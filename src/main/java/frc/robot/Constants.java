@@ -12,4 +12,25 @@ package frc.robot;
  * <p>It is advised to statically import this class (or one of its inner classes) wherever the
  * constants are needed, to reduce verbosity.
  */
-public final class Constants {}
+public final class Constants {
+
+    public static final class DriveConstants {
+
+        public static final int LEFT_FALCON_1 = 1;//placeholder
+        public static final int LEFT_FALCON_2 = 2;//placeholder
+        public static final int LEFT_FALCON_3 = 3;//placeholder
+
+        public static final int RIGHT_FALCON_1 = 4;//placeholder
+        public static final int RIGHT_FALCON_2 = 5;//placeholder
+        public static final int RIGHT_FALCON_3 = 6;//placeholder
+
+        public static final int[] SOLENOID_SHIFTER = {0, 1};//placeholder
+
+        public static final double DRIVE_ENCODER_RESOLUTION = 2048;//placeholder
+        public static final double DRIVE_WHEEL_DIAMETER = 4;//placeholder
+        public static final double DISTANCE_PER_PULSE = (DRIVE_WHEEL_DIAMETER * Math.PI) / DRIVE_ENCODER_RESOLUTION;
+
+        public static final double HIGH_GEAR_RATIO = 1.0;//placeholder
+        public static final double LOW_GEAR_RATIO = 2.0;//placeholder
+    } 
+}
