@@ -32,5 +32,16 @@ public final class Constants {
 
         public static final double HIGH_GEAR_RATIO = 1.0;//placeholder
         public static final double LOW_GEAR_RATIO = 2.0;//placeholder
-    } 
+    }
+    
+    public static final class ClimberConstants {
+
+        public static final int RIGHT_CLIMBER = 0; //placeholder
+        public static final int LEFT_CLIMBER = 0; //placeholder
+
+        public static final double CLIMB_SPEED = 0.8; //placeholder
+
+        public static final int[] CLIMBER_BRAKE_SOLENOID = {0, 1}; //placeholder
+
+    }
 }
