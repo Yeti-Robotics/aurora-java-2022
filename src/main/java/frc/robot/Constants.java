@@ -85,4 +85,16 @@ public final class Constants {
         public static final double ROLL_IN_SPEED = 1.0;
         public static final double ROLL_OUT_SPEED = -1.0;
     }
+    public static final class NeckConstants{
+        //neck motor ports
+        public static final int NECK_BELT_TALON = 8;
+        public static final int NECK_ROLLER_TALON = 11;
+
+        //beam break sensor dio ports
+        public static final int NECK_BEAM_BREAK = 2;
+
+        //neck motor speed
+        public static final double NECK_UP_SPEED = 0.75;
+        public static final double NECK_DOWN_SPEED = -0.5;
+    }
 }
