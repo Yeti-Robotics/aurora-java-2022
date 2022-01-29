@@ -21,5 +21,42 @@ public class IntakeSubsystem extends SubsystemBase {
         pistons = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, IntakeConstants.INTAKE_PISTONS_SOLENOID[0], IntakeConstants.INTAKE_PISTONS_SOLENOID[1]);
         intakeFalcon = new TalonFX(IntakeConstants.INTAKE_FALCON);
         intakeFalcon.setInverted(true);
+
+        intakeStatus = IntakeStatus.UP;
+    }
+
+    public void extend(){
+        pistons.set(DoubleSolenoid.Value.kForward);
+        intakeStatus = IntakeStatus.DOWN;
+    }
+
+    public void retract(){
+        pistons.set(DoubleSolenoid.Value.kReverse);
+        intakeStatus = IntakeStatus.UP;
+    }
+
+    public void rollIn(){
+        intakeFalcon.set(ControlMode.PercentOutput, IntakeConstants.ROLL_IN_SPEED);
+    }
+
+    public void rollOut(){
+        intakeFalcon.set(ControlMode.PercentOutput, IntakeConstants.ROLL_OUT_SPEED);
+    }
+
+    public void stopRoll(){
+        intakeFalcon.set(ControlMode.PercentOutput, 0);
+    }
+
+    public IntakeStatus getIntakePostion(){
+        return intakeStatus;
+    }
+
+    public IntakeStatus getIntakePositionDown(){
+        return IntakeStatus.DOWN;
+    }
+
+    public IntakeStatus getIntakePositionUp(){
+        return IntakeStatus.UP;
+
     }
 }
