@@ -4,6 +4,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.Constants.CalcConstants;
 
+
 public class Limelight {
     private static NetworkTableInstance table = null;
 
@@ -119,12 +120,6 @@ public class Limelight {
         return distance;
     }
 
-    public static double getHorDistance() {
-        double horDistance;
-        horDistance = (Math.sqrt((getDistance() * getDistance()) - (85.5 * 85.5)));
-        return horDistance;
-    }
-
     /**
      * Helper method to get an entry from the Limelight NetworkTable.
      *
@@ -138,5 +133,13 @@ public class Limelight {
         }
 
         return table.getTable("limelight").getEntry(key);
-    }   
+    }
+
+    public static double getHorDistance() {
+        double horDistance;
+        final double HEIGHT_OF_TARGET_INCHES = 104;
+        // pythagorean theorem
+        horDistance = Math.sqrt((getDistance() * getDistance()) - (HEIGHT_OF_TARGET_INCHES * HEIGHT_OF_TARGET_INCHES));
+        return horDistance;
+    }
 }

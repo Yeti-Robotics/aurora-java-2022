@@ -16,15 +16,15 @@ public final class Constants {
 
     public static final class DriveConstants {
 
-        public static final int LEFT_FALCON_1 = 1;//placeholder
-        public static final int LEFT_FALCON_2 = 2;//placeholder
-        public static final int LEFT_FALCON_3 = 3;//placeholder
+        public static final int LEFT_FALCON_1 = 13;//placeholder
+        public static final int LEFT_FALCON_2 = 16;//placeholder
+        public static final int LEFT_FALCON_3 = 7;//placeholder
 
-        public static final int RIGHT_FALCON_1 = 4;//placeholder
-        public static final int RIGHT_FALCON_2 = 5;//placeholder
+        public static final int RIGHT_FALCON_1 = 3;//placeholder
+        public static final int RIGHT_FALCON_2 = 8;//placeholder
         public static final int RIGHT_FALCON_3 = 6;//placeholder
 
-        public static final int[] SOLENOID_SHIFTER = {0, 1};//placeholder
+        public static final int[] SOLENOID_SHIFTER = {6,7};//placeholder
 
         public static final double DRIVE_ENCODER_RESOLUTION = 2048;//placeholder
         public static final double DRIVE_WHEEL_DIAMETER = 4;//placeholder
@@ -47,8 +47,8 @@ public final class Constants {
 
     public static final class ShooterConstants{
         //shooter motor ports
-        public static final int SHOOTER_LEFT_TALON = 9; //left
-        public static final int SHOOTER_RIGHT_TALON = 10; //right
+        public static final int SHOOTER_LEFT_TALON = 18; //left
+        public static final int SHOOTER_RIGHT_TALON = 1; //right
 
         //shooter motor speeds    
         public static final double SHOOT_1_SPEED = .9;
@@ -57,11 +57,12 @@ public final class Constants {
         public static final double REVERSE_SHOOT_2_SPEED = -0.5;
 
         //shooter rpm calc constants
-        public static final double PULLEY_RATIO = 12.0 / 48.0;
+        public static final double PULLEY_RATIO = 48.0 / 36.0; //not completely known
         public static final double ENCODER_TIME_CONVERSION = 600.0; // 100 ms per minute
-        public static final double ENCODER_RESOLUTION = 12.0;
+        public static final double ENCODER_RESOLUTION = 2048.0;
         public static final double QUAD_FACTOR = 4.0; // quadrature encoder factor
-        public static final double MAX_RPM = 1425.0;
+        public static final double MAX_RPM = 4000.0;
+        public static final double RPM_TOLERANCE = 10.0;
     }
     public static final class CalcConstants{
         // distance calc constants
@@ -76,13 +77,26 @@ public final class Constants {
     }
     public static final class IntakeConstants{
         //intake motor port
-        public static final int INTAKE_FALCON = 5;
+        public static final int INTAKE_FALCON = 19;
 
         //intake piston solenoid ports
-        public static final int[] INTAKE_PISTONS_SOLENOID = {1, 3};
+        public static final int[] INTAKE_PISTONS_SOLENOID = {0, 1}; 
 
         //intake motor speed
-        public static final double ROLL_IN_SPEED = 1.0;
-        public static final double ROLL_OUT_SPEED = -1.0;
+        public static final double ROLL_IN_SPEED = .5; //placeholder
+        public static final double ROLL_OUT_SPEED = -.5;//placeholder
+    }
+    public static final class NeckConstants{
+        //neck motor ports
+        public static final int NECK_MOTOR_FRONT = 17; //placeholder
+        public static final int NECK_MOTOR_BACK = 15;//PLACEHOLDER   `
+        public static final int NECK_BEAMBREAK = 0;
+
+        //beam break sensor dio ports
+        public static final int NECK_BEAM_BREAK = 0;
+
+        //neck motor speed
+        public static final double NECK_UP_SPEED = 0.75;
+        public static final double NECK_DOWN_SPEED = -0.5;
     }
 }
