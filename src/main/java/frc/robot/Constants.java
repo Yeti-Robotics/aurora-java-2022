@@ -44,4 +44,45 @@ public final class Constants {
         public static final int[] CLIMBER_BRAKE_SOLENOID = {0, 1}; //placeholder
 
     }
+
+    public static final class ShooterConstants{
+        //shooter motor ports
+        public static final int SHOOTER_LEFT_TALON = 9; //left
+        public static final int SHOOTER_RIGHT_TALON = 10; //right
+
+        //shooter motor speeds    
+        public static final double SHOOT_1_SPEED = .9;
+        public static final double SHOOT_2_SPEED = .9;
+        public static final double REVERSE_SHOOT_1_SPEED = -0.5;
+        public static final double REVERSE_SHOOT_2_SPEED = -0.5;
+
+        //shooter rpm calc constants
+        public static final double PULLEY_RATIO = 12.0 / 48.0;
+        public static final double ENCODER_TIME_CONVERSION = 600.0; // 100 ms per minute
+        public static final double ENCODER_RESOLUTION = 12.0;
+        public static final double QUAD_FACTOR = 4.0; // quadrature encoder factor
+        public static final double MAX_RPM = 1425.0;
+    }
+    public static final class CalcConstants{
+        // distance calc constants
+        public static final double KNOWN_DISTANCE = 161.3; //inches
+        public static final int PIXEL_WIDTH_KNOWN = 65; //pixels
+        public static final double KNOWN_TAPE_BOUND_WIDTH = 39.25; //inches
+        public static final double FOCAL_LENGTH = ( KNOWN_DISTANCE * PIXEL_WIDTH_KNOWN) / KNOWN_TAPE_BOUND_WIDTH;
+
+        //trajectory constants
+        public static final int SHOOTER_HEIGHT = 23; // inches
+        public static final double GRAVITY = 386.09; // inches/ sec ^2
+    }
+    public static final class IntakeConstants{
+        //intake motor port
+        public static final int INTAKE_FALCON = 5;
+
+        //intake piston solenoid ports
+        public static final int[] INTAKE_PISTONS_SOLENOID = {1, 3};
+
+        //intake motor speed
+        public static final double ROLL_IN_SPEED = 1.0;
+        public static final double ROLL_OUT_SPEED = -1.0;
+    }
 }
