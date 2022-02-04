@@ -99,4 +99,7 @@ public final class Constants {
         public static final double NECK_UP_SPEED = 0.75;
         public static final double NECK_DOWN_SPEED = -0.5;
     }
+    public static final class TurretConstants {
+        public static final int TURRET_SPARK = 13; // placeholder
+    }
 }
