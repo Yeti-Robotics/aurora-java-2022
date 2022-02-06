@@ -34,6 +34,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     leftFalcon2.setInverted(InvertType.FollowMaster);
 
     rightFalcon2.follow(rightFalcon1);
+    rightFalcon1.setInverted(true);
     rightFalcon2.setInverted(InvertType.FollowMaster);
 
     drive = new DifferentialDrive(leftFalcon1, rightFalcon1);

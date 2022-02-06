@@ -16,13 +16,11 @@ public final class Constants {
 
     public static final class DriveConstants {
 
-        public static final int LEFT_FALCON_1 = 13;//placeholder
-        public static final int LEFT_FALCON_2 = 16;//placeholder
-        public static final int LEFT_FALCON_3 = 7;//placeholder
+        public static final int LEFT_FALCON_1 = 3;
+        public static final int LEFT_FALCON_2 = 1;
 
-        public static final int RIGHT_FALCON_1 = 3;//placeholder
-        public static final int RIGHT_FALCON_2 = 8;//placeholder
-        public static final int RIGHT_FALCON_3 = 6;//placeholder
+        public static final int RIGHT_FALCON_1 = 2;
+        public static final int RIGHT_FALCON_2 = 0;
 
         public static final int GYRO_ID = 1337;
 

@@ -27,27 +27,27 @@ public class RobotContainer {
   private ClimberSubsystem climberSubsystem;
 
   public RobotContainer() {
-    driverStationJoystick = new Joystick(OIConstants.DRIVER_STATION_JOY);
-    
-    drivetrainSubsystem = new DrivetrainSubsystem();
-    shiftingGearsSubsystem = new ShiftingGearsSubsystem();
-    intakeSubsystem = new IntakeSubsystem();
-    neckSubsystem = new NeckSubsystem();
-    turretSubsystem = new TurretSubsystem();
-    shooterSubsystem = new ShooterSubsystem();
-    climberSubsystem = new ClimberSubsystem();
+    // driverStationJoystick = new Joystick(OIConstants.DRIVER_STATION_JOY);
 
-    switch (drivetrainSubsystem.getDriveMode()) {
-      case TANK:
-        drivetrainSubsystem.setDefaultCommand(new RunCommand(() -> drivetrainSubsystem.tankDrive(getLeftY(), getRightY()), drivetrainSubsystem));
-        break;
-      case CHEEZY:
-        drivetrainSubsystem.setDefaultCommand(new RunCommand(() -> drivetrainSubsystem.cheezyDrive(getLeftY(), getRightX()), drivetrainSubsystem));
-        break;
-      case ARCADE:
-        drivetrainSubsystem.setDefaultCommand(new RunCommand(() -> drivetrainSubsystem.arcadeDrive(getLeftY(), getRightX()), drivetrainSubsystem));
-        break;
-    }
+    drivetrainSubsystem = new DrivetrainSubsystem();
+    // shiftingGearsSubsystem = new ShiftingGearsSubsystem();
+    // intakeSubsystem = new IntakeSubsystem();
+    // neckSubsystem = new NeckSubsystem();
+    // turretSubsystem = new TurretSubsystem();
+    // shooterSubsystem = new ShooterSubsystem();
+    // climberSubsystem = new ClimberSubsystem();
+
+    // switch (drivetrainSubsystem.getDriveMode()) {
+    //   case TANK:
+    //     drivetrainSubsystem.setDefaultCommand(new RunCommand(() -> drivetrainSubsystem.tankDrive(getLeftY(), getRightY()), drivetrainSubsystem));
+    //     break;
+    //   case CHEEZY:
+    //     drivetrainSubsystem.setDefaultCommand(new RunCommand(() -> drivetrainSubsystem.cheezyDrive(getLeftY(), getRightX()), drivetrainSubsystem));
+    //     break;
+    //   case ARCADE:
+    //     drivetrainSubsystem.setDefaultCommand(new RunCommand(() -> drivetrainSubsystem.arcadeDrive(getLeftY(), getRightX()), drivetrainSubsystem));
+    //     break;
+    // }
     
     configureButtonBindings();
   }
@@ -58,19 +58,19 @@ public class RobotContainer {
     return null;
   }
 
-  private double getLeftY() {
-    return -driverStationJoystick.getRawAxis(0);
-  }
+  // private double getLeftY() {
+  //   return -driverStationJoystick.getRawAxis(0);
+  // }
 
-  private double getLeftX() {
-    return driverStationJoystick.getRawAxis(1);
-  }
+  // private double getLeftX() {
+  //   return driverStationJoystick.getRawAxis(1);
+  // }
 
-  private double getRightY() {
-    return -driverStationJoystick.getRawAxis(2);
-  }
+  // private double getRightY() {
+  //   return -driverStationJoystick.getRawAxis(2);
+  // }
 
-  private double getRightX() {
-    return driverStationJoystick.getRawAxis(3);
-  }
+  // private double getRightX() {
+  //   return driverStationJoystick.getRawAxis(3);
+  // }
 }
