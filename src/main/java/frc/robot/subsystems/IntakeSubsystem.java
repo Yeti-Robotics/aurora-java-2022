@@ -12,17 +12,16 @@ public class IntakeSubsystem extends SubsystemBase {
     public enum IntakeStatus {
         DOWN, UP
     }
-    public IntakeStatus intakeStatus;
+
+    private IntakeStatus intakeStatus;
 
     private TalonFX intakeFalcon;
     private DoubleSolenoid pistons;
 
     public IntakeSubsystem() {
-        pistons = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, IntakeConstants.INTAKE_PISTONS_SOLENOID[0], IntakeConstants.INTAKE_PISTONS_SOLENOID[1]);
+        pistons = new DoubleSolenoid(PneumaticsModuleType.REVPH, IntakeConstants.INTAKE_PISTONS_SOLENOID[0], IntakeConstants.INTAKE_PISTONS_SOLENOID[1]);
         intakeFalcon = new TalonFX(IntakeConstants.INTAKE_FALCON);
-        intakeFalcon.setInverted(true);
-
-        intakeStatus = IntakeStatus.UP;
+        intakeStatus = IntakeStatus.DOWN;
     }
 
     public void extend(){
@@ -36,15 +35,15 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void rollIn(){
-        intakeFalcon.set(ControlMode.PercentOutput, IntakeConstants.ROLL_IN_SPEED);
+        intakeFalcon.set(ControlMode.PercentOutput, IntakeConstants.INTAKE_SPEED);
     }
 
     public void rollOut(){
-        intakeFalcon.set(ControlMode.PercentOutput, IntakeConstants.ROLL_OUT_SPEED);
+        intakeFalcon.set(ControlMode.PercentOutput, IntakeConstants.INTAKE_SPEED);
     }
 
     public void stopRoll(){
-        intakeFalcon.set(ControlMode.PercentOutput, 0);
+        intakeFalcon.set(ControlMode.PercentOutput, 0.0);
     }
 
     public IntakeStatus getIntakePostion(){

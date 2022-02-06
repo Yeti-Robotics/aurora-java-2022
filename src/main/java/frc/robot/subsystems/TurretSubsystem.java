@@ -6,41 +6,42 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxAnalogSensor;
+import com.revrobotics.SparkMaxLimitSwitch;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.SparkMaxAnalogSensor.Mode;
+import com.revrobotics.SparkMaxLimitSwitch.Type;
 
 import frc.robot.Constants.TurretConstants;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class TurretSubsystem extends SubsystemBase {
-	CANSparkMax turretSpark;
-	SparkMaxAnalogSensor magSwitch;
-    RelativeEncoder turretEncoder;
+	private CANSparkMax turretSpark;
+	private SparkMaxLimitSwitch magSwitch;
+    private RelativeEncoder turretEncoder;
 
 	public TurretSubsystem() {
 		turretSpark = new CANSparkMax(TurretConstants.TURRET_SPARK, MotorType.kBrushless);
-		magSwitch = turretSpark.getAnalog(Mode.kAbsolute);
+		magSwitch = turretSpark.getForwardLimitSwitch(Type.kNormallyClosed);
         turretEncoder = turretSpark.getEncoder();
 	}
-
-	@Override
-	public void periodic() {}
 
 	public void moveTurret(double power) {
         turretSpark.set(power);
     }
-
+    
     public void stopTurret() {
-        turretSpark.set(0);
+        turretSpark.set(0.0);
     }
 
     public void resetEncoder(){
-        turretEncoder.setPosition(0);
+        turretEncoder.setPosition(0.0);
     }
 
     public double getEncoder(){
         return turretEncoder.getPosition();
+    }
+
+    public boolean getMagSwitch(){
+        return magSwitch.isPressed();
     }
 }

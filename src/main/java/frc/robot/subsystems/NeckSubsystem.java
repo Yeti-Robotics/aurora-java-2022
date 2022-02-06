@@ -1,37 +1,44 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.NeckConstants;
 
 public class NeckSubsystem extends SubsystemBase {
-    private TalonSRX neckBackRollerTalonSRX;
-    private TalonSRX neckFrontRollerTalonSRX;
-    private DigitalInput neckBeamBreak;
+    private CANSparkMax neckFrontSpark;
+    private CANSparkMax neckBackSpark;
+    private DigitalInput lowerBeamBreak;
+    private DigitalInput upperBeamBreak;
 
     public NeckSubsystem() {
-        neckBackRollerTalonSRX = new TalonSRX(NeckConstants.NECK_MOTOR_BACK);
-        neckFrontRollerTalonSRX = new TalonSRX(NeckConstants.NECK_MOTOR_FRONT);
-        neckBeamBreak = new DigitalInput(NeckConstants.NECK_BEAM_BREAK);
+        neckFrontSpark = new CANSparkMax(NeckConstants.NECK_MOTOR_FRONT, MotorType.kBrushless);
+        neckBackSpark = new CANSparkMax(NeckConstants.NECK_MOTOR_BACK, MotorType.kBrushless);
+        lowerBeamBreak = new DigitalInput(NeckConstants.NECK_LOWER_BEAM_BREAK);
+        upperBeamBreak = new DigitalInput(NeckConstants.NECK_UPPER_BEAM_BREAK);
+    }
 
-    }
     public void moveUp(){
-        neckBackRollerTalonSRX.set(ControlMode.PercentOutput, NeckConstants.NECK_UP_SPEED);
-        neckFrontRollerTalonSRX.set(ControlMode.PercentOutput, NeckConstants.NECK_UP_SPEED);
+        neckFrontSpark.set(NeckConstants.NECK_SPEED);
+        neckBackSpark.set(NeckConstants.NECK_SPEED);
     }
+
     public void moveDown(){
-        neckBackRollerTalonSRX.set(ControlMode.PercentOutput, NeckConstants.NECK_DOWN_SPEED);
-        neckFrontRollerTalonSRX.set(ControlMode.PercentOutput, NeckConstants.NECK_DOWN_SPEED);
+        neckFrontSpark.set(-NeckConstants.NECK_SPEED);
+        neckBackSpark.set(-NeckConstants.NECK_SPEED);
     }
+
     public void stopNeck(){
-        neckBackRollerTalonSRX.set(ControlMode.PercentOutput, 0);
-        neckFrontRollerTalonSRX.set(ControlMode.PercentOutput, 0);
+        neckFrontSpark.set(0.0);
+        neckBackSpark.set(0.0);
     }
-    public boolean getbeambreak(){
-        return neckBeamBreak.get();
+
+    public boolean getLowerBeamBreak(){
+        return lowerBeamBreak.get();
     }
-    
+    public boolean getUpperBeamBreak(){
+        return upperBeamBreak.get();
+    }
 }
