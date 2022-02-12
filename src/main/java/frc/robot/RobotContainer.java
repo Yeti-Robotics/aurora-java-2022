@@ -4,11 +4,11 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
-//import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.LEDSubsystem;
-import frc.robot.subsystems.NeckSubsystem;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import frc.robot.Constants.OIConstants;
+import frc.robot.subsystems.*;
 
 
 /**
@@ -18,19 +18,43 @@ import frc.robot.subsystems.NeckSubsystem;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+  // private Joystick driverStationJoystick;
+  // private DrivetrainSubsystem drivetrainSubsystem;
+  // private ShiftingGearsSubsystem shiftingGearsSubsystem;
+  // private IntakeSubsystem intakeSubsystem;
+  // private NeckSubsystem neckSubsystem;
+  // private TurretSubsystem turretSubsystem;
+  // private ShooterSubsystem shooterSubsystem;
+  // private ClimberSubsystem climberSubsystem;
   public final LEDSubsystem ledSubsystem;
 
   // The robot's subsystems and commands are defined here...
   //private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
- // private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+  // private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  public NeckSubsystem neckSubsystem;
   public RobotContainer() {
     ledSubsystem = new LEDSubsystem();
-    neckSubsystem = new NeckSubsystem();
-    
+    // driverStationJoystick = new Joystick(OIConstants.DRIVER_STATION_JOY);
+    // shiftingGearsSubsystem = new ShiftingGearsSubsystem();
+    // intakeSubsystem = new IntakeSubsystem();
+    // neckSubsystem = new NeckSubsystem();
+    // turretSubsystem = new TurretSubsystem();
+    // shooterSubsystem = new ShooterSubsystem();
+    // climberSubsystem = new ClimberSubsystem();
+
+    // switch (drivetrainSubsystem.getDriveMode()) {
+    //   case TANK:
+    //     drivetrainSubsystem.setDefaultCommand(new RunCommand(() -> drivetrainSubsystem.tankDrive(getLeftY(), getRightY()), drivetrainSubsystem));
+    //     break;
+    //   case CHEEZY:
+    //     drivetrainSubsystem.setDefaultCommand(new RunCommand(() -> drivetrainSubsystem.cheezyDrive(getLeftY(), getRightX()), drivetrainSubsystem));
+    //     break;
+    //   case ARCADE:
+    //     drivetrainSubsystem.setDefaultCommand(new RunCommand(() -> drivetrainSubsystem.arcadeDrive(getLeftY(), getRightX()), drivetrainSubsystem));
+    //     break;
+    // }
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -41,9 +65,23 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {
+  private void configureButtonBindings() {}
 
-  }
+  // private double getLeftY() {
+  //   return -driverStationJoystick.getRawAxis(0);
+  // }
+
+  // private double getLeftX() {
+  //   return driverStationJoystick.getRawAxis(1);
+  // }
+
+  // private double getRightY() {
+  //   return -driverStationJoystick.getRawAxis(2);
+  // }
+
+  // private double getRightX() {
+  //   return driverStationJoystick.getRawAxis(3);
+  // }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
