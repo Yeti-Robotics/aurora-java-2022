@@ -33,6 +33,11 @@ public final class Constants {
         public static final double HIGH_GEAR_RATIO = 1.0;//placeholder
         public static final double LOW_GEAR_RATIO = 2.0;//placeholder
     }
+
+    public static final class LEDConstants {
+        public static final int ADDRESSABLE_LED = 0;
+        public static final int LED_COUNT = 180;
+    }
     
     public static final class ClimberConstants {
 

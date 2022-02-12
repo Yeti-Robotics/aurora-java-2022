@@ -4,9 +4,13 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.LED.AuroraLEDCommand;
+import frc.robot.commands.LED.BlinkLEDCommand;
+import frc.robot.commands.LED.SetLEDYetiBlueCommand;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -16,8 +20,10 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
+  private Command beforeBlinkCommand = null;
+  private boolean blinkWarningRan = false;
 
-  private RobotContainer robotContainer;
+  private RobotContainer m_robotContainer;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -27,7 +33,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
-    robotContainer = new RobotContainer();
+    m_robotContainer = new RobotContainer();
   }
 
   /**
@@ -39,25 +45,37 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    System.out.println("beam breck: " + robotContainer.neckSubsystem.getbeambreak());
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+
+    // System.out.println("Shifter Position: " + m_robotContainer.shiftSubsystem.getShifterPosition());
+
+    // System.out.println("Beam Break Status:" + m_robotContainer.neckSubsystem.getBeamBreak());
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    m_robotContainer.ledSubsystem.setDefaultCommand(new AuroraLEDCommand(m_robotContainer.ledSubsystem));
+  }
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    CommandScheduler.getInstance().run();
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    
+    m_robotContainer.ledSubsystem.setDefaultCommand(new AuroraLEDCommand(m_robotContainer.ledSubsystem));
+
+    // schedule the autonomous command (example)
+    if (m_autonomousCommand != null) {
+      m_autonomousCommand.schedule();
+    }
   }
 
   /** This function is called periodically during autonomous. */
@@ -70,6 +88,14 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    m_robotContainer.ledSubsystem.getCurrentCommand().cancel();
+    m_robotContainer.ledSubsystem.setDefaultCommand(new SetLEDYetiBlueCommand(m_robotContainer.ledSubsystem));
+
+    CommandScheduler.getInstance().onCommandFinish(command -> {
+      if (command.getName().equals(new BlinkLEDCommand().getName())) {
+        if (beforeBlinkCommand != null) beforeBlinkCommand.schedule();
+      }
+    });
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -78,7 +104,11 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    
+    if (DriverStation.getMatchTime() < 30 && !blinkWarningRan) {
+      beforeBlinkCommand = m_robotContainer.ledSubsystem.getCurrentCommand();
+      new BlinkLEDCommand(m_robotContainer.ledSubsystem, 300, 255, 34, 0).schedule();
+      blinkWarningRan = true;
+    }
   }
 
   @Override

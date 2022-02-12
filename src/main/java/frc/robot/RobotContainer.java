@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 //import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.NeckSubsystem;
 
 
@@ -17,6 +18,7 @@ import frc.robot.subsystems.NeckSubsystem;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+  public final LEDSubsystem ledSubsystem;
 
   // The robot's subsystems and commands are defined here...
   //private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
@@ -26,6 +28,7 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public NeckSubsystem neckSubsystem;
   public RobotContainer() {
+    ledSubsystem = new LEDSubsystem();
     neckSubsystem = new NeckSubsystem();
     
     // Configure the button bindings
