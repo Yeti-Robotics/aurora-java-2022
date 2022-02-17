@@ -16,11 +16,11 @@ public final class Constants {
 
     public static final class DriveConstants {
 
-        public static final int LEFT_FALCON_1 = 3;
-        public static final int LEFT_FALCON_2 = 1;
+        public static final int LEFT_FALCON_1 = 1; //front relative to robot
+        public static final int LEFT_FALCON_2 = 2; // rear relative to robot
 
-        public static final int RIGHT_FALCON_1 = 2;
-        public static final int RIGHT_FALCON_2 = 0;
+        public static final int RIGHT_FALCON_1 = 3; //front relative to robot
+        public static final int RIGHT_FALCON_2 = 4; // rear relative to robot
 
         public static final int GYRO_ID = 1337;
 
@@ -40,8 +40,8 @@ public final class Constants {
     }
     
     public static final class ClimberConstants {
-        public static final int RIGHT_CLIMBER = 0; //placeholder
-        public static final int LEFT_CLIMBER = 0; //placeholder
+        public static final int CLIMBER_1 = 5; //front relative to robot
+        public static final int CLIMBER_2 = 6; // rear relative to robot
 
         public static final double CLIMB_SPEED = 0.8; //placeholder
 
@@ -52,8 +52,8 @@ public final class Constants {
 
     public static final class ShooterConstants {
         //shooter motor ports
-        public static final int SHOOTER_LEFT_FALCON = 18; //left
-        public static final int SHOOTER_RIGHT_FALCON = 1; //right
+        public static final int SHOOTER_LEFT_FALCON = 8; //left
+        public static final int SHOOTER_RIGHT_FALCON = 7; //right
 
         //shooter motor speeds    
         public static final double SHOOTER_SPEED = .9;
@@ -80,21 +80,21 @@ public final class Constants {
     }
 
     public static final class IntakeConstants{
-        public static final int INTAKE_FALCON = 19;
+        public static final int INTAKE_FALCON = 9;
         public static final int[] INTAKE_PISTONS_SOLENOID = {0, 1}; 
         public static final double INTAKE_SPEED = 0.5; //placeholder
     }
 
     public static final class NeckConstants{
-        public static final int NECK_MOTOR_FRONT = 17; //placeholder
-        public static final int NECK_MOTOR_BACK = 15;//PLACEHOLDER   `
+        public static final int FRONT_INDEXER = 10;
+        public static final int REAR_INDEXER = 11;   
         public static final int NECK_LOWER_BEAM_BREAK = 1337;
         public static final int NECK_UPPER_BEAM_BREAK = 1337;
         public static final double NECK_SPEED = 0.5;
     }
 
     public static final class TurretConstants {
-        public static final int TURRET_SPARK = 13; // placeholder
+        public static final int TURRET_SPARK = 12; 
         public static final double TURRET_SPEED = 0.5;
     }
 

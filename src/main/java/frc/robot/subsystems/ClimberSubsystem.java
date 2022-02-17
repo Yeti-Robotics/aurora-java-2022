@@ -16,26 +16,26 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimberConstants;
 
 public class ClimberSubsystem extends SubsystemBase {
-  private WPI_TalonFX climberRightFalcon, climberLeftFalcon;
+  private WPI_TalonFX climberFalcon1, climberFalcon2;
   private DoubleSolenoid climberBrake;
   private DoubleSolenoid climberPistons;
 
   public ClimberSubsystem() {
-    climberRightFalcon = new WPI_TalonFX(ClimberConstants.RIGHT_CLIMBER);
-    climberLeftFalcon = new WPI_TalonFX(ClimberConstants.LEFT_CLIMBER);
+    climberFalcon1 = new WPI_TalonFX(ClimberConstants.CLIMBER_1);
+    climberFalcon2 = new WPI_TalonFX(ClimberConstants.CLIMBER_2);
     climberBrake = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.CLIMBER_BRAKE_SOLENOID[0], ClimberConstants.CLIMBER_BRAKE_SOLENOID[1]);
     climberPistons = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.CLIMBER_PISTONS[0], ClimberConstants.CLIMBER_PISTONS[1]);
 
     climberBrake.set(Value.kReverse); // set value for toggling; assume reverse position on startup
     climberPistons.set(Value.kReverse);
 
-    climberLeftFalcon.follow(climberRightFalcon);
+    climberFalcon2.follow(climberFalcon1);
 
-    climberRightFalcon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
-    climberLeftFalcon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+    climberFalcon1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+    climberFalcon2.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
 
-    climberRightFalcon.setNeutralMode(NeutralMode.Brake);
-    climberLeftFalcon.setNeutralMode(NeutralMode.Brake);
+    climberFalcon1.setNeutralMode(NeutralMode.Brake);
+    climberFalcon2.setNeutralMode(NeutralMode.Brake);
   }
 
   @Override
@@ -44,14 +44,14 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public void climbUp() {
-    climberRightFalcon.set(ControlMode.PercentOutput, ClimberConstants.CLIMB_SPEED);
+    climberFalcon1.set(ControlMode.PercentOutput, ClimberConstants.CLIMB_SPEED);
   }
   public void climbDown(){
-    climberRightFalcon.set(ControlMode.PercentOutput, -ClimberConstants.CLIMB_SPEED);
+    climberFalcon1.set(ControlMode.PercentOutput, -ClimberConstants.CLIMB_SPEED);
   }
 
   public void stopClimb(){
-      climberRightFalcon.set(ControlMode.PercentOutput, 0.0);
+      climberFalcon1.set(ControlMode.PercentOutput, 0.0);
   }
 
   public void toggleBrake(){
@@ -63,11 +63,11 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public double getLeftEncoder(){
-    return climberLeftFalcon.getSelectedSensorPosition();
+    return climberFalcon2.getSelectedSensorPosition();
   }
 
   public double getRightEncoder(){
-    return climberRightFalcon.getSelectedSensorPosition();
+    return climberFalcon1.getSelectedSensorPosition();
   }
 
   public double getAverageEncoder(){
@@ -75,8 +75,8 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public void resetEncoders(){
-    climberLeftFalcon.setSelectedSensorPosition(0.0);
-    climberRightFalcon.setSelectedSensorPosition(0.0);
+    climberFalcon2.setSelectedSensorPosition(0.0);
+    climberFalcon1.setSelectedSensorPosition(0.0);
   }
 
   public DoubleSolenoid.Value getBrakePos(){
