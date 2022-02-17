@@ -99,6 +99,9 @@ public final class Constants {
         public static final double kPTurretVel = 0.0; // ph
         public static final double kITurretVel = 0.0; // ph
         public static final double kDTurretVel = 0.0; // ph
+        public static final double TURRET_MAX_RIGHT = 90; //placeholder
+        public static final double TURRET_MAX_LEFT = -90; //placeholder
+        public static final double TURRET_MAX_TOLERANCE = 10;
     }
 
     public static final class OIConstants {
