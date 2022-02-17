@@ -18,6 +18,7 @@ public class TurretSubsystem extends SubsystemBase {
 	private CANSparkMax turretSpark;
 	private SparkMaxLimitSwitch magSwitch;
     private RelativeEncoder turretEncoder;
+    private double power;
 
     public enum TurretLockStatus {
         LOCKED, UNLOCKED
@@ -32,12 +33,29 @@ public class TurretSubsystem extends SubsystemBase {
         lockStatus = TurretLockStatus.LOCKED;
 	}
 
+    @Override
+    public void periodic() {
+        double turretPosition = getEncoder();
+        if (
+            (turretPosition >= TurretConstants.TURRET_MAX_RIGHT - TurretConstants.TURRET_MAX_TOLERANCE && power > 0) || 
+			(turretPosition <= TurretConstants.TURRET_MAX_LEFT + TurretConstants.TURRET_MAX_TOLERANCE && power < 0)
+            ) {
+                stopTurret();
+        }
+    }
+
 	public void moveTurret(double power) {
-        turretSpark.set(power);
+        turretSpark.set(this.power = power);
     }
     
     public void stopTurret() {
-        turretSpark.set(0.0);
+        turretSpark.set(power = 0.0);
+    }
+
+    public boolean isWithinRotationLimit() {
+        double turretPosition = getEncoder();
+        return turretPosition < TurretConstants.TURRET_MAX_RIGHT - TurretConstants.TURRET_MAX_TOLERANCE || 
+				turretPosition > TurretConstants.TURRET_MAX_LEFT + TurretConstants.TURRET_MAX_TOLERANCE;
     }
 
     public void resetEncoder(){
