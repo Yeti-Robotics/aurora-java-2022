@@ -18,22 +18,22 @@ import frc.robot.Constants.ClimberConstants;
 public class ClimberSubsystem extends SubsystemBase {
   private WPI_TalonFX climberFalcon1, climberFalcon2;
   //private DoubleSolenoid climberBrake;
-  private DoubleSolenoid climberHookPiston1;
-  private DoubleSolenoid climberHookPiston2;
+  //private DoubleSolenoid climberHookPiston1;
+  //private DoubleSolenoid climberHookPiston2;
   private DoubleSolenoid climberLeanPiston;
 
   public ClimberSubsystem() {
     climberFalcon1 = new WPI_TalonFX(ClimberConstants.CLIMBER_1);
     climberFalcon2 = new WPI_TalonFX(ClimberConstants.CLIMBER_2);
     //climberBrake = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.CLIMBER_BRAKE_SOLENOID[0], ClimberConstants.CLIMBER_BRAKE_SOLENOID[1]);
-    climberHookPiston1 = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.CLIMBER_HOOK_PISTONS[0], ClimberConstants.CLIMBER_HOOK_PISTONS[1]);
-    climberHookPiston2 = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.CLIMBER_HOOK_PISTONS[0], ClimberConstants.CLIMBER_HOOK_PISTONS[1]);
+   //climberHookPiston1 = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.CLIMBER_HOOK_PISTONS[0], ClimberConstants.CLIMBER_HOOK_PISTONS[1]);
+    //climberHookPiston2 = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.CLIMBER_HOOK_PISTONS[0], ClimberConstants.CLIMBER_HOOK_PISTONS[1]);
     climberLeanPiston = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.CLIMBER_HOOK_PISTONS[0], ClimberConstants.CLIMBER_HOOK_PISTONS[1]);
 
 
     //climberBrake.set(Value.kReverse); // set value for toggling; assume reverse position on startup
-    climberHookPiston1.set(Value.kReverse);
-    climberHookPiston2.set(Value.kReverse);
+    //climberHookPiston1.set(Value.kReverse);
+   // climberHookPiston2.set(Value.kReverse);
     climberLeanPiston.set(Value.kReverse);
 
     climberFalcon2.follow(climberFalcon1);
@@ -66,8 +66,8 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public void toggleHookPistons(){
-    climberHookPiston1.toggle();
-    climberHookPiston2.toggle();
+    //climberHookPiston1.toggle();
+    //climberHookPiston2.toggle();
   }
 
   public void toggleLeanPistons(){
@@ -95,7 +95,7 @@ public class ClimberSubsystem extends SubsystemBase {
   //   return climberBrake.get(); // returns kOff, kForward, or kReverse
   // }
 
-  public DoubleSolenoid.Value getPistonsPos(){
-    return climberHookPiston1.get(); 
-  }
+  // public DoubleSolenoid.Value getPistonsPos(){
+  //   return climberHookPiston1.get(); 
+  // }
 }

@@ -22,7 +22,7 @@ public final class Constants {
         public static final int RIGHT_FALCON_1 = 3; //front relative to robot
         public static final int RIGHT_FALCON_2 = 4; // rear relative to robot
 
-        public static final int GYRO_ID = 1337;
+        public static final int GYRO_ID = 1;
 
         public static final int[] SOLENOID_SHIFTER = {6,7};//placeholder
 
@@ -46,7 +46,7 @@ public final class Constants {
         public static final double CLIMB_SPEED = 0.8; //placeholder
 
         public static final int[] CLIMBER_BRAKE_SOLENOID = {0, 1}; //placeholder
-        public static final int[] CLIMBER_HOOK_PISTONS = {110101, 100101};
+        public static final int[] CLIMBER_HOOK_PISTONS = {8, 9};
 
     }
 
@@ -88,8 +88,8 @@ public final class Constants {
     public static final class NeckConstants{
         public static final int FRONT_INDEXER = 10;
         public static final int REAR_INDEXER = 11;   
-        public static final int NECK_LOWER_BEAM_BREAK = 1337;
-        public static final int NECK_UPPER_BEAM_BREAK = 1337;
+        public static final int NECK_LOWER_BEAM_BREAK = 0;
+        public static final int NECK_UPPER_BEAM_BREAK = 1;
         public static final double NECK_SPEED = 0.5;
     }
 
@@ -102,6 +102,6 @@ public final class Constants {
     }
 
     public static final class OIConstants {
-        public static final int DRIVER_STATION_JOY = 1337;
+        public static final int DRIVER_STATION_JOY = 0;
     }
 }
