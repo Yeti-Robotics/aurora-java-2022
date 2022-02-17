@@ -5,6 +5,7 @@
 package frc.robot.commands.turret;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.subsystems.TurretSubsystem;
@@ -24,7 +25,10 @@ public class TurretLockCommand extends PIDCommand {
         0.0,
         // This uses the output
         output -> {
-          turretSubsystem.moveTurret(-output);
+          turretSubsystem.moveTurret(
+            (Math.abs(output) >= TurretConstants.TURRET_SPEED) ?
+              -Math.signum(output) * TurretConstants.TURRET_SPEED
+              : -output);
         }
     );
     this.turretSubsystem = turretSubsystem;
