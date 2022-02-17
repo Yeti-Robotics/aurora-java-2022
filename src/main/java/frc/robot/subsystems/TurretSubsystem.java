@@ -19,10 +19,17 @@ public class TurretSubsystem extends SubsystemBase {
 	private SparkMaxLimitSwitch magSwitch;
     private RelativeEncoder turretEncoder;
 
+    public enum TurretLockStatus {
+        LOCKED, UNLOCKED
+    }
+
+    public TurretLockStatus lockStatus;
+
 	public TurretSubsystem() {
 		turretSpark = new CANSparkMax(TurretConstants.TURRET_SPARK, MotorType.kBrushless);
 		magSwitch = turretSpark.getForwardLimitSwitch(Type.kNormallyClosed);
         turretEncoder = turretSpark.getEncoder();
+        lockStatus = TurretLockStatus.LOCKED;
 	}
 
 	public void moveTurret(double power) {
