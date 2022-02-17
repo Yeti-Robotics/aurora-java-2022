@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.*;
+import frc.robot.commands.turret.TurretLockCommand;
 
 
 /**
@@ -43,6 +44,8 @@ public class RobotContainer {
     // turretSubsystem = new TurretSubsystem();
     // shooterSubsystem = new ShooterSubsystem();
     // climberSubsystem = new ClimberSubsystem();
+
+    // turretSubsystem.setDefaultCommand(new TurretLockCommand(turretSubsystem));
 
     // switch (drivetrainSubsystem.getDriveMode()) {
     //   case TANK:
