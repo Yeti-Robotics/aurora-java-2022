@@ -18,17 +18,17 @@ import frc.robot.Constants.ClimberConstants;
 public class ClimberSubsystem extends SubsystemBase {
   private WPI_TalonFX climberFalcon1, climberFalcon2;
   //private DoubleSolenoid climberBrake;
-  //private DoubleSolenoid climberHookPiston1;
-  //private DoubleSolenoid climberHookPiston2;
+  private DoubleSolenoid climberHookPiston1;
+  private DoubleSolenoid climberHookPiston2;
   private DoubleSolenoid climberLeanPiston;
 
   public ClimberSubsystem() {
     climberFalcon1 = new WPI_TalonFX(ClimberConstants.CLIMBER_1);
     climberFalcon2 = new WPI_TalonFX(ClimberConstants.CLIMBER_2);
     //climberBrake = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.CLIMBER_BRAKE_SOLENOID[0], ClimberConstants.CLIMBER_BRAKE_SOLENOID[1]);
-   //climberHookPiston1 = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.CLIMBER_HOOK_PISTONS[0], ClimberConstants.CLIMBER_HOOK_PISTONS[1]);
-    //climberHookPiston2 = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.CLIMBER_HOOK_PISTONS[0], ClimberConstants.CLIMBER_HOOK_PISTONS[1]);
-    climberLeanPiston = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.CLIMBER_HOOK_PISTONS[0], ClimberConstants.CLIMBER_HOOK_PISTONS[1]);
+    climberHookPiston1 = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.CLIMBER_HOOK_PISTONS[0], ClimberConstants.CLIMBER_HOOK_PISTONS[1]);
+    climberHookPiston2 = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.CLIMBER_HOOK_PISTONS[0], ClimberConstants.CLIMBER_HOOK_PISTONS[1]);
+    climberLeanPiston = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.CLIMBER_LEAN_PISTON[0], ClimberConstants.CLIMBER_LEAN_PISTON[1]);
 
 
     //climberBrake.set(Value.kReverse); // set value for toggling; assume reverse position on startup
@@ -66,8 +66,8 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public void toggleHookPistons(){
-    //climberHookPiston1.toggle();
-    //climberHookPiston2.toggle();
+    climberHookPiston1.toggle();
+    climberHookPiston2.toggle();
   }
 
   public void toggleLeanPistons(){
