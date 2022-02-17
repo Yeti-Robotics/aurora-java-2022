@@ -32,8 +32,8 @@ public class ClimberSubsystem extends SubsystemBase {
 
 
     //climberBrake.set(Value.kReverse); // set value for toggling; assume reverse position on startup
-    //climberHookPiston1.set(Value.kReverse);
-   // climberHookPiston2.set(Value.kReverse);
+    climberHookPiston1.set(Value.kReverse);
+    climberHookPiston2.set(Value.kReverse);
     climberLeanPiston.set(Value.kReverse);
 
     climberFalcon2.follow(climberFalcon1);

@@ -47,7 +47,7 @@ public final class Constants {
 
         public static final int[] CLIMBER_BRAKE_SOLENOID = {0, 1}; //placeholder
         public static final int[] CLIMBER_HOOK_PISTONS = {8, 9}; //placeholder
-        public static final int[] CLIMBER_LEAN_PISTON = {0, 1};
+        public static final int[] CLIMBER_LEAN_PISTON = {0, 1}; //placeholder
 
     }
 
