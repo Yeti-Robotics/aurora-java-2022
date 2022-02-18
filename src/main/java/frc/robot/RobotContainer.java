@@ -35,7 +35,9 @@ public class RobotContainer {
   private TurretSubsystem turretSubsystem;
   private ShooterSubsystem shooterSubsystem;
   private ClimberSubsystem climberSubsystem;
+  private PneumaticsSubsystem pneumaticsSubsystem;
   public final LEDSubsystem ledSubsystem;
+  
 
   // The robot's subsystems and commands are defined here...
   //private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
@@ -53,7 +55,7 @@ public class RobotContainer {
     shooterSubsystem = new ShooterSubsystem();
     climberSubsystem = new ClimberSubsystem();
     drivetrainSubsystem = new DrivetrainSubsystem();
-
+    pneumaticsSubsystem = new PneumaticsSubsystem();
     turretSubsystem.setDefaultCommand(new TurretLockCommand(turretSubsystem));
 
     switch (drivetrainSubsystem.getDriveMode()) {
