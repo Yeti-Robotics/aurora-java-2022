@@ -1,14 +1,14 @@
 package frc.robot.commands.shifting;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ShiftingGearsSubsystem;
+import frc.robot.subsystems.ShiftingSubsystem;
 
 public class ToggleShiftCommand extends CommandBase {
-    private final ShiftingGearsSubsystem shiftingGearsSubsystem;
+    private final ShiftingSubsystem shiftingSubsystem;
 
-    public ToggleShiftCommand(ShiftingGearsSubsystem shiftingGearsSubsystem) {
-        this.shiftingGearsSubsystem = shiftingGearsSubsystem;
-        addRequirements(shiftingGearsSubsystem);
+    public ToggleShiftCommand(ShiftingSubsystem shiftingSubsystem) {
+        this.shiftingSubsystem = shiftingSubsystem;
+        addRequirements(shiftingSubsystem);
     }
 
     @Override
@@ -18,10 +18,10 @@ public class ToggleShiftCommand extends CommandBase {
 
     @Override
     public void execute() {
-        if (ShiftingGearsSubsystem.getShifterPosition() == ShiftingGearsSubsystem.ShiftStatus.HIGH) {
-            shiftingGearsSubsystem.shiftDown();
+        if (ShiftingSubsystem.getShifterPosition() == ShiftingSubsystem.ShiftStatus.HIGH) {
+            shiftingSubsystem.shiftDown();
         } else {
-            shiftingGearsSubsystem.shiftUp();
+            shiftingSubsystem.shiftUp();
         }
     }
 

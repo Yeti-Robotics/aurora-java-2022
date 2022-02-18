@@ -24,10 +24,10 @@ public final class Constants {
 
         public static final int GYRO_ID = 1;
 
-        public static final int[] SOLENOID_SHIFTER = {6,7};//placeholder
+        public static final int[] SOLENOID_SHIFTER = {0,1};
 
-        public static final double DRIVE_ENCODER_RESOLUTION = 2048.0;//placeholder
-        public static final double DRIVE_WHEEL_DIAMETER = 4.0;//placeholder
+        public static final double DRIVE_ENCODER_RESOLUTION = 2048.0;
+        public static final double DRIVE_WHEEL_DIAMETER = 4.0;
         public static final double DISTANCE_PER_PULSE = (DRIVE_WHEEL_DIAMETER * Math.PI) / DRIVE_ENCODER_RESOLUTION;
 
         public static final double HIGH_GEAR_RATIO = 1.0;//placeholder
@@ -45,9 +45,9 @@ public final class Constants {
 
         public static final double CLIMB_SPEED = 0.8; //placeholder
 
-        public static final int[] CLIMBER_BRAKE_SOLENOID = {0, 1}; //placeholder
-        public static final int[] CLIMBER_HOOK_PISTONS = {8, 9}; //placeholder
-        public static final int[] CLIMBER_LEAN_PISTON = {0, 1}; //placeholder
+        public static final int[] CLIMBER_HOOK_PISTONS_1 = {6, 7}; // placeholder
+        public static final int[] CLIMBER_HOOK_PISTONS_2 = {8, 9}; // placeholder
+        public static final int[] CLIMBER_LEAN_PISTON = {4, 5}; 
 
     }
 
@@ -82,8 +82,8 @@ public final class Constants {
 
     public static final class IntakeConstants{
         public static final int INTAKE_FALCON = 9;
-        public static final int[] INTAKE_PISTONS_SOLENOID = {0, 1}; 
-        public static final double INTAKE_SPEED = 0.5; //placeholder
+        public static final int[] INTAKE_PISTONS_SOLENOID = {2, 3}; 
+        public static final double INTAKE_SPEED = 0.15; //placeholder
     }
 
     public static final class NeckConstants{
@@ -91,7 +91,7 @@ public final class Constants {
         public static final int REAR_INDEXER = 11;   
         public static final int NECK_LOWER_BEAM_BREAK = 0;
         public static final int NECK_UPPER_BEAM_BREAK = 1;
-        public static final double NECK_SPEED = 0.5;
+        public static final double NECK_SPEED = 0.3;
     }
 
     public static final class TurretConstants {

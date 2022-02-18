@@ -26,8 +26,8 @@ public class ClimberSubsystem extends SubsystemBase {
     climberFalcon1 = new WPI_TalonFX(ClimberConstants.CLIMBER_1);
     climberFalcon2 = new WPI_TalonFX(ClimberConstants.CLIMBER_2);
     //climberBrake = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.CLIMBER_BRAKE_SOLENOID[0], ClimberConstants.CLIMBER_BRAKE_SOLENOID[1]);
-    climberHookPiston1 = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.CLIMBER_HOOK_PISTONS[0], ClimberConstants.CLIMBER_HOOK_PISTONS[1]);
-    climberHookPiston2 = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.CLIMBER_HOOK_PISTONS[0], ClimberConstants.CLIMBER_HOOK_PISTONS[1]);
+    climberHookPiston1 = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.CLIMBER_HOOK_PISTONS_1[0], ClimberConstants.CLIMBER_HOOK_PISTONS_1[1]);
+    climberHookPiston2 = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.CLIMBER_HOOK_PISTONS_2[0], ClimberConstants.CLIMBER_HOOK_PISTONS_2[1]);
     climberLeanPiston = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.CLIMBER_LEAN_PISTON[0], ClimberConstants.CLIMBER_LEAN_PISTON[1]);
 
 

@@ -5,16 +5,17 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.ctre.phoenix.sensors.PigeonIMU;
+import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.subsystems.ShiftingGearsSubsystem.ShiftStatus;
+import frc.robot.subsystems.ShiftingSubsystem.ShiftStatus;
 
 public class DrivetrainSubsystem extends SubsystemBase {
   private WPI_TalonFX leftFalcon1, leftFalcon2, rightFalcon1, rightFalcon2;  
-  private PigeonIMU gyro; 
+  private AHRS gyro; 
   
   private DifferentialDrive drive;
   private DriveMode driveMode;
@@ -28,13 +29,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
     leftFalcon2 = new WPI_TalonFX(DriveConstants.LEFT_FALCON_2);
     rightFalcon1 = new WPI_TalonFX(DriveConstants.RIGHT_FALCON_1);
     rightFalcon2 = new WPI_TalonFX(DriveConstants.RIGHT_FALCON_2);
-    gyro = new PigeonIMU(DriveConstants.GYRO_ID);
+    gyro = new AHRS(I2C.Port.kOnboard);
 
     leftFalcon2.follow(leftFalcon1);
     leftFalcon2.setInverted(InvertType.FollowMaster);
 
     rightFalcon2.follow(rightFalcon1);
-    rightFalcon1.setInverted(true);
     rightFalcon2.setInverted(InvertType.FollowMaster);
 
     drive = new DifferentialDrive(leftFalcon1, rightFalcon1);
@@ -44,7 +44,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
     rightFalcon1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
 
     leftFalcon1.setNeutralMode(NeutralMode.Coast);
+    leftFalcon2.setNeutralMode(NeutralMode.Coast);
     rightFalcon1.setNeutralMode(NeutralMode.Coast);
+    rightFalcon2.setNeutralMode(NeutralMode.Coast);
 
     resetEncoders();
   
@@ -77,11 +79,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   public double getLeftEncoder() {
-    return (leftFalcon1.getSelectedSensorPosition() * (DriveConstants.DISTANCE_PER_PULSE)  / (ShiftingGearsSubsystem.getShifterPosition() == ShiftStatus.HIGH ? DriveConstants.HIGH_GEAR_RATIO : DriveConstants.LOW_GEAR_RATIO));
+    return (leftFalcon1.getSelectedSensorPosition() * (DriveConstants.DISTANCE_PER_PULSE)  / (ShiftingSubsystem.getShifterPosition() == ShiftStatus.HIGH ? DriveConstants.HIGH_GEAR_RATIO : DriveConstants.LOW_GEAR_RATIO));
   }
 
   public double getRightEncoder() {
-    return (-rightFalcon1.getSelectedSensorPosition() * (DriveConstants.DISTANCE_PER_PULSE) / (ShiftingGearsSubsystem.getShifterPosition() == ShiftStatus.HIGH ? DriveConstants.HIGH_GEAR_RATIO : DriveConstants.LOW_GEAR_RATIO));
+    return (-rightFalcon1.getSelectedSensorPosition() * (DriveConstants.DISTANCE_PER_PULSE) / (ShiftingSubsystem.getShifterPosition() == ShiftStatus.HIGH ? DriveConstants.HIGH_GEAR_RATIO : DriveConstants.LOW_GEAR_RATIO));
   }
 
   public double getAverageEncoder(){
@@ -92,14 +94,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
     drive.setMaxOutput(maxOutput);
   }
 
-  public double getAngle(){
-    double [] ypr = new double[3];
-    gyro.getYawPitchRoll(ypr);
-    return ypr[0];
+  public double getHeading(){
+    return gyro.getRotation2d().getDegrees();
   }
 
   public void resetGyro(){
-    gyro.setYaw(0.0);
+    gyro.reset();
   }
 
   public DriveMode getDriveMode(){
