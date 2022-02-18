@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.CompressorConfigType;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -16,6 +17,7 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private Command beforeBlinkCommand = null;
   private boolean blinkWarningRan = false;
+  public CompressorConfigType compressorConfigType;
 
   private RobotContainer m_robotContainer;
 
@@ -73,6 +75,7 @@ public class Robot extends TimedRobot {
       new BlinkLEDCommand(m_robotContainer.ledSubsystem, 300, 255, 34, 0).schedule();
       blinkWarningRan = true;
     }
+    
   }
 
   @Override
