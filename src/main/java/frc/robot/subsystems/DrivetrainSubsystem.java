@@ -34,6 +34,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     leftFalcon2.follow(leftFalcon1);
     leftFalcon2.setInverted(InvertType.FollowMaster);
 
+    rightFalcon1.setInverted(true);
     rightFalcon2.follow(rightFalcon1);
     rightFalcon2.setInverted(InvertType.FollowMaster);
 
@@ -43,10 +44,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
     leftFalcon1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
     rightFalcon1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
 
-    leftFalcon1.setNeutralMode(NeutralMode.Coast);
-    leftFalcon2.setNeutralMode(NeutralMode.Coast);
-    rightFalcon1.setNeutralMode(NeutralMode.Coast);
-    rightFalcon2.setNeutralMode(NeutralMode.Coast);
+    leftFalcon1.setNeutralMode(NeutralMode.Brake);
+    leftFalcon2.setNeutralMode(NeutralMode.Brake);
+    rightFalcon1.setNeutralMode(NeutralMode.Brake);
+    rightFalcon2.setNeutralMode(NeutralMode.Brake);
 
     resetEncoders();
   
