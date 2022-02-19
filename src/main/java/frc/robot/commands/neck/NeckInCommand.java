@@ -6,15 +6,12 @@ package frc.robot.commands.neck;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.NeckSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
 
 public class NeckInCommand extends CommandBase {
   private NeckSubsystem neckSubsystem;
-  private ShooterSubsystem shooterSubsystem;
 
-  public NeckInCommand(NeckSubsystem neckSubsystem, ShooterSubsystem shooterSubsystem) {
+  public NeckInCommand(NeckSubsystem neckSubsystem) {
     this.neckSubsystem = neckSubsystem;
-    this.shooterSubsystem = shooterSubsystem;
     addRequirements(neckSubsystem);
   }
 
@@ -23,10 +20,7 @@ public class NeckInCommand extends CommandBase {
 
   @Override
   public void execute() {
-    if(shooterSubsystem.getFlywheelRPM() > 10.0 || (shooterSubsystem.getFlywheelRPM() < 10.0 && !neckSubsystem.getUpperBeamBreak())){
-      neckSubsystem.moveFrontUp();
-    }
-    neckSubsystem.moveRearUp();
+    neckSubsystem.moveUp();
   }
 
   @Override

@@ -32,7 +32,8 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-    SmartDashboard.putNumber( "Current Pressure: ", m_robotContainer.pneumaticsSubsystem.getPressure());
+    SmartDashboard.putNumber("Current Pressure: ", m_robotContainer.pneumaticsSubsystem.getPressure());
+    SmartDashboard.putNumber("Flywheel RPM: ", m_robotContainer.shooterSubsystem.getFlywheelRPM());
   }
 
   @Override

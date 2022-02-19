@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.*;
+import frc.robot.commands.commandgroups.AllInCommand;
+import frc.robot.commands.commandgroups.AllOutCommand;
 import frc.robot.commands.intake.IntakeInCommand;
 import frc.robot.commands.intake.IntakeOutCommand;
 import frc.robot.commands.intake.ToggleIntakeCommand;
@@ -36,7 +38,7 @@ public class RobotContainer {
   private IntakeSubsystem intakeSubsystem;
   private NeckSubsystem neckSubsystem;
   private TurretSubsystem turretSubsystem;
-  private ShooterSubsystem shooterSubsystem;
+  public ShooterSubsystem shooterSubsystem;
   private ClimberSubsystem climberSubsystem;
   public PneumaticsSubsystem pneumaticsSubsystem;
   public final LEDSubsystem ledSubsystem;
@@ -87,8 +89,9 @@ public class RobotContainer {
     setJoystickButtonWhileHeld(driverStationJoystick, 2, new SpinShooterCommand(shooterSubsystem, ShooterConstants.SHOOTER_SPEED));
     setJoystickButtonWhileHeld(driverStationJoystick, 3, new IntakeInCommand(intakeSubsystem));
     setJoystickButtonWhileHeld(driverStationJoystick, 4, new MoveTurretCommand(turretSubsystem, 0.1));
+    setJoystickButtonWhileHeld(driverStationJoystick, 5, new AllInCommand(neckSubsystem, intakeSubsystem));
 
-    setJoystickButtonWhileHeld(driverStationJoystick, 6, new NeckOutCommand(neckSubsystem));
+    setJoystickButtonWhileHeld(driverStationJoystick, 6, new AllOutCommand(intakeSubsystem, neckSubsystem));
     
     setJoystickButtonWhileHeld(driverStationJoystick, 9, new MoveTurretCommand(turretSubsystem, -0.1));
     setJoystickButtonWhenPressed(driverStationJoystick, 11, new ToggleShiftCommand(shiftingSubsystem));

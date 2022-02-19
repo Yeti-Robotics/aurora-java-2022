@@ -42,7 +42,6 @@ public class TurretSubsystem extends SubsystemBase {
             ) {
                 stopTurret();
         }
-        System.out.println("MAG SWITCH: " + getMagSwitch());
     }
 
 	public void moveTurret(double power) {
