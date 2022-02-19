@@ -6,35 +6,34 @@ package frc.robot.commands.neck;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.NeckSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
 public class NeckInCommand extends CommandBase {
-  /** Creates a new NeckInCommand. */
-  private final NeckSubsystem neckSubsystem;
+  private NeckSubsystem neckSubsystem;
+  private ShooterSubsystem shooterSubsystem;
 
-
-  public NeckInCommand(NeckSubsystem neckSubsystem) {
+  public NeckInCommand(NeckSubsystem neckSubsystem, ShooterSubsystem shooterSubsystem) {
     this.neckSubsystem = neckSubsystem;
+    this.shooterSubsystem = shooterSubsystem;
     addRequirements(neckSubsystem);
-    // Use addRequirements() here to declare subsystem dependencies.
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {}
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    neckSubsystem.moveUp();
+    if(shooterSubsystem.getFlywheelRPM() > 10.0 || (shooterSubsystem.getFlywheelRPM() < 10.0 && !neckSubsystem.getUpperBeamBreak())){
+      neckSubsystem.moveFrontUp();
+    }
+    neckSubsystem.moveRearUp();
   }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     neckSubsystem.stopNeck();
   }
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;

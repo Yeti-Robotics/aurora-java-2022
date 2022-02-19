@@ -20,8 +20,19 @@ public class NeckSubsystem extends SubsystemBase {
         upperBeamBreak = new DigitalInput(NeckConstants.NECK_UPPER_BEAM_BREAK);
     }
 
+    @Override
+    public void periodic() {}
+
     public void moveUp(){
         frontSpark.set(NeckConstants.NECK_SPEED);
+        rearSpark.set(NeckConstants.NECK_SPEED);
+    }
+
+    public void moveFrontUp(){
+        frontSpark.set(NeckConstants.NECK_SPEED);
+    }
+
+    public void moveRearUp(){
         rearSpark.set(NeckConstants.NECK_SPEED);
     }
 
