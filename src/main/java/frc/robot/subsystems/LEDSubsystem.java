@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LEDConstants;
 
 public class LEDSubsystem extends SubsystemBase {
-  private AddressableLED[] ledStrips;
+  private AddressableLED[] ledStrips = new AddressableLED[LEDConstants.LED_COUNT];
   private AddressableLEDBuffer ledBuffer;
   private int r,g,b;
 
