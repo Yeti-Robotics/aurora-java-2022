@@ -25,6 +25,7 @@ public class Robot extends TimedRobot {
   public CompressorConfigType compressorConfigType;
 
   private RobotContainer m_robotContainer;
+
   String trajectoryJSON = "insert json here"; //No path is loaded yet
   public static Trajectory trajectory = new Trajectory();
 
@@ -38,8 +39,6 @@ public class Robot extends TimedRobot {
     } catch (IOException ex) {
       DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
     }
-
-
   }
 
   @Override

@@ -17,8 +17,6 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.*;
-import frc.robot.commands.intake.IntakeInCommand;
-import frc.robot.commands.intake.IntakeOutCommand;
 import frc.robot.commands.neck.NeckInCommand;
 import frc.robot.commands.neck.NeckOutCommand;
 import frc.robot.commands.shifting.ToggleShiftCommand;
@@ -120,7 +118,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
     Trajectory customTrajectory = Robot.trajectory;
 
     RamseteCommand  ramseteCommand = new RamseteCommand(
