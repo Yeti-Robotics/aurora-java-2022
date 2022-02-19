@@ -35,7 +35,7 @@ public class RobotContainer {
   private TurretSubsystem turretSubsystem;
   private ShooterSubsystem shooterSubsystem;
   private ClimberSubsystem climberSubsystem;
-  private PneumaticsSubsystem pneumaticsSubsystem;
+  public PneumaticsSubsystem pneumaticsSubsystem;
   public final LEDSubsystem ledSubsystem;
   
 
