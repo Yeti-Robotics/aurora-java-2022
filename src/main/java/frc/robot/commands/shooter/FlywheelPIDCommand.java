@@ -10,7 +10,7 @@ import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.ShooterSubsystem;
 
 public class FlywheelPIDCommand extends PIDCommand {
-  public FlywheelPIDCommand(ShooterSubsystem shooterSubsystem) {
+  public FlywheelPIDCommand(ShooterSubsystem shooterSubsystem) {  
     super(
         // The controller that the command will use
         new PIDController(ShooterConstants.SHOOTER_P, ShooterConstants.SHOOTER_I, ShooterConstants.SHOOTER_D),
