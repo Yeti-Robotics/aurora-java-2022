@@ -5,7 +5,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -15,11 +14,10 @@ import frc.robot.subsystems.*;
 import frc.robot.commands.commandgroups.AllInCommand;
 import frc.robot.commands.commandgroups.AllOutCommand;
 import frc.robot.commands.intake.IntakeInCommand;
-import frc.robot.commands.intake.IntakeOutCommand;
 import frc.robot.commands.intake.ToggleIntakeCommand;
 import frc.robot.commands.neck.NeckInCommand;
-import frc.robot.commands.neck.NeckOutCommand;
 import frc.robot.commands.shifting.ToggleShiftCommand;
+import frc.robot.commands.shooter.FlywheelPIDCommand;
 import frc.robot.commands.shooter.SpinShooterCommand;
 import frc.robot.commands.turret.MoveTurretCommand;
 import frc.robot.commands.turret.TurretLockCommand;
@@ -41,9 +39,8 @@ public class RobotContainer {
   public ShooterSubsystem shooterSubsystem;
   private ClimberSubsystem climberSubsystem;
   public PneumaticsSubsystem pneumaticsSubsystem;
-  public final LEDSubsystem ledSubsystem;
+  public LEDSubsystem ledSubsystem;
   
-
   // The robot's subsystems and commands are defined here...
   //private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
@@ -90,8 +87,8 @@ public class RobotContainer {
     setJoystickButtonWhileHeld(driverStationJoystick, 3, new IntakeInCommand(intakeSubsystem));
     setJoystickButtonWhileHeld(driverStationJoystick, 4, new MoveTurretCommand(turretSubsystem, 0.1));
     setJoystickButtonWhileHeld(driverStationJoystick, 5, new AllInCommand(neckSubsystem, intakeSubsystem));
-
     setJoystickButtonWhileHeld(driverStationJoystick, 6, new AllOutCommand(intakeSubsystem, neckSubsystem));
+    setJoystickButtonWhileHeld(driverStationJoystick, 7, new FlywheelPIDCommand(shooterSubsystem));
     
     setJoystickButtonWhileHeld(driverStationJoystick, 9, new MoveTurretCommand(turretSubsystem, -0.1));
     setJoystickButtonWhenPressed(driverStationJoystick, 11, new ToggleShiftCommand(shiftingSubsystem));
