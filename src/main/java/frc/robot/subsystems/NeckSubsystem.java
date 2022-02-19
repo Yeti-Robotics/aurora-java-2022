@@ -8,31 +8,31 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.NeckConstants;
 
 public class NeckSubsystem extends SubsystemBase {
-    private CANSparkMax FRONT_INDEXER;
-    private CANSparkMax REAR_INDEXER;
+    private CANSparkMax frontSpark;
+    private CANSparkMax rearSpark;
     private DigitalInput lowerBeamBreak;
     private DigitalInput upperBeamBreak;
 
     public NeckSubsystem() {
-        FRONT_INDEXER = new CANSparkMax(NeckConstants.FRONT_INDEXER, MotorType.kBrushless);
-        REAR_INDEXER = new CANSparkMax(NeckConstants.REAR_INDEXER, MotorType.kBrushless);
+        frontSpark = new CANSparkMax(NeckConstants.FRONT_INDEXER, MotorType.kBrushless);
+        rearSpark = new CANSparkMax(NeckConstants.REAR_INDEXER, MotorType.kBrushless);
         lowerBeamBreak = new DigitalInput(NeckConstants.NECK_LOWER_BEAM_BREAK);
         upperBeamBreak = new DigitalInput(NeckConstants.NECK_UPPER_BEAM_BREAK);
     }
 
     public void moveUp(){
-        FRONT_INDEXER.set(NeckConstants.NECK_SPEED);
-        REAR_INDEXER.set(NeckConstants.NECK_SPEED);
+        frontSpark.set(NeckConstants.NECK_SPEED);
+        rearSpark.set(NeckConstants.NECK_SPEED);
     }
 
     public void moveDown(){
-        FRONT_INDEXER.set(-NeckConstants.NECK_SPEED);
-        REAR_INDEXER.set(-NeckConstants.NECK_SPEED);
+        frontSpark.set(-NeckConstants.NECK_SPEED);
+        rearSpark.set(-NeckConstants.NECK_SPEED);
     }
 
     public void stopNeck(){
-        FRONT_INDEXER.set(0.0);
-        REAR_INDEXER.set(0.0);
+        frontSpark.set(0.0);
+        rearSpark.set(0.0);
     }
 
     public boolean getLowerBeamBreak(){

@@ -57,7 +57,7 @@ public final class Constants {
         public static final int SHOOTER_RIGHT_FALCON = 7; //right
 
         //shooter motor speeds    
-        public static final double SHOOTER_SPEED = .9;
+        public static final double SHOOTER_SPEED = 0.7;
 
         //shooter rpm calc constants
         public static final double PULLEY_RATIO = 48.0 / 36.0; //not completely known
@@ -91,7 +91,7 @@ public final class Constants {
         public static final int REAR_INDEXER = 11;   
         public static final int NECK_LOWER_BEAM_BREAK = 0;
         public static final int NECK_UPPER_BEAM_BREAK = 1;
-        public static final double NECK_SPEED = 0.3;
+        public static final double NECK_SPEED = 0.9;
     }
 
     public static final class TurretConstants {

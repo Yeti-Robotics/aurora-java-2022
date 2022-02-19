@@ -10,13 +10,16 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.*;
 import frc.robot.commands.intake.IntakeInCommand;
 import frc.robot.commands.intake.IntakeOutCommand;
+import frc.robot.commands.intake.ToggleIntakeCommand;
 import frc.robot.commands.neck.NeckInCommand;
 import frc.robot.commands.neck.NeckOutCommand;
 import frc.robot.commands.shifting.ToggleShiftCommand;
 import frc.robot.commands.shooter.SpinShooterCommand;
+import frc.robot.commands.turret.MoveTurretCommand;
 import frc.robot.commands.turret.TurretLockCommand;
 
 
@@ -81,10 +84,15 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     setJoystickButtonWhileHeld(driverStationJoystick, 1, new NeckInCommand(neckSubsystem));
-    setJoystickButtonWhileHeld(driverStationJoystick, 2, new NeckOutCommand(neckSubsystem));
-    setJoystickButtonWhileHeld(driverStationJoystick, 3, new SpinShooterCommand(shooterSubsystem, 0.5));
-    setJoystickButtonWhenPressed(driverStationJoystick, 11, new ToggleShiftCommand(shiftingSubsystem));
+    setJoystickButtonWhileHeld(driverStationJoystick, 2, new SpinShooterCommand(shooterSubsystem, ShooterConstants.SHOOTER_SPEED));
+    setJoystickButtonWhileHeld(driverStationJoystick, 3, new IntakeInCommand(intakeSubsystem));
+    setJoystickButtonWhileHeld(driverStationJoystick, 4, new MoveTurretCommand(turretSubsystem, 0.1));
 
+    setJoystickButtonWhileHeld(driverStationJoystick, 6, new NeckOutCommand(neckSubsystem));
+    
+    setJoystickButtonWhileHeld(driverStationJoystick, 9, new MoveTurretCommand(turretSubsystem, -0.1));
+    setJoystickButtonWhenPressed(driverStationJoystick, 11, new ToggleShiftCommand(shiftingSubsystem));
+    setJoystickButtonWhenPressed(driverStationJoystick, 12, new ToggleIntakeCommand(intakeSubsystem));
   }
 
   private double getLeftY() {
@@ -103,12 +111,12 @@ public class RobotContainer {
     return driverStationJoystick.getRawAxis(3);
   }
 
-  private void setJoystickButtonWhenPressed(Joystick joystick, int button, CommandBase command) {
-    new JoystickButton(joystick, button).whenPressed(command);
+  private void setJoystickButtonWhenPressed(Joystick driverStationJoystick, int button, CommandBase command) {
+    new JoystickButton(driverStationJoystick, button).whenPressed(command);
   }
 
-  private void setJoystickButtonWhileHeld(Joystick joystick, int button, CommandBase command) {
-    new JoystickButton(joystick, button).whileHeld(command);
+  private void setJoystickButtonWhileHeld(Joystick driverStationJoystick, int button, CommandBase command) {
+    new JoystickButton(driverStationJoystick, button).whileHeld(command);
   }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

@@ -13,10 +13,8 @@ public class PneumaticsSubsystem extends SubsystemBase {
   public PneumaticsSubsystem() {
     compressor = new Compressor(PneumaticsModuleType.REVPH);
     compressor.enableAnalog(110, 120);
-  
   }
     
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
