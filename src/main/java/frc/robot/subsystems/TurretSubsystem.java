@@ -11,12 +11,12 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxLimitSwitch.Type;
 
 import frc.robot.Constants.TurretConstants;
-
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class TurretSubsystem extends SubsystemBase {
 	private CANSparkMax turretSpark;
-	private SparkMaxLimitSwitch magSwitch;
+	private DigitalInput magSwitch;
     private RelativeEncoder turretEncoder;
     private double power;
 
@@ -28,7 +28,7 @@ public class TurretSubsystem extends SubsystemBase {
 
 	public TurretSubsystem() {
 		turretSpark = new CANSparkMax(TurretConstants.TURRET_SPARK, MotorType.kBrushless);
-		magSwitch = turretSpark.getForwardLimitSwitch(Type.kNormallyClosed);
+		magSwitch = new DigitalInput(TurretConstants.MAG_SWITCH_PORT);
         turretEncoder = turretSpark.getEncoder();
         lockStatus = TurretLockStatus.LOCKED;
 	}
@@ -42,6 +42,7 @@ public class TurretSubsystem extends SubsystemBase {
             ) {
                 stopTurret();
         }
+        System.out.println("MAG SWITCH: " + getMagSwitch());
     }
 
 	public void moveTurret(double power) {
@@ -67,6 +68,6 @@ public class TurretSubsystem extends SubsystemBase {
     }
 
     public boolean getMagSwitch(){
-        return magSwitch.isPressed();
+        return !magSwitch.get();
     }
 }

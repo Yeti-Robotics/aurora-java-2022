@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
@@ -36,7 +37,9 @@ public class ClimberSubsystem extends SubsystemBase {
     climberHookPiston2.set(Value.kReverse);
     climberLeanPiston.set(Value.kReverse);
 
+    climberFalcon1.setInverted(true);
     climberFalcon2.follow(climberFalcon1);
+    climberFalcon2.setInverted(InvertType.FollowMaster);
 
     climberFalcon1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
     climberFalcon2.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
