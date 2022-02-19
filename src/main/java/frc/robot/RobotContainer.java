@@ -36,6 +36,7 @@ public class RobotContainer {
   private ShooterSubsystem shooterSubsystem;
   private ClimberSubsystem climberSubsystem;
   public final LEDSubsystem ledSubsystem;
+  private boolean buttonMode = true;
 
   // The robot's subsystems and commands are defined here...
   //private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
@@ -78,9 +79,19 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    setJoystickButtonWhileHeld(driverStationJoystick, 1, new NeckInCommand(neckSubsystem));
-    setJoystickButtonWhileHeld(driverStationJoystick, 2, new NeckOutCommand(neckSubsystem));
+    setJoystickButtonWhileHeld(driverStationJoystick, 1, buttonMode ? new NeckInCommand(neckSubsystem) : new NeckOutCommand(neckSubsystem));
+    setJoystickButtonWhileHeld(driverStationJoystick, 2, buttonMode ? new NeckOutCommand(neckSubsystem) : new NeckInCommand(neckSubsystem));
     setJoystickButtonWhileHeld(driverStationJoystick, 3, new SpinShooterCommand(shooterSubsystem, 0.5));
+    setJoystickButtonWhenPressed(driverStationJoystick, 10, new CommandBase() {
+      public void initialize() {
+        buttonMode = !buttonMode;
+        configureButtonBindings();
+      }
+
+      public boolean isFinished() {
+        return true;
+      }
+    });
     setJoystickButtonWhenPressed(driverStationJoystick, 11, new ToggleShiftCommand(shiftingSubsystem));
 
   }
