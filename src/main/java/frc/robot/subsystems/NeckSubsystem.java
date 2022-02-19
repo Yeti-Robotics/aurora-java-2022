@@ -22,13 +22,18 @@ public class NeckSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        System.out.println("LOWER BB: " + getLowerBeamBreak());
-        System.out.println("UPPER BB: " + getUpperBeamBreak());
+        // System.out.println("LOWER BB: " + getLowerBeamBreak());
+        // System.out.println("UPPER BB: " + getUpperBeamBreak());
     }
 
     public void moveUp(){
         frontSpark.set(NeckConstants.NECK_FRONT_SPEED);
         rearSpark.set(NeckConstants.NECK_REAR_SPEED);
+    }
+
+    public void moveUp(double speed){
+        frontSpark.set(speed);
+        rearSpark.set(speed);
     }
 
     public void moveFrontUp(){

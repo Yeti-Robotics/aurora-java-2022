@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import javax.swing.text.StyleContext.SmallAttributeSet;
-
 import edu.wpi.first.wpilibj.CompressorConfigType;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;

@@ -18,7 +18,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public static ShooterStatus shooterStatus;
 
-    public static double setPoint = 1000.0;
+    public static double setPoint = 5000.0;
     public static boolean atSetPoint = false;
 
     public ShooterSubsystem() {
@@ -39,8 +39,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // ShooterSubsystem.atSetPoint = Math.abs(getFlywheelRPM() - ShooterSubsystem.setPoint) <= ShooterConstants.RPM_TOLERANCE;
-        ShooterSubsystem.atSetPoint = getFlywheelRPM() >= 3000.0; // FOR TESTING PURPOSES ONLY!!!!!! do above commented code ^
+        ShooterSubsystem.atSetPoint = Math.abs(getFlywheelRPM() - ShooterSubsystem.setPoint) <= ShooterConstants.RPM_TOLERANCE;
+        // ShooterSubsystem.atSetPoint = getFlywheelRPM() >= 3000.0; // FOR TESTING PURPOSES ONLY!!!!!! do above commented code ^
     }
 
     public void shootFlywheel() {
