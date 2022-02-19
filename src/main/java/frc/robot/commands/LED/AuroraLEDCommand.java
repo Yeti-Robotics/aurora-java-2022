@@ -55,7 +55,7 @@ public class AuroraLEDCommand extends CommandBase {
   private int[] calcBoundaries() {
     int[] result = new int[NUM_COLORS];
     for (int i = 0; i < NUM_COLORS; i++) {
-      result[i] = (i + 1) / NUM_COLORS * NUM_LED_GROUPS;
+      result[i] = ((i + 1) * LEDConstants.LED_COUNT) / NUM_COLORS * NUM_LED_GROUPS;
     }
     return result;
   }
