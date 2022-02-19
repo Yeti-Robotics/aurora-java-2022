@@ -56,6 +56,12 @@ public final class Constants {
         public static final int SHOOTER_LEFT_FALCON = 8; //left
         public static final int SHOOTER_RIGHT_FALCON = 7; //right
 
+        //PID constants
+        public static final double SHOOTER_P = 0.0;
+        public static final double SHOOTER_I = 0.0;
+        public static final double SHOOTER_D = 0.0;
+        public static final double SHOOTER_F = 0.0;
+
         //shooter motor speeds    
         public static final double SHOOTER_SPEED = 0.7;
 
@@ -64,7 +70,7 @@ public final class Constants {
         public static final double ENCODER_TIME_CONVERSION = 600.0; // 100 ms per minute
         public static final double ENCODER_RESOLUTION = 2048.0;
         public static final double QUAD_FACTOR = 4.0; // quadrature encoder factor
-        public static final double RPM_TOLERANCE = 25.0;
+        public static final double RPM_TOLERANCE = 10.0;
     }
 
     public static final class CalcConstants {
@@ -79,10 +85,10 @@ public final class Constants {
         public static final double GRAVITY = 386.09; // inches/ sec ^2
     }
 
-    public static final class IntakeConstants{
+    public static final class IntakeConstants {
         public static final int INTAKE_FALCON = 9;
         public static final int[] INTAKE_PISTONS_SOLENOID = {2, 3}; 
-        public static final double INTAKE_SPEED = 0.4; 
+        public static final double INTAKE_SPEED = 0.2; 
     }
 
     public static final class NeckConstants{
@@ -90,8 +96,8 @@ public final class Constants {
         public static final int REAR_INDEXER = 11;   
         public static final int NECK_LOWER_BEAM_BREAK = 4;
         public static final int NECK_UPPER_BEAM_BREAK = 2;
-        public static final double NECK_FRONT_SPEED = 0.1;
-        public static final double NECK_REAR_SPEED = 0.45;
+        public static final double NECK_FRONT_SPEED = 0.6;
+        public static final double NECK_REAR_SPEED = 0.6;
     }
 
     public static final class TurretConstants {

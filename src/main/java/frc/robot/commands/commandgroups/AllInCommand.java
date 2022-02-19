@@ -29,16 +29,23 @@ public class AllInCommand extends CommandBase {
 	public void execute() {
 		intakeSubsystem.rollIn();
 		neckSubsystem.stopNeck();
-		if (ShooterSubsystem.atSetPoint) {
+
+		if(ShooterSubsystem.atSetPoint){
 			neckSubsystem.moveUp();
-		} else {
-			if (neckSubsystem.getUpperBeamBreak()) {
-				neckSubsystem.moveUp();
-			}
-			// if (neckSubsystem.getLowerBeamBreak() || (!neckSubsystem.getLowerBeamBreak() && neckSubsystem.getUpperBeamBreak())) {
-			// 	neckSubsystem.moveFrontUp();
-			// }
+		} else if(neckSubsystem.getLowerBeamBreak()){
+			neckSubsystem.moveUp(0.3);
 		}
+
+		// if (ShooterSubsystem.atSetPoint) {
+		// 	neckSubsystem.moveUp();
+		// } else {
+		// 	if (neckSubsystem.getUpperBeamBreak()) {
+		// 		neckSubsystem.moveUp(0.1);
+		// 	}
+		// 	if (neckSubsystem.getLowerBeamBreak() || (!neckSubsystem.getLowerBeamBreak() && neckSubsystem.getUpperBeamBreak())) {
+		// 		neckSubsystem.moveFrontUp();
+		// 	}
+		// }
 	}
 
 	// Called once the command ends or is interrupted.
