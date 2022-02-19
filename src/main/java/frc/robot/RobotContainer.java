@@ -4,11 +4,17 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.RamseteController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.*;
 import frc.robot.commands.intake.IntakeInCommand;
@@ -113,10 +119,28 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-/*  public Command getAutonomousCommand() {
+  public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    Trajectory customTrajectory = Robot.trajectory;
+
+    RamseteCommand  ramseteCommand = new RamseteCommand(
+      customTrajectory, 
+      drivetrainSubsystem::getPose,
+      new RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
+      new SimpleMotorFeedforward(
+        AutoConstants.ksVolts,
+        AutoConstants.kvVoltSecondsPerMeters,
+        AutoConstants.kaVoltSecondsSquaredPerMeter), 
+        AutoConstants.kinematics, 
+        drivetrainSubsystem::getWheelSpeeds,
+        new PIDController(AutoConstants.kPDriveVel, 0, 0), 
+        new PIDController(AutoConstants.kPDriveVel, 0, 0), 
+        drivetrainSubsystem::tankDriveVolts, 
+        drivetrainSubsystem);
+
+        drivetrainSubsystem.resetOdometry(customTrajectory.getInitialPose());
+        return  ramseteCommand.andThen(() -> drivetrainSubsystem.tankDriveVolts(0, 0));
   }
-}
-*/
+
+
 }

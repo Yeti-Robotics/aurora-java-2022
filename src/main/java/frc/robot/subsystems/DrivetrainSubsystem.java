@@ -7,6 +7,9 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -18,6 +21,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private AHRS gyro; 
   
   private DifferentialDrive drive;
+  private DifferentialDriveOdometry odometry;
   private DriveMode driveMode;
 
   public enum DriveMode {
@@ -30,10 +34,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
     rightFalcon1 = new WPI_TalonFX(DriveConstants.RIGHT_FALCON_1);
     rightFalcon2 = new WPI_TalonFX(DriveConstants.RIGHT_FALCON_2);
     gyro = new AHRS(I2C.Port.kOnboard);
+    resetGyro();
+
+    odometry = new DifferentialDriveOdometry(gyro.getRotation2d());
 
     leftFalcon2.follow(leftFalcon1);
     leftFalcon2.setInverted(InvertType.FollowMaster);
-
+    rightFalcon1.setInverted(true);
     rightFalcon2.follow(rightFalcon1);
     rightFalcon2.setInverted(InvertType.FollowMaster);
 
@@ -43,10 +50,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
     leftFalcon1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
     rightFalcon1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
 
-    leftFalcon1.setNeutralMode(NeutralMode.Coast);
-    leftFalcon2.setNeutralMode(NeutralMode.Coast);
-    rightFalcon1.setNeutralMode(NeutralMode.Coast);
-    rightFalcon2.setNeutralMode(NeutralMode.Coast);
+    leftFalcon1.setNeutralMode(NeutralMode.Brake);
+    leftFalcon2.setNeutralMode(NeutralMode.Brake);
+    rightFalcon1.setNeutralMode(NeutralMode.Brake);
+    rightFalcon2.setNeutralMode(NeutralMode.Brake);
 
     resetEncoders();
   
@@ -54,7 +61,18 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   @Override
-  public void periodic(){}
+  public void periodic(){
+    odometry.update(
+      gyro.getRotation2d(),
+      getLeftEncoder(),
+      getRightEncoder());
+  }
+
+
+  public void tankDriveVolts(double leftVolts, double rightVolts){
+    leftFalcon1.setVoltage(leftVolts);
+    rightFalcon1.setVoltage(rightVolts);
+  }
 
   public void tankDrive(double leftpower, double rightpower) {
     drive.tankDrive(leftpower, rightpower);
@@ -96,6 +114,19 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   public double getHeading(){
     return gyro.getRotation2d().getDegrees();
+  }
+
+  public Pose2d getPose(){
+    return odometry.getPoseMeters();
+  }
+
+  public void resetOdometry(Pose2d pose){
+    resetEncoders();
+    odometry.resetPosition(pose, gyro.getRotation2d());
+  }
+
+  public DifferentialDriveWheelSpeeds getWheelSpeeds(){
+    return new DifferentialDriveWheelSpeeds(getLeftEncoder(), getRightEncoder()); 
   }
 
   public void resetGyro(){

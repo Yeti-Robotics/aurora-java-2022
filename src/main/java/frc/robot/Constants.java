@@ -4,6 +4,11 @@
 
 package frc.robot;
 
+import com.fasterxml.jackson.databind.type.PlaceholderForType;
+
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -32,6 +37,21 @@ public final class Constants {
 
         public static final double HIGH_GEAR_RATIO = 1.0;//placeholder
         public static final double LOW_GEAR_RATIO = 2.0;//placeholder
+    }
+
+    public static final class AutoConstants{
+        public static final double ksVolts = 1; //placeholder
+        public static final double kvVoltSecondsPerMeters = 1; //placeholder
+        public static final double kaVoltSecondsSquaredPerMeter = 1; //placeholder 
+        public static final double kPDriveVel = 1; //placeholder
+        public static final double trackWidthMeters = 1;//placeholder
+        public static final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(trackWidthMeters);
+        public static final double kRamseteB = 2.0;
+        public static final double kRamseteZeta = 0.7;
+        public static final double kMaxSpeedMetersPerSecond = 2.0;
+        public static final double kMaxAccelerationMetersPerSecondSquared = 2.0;
+    
+
     }
 
     public static final class LEDConstants {
