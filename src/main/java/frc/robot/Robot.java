@@ -49,7 +49,6 @@ public class Robot extends TimedRobot {
 	public void autonomousInit() {
 		// m_robotContainer.ledSubsystem.setDefaultCommand(new
 		// AuroraLEDCommand(m_robotContainer.ledSubsystem));
-
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.schedule();
 		}
@@ -70,6 +69,7 @@ public class Robot extends TimedRobot {
 		// if (beforeBlinkCommand != null) beforeBlinkCommand.schedule();
 		// }
 		// });
+		m_robotContainer.climberSubsystem.resetEncoders();
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.cancel();
 		}

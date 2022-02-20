@@ -24,7 +24,7 @@ public final class Constants {
 
         public static final int GYRO_ID = 1;
 
-        public static final int[] SOLENOID_SHIFTER = {0,1};
+        public static final int[] SOLENOID_SHIFTER = {0, 1};
 
         public static final double DRIVE_ENCODER_RESOLUTION = 2048.0;
         public static final double DRIVE_WHEEL_DIAMETER = 4.0;
@@ -45,13 +45,12 @@ public final class Constants {
 
         public static final double CLIMB_SPEED = 0.3;
         public static final double CLIMBER_LOWER_LIMIT = 0.0;
-        public static final double CLIMBER_UPPER_LIMIT = 1000.0; // placeholder !?>!>?!?>!
+        public static final double CLIMBER_UPPER_LIMIT = 101331.5; 
         public static final double CLIMBER_TOLERANCE = 15.0; 
 
-        public static final int[] CLIMBER_HOOK_PISTONS_1 = {6, 7}; // placeholder
-        public static final int[] CLIMBER_HOOK_PISTONS_2 = {8, 9}; // placeholder
-        public static final int[] CLIMBER_MOVING_PISTON = {8, 9}; // placeholder
         public static final int[] CLIMBER_LEAN_PISTON = {4, 5}; 
+        public static final int[] CLIMBER_MOVING_PISTON = {6, 7}; 
+        public static final int[] CLIMBER_STATIONARY_PISTONS = {8, 9}; 
 
     }
 
