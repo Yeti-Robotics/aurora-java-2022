@@ -35,7 +35,7 @@ public final class Constants {
     }
 
     public static final class LEDConstants {
-        public static final int[] ADDRESSABLE_LED = {0, 1};
+        public static final int ADDRESSABLE_LED = 0;
         public static final int LED_COUNT = 60;
     }
     

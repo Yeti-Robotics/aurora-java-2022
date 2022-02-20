@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LEDConstants;
 
 public class LEDSubsystem extends SubsystemBase {
-  private AddressableLED[] ledStrips = new AddressableLED[LEDConstants.LED_COUNT];
+  private AddressableLED ledStrip;
   private AddressableLEDBuffer ledBuffer;
   private int r,g,b;
 
@@ -22,17 +22,14 @@ public class LEDSubsystem extends SubsystemBase {
   public LEDStripStatus stripStatus;
 
   public LEDSubsystem() {
-    ledBuffer = new AddressableLEDBuffer(LEDConstants.LED_COUNT);
-    for (int i = 0; i < LEDConstants.ADDRESSABLE_LED.length; i++) {
-      AddressableLED ledStrip = new AddressableLED(LEDConstants.ADDRESSABLE_LED[i]);
-      AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(LEDConstants.LED_COUNT);
-      ledStrip.setLength(ledBuffer.getLength());
-      ledStrip.setData(ledBuffer);
-      ledStrip.start();
-      ledStrips[i] = ledStrip;
-    }
+    AddressableLED ledStrip = new AddressableLED(LEDConstants.ADDRESSABLE_LED);
+    AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(LEDConstants.LED_COUNT);
+    ledStrip.setLength(ledBuffer.getLength());
+    ledStrip.setData(ledBuffer);
+    ledStrip.start();
 
     stripStatus = LEDStripStatus.ON;
+    ledBuffer.getLED(0);
     SmartDashboard.putNumber("r", r);
     SmartDashboard.putNumber("g", g);
     SmartDashboard.putNumber("b", b);
@@ -50,11 +47,11 @@ public class LEDSubsystem extends SubsystemBase {
   }
 
   public void setHSV(int i, int hue, int saturation, int value){
-    ledBuffer.setHSV(i, hue, saturation, value);
+      ledBuffer.setHSV(i, hue, saturation, value);
   }
   
   public void setRGB(int i, int red, int green, int blue){
-    ledBuffer.setRGB(i, red, green, blue);
+   ledBuffer.setRGB(i, red, green, blue);
   }
 
   public int getBufferLength(){
@@ -62,16 +59,16 @@ public class LEDSubsystem extends SubsystemBase {
   }
 
   public void sendData(){
-    for (AddressableLED ledStrip: ledStrips) ledStrip.setData(ledBuffer);
+    ledStrip.setData(ledBuffer);
   }
 
   public void stopLEDStrip() {
-    for (AddressableLED ledStrip: ledStrips) ledStrip.stop();
+    ledStrip.stop();
     stripStatus = LEDStripStatus.OFF;
   }
 
   public void startLEDStrip() {
-    for (AddressableLED ledStrip: ledStrips) ledStrip.start();
+    ledStrip.start();
     stripStatus = LEDStripStatus.ON;
   }
 
