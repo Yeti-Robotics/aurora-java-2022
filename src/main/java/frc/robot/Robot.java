@@ -15,77 +15,83 @@ import frc.robot.commands.LED.BlinkLEDCommand;
 import frc.robot.commands.LED.SetLEDYetiBlueCommand;
 
 public class Robot extends TimedRobot {
-  private Command m_autonomousCommand;
-  private Command beforeBlinkCommand = null;
-  private boolean blinkWarningRan = false;
-  public CompressorConfigType compressorConfigType;
+	private Command m_autonomousCommand;
+	private Command beforeBlinkCommand = null;
+	private boolean blinkWarningRan = false;
+	public CompressorConfigType compressorConfigType;
 
-  private RobotContainer m_robotContainer;
+	private RobotContainer m_robotContainer;
 
-  @Override
-  public void robotInit() {
-    m_robotContainer = new RobotContainer();
-  }
+	@Override
+	public void robotInit() {
+		m_robotContainer = new RobotContainer();
+	}
 
-  @Override
-  public void robotPeriodic() {
-    CommandScheduler.getInstance().run();
-    SmartDashboard.putNumber("Current Pressure: ", m_robotContainer.pneumaticsSubsystem.getPressure());
-    SmartDashboard.putNumber("Flywheel RPM: ", m_robotContainer.shooterSubsystem.getFlywheelRPM());
-  }
+	@Override
+	public void robotPeriodic() {
+		CommandScheduler.getInstance().run();
+		SmartDashboard.putNumber("Current Pressure: ", m_robotContainer.pneumaticsSubsystem.getPressure());
+		SmartDashboard.putNumber("Flywheel RPM: ", m_robotContainer.shooterSubsystem.getFlywheelRPM());
+	}
 
-  @Override
-  public void disabledInit() {
-    // m_robotContainer.ledSubsystem.setDefaultCommand(new AuroraLEDCommand(m_robotContainer.ledSubsystem));
-  }
+	@Override
+	public void disabledInit() {
+		// m_robotContainer.ledSubsystem.setDefaultCommand(new
+		// AuroraLEDCommand(m_robotContainer.ledSubsystem));
+	}
 
-  @Override
-  public void disabledPeriodic() {
-    CommandScheduler.getInstance().run();
-  }
+	@Override
+	public void disabledPeriodic() {
+		CommandScheduler.getInstance().run();
+	}
 
-  @Override
-  public void autonomousInit() {
-    // m_robotContainer.ledSubsystem.setDefaultCommand(new AuroraLEDCommand(m_robotContainer.ledSubsystem));
+	@Override
+	public void autonomousInit() {
+		// m_robotContainer.ledSubsystem.setDefaultCommand(new
+		// AuroraLEDCommand(m_robotContainer.ledSubsystem));
 
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
-    }
-  }
+		if (m_autonomousCommand != null) {
+			m_autonomousCommand.schedule();
+		}
+	}
 
-  @Override
-  public void autonomousPeriodic() {}
+	@Override
+	public void autonomousPeriodic() {
+	}
 
-  @Override
-  public void teleopInit() {
-    // m_robotContainer.ledSubsystem.getCurrentCommand().cancel();
-    // m_robotContainer.ledSubsystem.setDefaultCommand(new SetLEDYetiBlueCommand(m_robotContainer.ledSubsystem));
+	@Override
+	public void teleopInit() {
+		// m_robotContainer.ledSubsystem.getCurrentCommand().cancel();
+		// m_robotContainer.ledSubsystem.setDefaultCommand(new
+		// SetLEDYetiBlueCommand(m_robotContainer.ledSubsystem));
 
-    // CommandScheduler.getInstance().onCommandFinish(command -> {
-      // if (command.getName().equals(new BlinkLEDCommand().getName())) {
-        // if (beforeBlinkCommand != null) beforeBlinkCommand.schedule();
-      // }
-    // });
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
-    }
-  }
+		// CommandScheduler.getInstance().onCommandFinish(command -> {
+		// if (command.getName().equals(new BlinkLEDCommand().getName())) {
+		// if (beforeBlinkCommand != null) beforeBlinkCommand.schedule();
+		// }
+		// });
+		if (m_autonomousCommand != null) {
+			m_autonomousCommand.cancel();
+		}
+	}
 
-  @Override
-  public void teleopPeriodic() {
-    // if (DriverStation.getMatchTime() < 30 && !blinkWarningRan) {
-      // beforeBlinkCommand = m_robotContainer.ledSubsystem.getCurrentCommand();
-      // new BlinkLEDCommand(m_robotContainer.ledSubsystem, 300, 255, 34, 0).schedule();
-      // blinkWarningRan = true;
-    // }
-    
-  }
+	@Override
+	public void teleopPeriodic() {
+		// if (DriverStation.getMatchTime() < 30 && !blinkWarningRan) {
+		// beforeBlinkCommand = m_robotContainer.ledSubsystem.getCurrentCommand();
+		// new BlinkLEDCommand(m_robotContainer.ledSubsystem, 300, 255, 34,
+		// 0).schedule();
+		// blinkWarningRan = true;
+		// }
 
-  @Override
-  public void testInit() {
-    CommandScheduler.getInstance().cancelAll();
-  }
+	}
 
-  @Override
-  public void testPeriodic() {}
+	@Override
+	public void testInit() {
+		CommandScheduler.getInstance().cancelAll();
+	}
+
+	@Override
+	public void testPeriodic() {
+	}
 }

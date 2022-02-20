@@ -46,8 +46,8 @@ public class ClimberSubsystem extends SubsystemBase {
     climberFalcon1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
     climberFalcon2.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
 
-    climberFalcon1.setNeutralMode(NeutralMode.Brake);
-    climberFalcon2.setNeutralMode(NeutralMode.Brake);
+    climberFalcon1.setNeutralMode(NeutralMode.Coast);
+    climberFalcon2.setNeutralMode(NeutralMode.Coast);
   }
 
   @Override

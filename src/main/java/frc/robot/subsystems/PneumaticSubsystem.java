@@ -8,9 +8,9 @@ import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class PneumaticsSubsystem extends SubsystemBase {
+public class PneumaticSubsystem extends SubsystemBase {
   private Compressor compressor;
-  public PneumaticsSubsystem() {
+  public PneumaticSubsystem() {
     compressor = new Compressor(PneumaticsModuleType.REVPH);
     compressor.enableAnalog(110, 120);
   }

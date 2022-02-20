@@ -43,7 +43,7 @@ public class RobotContainer {
   private TurretSubsystem turretSubsystem;
   public ShooterSubsystem shooterSubsystem;
   private ClimberSubsystem climberSubsystem;
-  public PneumaticsSubsystem pneumaticsSubsystem;
+  public PneumaticSubsystem pneumaticsSubsystem;
   public LEDSubsystem ledSubsystem;
   
   // The robot's subsystems and commands are defined here...
@@ -62,7 +62,7 @@ public class RobotContainer {
     shooterSubsystem = new ShooterSubsystem();
     climberSubsystem = new ClimberSubsystem();
     drivetrainSubsystem = new DrivetrainSubsystem();
-    pneumaticsSubsystem = new PneumaticsSubsystem();
+    pneumaticsSubsystem = new PneumaticSubsystem();
     turretSubsystem.setDefaultCommand(new TurretLockCommand(turretSubsystem));
 
     switch (drivetrainSubsystem.getDriveMode()) {
@@ -100,7 +100,7 @@ public class RobotContainer {
     setJoystickButtonWhileHeld(driverStationJoystick, 8, new SpinShooterVelocityCommand(shooterSubsystem, ShooterConstants.SHOOTER_MAX_VEL));
 
     // setJoystickButtonWhileHeld(driverStationJoystick, 9, new MoveTurretCommand(turretSubsystem, -0.1));
-    
+
     setJoystickButtonWhileHeld(driverStationJoystick, 9, new ClimbUpCommand(climberSubsystem));
     setJoystickButtonWhenPressed(driverStationJoystick, 10, new ToggleMovingHookCommand(climberSubsystem));
 
