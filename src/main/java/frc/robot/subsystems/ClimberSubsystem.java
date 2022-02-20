@@ -21,6 +21,7 @@ public class ClimberSubsystem extends SubsystemBase {
   //private DoubleSolenoid climberBrake;
   private DoubleSolenoid climberHookPiston1;
   private DoubleSolenoid climberHookPiston2;
+  private DoubleSolenoid climberMovingHook;
   private DoubleSolenoid climberLeanPiston;
 
   public ClimberSubsystem() {
@@ -29,12 +30,13 @@ public class ClimberSubsystem extends SubsystemBase {
     //climberBrake = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.CLIMBER_BRAKE_SOLENOID[0], ClimberConstants.CLIMBER_BRAKE_SOLENOID[1]);
     climberHookPiston1 = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.CLIMBER_HOOK_PISTONS_1[0], ClimberConstants.CLIMBER_HOOK_PISTONS_1[1]);
     climberHookPiston2 = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.CLIMBER_HOOK_PISTONS_2[0], ClimberConstants.CLIMBER_HOOK_PISTONS_2[1]);
+    climberMovingHook = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.CLIMBER_MOVING_PISTON[0], ClimberConstants.CLIMBER_MOVING_PISTON[1]);
     climberLeanPiston = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.CLIMBER_LEAN_PISTON[0], ClimberConstants.CLIMBER_LEAN_PISTON[1]);
-
 
     //climberBrake.set(Value.kReverse); // set value for toggling; assume reverse position on startup
     climberHookPiston1.set(Value.kReverse);
     climberHookPiston2.set(Value.kReverse);
+    climberMovingHook.set(Value.kReverse);
     climberLeanPiston.set(Value.kReverse);
 
     climberFalcon1.setInverted(true);
@@ -50,7 +52,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    System.out.println("CLIMBER RAW ENCODERS: " + getAverageEncoder());
   }
 
   public void climbUp() {
@@ -61,19 +63,23 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public void stopClimb(){
-      climberFalcon1.set(ControlMode.PercentOutput, 0.0);
+    climberFalcon1.set(ControlMode.PercentOutput, 0.0);
   }
 
   public void toggleBrake(){
-    climberFalcon1.set(ControlMode.PercentOutput, 0.1);
+    // TODO 
   }
 
-  public void toggleHookPistons(){
+  public void toggleStaticHooks(){
     climberHookPiston1.toggle();
     climberHookPiston2.toggle();
   }
 
-  public void toggleLeanPistons(){
+  public void toggleMovingHook(){
+    climberMovingHook.toggle();
+  }
+
+  public void toggleLeanPiston(){
     climberLeanPiston.toggle();
   }
 

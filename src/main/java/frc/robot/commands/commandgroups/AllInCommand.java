@@ -31,7 +31,7 @@ public class AllInCommand extends CommandBase {
 		neckSubsystem.stopNeck();
 
 		if(ShooterSubsystem.atSetPoint){
-			neckSubsystem.moveUp();
+			neckSubsystem.moveUp(0.8);
 		} else if(neckSubsystem.getLowerBeamBreak()){
 			neckSubsystem.moveUp(0.3);
 		}

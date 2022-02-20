@@ -5,6 +5,8 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
 
@@ -18,7 +20,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public static ShooterStatus shooterStatus;
 
-    public static double setPoint = 5000.0;
+    public static double setPoint = 4750.0;
     public static boolean atSetPoint = false;
 
     public ShooterSubsystem() {
@@ -27,6 +29,13 @@ public class ShooterSubsystem extends SubsystemBase {
 
         shooterLeftFalcon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
         shooterRightFalcon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
+
+        shooterRightFalcon.config_kP(0, ShooterConstants.SHOOTER_P);
+        shooterRightFalcon.config_kI(0, ShooterConstants.SHOOTER_I);
+        shooterRightFalcon.config_kD(0, ShooterConstants.SHOOTER_D);
+        shooterRightFalcon.config_kF(0, ShooterConstants.SHOOTER_F);
+
+        shooterRightFalcon.configPeakOutputForward(0.8);
 
         shooterLeftFalcon.follow(shooterRightFalcon);
         shooterLeftFalcon.setInverted(InvertType.OpposeMaster);
@@ -41,6 +50,9 @@ public class ShooterSubsystem extends SubsystemBase {
     public void periodic() {
         ShooterSubsystem.atSetPoint = Math.abs(getFlywheelRPM() - ShooterSubsystem.setPoint) <= ShooterConstants.RPM_TOLERANCE;
         // ShooterSubsystem.atSetPoint = getFlywheelRPM() >= 3000.0; // FOR TESTING PURPOSES ONLY!!!!!! do above commented code ^
+        // System.out.println("Flywheel RPM: " + getFlywheelRPM());
+        SmartDashboard.putNumber("Flywheel Set Point: ", ShooterSubsystem.setPoint);
+        SmartDashboard.putNumber("Flywheel Voltage", shooterRightFalcon.getMotorOutputVoltage());
     }
 
     public void shootFlywheel() {
@@ -50,6 +62,11 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public void shootFlywheel(double speed) {
         shooterRightFalcon.set(ControlMode.PercentOutput, speed);
+        shooterStatus = ShooterStatus.FORWARD;
+    }
+
+    public void setFlywheelVelocity(double vel){
+        shooterRightFalcon.set(ControlMode.Velocity, vel);
         shooterStatus = ShooterStatus.FORWARD;
     }
 

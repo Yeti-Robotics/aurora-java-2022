@@ -43,10 +43,14 @@ public final class Constants {
         public static final int CLIMBER_1 = 5; //front relative to robot
         public static final int CLIMBER_2 = 6; // rear relative to robot
 
-        public static final double CLIMB_SPEED = 0.8; //placeholder
+        public static final double CLIMB_SPEED = 0.3;
+        public static final double CLIMBER_LOWER_LIMIT = 0.0;
+        public static final double CLIMBER_UPPER_LIMIT = 1000.0; // placeholder !?>!>?!?>!
+        public static final double CLIMBER_TOLERANCE = 15.0; 
 
         public static final int[] CLIMBER_HOOK_PISTONS_1 = {6, 7}; // placeholder
         public static final int[] CLIMBER_HOOK_PISTONS_2 = {8, 9}; // placeholder
+        public static final int[] CLIMBER_MOVING_PISTON = {8, 9}; // placeholder
         public static final int[] CLIMBER_LEAN_PISTON = {4, 5}; 
 
     }
@@ -57,13 +61,14 @@ public final class Constants {
         public static final int SHOOTER_RIGHT_FALCON = 7; //right
 
         //PID constants
-        public static final double SHOOTER_P = 0.0001;
+        public static final double SHOOTER_P = 2.4;
         public static final double SHOOTER_I = 0.0;
         public static final double SHOOTER_D = 0.0;
-        public static final double SHOOTER_F = 0.7;
+        public static final double SHOOTER_F = 0.05013681846; // (60% * 1023) / max native vel per 100 ms @ 60%
+        public static final double SHOOTER_MAX_VEL = 12242.5; // in native encoder units per 100 ms
 
         //shooter motor speeds    
-        public static final double SHOOTER_SPEED = 0.7;
+        public static final double SHOOTER_SPEED = 0.6;
 
         //shooter rpm calc constants
         public static final double PULLEY_RATIO = 48.0 / 36.0; //not completely known

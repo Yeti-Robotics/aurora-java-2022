@@ -7,10 +7,10 @@ package frc.robot.commands.climber;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ClimberSubsystem;
 
-public class ToggleBrakeCommand extends CommandBase {
+public class ToggleStaticHooksCommand extends CommandBase {
   private ClimberSubsystem climberSubsystem;
 
-  public ToggleBrakeCommand(ClimberSubsystem climberSubsystem) {
+  public ToggleStaticHooksCommand(ClimberSubsystem climberSubsystem) {
     this.climberSubsystem = climberSubsystem;
     addRequirements(climberSubsystem);
   }
@@ -18,7 +18,7 @@ public class ToggleBrakeCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    climberSubsystem.toggleBrake();
+    climberSubsystem.toggleStaticHooks();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

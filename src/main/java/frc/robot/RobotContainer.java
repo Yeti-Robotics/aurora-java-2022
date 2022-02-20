@@ -11,6 +11,10 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.*;
+import frc.robot.commands.climber.ClimbDownCommand;
+import frc.robot.commands.climber.ClimbUpCommand;
+import frc.robot.commands.climber.ToggleMovingHookCommand;
+import frc.robot.commands.climber.ToggleStaticHooksCommand;
 import frc.robot.commands.commandgroups.AllInCommand;
 import frc.robot.commands.commandgroups.AllOutCommand;
 import frc.robot.commands.intake.IntakeInCommand;
@@ -19,6 +23,7 @@ import frc.robot.commands.neck.NeckInCommand;
 import frc.robot.commands.shifting.ToggleShiftCommand;
 import frc.robot.commands.shooter.FlywheelPIDCommand;
 import frc.robot.commands.shooter.SpinShooterCommand;
+import frc.robot.commands.shooter.SpinShooterVelocityCommand;
 import frc.robot.commands.turret.MoveTurretCommand;
 import frc.robot.commands.turret.TurretLockCommand;
 
@@ -48,7 +53,7 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    ledSubsystem = new LEDSubsystem();
+    // ledSubsystem = new LEDSubsystem();
     driverStationJoystick = new Joystick(OIConstants.DRIVER_STATION_JOY);
     shiftingSubsystem = new ShiftingSubsystem();
     intakeSubsystem = new IntakeSubsystem();
@@ -82,15 +87,23 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    setJoystickButtonWhileHeld(driverStationJoystick, 1, new NeckInCommand(neckSubsystem));
+    setJoystickButtonWhileHeld(driverStationJoystick, 1, new AllInCommand(neckSubsystem, intakeSubsystem));
     setJoystickButtonWhileHeld(driverStationJoystick, 2, new SpinShooterCommand(shooterSubsystem, ShooterConstants.SHOOTER_SPEED));
     setJoystickButtonWhileHeld(driverStationJoystick, 3, new IntakeInCommand(intakeSubsystem));
-    setJoystickButtonWhileHeld(driverStationJoystick, 4, new MoveTurretCommand(turretSubsystem, 0.1));
-    setJoystickButtonWhileHeld(driverStationJoystick, 5, new AllInCommand(neckSubsystem, intakeSubsystem));
+
+    // setJoystickButtonWhileHeld(driverStationJoystick, 4, new MoveTurretCommand(turretSubsystem, 0.1));
+
+    setJoystickButtonWhileHeld(driverStationJoystick, 4, new ClimbDownCommand(climberSubsystem));
+    setJoystickButtonWhenPressed(driverStationJoystick, 5, new ToggleStaticHooksCommand(climberSubsystem));
     setJoystickButtonWhileHeld(driverStationJoystick, 6, new AllOutCommand(intakeSubsystem, neckSubsystem));
     setJoystickButtonWhileHeld(driverStationJoystick, 7, new FlywheelPIDCommand(shooterSubsystem));
+    setJoystickButtonWhileHeld(driverStationJoystick, 8, new SpinShooterVelocityCommand(shooterSubsystem, ShooterConstants.SHOOTER_MAX_VEL));
+
+    // setJoystickButtonWhileHeld(driverStationJoystick, 9, new MoveTurretCommand(turretSubsystem, -0.1));
     
-    setJoystickButtonWhileHeld(driverStationJoystick, 9, new MoveTurretCommand(turretSubsystem, -0.1));
+    setJoystickButtonWhileHeld(driverStationJoystick, 9, new ClimbUpCommand(climberSubsystem));
+    setJoystickButtonWhenPressed(driverStationJoystick, 10, new ToggleMovingHookCommand(climberSubsystem));
+
     setJoystickButtonWhenPressed(driverStationJoystick, 11, new ToggleShiftCommand(shiftingSubsystem));
     setJoystickButtonWhenPressed(driverStationJoystick, 12, new ToggleIntakeCommand(intakeSubsystem));
   }

@@ -36,7 +36,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
-    m_robotContainer.ledSubsystem.setDefaultCommand(new AuroraLEDCommand(m_robotContainer.ledSubsystem));
+    // m_robotContainer.ledSubsystem.setDefaultCommand(new AuroraLEDCommand(m_robotContainer.ledSubsystem));
   }
 
   @Override
@@ -46,7 +46,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    m_robotContainer.ledSubsystem.setDefaultCommand(new AuroraLEDCommand(m_robotContainer.ledSubsystem));
+    // m_robotContainer.ledSubsystem.setDefaultCommand(new AuroraLEDCommand(m_robotContainer.ledSubsystem));
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
@@ -58,14 +58,14 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    m_robotContainer.ledSubsystem.getCurrentCommand().cancel();
-    m_robotContainer.ledSubsystem.setDefaultCommand(new SetLEDYetiBlueCommand(m_robotContainer.ledSubsystem));
+    // m_robotContainer.ledSubsystem.getCurrentCommand().cancel();
+    // m_robotContainer.ledSubsystem.setDefaultCommand(new SetLEDYetiBlueCommand(m_robotContainer.ledSubsystem));
 
-    CommandScheduler.getInstance().onCommandFinish(command -> {
-      if (command.getName().equals(new BlinkLEDCommand().getName())) {
-        if (beforeBlinkCommand != null) beforeBlinkCommand.schedule();
-      }
-    });
+    // CommandScheduler.getInstance().onCommandFinish(command -> {
+      // if (command.getName().equals(new BlinkLEDCommand().getName())) {
+        // if (beforeBlinkCommand != null) beforeBlinkCommand.schedule();
+      // }
+    // });
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -73,11 +73,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    if (DriverStation.getMatchTime() < 30 && !blinkWarningRan) {
-      beforeBlinkCommand = m_robotContainer.ledSubsystem.getCurrentCommand();
-      new BlinkLEDCommand(m_robotContainer.ledSubsystem, 300, 255, 34, 0).schedule();
-      blinkWarningRan = true;
-    }
+    // if (DriverStation.getMatchTime() < 30 && !blinkWarningRan) {
+      // beforeBlinkCommand = m_robotContainer.ledSubsystem.getCurrentCommand();
+      // new BlinkLEDCommand(m_robotContainer.ledSubsystem, 300, 255, 34, 0).schedule();
+      // blinkWarningRan = true;
+    // }
     
   }
 
