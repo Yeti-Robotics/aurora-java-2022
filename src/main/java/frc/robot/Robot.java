@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.wpilibj.CompressorConfigType;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -13,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.LED.AuroraLEDCommand;
 import frc.robot.commands.LED.BlinkLEDCommand;
 import frc.robot.commands.LED.SetLEDYetiBlueCommand;
+import frc.robot.utils.Limelight;
 
 public class Robot extends TimedRobot {
 	private Command m_autonomousCommand;
@@ -20,18 +22,27 @@ public class Robot extends TimedRobot {
 	private boolean blinkWarningRan = false;
 	public CompressorConfigType compressorConfigType;
 
-	private RobotContainer m_robotContainer;
+	private RobotContainer robotContainer;
+	private BangBangController shooterBBController;
+
+	public Robot(){
+		shooterBBController = new BangBangController();
+		// addPeriodic(() -> {
+
+		// }, 0.0);
+	}
 
 	@Override
 	public void robotInit() {
-		m_robotContainer = new RobotContainer();
+		robotContainer = new RobotContainer();
 	}
 
 	@Override
 	public void robotPeriodic() {
 		CommandScheduler.getInstance().run();
-		SmartDashboard.putNumber("Current Pressure: ", m_robotContainer.pneumaticsSubsystem.getPressure());
-		SmartDashboard.putNumber("Flywheel RPM: ", m_robotContainer.shooterSubsystem.getFlywheelRPM());
+		SmartDashboard.putNumber("Current Pressure: ", robotContainer.pneumaticsSubsystem.getPressure());
+		SmartDashboard.putNumber("Flywheel RPM: ", robotContainer.shooterSubsystem.getFlywheelRPM());
+		System.out.println("LIMELIGHT TX: " + Limelight.getTx());
 	}
 
 	@Override
@@ -69,7 +80,8 @@ public class Robot extends TimedRobot {
 		// if (beforeBlinkCommand != null) beforeBlinkCommand.schedule();
 		// }
 		// });
-		m_robotContainer.climberSubsystem.resetEncoders();
+		robotContainer.turretSubsystem.resetEncoder();
+		robotContainer.climberSubsystem.resetEncoders();
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.cancel();
 		}
@@ -83,7 +95,7 @@ public class Robot extends TimedRobot {
 		// 0).schedule();
 		// blinkWarningRan = true;
 		// }
-
+		
 	}
 
 	@Override

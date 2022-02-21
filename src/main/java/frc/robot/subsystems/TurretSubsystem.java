@@ -36,12 +36,13 @@ public class TurretSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         double turretPosition = getEncoder();
-        if (
-            (turretPosition >= TurretConstants.TURRET_MAX_RIGHT - TurretConstants.TURRET_MAX_TOLERANCE && power > 0) || 
-			(turretPosition <= TurretConstants.TURRET_MAX_LEFT + TurretConstants.TURRET_MAX_TOLERANCE && power < 0)
-            ) {
-                stopTurret();
-        }
+        // if (
+        //     (turretPosition >= TurretConstants.TURRET_MAX_RIGHT - TurretConstants.TURRET_MAX_TOLERANCE && power > 0) || 
+		// 	(turretPosition <= TurretConstants.TURRET_MAX_LEFT + TurretConstants.TURRET_MAX_TOLERANCE && power < 0)
+        //     ) {
+        //         stopTurret();
+        // }
+        // System.out.println("TURRET ENC: " + turretPosition);
     }
 
 	public void moveTurret(double power) {
@@ -54,8 +55,8 @@ public class TurretSubsystem extends SubsystemBase {
 
     public boolean isWithinRotationLimit() {
         double turretPosition = getEncoder();
-        return turretPosition < TurretConstants.TURRET_MAX_RIGHT - TurretConstants.TURRET_MAX_TOLERANCE || 
-				turretPosition > TurretConstants.TURRET_MAX_LEFT + TurretConstants.TURRET_MAX_TOLERANCE;
+        return turretPosition < TurretConstants.TURRET_MAX_RIGHT - TurretConstants.TURRET_TOLERANCE || 
+				turretPosition > TurretConstants.TURRET_MAX_LEFT + TurretConstants.TURRET_TOLERANCE;
     }
 
     public void resetEncoder(){

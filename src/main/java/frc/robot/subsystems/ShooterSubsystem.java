@@ -23,6 +23,9 @@ public class ShooterSubsystem extends SubsystemBase {
     public static double setPoint = 4750.0;
     public static boolean atSetPoint = false;
 
+    // for BangBangController
+    public static boolean isShooting = false;
+
     public ShooterSubsystem() {
         shooterLeftFalcon = new TalonFX(ShooterConstants.SHOOTER_LEFT_FALCON);
         shooterRightFalcon = new TalonFX(ShooterConstants.SHOOTER_RIGHT_FALCON);
@@ -30,12 +33,12 @@ public class ShooterSubsystem extends SubsystemBase {
         shooterLeftFalcon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
         shooterRightFalcon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
 
-        shooterRightFalcon.config_kP(0, ShooterConstants.SHOOTER_P);
-        shooterRightFalcon.config_kI(0, ShooterConstants.SHOOTER_I);
-        shooterRightFalcon.config_kD(0, ShooterConstants.SHOOTER_D);
-        shooterRightFalcon.config_kF(0, ShooterConstants.SHOOTER_F);
+        // shooterRightFalcon.config_kP(0, ShooterConstants.SHOOTER_P);
+        // shooterRightFalcon.config_kI(0, ShooterConstants.SHOOTER_I);
+        // shooterRightFalcon.config_kD(0, ShooterConstants.SHOOTER_D);
+        // shooterRightFalcon.config_kF(0, ShooterConstants.SHOOTER_F);
 
-        shooterRightFalcon.configPeakOutputForward(0.8);
+        // shooterRightFalcon.configPeakOutputForward(0.8);
 
         shooterLeftFalcon.follow(shooterRightFalcon);
         shooterLeftFalcon.setInverted(InvertType.OpposeMaster);

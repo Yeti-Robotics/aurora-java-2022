@@ -50,7 +50,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-		System.out.println("CLIMBER RAW ENCODERS: " + getAverageEncoder());
+		// System.out.println("CLIMBER RAW ENCODERS: " + getAverageEncoder());
   }
 
   public void climbUp() {
@@ -64,9 +64,9 @@ public class ClimberSubsystem extends SubsystemBase {
     climberFalcon1.set(ControlMode.PercentOutput, 0.0);
   }
 
-  public void toggleBrake(){
+  public void toggleBrake(){ 
     // TODO 
-  }
+  } 
 
   public void toggleStaticHooks(){
     climberStationaryHooks.toggle();

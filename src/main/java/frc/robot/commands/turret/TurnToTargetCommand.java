@@ -9,14 +9,17 @@ import frc.robot.Constants.TurretConstants;
 import frc.robot.subsystems.TurretSubsystem;
 import frc.robot.utils.Limelight;
 
-public class MoveTurretCommand extends CommandBase {
+public class TurnToTargetCommand extends CommandBase {
   private TurretSubsystem turretSubsystem;
-  private boolean atLimit = false;
   private double power;
+  private boolean atLimit = false;
+  private boolean isAligned = false;
 
-  public MoveTurretCommand(TurretSubsystem turretSubsystem, double power) {
+  // power should be positive
+  public TurnToTargetCommand(TurretSubsystem turretSubsystem, double power) {
     this.turretSubsystem = turretSubsystem;
     this.power = power;
+
     addRequirements(turretSubsystem);
   }
 
@@ -25,11 +28,17 @@ public class MoveTurretCommand extends CommandBase {
 
   @Override
   public void execute() {
+    power = Math.abs(power) * ((Limelight.getTx() < 0) ? -1 : 1);
+    isAligned = Math.abs(Limelight.getTx()) <= TurretConstants.LIMELIGHT_TOLERANCE;
+
+    System.out.println("GETTX: " + Limelight.getTx());
+    System.out.println("POWER: " + power);
+
     atLimit = (power > 0)
         ? turretSubsystem.getEncoder() >= TurretConstants.TURRET_MAX_RIGHT - TurretConstants.TURRET_TOLERANCE
         : turretSubsystem.getEncoder() <= TurretConstants.TURRET_MAX_LEFT + TurretConstants.TURRET_TOLERANCE;
-    if (!atLimit) {
-      turretSubsystem.moveTurret((Limelight.getTx() == 0.0) ? 0 : power);
+    if(!isAligned || !atLimit){
+      turretSubsystem.moveTurret(power);
     }
   }
 
@@ -40,6 +49,6 @@ public class MoveTurretCommand extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return atLimit;
+    return atLimit; // || isAligned
   }
 }

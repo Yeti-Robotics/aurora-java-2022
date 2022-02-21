@@ -107,13 +107,14 @@ public final class Constants {
     public static final class TurretConstants {
         public static final int TURRET_SPARK = 12; 
         public static final int MAG_SWITCH_PORT = 3;
-        public static final double TURRET_SPEED = 0.5;
+        public static final double TURRET_SPEED = 0.15;
         public static final double kPTurretVel = 0.0; // ph
         public static final double kITurretVel = 0.0; // ph
         public static final double kDTurretVel = 0.0; // ph
-        public static final double TURRET_MAX_RIGHT = 90; //placeholder
-        public static final double TURRET_MAX_LEFT = -90; //placeholder
-        public static final double TURRET_MAX_TOLERANCE = 10;
+        public static final double TURRET_MAX_RIGHT = 54.59563446044922; 
+        public static final double TURRET_MAX_LEFT = -54.59563446044922;
+        public static final double TURRET_TOLERANCE = 1.0;
+        public static final double LIMELIGHT_TOLERANCE = 1.0;
     }
 
     public static final class OIConstants {

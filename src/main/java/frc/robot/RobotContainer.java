@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.Constants.TurretConstants;
 import frc.robot.subsystems.*;
 import frc.robot.commands.climber.ClimbDownCommand;
 import frc.robot.commands.climber.ClimbUpCommand;
@@ -25,6 +26,7 @@ import frc.robot.commands.shooter.FlywheelPIDCommand;
 import frc.robot.commands.shooter.SpinShooterCommand;
 import frc.robot.commands.shooter.SpinShooterVelocityCommand;
 import frc.robot.commands.turret.MoveTurretCommand;
+import frc.robot.commands.turret.TurnToTargetCommand;
 import frc.robot.commands.turret.TurretLockCommand;
 
 
@@ -35,12 +37,12 @@ import frc.robot.commands.turret.TurretLockCommand;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  private Joystick driverStationJoystick;
-  private DrivetrainSubsystem drivetrainSubsystem;
-  private ShiftingSubsystem shiftingSubsystem;
-  private IntakeSubsystem intakeSubsystem;
-  private NeckSubsystem neckSubsystem;
-  private TurretSubsystem turretSubsystem;
+  public Joystick driverStationJoystick;
+  public DrivetrainSubsystem drivetrainSubsystem;
+  public ShiftingSubsystem shiftingSubsystem;
+  public IntakeSubsystem intakeSubsystem;
+  public NeckSubsystem neckSubsystem;
+  public TurretSubsystem turretSubsystem;
   public ShooterSubsystem shooterSubsystem;
   public ClimberSubsystem climberSubsystem;
   public PneumaticSubsystem pneumaticsSubsystem;
@@ -91,19 +93,19 @@ public class RobotContainer {
     setJoystickButtonWhileHeld(driverStationJoystick, 2, new SpinShooterCommand(shooterSubsystem, ShooterConstants.SHOOTER_SPEED));
     setJoystickButtonWhileHeld(driverStationJoystick, 3, new IntakeInCommand(intakeSubsystem));
 
-    // setJoystickButtonWhileHeld(driverStationJoystick, 4, new MoveTurretCommand(turretSubsystem, 0.1));
-
-    setJoystickButtonWhileHeld(driverStationJoystick, 4, new ClimbDownCommand(climberSubsystem));
+    setJoystickButtonWhileHeld(driverStationJoystick, 4, new TurnToTargetCommand(turretSubsystem, TurretConstants.TURRET_SPEED));
+    // setJoystickButtonWhileHeld(driverStationJoystick, 4, new MoveTurretCommand(turretSubsystem, -TurretConstants.TURRET_SPEED));
+    // setJoystickButtonWhileHeld(driverStationJoystick, 4, new ClimbDownCommand(climberSubsystem));
+    
     setJoystickButtonWhenPressed(driverStationJoystick, 5, new ToggleStaticHooksCommand(climberSubsystem));
     setJoystickButtonWhileHeld(driverStationJoystick, 6, new AllOutCommand(intakeSubsystem, neckSubsystem));
     setJoystickButtonWhileHeld(driverStationJoystick, 7, new FlywheelPIDCommand(shooterSubsystem));
     setJoystickButtonWhileHeld(driverStationJoystick, 8, new SpinShooterVelocityCommand(shooterSubsystem, ShooterConstants.SHOOTER_MAX_VEL));
 
-    // setJoystickButtonWhileHeld(driverStationJoystick, 9, new MoveTurretCommand(turretSubsystem, -0.1));
-
-    setJoystickButtonWhileHeld(driverStationJoystick, 9, new ClimbUpCommand(climberSubsystem));
+    setJoystickButtonWhileHeld(driverStationJoystick, 9, new MoveTurretCommand(turretSubsystem, TurretConstants.TURRET_SPEED));
+    // setJoystickButtonWhileHeld(driverStationJoystick, 9, new ClimbUpCommand(climberSubsystem));
+    
     setJoystickButtonWhenPressed(driverStationJoystick, 10, new ToggleMovingHookCommand(climberSubsystem));
-
     setJoystickButtonWhenPressed(driverStationJoystick, 11, new ToggleShiftCommand(shiftingSubsystem));
     setJoystickButtonWhenPressed(driverStationJoystick, 12, new ToggleIntakeCommand(intakeSubsystem));
   }
