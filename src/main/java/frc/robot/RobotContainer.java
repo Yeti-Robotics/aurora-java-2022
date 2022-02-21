@@ -53,7 +53,7 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    // ledSubsystem = new LEDSubsystem();
+    ledSubsystem = new LEDSubsystem();
     driverStationJoystick = new Joystick(OIConstants.DRIVER_STATION_JOY);
     shiftingSubsystem = new ShiftingSubsystem();
     intakeSubsystem = new IntakeSubsystem();
