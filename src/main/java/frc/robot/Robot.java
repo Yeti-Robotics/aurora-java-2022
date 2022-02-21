@@ -36,8 +36,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void disabledInit() {
-		m_robotContainer.ledSubsystem.setDefaultCommand(new
-		AuroraLEDCommand(m_robotContainer.ledSubsystem));
+		m_robotContainer.ledSubsystem.setDefaultCommand(new AuroraLEDCommand(m_robotContainer.ledSubsystem));
 	}
 
 	@Override
