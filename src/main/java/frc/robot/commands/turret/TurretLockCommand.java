@@ -17,20 +17,24 @@ public class TurretLockCommand extends PIDCommand {
 	public TurretLockCommand(TurretSubsystem turretSubsystem) {
 		super(
 				// Tune values later
-				new PIDController(TurretConstants.kPTurretVel, TurretConstants.kITurretVel,
-						TurretConstants.kDTurretVel),
+				new PIDController(TurretConstants.TURRET_P, TurretConstants.TURRET_I, TurretConstants.TURRET_D),
 				// This should return the measurement
 				Limelight::getTx,
 				// This should return the setpoint (can also be a constant)
 				0.0,
 				// This uses the output
 				output -> {
-					turretSubsystem.moveTurret(
-							(Math.abs(output) >= TurretConstants.TURRET_SPEED)
-									? -Math.signum(output) * TurretConstants.TURRET_SPEED
-									: -output);
+					// turretSubsystem.moveTurret(
+					// 		(Math.abs(output) >= TurretConstants.TURRET_SPEED)
+					// 				? -Math.signum(output) * TurretConstants.TURRET_SPEED
+					// 				: -output);
+					if(turretSubsystem.isWithinRotationLimit()){
+						turretSubsystem.moveTurret(output);
+					}
 				});
 		this.turretSubsystem = turretSubsystem;
+		getController().setTolerance(TurretConstants.LIMELIGHT_TOLERANCE);
+
 		addRequirements(turretSubsystem);
 	}
 
@@ -43,6 +47,7 @@ public class TurretLockCommand extends PIDCommand {
 
 	@Override
 	public void end(boolean interrupted) {
+		turretSubsystem.stopTurret();
 	}
 
 	@Override

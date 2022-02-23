@@ -20,7 +20,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public static ShooterStatus shooterStatus;
 
-    public static double setPoint = 4750.0;
+    public static double setPoint = 1000.0;
     public static boolean atSetPoint = false;
 
     // for BangBangController
@@ -58,6 +58,11 @@ public class ShooterSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Flywheel Voltage", shooterRightFalcon.getMotorOutputVoltage());
     }
 
+    // toggles bang-bang control
+    public void toggleFlywheelBB(){
+        isShooting = !isShooting;
+    }
+
     public void shootFlywheel() {
         shooterRightFalcon.set(ControlMode.PercentOutput, ShooterConstants.SHOOTER_SPEED);
         shooterStatus = ShooterStatus.FORWARD;
@@ -86,6 +91,7 @@ public class ShooterSubsystem extends SubsystemBase {
     public void stopFlywheel() {
         shooterRightFalcon.set(ControlMode.PercentOutput, 0.0);
         shooterStatus = ShooterStatus.OFF;
+        ShooterSubsystem.isShooting = false;
     }
 
     public double getLeftEncoder() {

@@ -6,9 +6,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxLimitSwitch;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.SparkMaxLimitSwitch.Type;
 
 import frc.robot.Constants.TurretConstants;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -35,13 +33,9 @@ public class TurretSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        double turretPosition = getEncoder();
-        // if (
-        //     (turretPosition >= TurretConstants.TURRET_MAX_RIGHT - TurretConstants.TURRET_MAX_TOLERANCE && power > 0) || 
-		// 	(turretPosition <= TurretConstants.TURRET_MAX_LEFT + TurretConstants.TURRET_MAX_TOLERANCE && power < 0)
-        //     ) {
-        //         stopTurret();
-        // }
+        if (!isWithinRotationLimit()) {
+            stopTurret();
+        }
         // System.out.println("TURRET ENC: " + turretPosition);
     }
 
@@ -55,8 +49,8 @@ public class TurretSubsystem extends SubsystemBase {
 
     public boolean isWithinRotationLimit() {
         double turretPosition = getEncoder();
-        return turretPosition < TurretConstants.TURRET_MAX_RIGHT - TurretConstants.TURRET_TOLERANCE || 
-				turretPosition > TurretConstants.TURRET_MAX_LEFT + TurretConstants.TURRET_TOLERANCE;
+        return turretPosition <= TurretConstants.TURRET_MAX_RIGHT - TurretConstants.TURRET_TOLERANCE &&
+				turretPosition >= TurretConstants.TURRET_MAX_LEFT + TurretConstants.TURRET_TOLERANCE;
     }
 
     public void resetEncoder(){

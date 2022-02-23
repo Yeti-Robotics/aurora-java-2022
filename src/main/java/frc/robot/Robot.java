@@ -4,17 +4,18 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.controller.BangBangController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.CompressorConfigType;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.LED.AuroraLEDCommand;
 import frc.robot.commands.LED.BlinkLEDCommand;
 import frc.robot.commands.LED.SetLEDYetiBlueCommand;
-import frc.robot.utils.Limelight;
+import frc.robot.subsystems.ShooterSubsystem;
 
 public class Robot extends TimedRobot {
 	private Command m_autonomousCommand;
@@ -23,13 +24,25 @@ public class Robot extends TimedRobot {
 	public CompressorConfigType compressorConfigType;
 
 	private RobotContainer robotContainer;
-	private BangBangController shooterBBController;
+	private SimpleMotorFeedforward shooterFeedForward;
 
-	public Robot(){
-		shooterBBController = new BangBangController();
-		// addPeriodic(() -> {
-
-		// }, 0.0);
+	public Robot() {
+		shooterFeedForward = new SimpleMotorFeedforward(ShooterConstants.SHOOTER_KS, ShooterConstants.SHOOTER_KV, ShooterConstants.SHOOTER_KA);
+		addPeriodic(() -> {
+			if (ShooterSubsystem.isShooting) {
+				// robotContainer.shooterSubsystem.shootFlywheel(shooterFeedForward.calculate(robotContainer.shooterSubsystem.getVelocityUnitsFromRPM(ShooterSubsystem.setPoint) / 10.0));
+				// double error = Math.abs(robotContainer.shooterSubsystem.setPoint - robotContainer.shooterSubsystem.getFlywheelRPM()); // perhaps try scaling based on error?
+				double RPM = robotContainer.shooterSubsystem.getFlywheelRPM();
+				double setPoint = ShooterSubsystem.setPoint;
+				if(RPM > setPoint){
+					robotContainer.shooterSubsystem.shootFlywheel(0.0);
+				} else {
+					robotContainer.shooterSubsystem.shootFlywheel(ShooterConstants.SHOOTER_SPEED);
+				}
+			} else {
+				robotContainer.shooterSubsystem.stopFlywheel();
+			}
+		}, 0.01, 0.005); // every 10ms with a 5ms offset so timing doesn't conflict with robotPeriodic // (every 20ms)
 	}
 
 	@Override
@@ -42,7 +55,7 @@ public class Robot extends TimedRobot {
 		CommandScheduler.getInstance().run();
 		SmartDashboard.putNumber("Current Pressure: ", robotContainer.pneumaticsSubsystem.getPressure());
 		SmartDashboard.putNumber("Flywheel RPM: ", robotContainer.shooterSubsystem.getFlywheelRPM());
-		System.out.println("LIMELIGHT TX: " + Limelight.getTx());
+		// System.out.println("LIMELIGHT TX: " + Limelight.getTx());
 	}
 
 	@Override
@@ -71,15 +84,15 @@ public class Robot extends TimedRobot {
 	public void teleopInit() {
 		robotContainer.turretSubsystem.resetEncoder();
 		robotContainer.climberSubsystem.resetEncoders();
-		 robotContainer.ledSubsystem.getCurrentCommand().cancel();
-		 robotContainer.ledSubsystem.setDefaultCommand(new
-		 SetLEDYetiBlueCommand(robotContainer.ledSubsystem));
+		robotContainer.ledSubsystem.getCurrentCommand().cancel();
+		robotContainer.ledSubsystem.setDefaultCommand(new SetLEDYetiBlueCommand(robotContainer.ledSubsystem));
 
-		 CommandScheduler.getInstance().onCommandFinish(command -> {
-		 	if (command.getName().equals(new BlinkLEDCommand().getName())) {
-		 		if (beforeBlinkCommand != null) beforeBlinkCommand.schedule();
-		 	}
-		 });
+		CommandScheduler.getInstance().onCommandFinish(command -> {
+			if (command.getName().equals(new BlinkLEDCommand().getName())) {
+				if (beforeBlinkCommand != null)
+					beforeBlinkCommand.schedule();
+			}
+		});
 		robotContainer.climberSubsystem.resetEncoders();
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.cancel();
@@ -88,12 +101,12 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopPeriodic() {
-		 if (DriverStation.getMatchTime() < 30 && !blinkWarningRan) {
-		 beforeBlinkCommand = robotContainer.ledSubsystem.getCurrentCommand();
-		 new BlinkLEDCommand(robotContainer.ledSubsystem, 300, 255, 34,
-		 0).schedule();
-		 blinkWarningRan = true;
-		 }
+		if (DriverStation.getMatchTime() < 30 && !blinkWarningRan) {
+			beforeBlinkCommand = robotContainer.ledSubsystem.getCurrentCommand();
+			new BlinkLEDCommand(robotContainer.ledSubsystem, 300, 255, 34,
+					0).schedule();
+			blinkWarningRan = true;
+		}
 	}
 
 	@Override
@@ -102,5 +115,6 @@ public class Robot extends TimedRobot {
 	}
 
 	@Override
-	public void testPeriodic() {}
+	public void testPeriodic() {
+	}
 }

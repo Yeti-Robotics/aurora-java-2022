@@ -25,6 +25,7 @@ import frc.robot.commands.shifting.ToggleShiftCommand;
 import frc.robot.commands.shooter.FlywheelPIDCommand;
 import frc.robot.commands.shooter.SpinShooterCommand;
 import frc.robot.commands.shooter.SpinShooterVelocityCommand;
+import frc.robot.commands.shooter.ToggleBangBangCommand;
 import frc.robot.commands.turret.MoveTurretCommand;
 import frc.robot.commands.turret.TurnToTargetCommand;
 import frc.robot.commands.turret.TurretLockCommand;
@@ -65,6 +66,7 @@ public class RobotContainer {
     climberSubsystem = new ClimberSubsystem();
     drivetrainSubsystem = new DrivetrainSubsystem();
     pneumaticsSubsystem = new PneumaticSubsystem();
+    
     turretSubsystem.setDefaultCommand(new TurretLockCommand(turretSubsystem));
 
     switch (drivetrainSubsystem.getDriveMode()) {
@@ -93,13 +95,14 @@ public class RobotContainer {
     setJoystickButtonWhileHeld(driverStationJoystick, 2, new SpinShooterCommand(shooterSubsystem, ShooterConstants.SHOOTER_SPEED));
     setJoystickButtonWhileHeld(driverStationJoystick, 3, new IntakeInCommand(intakeSubsystem));
 
-    setJoystickButtonWhileHeld(driverStationJoystick, 4, new TurnToTargetCommand(turretSubsystem, TurretConstants.TURRET_SPEED));
+    setJoystickButtonWhenPressed(driverStationJoystick, 4, new TurretLockCommand(turretSubsystem));
     // setJoystickButtonWhileHeld(driverStationJoystick, 4, new MoveTurretCommand(turretSubsystem, -TurretConstants.TURRET_SPEED));
     // setJoystickButtonWhileHeld(driverStationJoystick, 4, new ClimbDownCommand(climberSubsystem));
     
     setJoystickButtonWhenPressed(driverStationJoystick, 5, new ToggleStaticHooksCommand(climberSubsystem));
     setJoystickButtonWhileHeld(driverStationJoystick, 6, new AllOutCommand(intakeSubsystem, neckSubsystem));
-    setJoystickButtonWhileHeld(driverStationJoystick, 7, new FlywheelPIDCommand(shooterSubsystem));
+    // setJoystickButtonWhileHeld(driverStationJoystick, 7, new FlywheelPIDCommand(shooterSubsystem));
+    setJoystickButtonWhenPressed(driverStationJoystick, 7, new ToggleBangBangCommand(shooterSubsystem));
     setJoystickButtonWhileHeld(driverStationJoystick, 8, new SpinShooterVelocityCommand(shooterSubsystem, ShooterConstants.SHOOTER_MAX_VEL));
 
     setJoystickButtonWhileHeld(driverStationJoystick, 9, new MoveTurretCommand(turretSubsystem, TurretConstants.TURRET_SPEED));
