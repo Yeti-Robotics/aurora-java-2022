@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.LED.AuroraLEDCommand;
 import frc.robot.commands.LED.BlinkLEDCommand;
 import frc.robot.commands.LED.SetLEDYetiBlueCommand;
+import frc.robot.commands.drivetrain.DriveForDistanceCommand;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
@@ -28,6 +29,7 @@ public class Robot extends TimedRobot {
 
   String trajectoryJSON = "insert json here"; //No path is loaded yet
   public static Trajectory trajectory = new Trajectory();
+    
 
   @Override
   public void robotInit() {
