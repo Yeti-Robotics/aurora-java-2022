@@ -60,16 +60,16 @@ public final class Constants {
         public static final int SHOOTER_RIGHT_FALCON = 7; //right
 
         //PID constants
-        public static final double SHOOTER_P = 2.4;
+        public static final double SHOOTER_P = 1.4029;
         public static final double SHOOTER_I = 0.0;
         public static final double SHOOTER_D = 0.0;
         public static final double SHOOTER_F = 0.05013681846; // (60% * 1023) / max native vel per 100 ms @ 60%
         public static final double SHOOTER_MAX_VEL = 12242.5; // in native encoder units per 100 ms
 
-        //bang bang
-        public static final double SHOOTER_KS = 0.64597;
-        public static final double SHOOTER_KV = 0.45847;
-        public static final double SHOOTER_KA = 0.079418;
+        //feed forward values
+        public static final double SHOOTER_KS = 0.72828;
+        public static final double SHOOTER_KV = 0.15313;
+        public static final double SHOOTER_KA = 0.033071;
 
         //shooter motor speeds    
         public static final double SHOOTER_SPEED = 0.6;
@@ -113,13 +113,13 @@ public final class Constants {
         public static final int TURRET_SPARK = 12; 
         public static final int MAG_SWITCH_PORT = 3;
         public static final double TURRET_SPEED = 0.15;
-        public static final double TURRET_P = 0.0; // ph
+        public static final double TURRET_P = 0.02; // ph
         public static final double TURRET_I = 0.0; // ph
         public static final double TURRET_D = 0.0; // ph
         public static final double TURRET_MAX_RIGHT = 54.59563446044922; 
         public static final double TURRET_MAX_LEFT = -54.59563446044922;
         public static final double TURRET_TOLERANCE = 1.0; // tolerance for checking encoder limits
-        public static final double LIMELIGHT_TOLERANCE = 3.0; // tolerance for alignment of target using limelight
+        public static final double LIMELIGHT_TOLERANCE = 0.5; // tolerance for alignment of target using limelight
     }
 
     public static final class OIConstants {

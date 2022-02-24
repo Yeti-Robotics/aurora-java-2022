@@ -16,6 +16,7 @@ import frc.robot.commands.LED.AuroraLEDCommand;
 import frc.robot.commands.LED.BlinkLEDCommand;
 import frc.robot.commands.LED.SetLEDYetiBlueCommand;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.TurretSubsystem;
 
 public class Robot extends TimedRobot {
 	private Command m_autonomousCommand;
@@ -30,19 +31,20 @@ public class Robot extends TimedRobot {
 		shooterFeedForward = new SimpleMotorFeedforward(ShooterConstants.SHOOTER_KS, ShooterConstants.SHOOTER_KV, ShooterConstants.SHOOTER_KA);
 		addPeriodic(() -> {
 			if (ShooterSubsystem.isShooting) {
-				// robotContainer.shooterSubsystem.shootFlywheel(shooterFeedForward.calculate(robotContainer.shooterSubsystem.getVelocityUnitsFromRPM(ShooterSubsystem.setPoint) / 10.0));
-				// double error = Math.abs(robotContainer.shooterSubsystem.setPoint - robotContainer.shooterSubsystem.getFlywheelRPM()); // perhaps try scaling based on error?
-				double RPM = robotContainer.shooterSubsystem.getFlywheelRPM();
-				double setPoint = ShooterSubsystem.setPoint;
-				if(RPM > setPoint){
-					robotContainer.shooterSubsystem.shootFlywheel(0.0);
-				} else {
-					robotContainer.shooterSubsystem.shootFlywheel(ShooterConstants.SHOOTER_SPEED);
-				}
+				System.out.println("FF: " + shooterFeedForward.calculate(robotContainer.shooterSubsystem.getFlywheelRPM() * 60));
+				robotContainer.shooterSubsystem.shootFlywheel(shooterFeedForward.calculate(robotContainer.shooterSubsystem.getFlywheelRPM() * 60));
+				// double RPM = robotContainer.shooterSubsystem.getFlywheelRPM();
+				// double setPoint = ShooterSubsystem.setPoint;
+				// double error = Math.abs(setPoint - RPM); 
+				// if(RPM > setPoint){
+				// 	robotContainer.shooterSubsystem.shootFlywheel(0.0);
+				// } else {
+				// 	robotContainer.shooterSubsystem.shootFlywheel(ShooterConstants.SHOOTER_SPEED);
+				// }
 			} else {
 				robotContainer.shooterSubsystem.stopFlywheel();
 			}
-		}, 0.01, 0.005); // every 10ms with a 5ms offset so timing doesn't conflict with robotPeriodic // (every 20ms)
+		}, 0.005, 0.005); // every 5ms with a 5ms offset so timing doesn't conflict with robotPeriodic // (every 20ms)
 	}
 
 	@Override
@@ -55,6 +57,7 @@ public class Robot extends TimedRobot {
 		CommandScheduler.getInstance().run();
 		SmartDashboard.putNumber("Current Pressure: ", robotContainer.pneumaticsSubsystem.getPressure());
 		SmartDashboard.putNumber("Flywheel RPM: ", robotContainer.shooterSubsystem.getFlywheelRPM());
+		SmartDashboard.putString("Turret Lock Status: ", ((robotContainer.turretSubsystem.lockStatus == robotContainer.turretSubsystem.lockStatus.UNLOCKED) ? "UNLOCKED" : "LOCKED"));
 		// System.out.println("LIMELIGHT TX: " + Limelight.getTx());
 	}
 

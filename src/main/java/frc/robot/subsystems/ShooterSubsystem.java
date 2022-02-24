@@ -20,7 +20,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public static ShooterStatus shooterStatus;
 
-    public static double setPoint = 1000.0;
+    public static double setPoint = 3000.0;
     public static boolean atSetPoint = false;
 
     // for BangBangController

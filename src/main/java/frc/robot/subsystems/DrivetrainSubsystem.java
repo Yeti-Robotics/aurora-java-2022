@@ -44,10 +44,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     leftFalcon1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
     rightFalcon1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
 
-    leftFalcon1.setNeutralMode(NeutralMode.Brake);
-    leftFalcon2.setNeutralMode(NeutralMode.Brake);
-    rightFalcon1.setNeutralMode(NeutralMode.Brake);
-    rightFalcon2.setNeutralMode(NeutralMode.Brake);
+    setMotorsBrake();
 
     resetEncoders();
   
@@ -72,6 +69,20 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public void stopDrive() {
     leftFalcon1.set(ControlMode.PercentOutput, 0.0);
     rightFalcon1.set(ControlMode.PercentOutput, 0.0);
+  }
+
+  public void setMotorsBrake(){
+    leftFalcon1.setNeutralMode(NeutralMode.Brake);
+    leftFalcon2.setNeutralMode(NeutralMode.Brake);
+    rightFalcon1.setNeutralMode(NeutralMode.Brake);
+    rightFalcon2.setNeutralMode(NeutralMode.Brake);
+  }
+
+  public void setMotorsCoast(){
+    leftFalcon1.setNeutralMode(NeutralMode.Coast);
+    leftFalcon2.setNeutralMode(NeutralMode.Coast);
+    rightFalcon1.setNeutralMode(NeutralMode.Coast);
+    rightFalcon2.setNeutralMode(NeutralMode.Coast);
   }
     
   public void resetEncoders() {

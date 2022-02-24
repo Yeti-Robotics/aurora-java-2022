@@ -33,7 +33,7 @@ public class TurretSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (!isWithinRotationLimit()) {
+        if (power > 0 && isRightLimit() || power < 0 && isLeftLimit()) {
             stopTurret();
         }
         // System.out.println("TURRET ENC: " + turretPosition);
@@ -45,6 +45,16 @@ public class TurretSubsystem extends SubsystemBase {
     
     public void stopTurret() {
         turretSpark.set(power = 0.0);
+    }
+
+    public boolean isLeftLimit(){
+        double turretPosition = getEncoder();
+        return turretPosition <= TurretConstants.TURRET_MAX_LEFT + TurretConstants.TURRET_TOLERANCE;
+    }
+
+    public boolean isRightLimit(){
+        double turretPosition = getEncoder();
+        return turretPosition >= TurretConstants.TURRET_MAX_RIGHT - TurretConstants.TURRET_TOLERANCE;
     }
 
     public boolean isWithinRotationLimit() {
@@ -63,5 +73,9 @@ public class TurretSubsystem extends SubsystemBase {
 
     public boolean getMagSwitch(){
         return !magSwitch.get();
+    }
+
+    public double getPower(){
+        return power;
     }
 }

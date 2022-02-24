@@ -26,7 +26,9 @@ import frc.robot.commands.shooter.FlywheelPIDCommand;
 import frc.robot.commands.shooter.SpinShooterCommand;
 import frc.robot.commands.shooter.SpinShooterVelocityCommand;
 import frc.robot.commands.shooter.ToggleBangBangCommand;
+import frc.robot.commands.turret.HomeTurretCommand;
 import frc.robot.commands.turret.MoveTurretCommand;
+import frc.robot.commands.turret.ToggleTurretLockCommand;
 import frc.robot.commands.turret.TurnToTargetCommand;
 import frc.robot.commands.turret.TurretLockCommand;
 
@@ -48,6 +50,8 @@ public class RobotContainer {
   public ClimberSubsystem climberSubsystem;
   public PneumaticSubsystem pneumaticsSubsystem;
   public LEDSubsystem ledSubsystem;
+
+  private double lastInputLeftY = 0.0;
   
   // The robot's subsystems and commands are defined here...
   //private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
@@ -95,7 +99,8 @@ public class RobotContainer {
     setJoystickButtonWhileHeld(driverStationJoystick, 2, new SpinShooterCommand(shooterSubsystem, ShooterConstants.SHOOTER_SPEED));
     setJoystickButtonWhileHeld(driverStationJoystick, 3, new IntakeInCommand(intakeSubsystem));
 
-    setJoystickButtonWhenPressed(driverStationJoystick, 4, new TurretLockCommand(turretSubsystem));
+    setJoystickButtonWhenPressed(driverStationJoystick, 4, new ToggleTurretLockCommand(turretSubsystem));
+    // setJoystickButtonWhileHeld(driverStationJoystick, 4, new TurnToTargetCommand(turretSubsystem, 0.2));
     // setJoystickButtonWhileHeld(driverStationJoystick, 4, new MoveTurretCommand(turretSubsystem, -TurretConstants.TURRET_SPEED));
     // setJoystickButtonWhileHeld(driverStationJoystick, 4, new ClimbDownCommand(climberSubsystem));
     
@@ -105,7 +110,8 @@ public class RobotContainer {
     setJoystickButtonWhenPressed(driverStationJoystick, 7, new ToggleBangBangCommand(shooterSubsystem));
     setJoystickButtonWhileHeld(driverStationJoystick, 8, new SpinShooterVelocityCommand(shooterSubsystem, ShooterConstants.SHOOTER_MAX_VEL));
 
-    setJoystickButtonWhileHeld(driverStationJoystick, 9, new MoveTurretCommand(turretSubsystem, TurretConstants.TURRET_SPEED));
+    setJoystickButtonWhenPressed(driverStationJoystick, 9, new HomeTurretCommand(turretSubsystem));
+    // setJoystickButtonWhileHeld(driverStationJoystick, 9, new MoveTurretCommand(turretSubsystem, TurretConstants.TURRET_SPEED));
     // setJoystickButtonWhileHeld(driverStationJoystick, 9, new ClimbUpCommand(climberSubsystem));
     
     setJoystickButtonWhenPressed(driverStationJoystick, 10, new ToggleMovingHookCommand(climberSubsystem));
@@ -114,6 +120,17 @@ public class RobotContainer {
   }
 
   private double getLeftY() {
+    // prevents tipping when stopping backward movement abruptly
+    if(lastInputLeftY < 0 && Math.abs(-driverStationJoystick.getRawAxis(0)) <= 0.05){ // 0.05 == joystick deadband
+      drivetrainSubsystem.setMotorsCoast();
+    }
+
+    if(Math.abs(-driverStationJoystick.getRawAxis(0)) > 0.05){
+      drivetrainSubsystem.setMotorsBrake();
+    }
+
+    lastInputLeftY = -driverStationJoystick.getRawAxis(0);
+
     return -driverStationJoystick.getRawAxis(0);
   }
 
