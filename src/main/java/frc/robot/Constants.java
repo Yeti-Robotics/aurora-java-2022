@@ -60,7 +60,7 @@ public final class Constants {
         public static final int SHOOTER_RIGHT_FALCON = 7; //right
 
         //PID constants
-        public static final double SHOOTER_P = 1.4029;
+        public static final double SHOOTER_P = 0.0;
         public static final double SHOOTER_I = 0.0;
         public static final double SHOOTER_D = 0.0;
         public static final double SHOOTER_F = 0.05013681846; // (60% * 1023) / max native vel per 100 ms @ 60%

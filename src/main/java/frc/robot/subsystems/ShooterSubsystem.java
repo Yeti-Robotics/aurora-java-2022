@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
@@ -13,6 +14,7 @@ import frc.robot.Constants.ShooterConstants;
 public class ShooterSubsystem extends SubsystemBase {
     private TalonFX shooterLeftFalcon;
     private TalonFX shooterRightFalcon;
+	private SimpleMotorFeedforward shooterFeedForward;
 
     public enum ShooterStatus {
         FORWARD, BACKWARDS, OFF
@@ -33,20 +35,23 @@ public class ShooterSubsystem extends SubsystemBase {
         shooterLeftFalcon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
         shooterRightFalcon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
 
-        // shooterRightFalcon.config_kP(0, ShooterConstants.SHOOTER_P);
-        // shooterRightFalcon.config_kI(0, ShooterConstants.SHOOTER_I);
-        // shooterRightFalcon.config_kD(0, ShooterConstants.SHOOTER_D);
-        // shooterRightFalcon.config_kF(0, ShooterConstants.SHOOTER_F);
-
-        // shooterRightFalcon.configPeakOutputForward(0.8);
-
+        
         shooterLeftFalcon.follow(shooterRightFalcon);
         shooterLeftFalcon.setInverted(InvertType.OpposeMaster);
-
+        
         shooterStatus = ShooterStatus.OFF;
-
+        
         shooterLeftFalcon.setNeutralMode(NeutralMode.Coast);
         shooterRightFalcon.setNeutralMode(NeutralMode.Coast);
+        
+		shooterFeedForward = new SimpleMotorFeedforward(ShooterConstants.SHOOTER_KS, ShooterConstants.SHOOTER_KV, ShooterConstants.SHOOTER_KA);
+       
+        shooterRightFalcon.config_kP(0, ShooterConstants.SHOOTER_P);
+        shooterRightFalcon.config_kI(0, ShooterConstants.SHOOTER_I);
+        shooterRightFalcon.config_kD(0, ShooterConstants.SHOOTER_D);
+        shooterRightFalcon.config_kF(0, getFeedForward());
+    
+        shooterRightFalcon.configPeakOutputForward(0.8);
     }
 
     @Override
@@ -120,5 +125,11 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public static void setSetPoint(double setPoint) {
         ShooterSubsystem.setPoint = setPoint;
+    }
+
+    public double getFeedForward(){
+        double kF = shooterFeedForward.calculate(getVelocityUnitsFromRPM(ShooterSubsystem.setPoint) / 60);
+        System.out.println("kF: " + kF);
+        return 0; //kF;
     }
 }

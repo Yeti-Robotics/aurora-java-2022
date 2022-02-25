@@ -108,7 +108,7 @@ public class RobotContainer {
     setJoystickButtonWhileHeld(driverStationJoystick, 6, new AllOutCommand(intakeSubsystem, neckSubsystem));
     // setJoystickButtonWhileHeld(driverStationJoystick, 7, new FlywheelPIDCommand(shooterSubsystem));
     setJoystickButtonWhenPressed(driverStationJoystick, 7, new ToggleBangBangCommand(shooterSubsystem));
-    setJoystickButtonWhileHeld(driverStationJoystick, 8, new SpinShooterVelocityCommand(shooterSubsystem, ShooterConstants.SHOOTER_MAX_VEL));
+    setJoystickButtonWhileHeld(driverStationJoystick, 8, new SpinShooterVelocityCommand(shooterSubsystem, shooterSubsystem.getVelocityUnitsFromRPM(ShooterSubsystem.setPoint)));
 
     setJoystickButtonWhenPressed(driverStationJoystick, 9, new HomeTurretCommand(turretSubsystem));
     // setJoystickButtonWhileHeld(driverStationJoystick, 9, new MoveTurretCommand(turretSubsystem, TurretConstants.TURRET_SPEED));

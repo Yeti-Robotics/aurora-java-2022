@@ -20,7 +20,7 @@ public class HomeTurretCommand extends CommandBase {
 
   @Override
   public void initialize() {
-    power = -Math.signum(turretSubsystem.getEncoder()) * 0.1;
+    power = -Math.signum(turretSubsystem.getEncoder()) * 0.2;
   }
 
   @Override
