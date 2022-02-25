@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -51,8 +53,6 @@ public class RobotContainer {
   public PneumaticSubsystem pneumaticsSubsystem;
   public LEDSubsystem ledSubsystem;
 
-  private double lastInputLeftY = 0.0;
-  
   // The robot's subsystems and commands are defined here...
   //private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
@@ -99,19 +99,19 @@ public class RobotContainer {
     setJoystickButtonWhileHeld(driverStationJoystick, 2, new SpinShooterCommand(shooterSubsystem, ShooterConstants.SHOOTER_SPEED));
     setJoystickButtonWhileHeld(driverStationJoystick, 3, new IntakeInCommand(intakeSubsystem));
 
-    setJoystickButtonWhenPressed(driverStationJoystick, 4, new ToggleTurretLockCommand(turretSubsystem));
+    // setJoystickButtonWhenPressed(driverStationJoystick, 4, new ToggleTurretLockCommand(turretSubsystem));
     // setJoystickButtonWhileHeld(driverStationJoystick, 4, new TurnToTargetCommand(turretSubsystem, 0.2));
-    // setJoystickButtonWhileHeld(driverStationJoystick, 4, new MoveTurretCommand(turretSubsystem, -TurretConstants.TURRET_SPEED));
+    setJoystickButtonWhileHeld(driverStationJoystick, 4, new MoveTurretCommand(turretSubsystem, -TurretConstants.TURRET_SPEED));
     // setJoystickButtonWhileHeld(driverStationJoystick, 4, new ClimbDownCommand(climberSubsystem));
     
     setJoystickButtonWhenPressed(driverStationJoystick, 5, new ToggleStaticHooksCommand(climberSubsystem));
     setJoystickButtonWhileHeld(driverStationJoystick, 6, new AllOutCommand(intakeSubsystem, neckSubsystem));
     // setJoystickButtonWhileHeld(driverStationJoystick, 7, new FlywheelPIDCommand(shooterSubsystem));
-    setJoystickButtonWhenPressed(driverStationJoystick, 7, new ToggleBangBangCommand(shooterSubsystem));
+    // setJoystickButtonWhenPressed(driverStationJoystick, 7, new ToggleBangBangCommand(shooterSubsystem));
     setJoystickButtonWhileHeld(driverStationJoystick, 8, new SpinShooterVelocityCommand(shooterSubsystem, shooterSubsystem.getVelocityUnitsFromRPM(ShooterSubsystem.setPoint)));
 
-    setJoystickButtonWhenPressed(driverStationJoystick, 9, new HomeTurretCommand(turretSubsystem));
-    // setJoystickButtonWhileHeld(driverStationJoystick, 9, new MoveTurretCommand(turretSubsystem, TurretConstants.TURRET_SPEED));
+    // setJoystickButtonWhenPressed(driverStationJoystick, 9, new HomeTurretCommand(turretSubsystem));
+    setJoystickButtonWhileHeld(driverStationJoystick, 9, new MoveTurretCommand(turretSubsystem, TurretConstants.TURRET_SPEED));
     // setJoystickButtonWhileHeld(driverStationJoystick, 9, new ClimbUpCommand(climberSubsystem));
     
     setJoystickButtonWhenPressed(driverStationJoystick, 10, new ToggleMovingHookCommand(climberSubsystem));
@@ -121,17 +121,18 @@ public class RobotContainer {
 
   private double getLeftY() {
     // prevents tipping when stopping backward movement abruptly
-    if(lastInputLeftY < 0 && Math.abs(-driverStationJoystick.getRawAxis(0)) <= 0.05){ // 0.05 == joystick deadband
+    double driveVel = drivetrainSubsystem.getVelocity();
+    double joyInput = -driverStationJoystick.getRawAxis(0);
+
+    if(drivetrainSubsystem.getNeutralMode() == NeutralMode.Brake && driveVel < 0.0 && joyInput >= 0.0){
       drivetrainSubsystem.setMotorsCoast();
     }
 
-    if(Math.abs(-driverStationJoystick.getRawAxis(0)) > 0.05){
+    if(drivetrainSubsystem.getNeutralMode() == NeutralMode.Coast && driveVel >= 0.0){
       drivetrainSubsystem.setMotorsBrake();
     }
 
-    lastInputLeftY = -driverStationJoystick.getRawAxis(0);
-
-    return -driverStationJoystick.getRawAxis(0);
+    return joyInput;
   }
 
   private double getLeftX() {

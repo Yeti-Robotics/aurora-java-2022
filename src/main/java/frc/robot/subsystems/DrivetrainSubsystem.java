@@ -24,6 +24,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     TANK, CHEEZY, ARCADE;
   }
 
+  private NeutralMode neutralMode; 
+
   public DrivetrainSubsystem() {   
     leftFalcon1 = new WPI_TalonFX(DriveConstants.LEFT_FALCON_1);
     leftFalcon2 = new WPI_TalonFX(DriveConstants.LEFT_FALCON_2);
@@ -45,7 +47,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
     rightFalcon1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
 
     setMotorsBrake();
-
     resetEncoders();
   
     driveMode = DriveMode.CHEEZY;
@@ -76,6 +77,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     leftFalcon2.setNeutralMode(NeutralMode.Brake);
     rightFalcon1.setNeutralMode(NeutralMode.Brake);
     rightFalcon2.setNeutralMode(NeutralMode.Brake);
+    neutralMode = NeutralMode.Brake;
   }
 
   public void setMotorsCoast(){
@@ -83,6 +85,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     leftFalcon2.setNeutralMode(NeutralMode.Coast);
     rightFalcon1.setNeutralMode(NeutralMode.Coast);
     rightFalcon2.setNeutralMode(NeutralMode.Coast);
+    neutralMode = NeutralMode.Coast;
   }
     
   public void resetEncoders() {
@@ -102,6 +105,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
     return ((getLeftEncoder() + getRightEncoder()) / 2.0);
   }
 
+  public double getVelocity(){
+    return (leftFalcon1.getSelectedSensorVelocity() + rightFalcon1.getSelectedSensorVelocity()) / 2.0;
+  }
+
   public void setMaxOutput(double maxOutput) {
     drive.setMaxOutput(maxOutput);
   }
@@ -116,5 +123,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   public DriveMode getDriveMode(){
     return driveMode;
+  }
+
+  public NeutralMode getNeutralMode(){
+    return neutralMode;
   }
 }
