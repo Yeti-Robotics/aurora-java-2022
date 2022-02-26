@@ -4,9 +4,15 @@
 
 package frc.robot;
 
+import java.io.IOException;
+import java.nio.file.Path;
+
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.CompressorConfigType;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -25,6 +31,9 @@ public class Robot extends TimedRobot {
 	public CompressorConfigType compressorConfigType;
 
 	private RobotContainer robotContainer;
+
+	private String trajectoryJSON = "insert json here"; //No path is loaded yet
+	public static Trajectory trajectory = new Trajectory();
 
 	public Robot() {
 		// addPeriodic(() -> {
@@ -50,6 +59,13 @@ public class Robot extends TimedRobot {
 	@Override
 	public void robotInit() {
 		robotContainer = new RobotContainer();
+
+		try {
+			Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+			trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+		} catch (IOException ex) {
+			DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+		}
 	}
 
 	@Override

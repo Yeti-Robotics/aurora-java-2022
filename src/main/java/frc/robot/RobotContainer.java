@@ -6,10 +6,17 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.RamseteController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.TurretConstants;
@@ -154,4 +161,27 @@ public class RobotContainer {
   private void setJoystickButtonWhileHeld(Joystick driverStationJoystick, int button, CommandBase command) {
     new JoystickButton(driverStationJoystick, button).whileHeld(command);
   }
+
+  public Command getAutonomousCommand() {
+    Trajectory customTrajectory = Robot.trajectory;
+
+    RamseteCommand ramseteCommand = new RamseteCommand(
+      customTrajectory, 
+      drivetrainSubsystem::getPose,
+      new RamseteController(AutoConstants.RAMSETE_B, AutoConstants.RAMSETE_ZETA),
+      new SimpleMotorFeedforward(
+        AutoConstants.AUTO_KS,
+        AutoConstants.AUTO_KV,
+        AutoConstants.AUTO_KA), 
+      AutoConstants.KINEMATICS, 
+      drivetrainSubsystem::getWheelSpeeds,
+      new PIDController(AutoConstants.AUTO_P, 0, 0), 
+      new PIDController(AutoConstants.AUTO_P, 0, 0), 
+      drivetrainSubsystem::tankDriveVolts, 
+      drivetrainSubsystem);
+
+    drivetrainSubsystem.resetOdometry(customTrajectory.getInitialPose());
+    return ramseteCommand.andThen(() -> drivetrainSubsystem.tankDriveVolts(0, 0));
+  }
+
 }

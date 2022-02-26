@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -113,13 +115,29 @@ public final class Constants {
         public static final int TURRET_SPARK = 12; 
         public static final int MAG_SWITCH_PORT = 3;
         public static final double TURRET_SPEED = 0.15;
-        public static final double TURRET_P = 0.02; // ph
-        public static final double TURRET_I = 0.0; // ph
-        public static final double TURRET_D = 0.0; // ph
+        public static final double TURRET_P = 0.02; // not fully tuned*
+        public static final double TURRET_I = 0.0; 
+        public static final double TURRET_D = 0.0; 
         public static final double TURRET_MAX_RIGHT = 54.59563446044922; 
         public static final double TURRET_MAX_LEFT = -54.59563446044922;
         public static final double TURRET_TOLERANCE = 1.0; // tolerance for checking encoder limits
         public static final double LIMELIGHT_TOLERANCE = 0.5; // tolerance for alignment of target using limelight
+    }
+
+    public static final class AutoConstants {
+        public static final double AUTO_KS = 0.72606; // volts
+        public static final double AUTO_KV = 2.136; // volt seconds per meter
+        public static final double AUTO_KA = 0.57982; // volt seconds squared per meter
+        public static final double AUTO_P = 0.0;
+
+        public static final double RAMSETE_B = 2.0;
+        public static final double RAMSETE_ZETA = 0.7;
+
+        public static final double TRACK_WIDTH = 0.0; // m
+        public static final DifferentialDriveKinematics KINEMATICS = new DifferentialDriveKinematics(TRACK_WIDTH);
+        
+        public static final double MAX_SPEED = 3.0; // m/s
+        public static final double MAX_ACCELERATION = 3.0; // m/s^2
     }
 
     public static final class OIConstants {

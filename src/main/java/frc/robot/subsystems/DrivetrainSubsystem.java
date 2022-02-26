@@ -7,18 +7,26 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.ShiftingSubsystem.ShiftStatus;
 
 public class DrivetrainSubsystem extends SubsystemBase {
   private WPI_TalonFX leftFalcon1, leftFalcon2, rightFalcon1, rightFalcon2;  
+  private MotorControllerGroup leftMotors;
+  private MotorControllerGroup rightMotors;
+
   private AHRS gyro; 
   
   private DifferentialDrive drive;
   private DriveMode driveMode;
+  private DifferentialDriveOdometry odometry;
 
   public enum DriveMode {
     TANK, CHEEZY, ARCADE;
@@ -31,17 +39,17 @@ public class DrivetrainSubsystem extends SubsystemBase {
     leftFalcon2 = new WPI_TalonFX(DriveConstants.LEFT_FALCON_2);
     rightFalcon1 = new WPI_TalonFX(DriveConstants.RIGHT_FALCON_1);
     rightFalcon2 = new WPI_TalonFX(DriveConstants.RIGHT_FALCON_2);
+
+    leftMotors = new MotorControllerGroup(leftFalcon1, leftFalcon2);
+    rightMotors = new MotorControllerGroup(rightFalcon1, rightFalcon2);
+    rightMotors.setInverted(true);
+
     gyro = new AHRS(I2C.Port.kOnboard);
 
-    leftFalcon2.follow(leftFalcon1);
-    leftFalcon2.setInverted(InvertType.FollowMaster);
-
-    rightFalcon1.setInverted(true);
-    rightFalcon2.follow(rightFalcon1);
-    rightFalcon2.setInverted(InvertType.FollowMaster);
-
-    drive = new DifferentialDrive(leftFalcon1, rightFalcon1);
+    drive = new DifferentialDrive(leftMotors, rightMotors);
     drive.setDeadband(0.05);
+
+    odometry = new DifferentialDriveOdometry(gyro.getRotation2d());
 
     leftFalcon1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
     rightFalcon1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
@@ -53,7 +61,19 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   @Override
-  public void periodic(){}
+  public void periodic(){
+    odometry.update(
+      gyro.getRotation2d(),
+      getLeftEncoder(),
+      getRightEncoder()
+    );
+  }
+
+  public void tankDriveVolts(double leftVolts, double rightVolts) {
+    leftMotors.setVoltage(leftVolts);
+    rightMotors.setVoltage(rightVolts);
+    drive.feed();
+  }
 
   public void tankDrive(double leftpower, double rightpower) {
     drive.tankDrive(leftpower, rightpower);
@@ -68,8 +88,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   public void stopDrive() {
-    leftFalcon1.set(ControlMode.PercentOutput, 0.0);
-    rightFalcon1.set(ControlMode.PercentOutput, 0.0);
+    leftMotors.set(0.0);
+    rightMotors.set(0.0);
   }
 
   public void setMotorsBrake(){
@@ -115,6 +135,19 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   public double getHeading(){
     return gyro.getRotation2d().getDegrees();
+  }
+
+  public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+    return new DifferentialDriveWheelSpeeds(getLeftEncoder(), getRightEncoder());
+  }
+
+  public Pose2d getPose() {
+    return odometry.getPoseMeters();
+  }
+
+  public void resetOdometry(Pose2d pose) {
+    resetEncoders();
+    odometry.resetPosition(pose, gyro.getRotation2d());
   }
 
   public void resetGyro(){
