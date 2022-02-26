@@ -7,6 +7,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
@@ -22,7 +23,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public static ShooterStatus shooterStatus;
 
-    public static double setPoint = 3000.0;
+    public static double setPoint = 4000.0;
     public static boolean atSetPoint = false;
 
     // for BangBangController
@@ -34,7 +35,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
         shooterLeftFalcon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
         shooterRightFalcon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
-
         
         shooterLeftFalcon.follow(shooterRightFalcon);
         shooterLeftFalcon.setInverted(InvertType.OpposeMaster);
@@ -46,21 +46,21 @@ public class ShooterSubsystem extends SubsystemBase {
         
 		shooterFeedForward = new SimpleMotorFeedforward(ShooterConstants.SHOOTER_KS, ShooterConstants.SHOOTER_KV, ShooterConstants.SHOOTER_KA);
        
-        shooterRightFalcon.config_kP(0, ShooterConstants.SHOOTER_P);
-        shooterRightFalcon.config_kI(0, ShooterConstants.SHOOTER_I);
-        shooterRightFalcon.config_kD(0, ShooterConstants.SHOOTER_D);
-        shooterRightFalcon.config_kF(0, getFeedForward());
+        // shooterRightFalcon.config_kP(0, ShooterConstants.SHOOTER_P);
+        // shooterRightFalcon.config_kI(0, ShooterConstants.SHOOTER_I);
+        // shooterRightFalcon.config_kD(0, ShooterConstants.SHOOTER_D);
+        // shooterRightFalcon.config_kF(0, getFeedForward());
     
-        shooterRightFalcon.configPeakOutputForward(0.8);
+        // shooterRightFalcon.configPeakOutputForward(0.8);
     }
 
     @Override
     public void periodic() {
         // ShooterSubsystem.atSetPoint = Math.abs(getFlywheelRPM() - ShooterSubsystem.setPoint) <= ShooterConstants.RPM_TOLERANCE;
         ShooterSubsystem.atSetPoint = getFlywheelRPM() >= 3000.0; // FOR TESTING PURPOSES ONLY!!!!!! do above commented code ^
-        // System.out.println("Flywheel RPM: " + getFlywheelRPM());
         SmartDashboard.putNumber("Flywheel Set Point: ", ShooterSubsystem.setPoint);
         SmartDashboard.putNumber("Flywheel Voltage", shooterRightFalcon.getMotorOutputVoltage());
+        System.out.println("Flywheel RPM: " + getFlywheelRPM());
     }
 
     // toggles bang-bang control
@@ -123,13 +123,14 @@ public class ShooterSubsystem extends SubsystemBase {
         return RPM / (ShooterConstants.PULLEY_RATIO * (ShooterConstants.ENCODER_TIME_CONVERSION / ShooterConstants.ENCODER_RESOLUTION));
     }
 
-    public static void setSetPoint(double setPoint) {
+    public void setSetPoint(double setPoint) {
         ShooterSubsystem.setPoint = setPoint;
+        // shooterRightFalcon.config_kF(0, getFeedForward());
     }
 
     public double getFeedForward(){
-        double kF = shooterFeedForward.calculate(getVelocityUnitsFromRPM(ShooterSubsystem.setPoint) / 60);
+        double kF = shooterFeedForward.calculate((ShooterSubsystem.setPoint / 60.0) * Units.inchesToMeters(ShooterConstants.FLYWHEEL_DIAMETER) * Math.PI);
         System.out.println("kF: " + kF);
-        return 0; //kF;
+        return 0; // kF;
     }
 }

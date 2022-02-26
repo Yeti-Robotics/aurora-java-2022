@@ -62,10 +62,10 @@ public final class Constants {
         public static final int SHOOTER_RIGHT_FALCON = 7; //right
 
         //PID constants
-        public static final double SHOOTER_P = 0.0;
-        public static final double SHOOTER_I = 0.0;
-        public static final double SHOOTER_D = 0.0;
-        public static final double SHOOTER_F = 0.05013681846; // (60% * 1023) / max native vel per 100 ms @ 60%
+        public static final double SHOOTER_P = 0.0012;
+        public static final double SHOOTER_I = 0.000024;
+        public static final double SHOOTER_D = 0.0000495;
+        public static final double SHOOTER_F = 0.45; 
         public static final double SHOOTER_MAX_VEL = 12242.5; // in native encoder units per 100 ms
 
         //feed forward values
@@ -82,6 +82,8 @@ public final class Constants {
         public static final double ENCODER_RESOLUTION = 2048.0;
         public static final double QUAD_FACTOR = 4.0; // quadrature encoder factor
         public static final double RPM_TOLERANCE = 10.0;
+
+        public static final double FLYWHEEL_DIAMETER = 4.0; // inches
     }
 
     public static final class CalcConstants {
@@ -99,7 +101,7 @@ public final class Constants {
     public static final class IntakeConstants {
         public static final int INTAKE_FALCON = 9;
         public static final int[] INTAKE_PISTONS_SOLENOID = {2, 3}; 
-        public static final double INTAKE_SPEED = 0.2; 
+        public static final double INTAKE_SPEED = 0.225; 
     }
 
     public static final class NeckConstants{

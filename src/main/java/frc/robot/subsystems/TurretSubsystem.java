@@ -36,6 +36,7 @@ public class TurretSubsystem extends SubsystemBase {
         if (power > 0 && isRightLimit() || power < 0 && isLeftLimit()) {
             stopTurret();
         }
+        stopTurret();
         // System.out.println("TURRET ENC: " + turretPosition);
     }
 

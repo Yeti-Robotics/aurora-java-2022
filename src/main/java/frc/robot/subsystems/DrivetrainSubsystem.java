@@ -10,6 +10,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.ADIS16448_IMU;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
@@ -23,6 +24,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private MotorControllerGroup rightMotors;
 
   private AHRS gyro; 
+  private ADIS16448_IMU tempGyro; // for testing
   
   private DifferentialDrive drive;
   private DriveMode driveMode;
@@ -126,7 +128,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   public double getVelocity(){
-    return (leftFalcon1.getSelectedSensorVelocity() + rightFalcon1.getSelectedSensorVelocity()) / 2.0;
+    return (leftFalcon1.getSelectedSensorVelocity() + -rightFalcon1.getSelectedSensorVelocity()) / 2.0;
   }
 
   public void setMaxOutput(double maxOutput) {
@@ -160,5 +162,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   public NeutralMode getNeutralMode(){
     return neutralMode;
+  }
+
+  public double getTempGyro(){
+    return tempGyro.getAngle(); 
   }
 }

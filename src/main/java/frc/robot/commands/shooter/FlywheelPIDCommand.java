@@ -10,20 +10,31 @@ import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.ShooterSubsystem;
 
 public class FlywheelPIDCommand extends PIDCommand {
+  private ShooterSubsystem shooterSubsystem; 
+
   public FlywheelPIDCommand(ShooterSubsystem shooterSubsystem) {  
     super(
-        // The controller that the command will use
-        new PIDController(ShooterConstants.SHOOTER_P, ShooterConstants.SHOOTER_I, ShooterConstants.SHOOTER_D),
-        // This should return the measurement
-        shooterSubsystem::getFlywheelRPM,
-        // This should return the setpoint (can also be a constant)
-        () -> ShooterSubsystem.setPoint,
-        // This uses the output
-        output -> {
-          shooterSubsystem.shootFlywheel(ShooterConstants.SHOOTER_F + output);
-        });
+      // The controller that the command will use
+      new PIDController(ShooterConstants.SHOOTER_P, ShooterConstants.SHOOTER_I, ShooterConstants.SHOOTER_D),
+      // This should return the measurement
+      shooterSubsystem::getFlywheelRPM,
+      // This should return the setpoint (can also be a constant)
+      () -> ShooterSubsystem.setPoint,
+      // This uses the output
+      output -> {
+        shooterSubsystem.shootFlywheel(ShooterConstants.SHOOTER_F + output);
+      }
+    );
+
+    this.shooterSubsystem = shooterSubsystem;
+
     addRequirements(shooterSubsystem);
     getController().setTolerance(ShooterConstants.RPM_TOLERANCE);
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    shooterSubsystem.stopFlywheel();
   }
 
   // Returns true when the command should end.

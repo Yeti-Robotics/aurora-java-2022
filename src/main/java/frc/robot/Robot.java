@@ -35,26 +35,22 @@ public class Robot extends TimedRobot {
 	private String trajectoryJSON = "insert json here"; //No path is loaded yet
 	public static Trajectory trajectory = new Trajectory();
 
-	public Robot() {
-		// addPeriodic(() -> {
-			// if (ShooterSubsystem.isShooting) {
-				// double kF = robotContainer.shooterSubsystem.getFeedForward();
-				// System.out.println("kF: " + kF);
-				// robotContainer.shooterSubsystem.setFlywheelVelocity(kF);
+	// public Robot() {
+	// 	addPeriodic(() -> {
+	// 		if (ShooterSubsystem.isShooting) {
+	// 			double RPM = robotContainer.shooterSubsystem.getFlywheelRPM();
+	// 			double setPoint = ShooterSubsystem.setPoint;
 
-				// double RPM = robotContainer.shooterSubsystem.getFlywheelRPM();
-				// double setPoint = ShooterSubsystem.setPoint;
-				// double error = Math.abs(setPoint - RPM); 
-				// if(RPM > setPoint){
-				// 	robotContainer.shooterSubsystem.shootFlywheel(0.0);
-				// } else {
-				// 	robotContainer.shooterSubsystem.shootFlywheel(ShooterConstants.SHOOTER_SPEED);
-				// }
-			// } else {
-			// 	robotContainer.shooterSubsystem.stopFlywheel();
-			// }
-		// }, 0.01, 0.005); // every 5ms with a 5ms offset so timing doesn't conflict with robotPeriodic // (every 20ms)
-	}
+	// 			if(RPM > setPoint){
+	// 				robotContainer.shooterSubsystem.setFlywheelVelocity(0.0);
+	// 			} else {
+	// 				robotContainer.shooterSubsystem.setFlywheelVelocity(robotContainer.shooterSubsystem.getVelocityUnitsFromRPM(ShooterSubsystem.setPoint));
+	// 			}
+	// 		} else {
+	// 			robotContainer.shooterSubsystem.stopFlywheel();
+	// 		}
+	// 	}, 0.01, 0.005); // every 5ms with a 5ms offset so timing doesn't conflict with robotPeriodic // (every 20ms)
+	// }
 
 	@Override
 	public void robotInit() {
