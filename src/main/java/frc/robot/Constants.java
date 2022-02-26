@@ -63,7 +63,7 @@ public final class Constants {
 
         //PID constants
         public static final double SHOOTER_P = 0.0012;
-        public static final double SHOOTER_I = 0.000024;
+        public static final double SHOOTER_I = 0.000056;
         public static final double SHOOTER_D = 0.0000495;
         public static final double SHOOTER_F = 0.45; 
         public static final double SHOOTER_MAX_VEL = 12242.5; // in native encoder units per 100 ms
