@@ -49,7 +49,6 @@ public class ShooterSubsystem extends SubsystemBase {
         ShooterSubsystem.atSetPoint = getFlywheelRPM() >= 3000.0; // FOR TESTING PURPOSES ONLY!!!!!! do above commented code ^
         SmartDashboard.putNumber("Flywheel Set Point: ", ShooterSubsystem.setPoint);
         SmartDashboard.putNumber("Flywheel Voltage", shooterRightFalcon.getMotorOutputVoltage());
-        System.out.println("Flywheel RPM: " + getFlywheelRPM());
     }
 
     // toggles bang-bang control
