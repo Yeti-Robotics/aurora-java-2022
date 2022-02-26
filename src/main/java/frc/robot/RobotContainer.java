@@ -4,14 +4,9 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.RamseteController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -24,10 +19,8 @@ import frc.robot.commands.neck.NeckOutCommand;
 import frc.robot.commands.shifting.ToggleShiftCommand;
 import frc.robot.commands.shooter.SpinShooterCommand;
 import frc.robot.commands.turret.TurretLockCommand;
-import frc.robot.commands.autoRoutines.FourBallAutoCommand;
 import frc.robot.commands.autoRoutines.PathFollowingCommand;
-import frc.robot.commands.autoRoutines.ThreeBallAutoCommand;
-import frc.robot.commands.autoRoutines.TwoBallAutoCommand;
+import frc.robot.commands.intake.IntakeInCommand;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -137,35 +130,46 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // Trajectory customTrajectory = Robot.trajectory;
 
-    // RamseteCommand  ramseteCommand = new RamseteCommand(
-    //   customTrajectory, 
-    //   drivetrainSubsystem::getPose,
-    //   new RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
-    //   new SimpleMotorFeedforward(
-    //     AutoConstants.ksVolts,
-    //     AutoConstants.kvVoltSecondsPerMeters,
-    //     AutoConstants.kaVoltSecondsSquaredPerMeter), 
-    //     AutoConstants.kinematics, 
-    //     drivetrainSubsystem::getWheelSpeeds,
-    //     new PIDController(AutoConstants.kPDriveVel, 0, 0), 
-    //     new PIDController(AutoConstants.kPDriveVel, 0, 0), 
-    //     drivetrainSubsystem::tankDriveVolts, 
-    //     drivetrainSubsystem);
+    // RamseteCommand ramseteCommand = new RamseteCommand(
+    // customTrajectory,
+    // drivetrainSubsystem::getPose,
+    // new RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
+    // new SimpleMotorFeedforward(
+    // AutoConstants.ksVolts,
+    // AutoConstants.kvVoltSecondsPerMeters,
+    // AutoConstants.kaVoltSecondsSquaredPerMeter),
+    // AutoConstants.kinematics,
+    // drivetrainSubsystem::getWheelSpeeds,
+    // new PIDController(AutoConstants.kPDriveVel, 0, 0),
+    // new PIDController(AutoConstants.kPDriveVel, 0, 0),
+    // drivetrainSubsystem::tankDriveVolts,
+    // drivetrainSubsystem);
 
-    //     drivetrainSubsystem.resetOdometry(customTrajectory.getInitialPose());
-        // return  ramseteCommand.andThen(() -> drivetrainSubsystem.tankDriveVolts(0, 0));
-    TwoBallAutoCommand twoBallAutoCommand = new TwoBallAutoCommand(drivetrainSubsystem, intakeSubsystem, neckSubsystem, turretSubsystem, shooterSubsystem, ledSubsystem);
-    ThreeBallAutoCommand threeBallAutoCommand = new ThreeBallAutoCommand(drivetrainSubsystem, intakeSubsystem, neckSubsystem, turretSubsystem, shooterSubsystem, ledSubsystem);
-    FourBallAutoCommand fourBallAutoCommand = new FourBallAutoCommand(drivetrainSubsystem, intakeSubsystem, neckSubsystem, turretSubsystem, shooterSubsystem, ledSubsystem)
+    // drivetrainSubsystem.resetOdometry(customTrajectory.getInitialPose());
+    // return ramseteCommand.andThen(() -> drivetrainSubsystem.tankDriveVolts(0,
+    // 0));
+    SequentialCommandGroup twoBallAutoCommand = new SequentialCommandGroup(new WaitCommand(1),
+        new IntakeInCommand(intakeSubsystem).withTimeout(1), new NeckInCommand(neckSubsystem).withTimeout(1),
+        new WaitCommand(1));
+        
+    SequentialCommandGroup threeBallAutoCommand = new SequentialCommandGroup(new WaitCommand(1),
+        new IntakeInCommand(intakeSubsystem).withTimeout(1), new NeckInCommand(neckSubsystem).withTimeout(1),
+        new WaitCommand(1));
+
+    SequentialCommandGroup fourBallAutoCommand = new SequentialCommandGroup(new WaitCommand(1),
+        new IntakeInCommand(intakeSubsystem).withTimeout(1), new NeckInCommand(neckSubsystem).withTimeout(1),
+        new WaitCommand(1), new IntakeInCommand(intakeSubsystem).withTimeout(1),
+        new NeckInCommand(neckSubsystem).withTimeout(1), new WaitCommand(1));
+
     return new SequentialCommandGroup(
-      new PathFollowingCommand(drivetrainSubsystem, AutoConstants.twoBallPrimary).alongWith(twoBallAutoCommand), 
-      new RunCommand(() -> drivetrainSubsystem.tankDriveVolts(0, 0), drivetrainSubsystem),
-      new SpinShooterCommand(shooterSubsystem, 0.5).withTimeout(1), 
-      new SequentialCommandGroup(
-        new PathFollowingCommand(drivetrainSubsystem, AutoConstants.threeBallPrimary).alongWith(threeBallAutoCommand),
-        new RunCommand(() -> drivetrainSubsystem.tankDriveVolts(0, 0), drivetrainSubsystem), 
-        new SpinShooterCommand(shooterSubsystem, 0.5).withTimeout(1)
-      ));
+        new PathFollowingCommand(drivetrainSubsystem, AutoConstants.twoBallPrimary).alongWith(twoBallAutoCommand),
+        new RunCommand(() -> drivetrainSubsystem.tankDriveVolts(0, 0), drivetrainSubsystem),
+        new SpinShooterCommand(shooterSubsystem, 0.5).withTimeout(1),
+        new SequentialCommandGroup(
+            new PathFollowingCommand(drivetrainSubsystem, AutoConstants.threeBallPrimary)
+                .alongWith(threeBallAutoCommand),
+            new RunCommand(() -> drivetrainSubsystem.tankDriveVolts(0, 0), drivetrainSubsystem),
+            new SpinShooterCommand(shooterSubsystem, 0.5).withTimeout(1)));
   }
 
 }

@@ -4,7 +4,6 @@
 
 package frc.robot.commands.autoRoutines;
 
-import frc.robot.Robot;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
@@ -24,38 +23,19 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
 public class PathFollowingCommand extends CommandBase {
   /** Creates a new PathFollowingCommand. */
   private final DrivetrainSubsystem drivetrainSubsystem;
-  Trajectory customTrajectory = Robot.trajectory;
-  Trajectory customTrajectory2 = Robot.trajectory2;
   private RamseteCommand ramseteCommand;
-  trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
   String trajectoryJSON;
   private Trajectory trajectory;
-
-
-
-
-
+  
+  
+  
+  
+  
   public PathFollowingCommand(DrivetrainSubsystem drivetrainSubsystem, String trajectoryJSON) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drivetrainSubsystem = drivetrainSubsystem;
     addRequirements(drivetrainSubsystem);
-
-    ramseteCommand = new RamseteCommand(
-        customTrajectory,
-        drivetrainSubsystem::getPose,
-        new RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
-        new SimpleMotorFeedforward(
-            AutoConstants.ksVolts,
-            AutoConstants.kvVoltSecondsPerMeters,
-            AutoConstants.kaVoltSecondsSquaredPerMeter),
-        AutoConstants.kinematics,
-        drivetrainSubsystem::getWheelSpeeds,
-        new PIDController(AutoConstants.kPDriveVel, 0, 0),
-        new PIDController(AutoConstants.kPDriveVel, 0, 0),
-        drivetrainSubsystem::tankDriveVolts,
-        drivetrainSubsystem);
-
-    drivetrainSubsystem.resetOdometry(customTrajectory.getInitialPose());
+    
 
   }
 
@@ -69,6 +49,23 @@ public class PathFollowingCommand extends CommandBase {
     } catch (IOException ex) {
       DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
     }
+
+    ramseteCommand = new RamseteCommand(
+      trajectory,
+      drivetrainSubsystem::getPose,
+      new RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
+      new SimpleMotorFeedforward(
+          AutoConstants.ksVolts,
+          AutoConstants.kvVoltSecondsPerMeters,
+          AutoConstants.kaVoltSecondsSquaredPerMeter),
+      AutoConstants.kinematics,
+      drivetrainSubsystem::getWheelSpeeds,
+      new PIDController(AutoConstants.kPDriveVel, 0, 0),
+      new PIDController(AutoConstants.kPDriveVel, 0, 0),
+      drivetrainSubsystem::tankDriveVolts,
+      drivetrainSubsystem);
+
+  drivetrainSubsystem.resetOdometry(trajectory.getInitialPose());
 
     ramseteCommand.schedule();
 

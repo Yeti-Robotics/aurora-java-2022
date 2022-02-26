@@ -4,20 +4,14 @@
 
 package frc.robot;
 
-import java.nio.file.Path;
-import java.io.IOException;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.CompressorConfigType;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.LED.AuroraLEDCommand;
 import frc.robot.commands.LED.BlinkLEDCommand;
 import frc.robot.commands.LED.SetLEDYetiBlueCommand;
-import frc.robot.commands.drivetrain.DriveForDistanceCommand;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
@@ -26,12 +20,7 @@ public class Robot extends TimedRobot {
   public CompressorConfigType compressorConfigType;
 
   private RobotContainer m_robotContainer;
-
-  String trajectoryJSON = "output/twoBallAlternative.wpilib.json"; //  
-  String trajectoryJSON2 = "hi"; //(still need to put this in)
-  public static Trajectory trajectory = new Trajectory();
-  public static Trajectory trajectory2 = new Trajectory();
-    
+   
 
   @Override
   public void robotInit() {
