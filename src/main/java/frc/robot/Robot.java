@@ -65,15 +65,17 @@ public class Robot extends TimedRobot {
 	@Override
 	public void disabledInit() {
 		robotContainer.ledSubsystem.setDefaultCommand(new AuroraLEDCommand(robotContainer.ledSubsystem));
-		new SetLEDToRGBCommand(robotContainer.ledSubsystem, 255,  0, 0).schedule();
-		if (robotContainer.turretSubsystem.getMagSwitch()) {
-			robotContainer.ledSubsystem.getCurrentCommand().cancel();
-		}
 	}
 
 	@Override
 	public void disabledPeriodic() {
 		CommandScheduler.getInstance().run();
+		SetLEDToRGBCommand redLedCommand = new SetLEDToRGBCommand(robotContainer.ledSubsystem, 255, 0, 0);
+		if (robotContainer.turretSubsystem.getMagSwitch()) {
+			redLedCommand.cancel();
+		} else {
+			redLedCommand.schedule();
+		}
 	}
 
 	@Override
