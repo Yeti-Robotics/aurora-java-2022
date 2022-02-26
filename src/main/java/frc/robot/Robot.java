@@ -27,20 +27,16 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
-  String trajectoryJSON = "insert json here"; //No path is loaded yet
+  String trajectoryJSON = "output/twoBallAlternative.wpilib.json"; //  
+  String trajectoryJSON2 = "hi"; //(still need to put this in)
   public static Trajectory trajectory = new Trajectory();
+  public static Trajectory trajectory2 = new Trajectory();
     
 
   @Override
   public void robotInit() {
     m_robotContainer = new RobotContainer();
 
-    try {
-      Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-      trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-    } catch (IOException ex) {
-      DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
-    }
   }
 
   @Override

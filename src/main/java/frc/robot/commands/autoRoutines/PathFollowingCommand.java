@@ -4,62 +4,85 @@
 
 package frc.robot.commands.autoRoutines;
 
-
 import frc.robot.Robot;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.subsystems.DrivetrainSubsystem;
+
+import java.io.IOException;
+import java.nio.file.Path;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryUtil;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 
 public class PathFollowingCommand extends CommandBase {
   /** Creates a new PathFollowingCommand. */
-private final DrivetrainSubsystem drivetrainSubsystem;
-Trajectory customTrajectory = Robot.trajectory;
-private final RamseteCommand ramseteCommand;
+  private final DrivetrainSubsystem drivetrainSubsystem;
+  Trajectory customTrajectory = Robot.trajectory;
+  Trajectory customTrajectory2 = Robot.trajectory2;
+  private RamseteCommand ramseteCommand;
+  trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+  String trajectoryJSON;
+  private Trajectory trajectory;
 
 
-  public PathFollowingCommand(DrivetrainSubsystem drivetrainSubsystem) {
+
+
+
+  public PathFollowingCommand(DrivetrainSubsystem drivetrainSubsystem, String trajectoryJSON) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drivetrainSubsystem = drivetrainSubsystem;
     addRequirements(drivetrainSubsystem);
 
     ramseteCommand = new RamseteCommand(
-      customTrajectory, 
-      drivetrainSubsystem::getPose,
-      new RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
-      new SimpleMotorFeedforward(
-        AutoConstants.ksVolts,
-        AutoConstants.kvVoltSecondsPerMeters,
-        AutoConstants.kaVoltSecondsSquaredPerMeter), 
-        AutoConstants.kinematics, 
+        customTrajectory,
+        drivetrainSubsystem::getPose,
+        new RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
+        new SimpleMotorFeedforward(
+            AutoConstants.ksVolts,
+            AutoConstants.kvVoltSecondsPerMeters,
+            AutoConstants.kaVoltSecondsSquaredPerMeter),
+        AutoConstants.kinematics,
         drivetrainSubsystem::getWheelSpeeds,
-        new PIDController(AutoConstants.kPDriveVel, 0, 0), 
-        new PIDController(AutoConstants.kPDriveVel, 0, 0), 
-        drivetrainSubsystem::tankDriveVolts, 
+        new PIDController(AutoConstants.kPDriveVel, 0, 0),
+        new PIDController(AutoConstants.kPDriveVel, 0, 0),
+        drivetrainSubsystem::tankDriveVolts,
         drivetrainSubsystem);
 
-        drivetrainSubsystem.resetOdometry(customTrajectory.getInitialPose());
+    drivetrainSubsystem.resetOdometry(customTrajectory.getInitialPose());
 
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+
+    try {
+      Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+      trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+    } catch (IOException ex) {
+      DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+    }
+
     ramseteCommand.schedule();
 
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override

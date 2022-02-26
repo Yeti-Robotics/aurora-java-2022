@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OIConstants;
@@ -22,14 +24,18 @@ import frc.robot.commands.neck.NeckOutCommand;
 import frc.robot.commands.shifting.ToggleShiftCommand;
 import frc.robot.commands.shooter.SpinShooterCommand;
 import frc.robot.commands.turret.TurretLockCommand;
+import frc.robot.commands.autoRoutines.FourBallAutoCommand;
 import frc.robot.commands.autoRoutines.PathFollowingCommand;
+import frc.robot.commands.autoRoutines.ThreeBallAutoCommand;
 import frc.robot.commands.autoRoutines.TwoBallAutoCommand;
 
-
 /**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in
+ * the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of
+ * the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
@@ -44,11 +50,14 @@ public class RobotContainer {
   public final LEDSubsystem ledSubsystem;
 
   // The robot's subsystems and commands are defined here...
-  //private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  // private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
-  // private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+  // private final ExampleCommand m_autoCommand = new
+  // ExampleCommand(m_exampleSubsystem);
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  /**
+   * The container for the robot. Contains subsystems, OI devices, and commands.
+   */
   public RobotContainer() {
     ledSubsystem = new LEDSubsystem();
     driverStationJoystick = new Joystick(OIConstants.DRIVER_STATION_JOY);
@@ -64,13 +73,16 @@ public class RobotContainer {
 
     switch (drivetrainSubsystem.getDriveMode()) {
       case TANK:
-        drivetrainSubsystem.setDefaultCommand(new RunCommand(() -> drivetrainSubsystem.tankDrive(getLeftY(), getRightY()), drivetrainSubsystem));
+        drivetrainSubsystem.setDefaultCommand(
+            new RunCommand(() -> drivetrainSubsystem.tankDrive(getLeftY(), getRightY()), drivetrainSubsystem));
         break;
       case CHEEZY:
-        drivetrainSubsystem.setDefaultCommand(new RunCommand(() -> drivetrainSubsystem.cheezyDrive(getLeftY(), getRightX()), drivetrainSubsystem));
+        drivetrainSubsystem.setDefaultCommand(
+            new RunCommand(() -> drivetrainSubsystem.cheezyDrive(getLeftY(), getRightX()), drivetrainSubsystem));
         break;
       case ARCADE:
-        drivetrainSubsystem.setDefaultCommand(new RunCommand(() -> drivetrainSubsystem.arcadeDrive(getLeftY(), getRightX()), drivetrainSubsystem));
+        drivetrainSubsystem.setDefaultCommand(
+            new RunCommand(() -> drivetrainSubsystem.arcadeDrive(getLeftY(), getRightX()), drivetrainSubsystem));
         break;
     }
     // Configure the button bindings
@@ -78,9 +90,11 @@ public class RobotContainer {
   }
 
   /**
-   * Use this method to define your button->command mappings. Buttons can be created by
+   * Use this method to define your button->command mappings. Buttons can be
+   * created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
+   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
+   * it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
@@ -114,6 +128,7 @@ public class RobotContainer {
   private void setJoystickButtonWhileHeld(Joystick joystick, int button, CommandBase command) {
     new JoystickButton(joystick, button).whileHeld(command);
   }
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
@@ -140,8 +155,17 @@ public class RobotContainer {
     //     drivetrainSubsystem.resetOdometry(customTrajectory.getInitialPose());
         // return  ramseteCommand.andThen(() -> drivetrainSubsystem.tankDriveVolts(0, 0));
     TwoBallAutoCommand twoBallAutoCommand = new TwoBallAutoCommand(drivetrainSubsystem, intakeSubsystem, neckSubsystem, turretSubsystem, shooterSubsystem, ledSubsystem);
-    return new PathFollowingCommand(drivetrainSubsystem).alongWith(twoBallAutoCommand).andThen(() -> drivetrainSubsystem.tankDriveVolts(0, 0));
+    ThreeBallAutoCommand threeBallAutoCommand = new ThreeBallAutoCommand(drivetrainSubsystem, intakeSubsystem, neckSubsystem, turretSubsystem, shooterSubsystem, ledSubsystem);
+    FourBallAutoCommand fourBallAutoCommand = new FourBallAutoCommand(drivetrainSubsystem, intakeSubsystem, neckSubsystem, turretSubsystem, shooterSubsystem, ledSubsystem)
+    return new SequentialCommandGroup(
+      new PathFollowingCommand(drivetrainSubsystem, AutoConstants.twoBallPrimary).alongWith(twoBallAutoCommand), 
+      new RunCommand(() -> drivetrainSubsystem.tankDriveVolts(0, 0), drivetrainSubsystem),
+      new SpinShooterCommand(shooterSubsystem, 0.5).withTimeout(1), 
+      new SequentialCommandGroup(
+        new PathFollowingCommand(drivetrainSubsystem, AutoConstants.threeBallPrimary).alongWith(threeBallAutoCommand),
+        new RunCommand(() -> drivetrainSubsystem.tankDriveVolts(0, 0), drivetrainSubsystem), 
+        new SpinShooterCommand(shooterSubsystem, 0.5).withTimeout(1)
+      ));
   }
-
 
 }

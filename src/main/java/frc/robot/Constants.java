@@ -49,6 +49,11 @@ public final class Constants {
         public static final double kRamseteZeta = 0.7;
         public static final double kMaxSpeedMetersPerSecond = 3.0;
         public static final double kMaxAccelerationMetersPerSecondSquared = 3.0;
+        public static final double kTrackWidthMeters = 0.6731;
+        public static final String twoBallPrimary = "output/twoBallPrimary.wpilib.json";
+        public static final String twoBallAlternative = "output/twoBallAlternative.wpilib.json";
+        public static final String threeBallPrimary = "output/threeBallPrimary.wpilib.json";
+        public static final String fourBallAuto = "output/fourBallAuto.wpilib.json";
     }
 
     public static final class LimelightConstants {
