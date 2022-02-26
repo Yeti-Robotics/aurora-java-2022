@@ -25,6 +25,8 @@ import frc.robot.commands.LED.SetLEDYetiBlueCommand;
 import frc.robot.commands.turret.HomeTurretCommand;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
+import frc.robot.subsystems.ShooterSubsystem.ShooterStatus;
+import frc.robot.subsystems.TurretSubsystem.TurretLockStatus;
 
 public class Robot extends TimedRobot {
 	private Command m_autonomousCommand;
@@ -40,6 +42,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void robotInit() {
 		robotContainer = new RobotContainer();
+		robotContainer.turretSubsystem.lockStatus = TurretLockStatus.UNLOCKED;
 
 		try {
 			Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
