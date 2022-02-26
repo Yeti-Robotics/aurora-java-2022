@@ -1,4 +1,4 @@
-package frc.robot.autoRoutines;
+package frc.robot.commands.autoRoutines;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.drivetrain.DriveForDistanceCommand;

@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.autoRoutines;
+package frc.robot.commands.autoRoutines;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -17,7 +17,7 @@ import frc.robot.subsystems.NeckSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
 
-public class TwoBallAutoCommand extends SequentialCommandGroup {  
+public class TwoBallAutoCommand extends SequentialCommandGroup {
   /** Creates a new twoBallAutoCommand. */
   public DrivetrainSubsystem drivetrainSubsystem;
   public IntakeSubsystem intakeSubsystem;
@@ -28,9 +28,11 @@ public class TwoBallAutoCommand extends SequentialCommandGroup {
   public Command SpinShooterCommand;
   public Command NeckInCommand;
   public Command IntakeInCommand;
+  public SequentialCommandGroup twoBall;
 
-  public TwoBallAutoCommand(DrivetrainSubsystem drivetrainSubsystem, IntakeSubsystem intakeSubsystem, NeckSubsystem neckSubsystem, 
-  TurretSubsystem turretSubsystem, ShooterSubsystem shooterSubsystem, LEDSubsystem ledSubsystem) {
+  public TwoBallAutoCommand(DrivetrainSubsystem drivetrainSubsystem, IntakeSubsystem intakeSubsystem,
+      NeckSubsystem neckSubsystem,
+      TurretSubsystem turretSubsystem, ShooterSubsystem shooterSubsystem, LEDSubsystem ledSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drivetrainSubsystem = drivetrainSubsystem;
     this.intakeSubsystem = intakeSubsystem;
@@ -40,23 +42,30 @@ public class TwoBallAutoCommand extends SequentialCommandGroup {
     this.ledSubsystem = ledSubsystem;
     addRequirements(drivetrainSubsystem);
     addRequirements(intakeSubsystem);
-    
+
+    twoBall = new SequentialCommandGroup(new WaitCommand(1), IntakeInCommand.withTimeout(1), NeckInCommand.withTimeout(1), new WaitCommand(1),
+    SpinShooterCommand, new WaitCommand(0.1), SpinShooterCommand); // do the waits stuffs
+
+
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    twoBall.schedule();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      //pathfollowitgcommand,
-      new SequentialCommandGroup(new WaitCommand(1), IntakeInCommand,  NeckInCommand, new WaitCommand(1), SpinShooterCommand, new WaitCommand(0.1), SpinShooterCommand); // do the waits stuffs 
+    // pathfollowitgcommand,
+  
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override

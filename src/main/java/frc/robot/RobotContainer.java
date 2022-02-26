@@ -22,6 +22,8 @@ import frc.robot.commands.neck.NeckOutCommand;
 import frc.robot.commands.shifting.ToggleShiftCommand;
 import frc.robot.commands.shooter.SpinShooterCommand;
 import frc.robot.commands.turret.TurretLockCommand;
+import frc.robot.commands.autoRoutines.PathFollowingCommand;
+import frc.robot.commands.autoRoutines.TwoBallAutoCommand;
 
 
 /**
@@ -118,25 +120,27 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    Trajectory customTrajectory = Robot.trajectory;
+    // Trajectory customTrajectory = Robot.trajectory;
 
-    RamseteCommand  ramseteCommand = new RamseteCommand(
-      customTrajectory, 
-      drivetrainSubsystem::getPose,
-      new RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
-      new SimpleMotorFeedforward(
-        AutoConstants.ksVolts,
-        AutoConstants.kvVoltSecondsPerMeters,
-        AutoConstants.kaVoltSecondsSquaredPerMeter), 
-        AutoConstants.kinematics, 
-        drivetrainSubsystem::getWheelSpeeds,
-        new PIDController(AutoConstants.kPDriveVel, 0, 0), 
-        new PIDController(AutoConstants.kPDriveVel, 0, 0), 
-        drivetrainSubsystem::tankDriveVolts, 
-        drivetrainSubsystem);
+    // RamseteCommand  ramseteCommand = new RamseteCommand(
+    //   customTrajectory, 
+    //   drivetrainSubsystem::getPose,
+    //   new RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
+    //   new SimpleMotorFeedforward(
+    //     AutoConstants.ksVolts,
+    //     AutoConstants.kvVoltSecondsPerMeters,
+    //     AutoConstants.kaVoltSecondsSquaredPerMeter), 
+    //     AutoConstants.kinematics, 
+    //     drivetrainSubsystem::getWheelSpeeds,
+    //     new PIDController(AutoConstants.kPDriveVel, 0, 0), 
+    //     new PIDController(AutoConstants.kPDriveVel, 0, 0), 
+    //     drivetrainSubsystem::tankDriveVolts, 
+    //     drivetrainSubsystem);
 
-        drivetrainSubsystem.resetOdometry(customTrajectory.getInitialPose());
-        return  ramseteCommand.andThen(() -> drivetrainSubsystem.tankDriveVolts(0, 0));
+    //     drivetrainSubsystem.resetOdometry(customTrajectory.getInitialPose());
+        // return  ramseteCommand.andThen(() -> drivetrainSubsystem.tankDriveVolts(0, 0));
+    TwoBallAutoCommand twoBallAutoCommand = new TwoBallAutoCommand(drivetrainSubsystem, intakeSubsystem, neckSubsystem, turretSubsystem, shooterSubsystem, ledSubsystem);
+    return new PathFollowingCommand(drivetrainSubsystem).alongWith(twoBallAutoCommand).andThen(() -> drivetrainSubsystem.tankDriveVolts(0, 0));
   }
 
 
