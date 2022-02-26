@@ -6,31 +6,61 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxLimitSwitch;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.SparkMaxLimitSwitch.Type;
 
 import frc.robot.Constants.TurretConstants;
-
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class TurretSubsystem extends SubsystemBase {
 	private CANSparkMax turretSpark;
-	private SparkMaxLimitSwitch magSwitch;
+	private DigitalInput magSwitch;
     private RelativeEncoder turretEncoder;
+    private double power;
+
+    public enum TurretLockStatus {
+        LOCKED, UNLOCKED
+    }
+
+    public TurretLockStatus lockStatus;
 
 	public TurretSubsystem() {
 		turretSpark = new CANSparkMax(TurretConstants.TURRET_SPARK, MotorType.kBrushless);
-		magSwitch = turretSpark.getForwardLimitSwitch(Type.kNormallyClosed);
+		magSwitch = new DigitalInput(TurretConstants.MAG_SWITCH_PORT);
         turretEncoder = turretSpark.getEncoder();
+        lockStatus = TurretLockStatus.LOCKED;
 	}
 
+    @Override
+    public void periodic() {
+        if (power > 0 && isRightLimit() || power < 0 && isLeftLimit()) {
+            stopTurret();
+        }
+        // System.out.println("TURRET ENC: " + turretPosition);
+    }
+
 	public void moveTurret(double power) {
-        turretSpark.set(power);
+        turretSpark.set(this.power = power);
     }
     
     public void stopTurret() {
-        turretSpark.set(0.0);
+        turretSpark.set(power = 0.0);
+    }
+
+    public boolean isLeftLimit(){
+        double turretPosition = getEncoder();
+        return turretPosition <= TurretConstants.TURRET_MAX_LEFT + TurretConstants.TURRET_TOLERANCE;
+    }
+
+    public boolean isRightLimit(){
+        double turretPosition = getEncoder();
+        return turretPosition >= TurretConstants.TURRET_MAX_RIGHT - TurretConstants.TURRET_TOLERANCE;
+    }
+
+    public boolean isWithinRotationLimit() {
+        double turretPosition = getEncoder();
+        return turretPosition <= TurretConstants.TURRET_MAX_RIGHT - TurretConstants.TURRET_TOLERANCE &&
+				turretPosition >= TurretConstants.TURRET_MAX_LEFT + TurretConstants.TURRET_TOLERANCE;
     }
 
     public void resetEncoder(){
@@ -42,6 +72,10 @@ public class TurretSubsystem extends SubsystemBase {
     }
 
     public boolean getMagSwitch(){
-        return magSwitch.isPressed();
+        return !magSwitch.get();
+    }
+
+    public double getPower(){
+        return power;
     }
 }

@@ -11,8 +11,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LEDConstants;
 
 public class LEDSubsystem extends SubsystemBase {
-  private AddressableLED ledStrip;
-  private AddressableLEDBuffer ledBuffer;
+  private final AddressableLED ledStrip;
+  private final AddressableLEDBuffer ledBuffer;
   private int r,g,b;
 
   public enum LEDStripStatus {
@@ -27,8 +27,8 @@ public class LEDSubsystem extends SubsystemBase {
     ledStrip.setLength(ledBuffer.getLength());
     ledStrip.setData(ledBuffer);
     ledStrip.start();
+
     stripStatus = LEDStripStatus.ON;
-    ledBuffer.getLED(0);
     SmartDashboard.putNumber("r", r);
     SmartDashboard.putNumber("g", g);
     SmartDashboard.putNumber("b", b);
