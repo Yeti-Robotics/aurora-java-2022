@@ -28,7 +28,7 @@ public class TurretSubsystem extends SubsystemBase {
 		turretSpark = new CANSparkMax(TurretConstants.TURRET_SPARK, MotorType.kBrushless);
 		magSwitch = new DigitalInput(TurretConstants.MAG_SWITCH_PORT);
         turretEncoder = turretSpark.getEncoder();
-        lockStatus = TurretLockStatus.LOCKED;
+        lockStatus = TurretLockStatus.UNLOCKED;
 	}
 
     @Override
@@ -36,8 +36,6 @@ public class TurretSubsystem extends SubsystemBase {
         if (power > 0 && isRightLimit() || power < 0 && isLeftLimit()) {
             stopTurret();
         }
-        stopTurret();
-        // System.out.println("TURRET ENC: " + turretPosition);
     }
 
 	public void moveTurret(double power) {
