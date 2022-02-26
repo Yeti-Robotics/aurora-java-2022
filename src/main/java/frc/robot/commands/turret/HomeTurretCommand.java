@@ -31,6 +31,11 @@ public class HomeTurretCommand extends CommandBase {
   }
 
   @Override
+  public boolean runsWhenDisabled() {
+    return true;
+  }
+
+  @Override
   public void end(boolean interrupted) {
     turretSubsystem.stopTurret();
   }

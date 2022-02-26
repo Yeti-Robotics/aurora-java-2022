@@ -20,7 +20,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.LED.AuroraLEDCommand;
 import frc.robot.commands.LED.BlinkLEDCommand;
+import frc.robot.commands.LED.SetLEDToRGBCommand;
 import frc.robot.commands.LED.SetLEDYetiBlueCommand;
+import frc.robot.commands.turret.HomeTurretCommand;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
 
@@ -60,6 +62,12 @@ public class Robot extends TimedRobot {
 	@Override
 	public void disabledInit() {
 		robotContainer.ledSubsystem.setDefaultCommand(new AuroraLEDCommand(robotContainer.ledSubsystem));
+		new SetLEDToRGBCommand(robotContainer.ledSubsystem, 255,  0, 0).schedule();
+		if (!robotContainer.turretSubsystem.getMagSwitch()) {
+			new HomeTurretCommand(robotContainer.turretSubsystem).schedule();
+		} else {
+			robotContainer.ledSubsystem.getCurrentCommand().cancel();
+		}
 	}
 
 	@Override
