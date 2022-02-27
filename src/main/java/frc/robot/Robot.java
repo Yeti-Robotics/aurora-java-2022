@@ -60,6 +60,7 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putString("Turret Lock Status: ", ((robotContainer.turretSubsystem.lockStatus == robotContainer.turretSubsystem.lockStatus.UNLOCKED) ? "UNLOCKED" : "LOCKED"));
 		SmartDashboard.putBoolean("ShooterSubsystem.isShooting: ", ShooterSubsystem.isShooting);
 		// System.out.println("LIMELIGHT TX: " + Limelight.getTx());
+		// System.out.println("Mag switch: " + robotContainer.turretSubsystem.getMagSwitch());
 	}
 
 	@Override
@@ -76,6 +77,7 @@ public class Robot extends TimedRobot {
 		} else {
 			redLedCommand.schedule();
 		}
+
 	}
 
 	@Override

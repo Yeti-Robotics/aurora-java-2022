@@ -11,7 +11,6 @@ import frc.robot.utils.Limelight;
 
 public class MoveTurretCommand extends CommandBase {
   private TurretSubsystem turretSubsystem;
-  private boolean atLimit = false;
   private double power;
 
   public MoveTurretCommand(TurretSubsystem turretSubsystem, double power) {
@@ -25,12 +24,7 @@ public class MoveTurretCommand extends CommandBase {
 
   @Override
   public void execute() {
-    atLimit = (power > 0)
-        ? turretSubsystem.getEncoder() >= TurretConstants.TURRET_MAX_RIGHT - TurretConstants.TURRET_TOLERANCE
-        : turretSubsystem.getEncoder() <= TurretConstants.TURRET_MAX_LEFT + TurretConstants.TURRET_TOLERANCE;
-    if (!atLimit) {
-      turretSubsystem.moveTurret((Limelight.getTx() == 0.0) ? 0 : power);
-    }
+    turretSubsystem.moveTurret(power);
   }
 
   @Override
@@ -40,6 +34,6 @@ public class MoveTurretCommand extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return atLimit;
+    return false;
   }
 }

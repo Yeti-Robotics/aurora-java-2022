@@ -117,9 +117,10 @@ public final class Constants {
         public static final int TURRET_SPARK = 12; 
         public static final int MAG_SWITCH_PORT = 3;
         public static final double TURRET_SPEED = 0.15;
-        public static final double TURRET_P = 0.02; // not fully tuned*
+        public static final double TURRET_P = 0.0224; 
         public static final double TURRET_I = 0.0; 
         public static final double TURRET_D = 0.0; 
+        public static final double TURRET_F = 0.0;
         public static final double TURRET_MAX_RIGHT = 54.59563446044922; 
         public static final double TURRET_MAX_LEFT = -54.59563446044922;
         public static final double TURRET_TOLERANCE = 1.0; // tolerance for checking encoder limits

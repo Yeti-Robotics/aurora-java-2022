@@ -13,7 +13,6 @@ public class PneumaticSubsystem extends SubsystemBase {
   public PneumaticSubsystem() {
     compressor = new Compressor(PneumaticsModuleType.REVPH);
     compressor.enableAnalog(110, 120);
-    compressor.disable();
   }
     
   @Override

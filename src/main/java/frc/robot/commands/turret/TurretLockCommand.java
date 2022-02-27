@@ -24,7 +24,9 @@ public class TurretLockCommand extends PIDCommand {
 				0.0,
 				// This uses the output
 				output -> {
-					turretSubsystem.moveTurret(-output);
+					// if(!((-output > 0 && turretSubsystem.atRightLimit()) || (-output < 0 && turretSubsystem.atLeftLimit()))){
+						turretSubsystem.moveTurret(TurretConstants.TURRET_F + -output);
+					// }
 				});
 		this.turretSubsystem = turretSubsystem;
 		getController().setTolerance(TurretConstants.LIMELIGHT_TOLERANCE);
