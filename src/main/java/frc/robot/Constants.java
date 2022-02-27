@@ -42,13 +42,16 @@ public final class Constants {
     }
     
     public static final class ClimberConstants {
-        public static final int CLIMBER_1 = 5; //front relative to robot
+        public static final int CLIMBER_1 = 5; // front relative to robot
         public static final int CLIMBER_2 = 6; // rear relative to robot
+        public static final int CLIMBER_WINCH = 13; 
 
         public static final double CLIMB_SPEED = 0.3;
         public static final double CLIMBER_LOWER_LIMIT = 0.0;
         public static final double CLIMBER_UPPER_LIMIT = 101331.5; 
         public static final double CLIMBER_TOLERANCE = 15.0; 
+
+        public static final double WINCH_SPEED = 0.8;
 
         public static final int[] CLIMBER_LEAN_PISTON = {4, 5}; 
         public static final int[] CLIMBER_MOVING_PISTON = {6, 7}; 
