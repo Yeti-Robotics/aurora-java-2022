@@ -10,8 +10,6 @@ import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import frc.robot.Constants.TurretConstants;
-import frc.robot.utils.Limelight;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -26,8 +24,6 @@ public class TurretSubsystem extends SubsystemBase {
 
     public TurretLockStatus lockStatus;
 
-    private PIDController turretPID;
-
 	public TurretSubsystem() {
 		turretSpark = new CANSparkMax(TurretConstants.TURRET_SPARK, MotorType.kBrushless);
 		magSwitch = new DigitalInput(TurretConstants.MAG_SWITCH_PORT);
@@ -38,18 +34,10 @@ public class TurretSubsystem extends SubsystemBase {
         turretSpark.enableSoftLimit(SoftLimitDirection.kReverse, true);
         turretSpark.setSoftLimit(SoftLimitDirection.kForward, (float) TurretConstants.TURRET_MAX_RIGHT);
         turretSpark.setSoftLimit(SoftLimitDirection.kReverse, (float) TurretConstants.TURRET_MAX_LEFT);
-	
-        turretPID = new PIDController(TurretConstants.TURRET_P, TurretConstants.TURRET_I, TurretConstants.TURRET_D);
-        turretPID.setTolerance(TurretConstants.LIMELIGHT_TOLERANCE);
-        turretPID.setSetpoint(0.0);
     }
 
     @Override
-    public void periodic() {
-        if(lockStatus == TurretLockStatus.LOCKED){
-            turretSpark.set(turretPID.calculate(Limelight.getTx()));
-        } 
-    }
+    public void periodic() {}
 
 	public void moveTurret(double power) {
         turretSpark.set(power);

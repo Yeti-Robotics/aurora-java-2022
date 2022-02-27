@@ -27,7 +27,6 @@ public class ClimberSubsystem extends SubsystemBase {
   public ClimberSubsystem() {
     climberFalcon1 = new WPI_TalonFX(ClimberConstants.CLIMBER_1);
     climberFalcon2 = new WPI_TalonFX(ClimberConstants.CLIMBER_2);
-    climberWinch = new TalonSRX(ClimberConstants.CLIMBER_WINCH);
     
     climberStationaryHooks = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.CLIMBER_STATIONARY_PISTONS[0], ClimberConstants.CLIMBER_STATIONARY_PISTONS[1]);
     climberMovingHook = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.CLIMBER_MOVING_PISTON[0], ClimberConstants.CLIMBER_MOVING_PISTON[1]);
@@ -94,17 +93,5 @@ public class ClimberSubsystem extends SubsystemBase {
 
   public void moveWinch(double power){
     climberWinch.set(ControlMode.PercentOutput, power);
-  }
-
-  public void winchIn(){
-    climberWinch.set(ControlMode.PercentOutput, ClimberConstants.WINCH_SPEED);
-  }
-
-  public void winchOut(){
-    climberWinch.set(ControlMode.PercentOutput, -ClimberConstants.WINCH_SPEED);
-  }
-
-  public void stopWinch(){
-    climberWinch.set(ControlMode.PercentOutput, 0.0);
   }
 }
