@@ -5,8 +5,10 @@
 package frc.robot.commands.turret;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.subsystems.TurretSubsystem;
+import frc.robot.subsystems.TurretSubsystem.TurretLockStatus;
 
 // run this command before encoders are reset
 public class HomeTurretCommand extends CommandBase {
@@ -20,12 +22,12 @@ public class HomeTurretCommand extends CommandBase {
 
   @Override
   public void initialize() {
-    power = -Math.signum(turretSubsystem.getEncoder()) * 0.2;
+    power = -Math.signum(turretSubsystem.getEncoder()) * TurretConstants.TURRET_SPEED;
   }
 
   @Override
   public void execute() {
-    if(!(turretSubsystem.getMagSwitch())){
+    if(!(turretSubsystem.getMagSwitch()) && turretSubsystem.lockStatus != TurretLockStatus.LOCKED){
       turretSubsystem.moveTurret(power);
     }
   }
@@ -37,6 +39,6 @@ public class HomeTurretCommand extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return turretSubsystem.getMagSwitch();
+    return turretSubsystem.getMagSwitch() || turretSubsystem.lockStatus == TurretLockStatus.LOCKED;
   }
 }

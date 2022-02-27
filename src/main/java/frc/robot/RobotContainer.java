@@ -55,144 +55,155 @@ import frc.robot.commands.intake.IntakeInCommand;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  public Joystick driverStationJoystick;
-  public DrivetrainSubsystem drivetrainSubsystem;
-  public ShiftingSubsystem shiftingSubsystem;
-  public IntakeSubsystem intakeSubsystem;
-  public NeckSubsystem neckSubsystem;
-  public TurretSubsystem turretSubsystem;
-  public ShooterSubsystem shooterSubsystem;
-  public ClimberSubsystem climberSubsystem;
-  public PneumaticSubsystem pneumaticsSubsystem;
-  public LEDSubsystem ledSubsystem;
+    public Joystick driverStationJoystick;
+    public DrivetrainSubsystem drivetrainSubsystem;
+    public ShiftingSubsystem shiftingSubsystem;
+    public IntakeSubsystem intakeSubsystem;
+    public NeckSubsystem neckSubsystem;
+    public TurretSubsystem turretSubsystem;
+    public ShooterSubsystem shooterSubsystem;
+    public ClimberSubsystem climberSubsystem;
+    public PneumaticSubsystem pneumaticsSubsystem;
+    public LEDSubsystem ledSubsystem;
 
-  // The robot's subsystems and commands are defined here...
-  // private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+    private double lastInputLeftY = 0.0;
 
-  // private final ExampleCommand m_autoCommand = new
-  // ExampleCommand(m_exampleSubsystem);
+    /**
+     * The container for the robot. Contains subsystems, OI devices, and commands.
+     */
+    public RobotContainer() {
+        ledSubsystem = new LEDSubsystem();
+        driverStationJoystick = new Joystick(OIConstants.DRIVER_STATION_JOY);
+        shiftingSubsystem = new ShiftingSubsystem();
+        intakeSubsystem = new IntakeSubsystem();
+        neckSubsystem = new NeckSubsystem();
+        turretSubsystem = new TurretSubsystem();
+        shooterSubsystem = new ShooterSubsystem();
+        climberSubsystem = new ClimberSubsystem();
+        drivetrainSubsystem = new DrivetrainSubsystem();
+        pneumaticsSubsystem = new PneumaticSubsystem();
 
-  /**
-   * The container for the robot. Contains subsystems, OI devices, and commands.
-   */
-  public RobotContainer() {
-    ledSubsystem = new LEDSubsystem();
-    driverStationJoystick = new Joystick(OIConstants.DRIVER_STATION_JOY);
-    shiftingSubsystem = new ShiftingSubsystem();
-    intakeSubsystem = new IntakeSubsystem();
-    neckSubsystem = new NeckSubsystem();
-    turretSubsystem = new TurretSubsystem();
-    shooterSubsystem = new ShooterSubsystem();
-    climberSubsystem = new ClimberSubsystem();
-    drivetrainSubsystem = new DrivetrainSubsystem();
-    pneumaticsSubsystem = new PneumaticSubsystem();
-    
-    turretSubsystem.setDefaultCommand(new TurretLockCommand(turretSubsystem));
+        turretSubsystem.setDefaultCommand(new TurretLockCommand(turretSubsystem));
 
-    switch (drivetrainSubsystem.getDriveMode()) {
-      case TANK:
-        drivetrainSubsystem.setDefaultCommand(
-            new RunCommand(() -> drivetrainSubsystem.tankDrive(getLeftY(), getRightY()), drivetrainSubsystem));
-        break;
-      case CHEEZY:
-        drivetrainSubsystem.setDefaultCommand(
-            new RunCommand(() -> drivetrainSubsystem.cheezyDrive(getLeftY(), getRightX()), drivetrainSubsystem));
-        break;
-      case ARCADE:
-        drivetrainSubsystem.setDefaultCommand(
-            new RunCommand(() -> drivetrainSubsystem.arcadeDrive(getLeftY(), getRightX()), drivetrainSubsystem));
-        break;
-    }
-    // Configure the button bindings
-    configureButtonBindings();
-  }
+        switch (drivetrainSubsystem.getDriveMode()) {
+            case TANK:
+                drivetrainSubsystem.setDefaultCommand(
+                        new RunCommand(() -> drivetrainSubsystem.tankDrive(getLeftY(), getRightY()),
+                                drivetrainSubsystem));
+                break;
+            case CHEEZY:
+                drivetrainSubsystem.setDefaultCommand(
+                        new RunCommand(() -> drivetrainSubsystem.cheezyDrive(getLeftY(), getRightX()),
+                                drivetrainSubsystem));
+                break;
+            case ARCADE:
+                drivetrainSubsystem.setDefaultCommand(
+                        new RunCommand(() -> drivetrainSubsystem.arcadeDrive(getLeftY(), getRightX()),
+                                drivetrainSubsystem));
+                break;
+        }
 
-  /**
-   * Use this method to define your button->command mappings. Buttons can be
-   * created by
-   * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
-   * it to a {@link
-   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-   */
-  private void configureButtonBindings() {
-    setJoystickButtonWhileHeld(driverStationJoystick, 1, new AllInCommand(neckSubsystem, intakeSubsystem));
-    setJoystickButtonWhileHeld(driverStationJoystick, 2, new SpinShooterCommand(shooterSubsystem, 0.6));
-    setJoystickButtonWhileHeld(driverStationJoystick, 3, new IntakeInCommand(intakeSubsystem));
-    setJoystickButtonWhenPressed(driverStationJoystick, 4, new ToggleTurretLockCommand(turretSubsystem));
-    setJoystickButtonWhenPressed(driverStationJoystick, 5, new ToggleStaticHooksCommand(climberSubsystem));
-    setJoystickButtonWhileHeld(driverStationJoystick, 6, new AllOutCommand(intakeSubsystem, neckSubsystem));
-    setJoystickButtonWhileHeld(driverStationJoystick, 7, new FlywheelPIDCommand(shooterSubsystem));
-    setJoystickButtonWhenPressed(driverStationJoystick, 9, new HomeTurretCommand(turretSubsystem));
-    setJoystickButtonWhenPressed(driverStationJoystick, 10, new ToggleMovingHookCommand(climberSubsystem));
-    setJoystickButtonWhenPressed(driverStationJoystick, 11, new ToggleShiftCommand(shiftingSubsystem));
-    setJoystickButtonWhenPressed(driverStationJoystick, 12, new ToggleIntakeCommand(intakeSubsystem));
-  }
-
-  private double getLeftY() {
-    // prevents tipping when stopping backward movement abruptly
-    double driveVel = drivetrainSubsystem.getVelocity();
-    double joyInput = -driverStationJoystick.getRawAxis(0);
-
-    if(drivetrainSubsystem.getNeutralMode() == NeutralMode.Brake && driveVel < 0.0 && joyInput >= 0.0){
-      drivetrainSubsystem.setMotorsCoast();
+        // Configure the button bindings
+        configureButtonBindings();
     }
 
-    if(drivetrainSubsystem.getNeutralMode() == NeutralMode.Coast && driveVel >= 0.0){
-      drivetrainSubsystem.setMotorsBrake();
+    /**
+     * Use this method to define your button->command mappings. Buttons can be
+     * created by
+     * instantiating a {@link GenericHID} or one of its subclasses ({@link
+     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
+     * it to a {@link
+     * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+     */
+    private void configureButtonBindings() {
+        setJoystickButtonWhileHeld(driverStationJoystick, 6, new AllOutCommand(intakeSubsystem, neckSubsystem));
+        setJoystickButtonWhileHeld(driverStationJoystick, 1, new AllInCommand(neckSubsystem, intakeSubsystem));
+
+        setJoystickButtonWhenPressed(driverStationJoystick, 7,
+            new ToggleTurretLockCommand(turretSubsystem).andThen(new HomeTurretCommand(turretSubsystem)));
+        setJoystickButtonWhileHeld(driverStationJoystick, 2, new FlywheelPIDCommand(shooterSubsystem));
+
+        // 8 = nothing
+        // 3 = nothing
+
+        setJoystickButtonWhileHeld(driverStationJoystick, 9, new ClimbUpCommand(climberSubsystem));
+        setJoystickButtonWhileHeld(driverStationJoystick, 4, new ClimbDownCommand(climberSubsystem));
+
+        setJoystickButtonWhenPressed(driverStationJoystick, 10, new ToggleStaticHooksCommand(climberSubsystem));
+        setJoystickButtonWhenPressed(driverStationJoystick, 5, new ToggleMovingHookCommand(climberSubsystem));
+
+        setJoystickButtonWhenPressed(driverStationJoystick, 11, new ToggleShiftCommand(shiftingSubsystem));
+        setJoystickButtonWhenPressed(driverStationJoystick, 12, new ToggleIntakeCommand(intakeSubsystem));
     }
 
-    return joyInput;
-  }
+    private double getLeftY() {
+        // prevents tipping when stopping backward movement abruptly
+        if (lastInputLeftY < 0 && Math.abs(-driverStationJoystick.getRawAxis(0)) <= 0.05) { // 0.05 == joystick deadband
+            drivetrainSubsystem.setMotorsCoast();
+        }
 
-  private double getLeftX() {
-    return driverStationJoystick.getRawAxis(1);
-  }
+        if (Math.abs(-driverStationJoystick.getRawAxis(0)) > 0.05) {
+            drivetrainSubsystem.setMotorsBrake();
+        }
 
-  private double getRightY() {
-    return -driverStationJoystick.getRawAxis(2);
-  }
+        lastInputLeftY = -driverStationJoystick.getRawAxis(0);
 
-  private double getRightX() {
-    return driverStationJoystick.getRawAxis(3);
-  }
+        return -driverStationJoystick.getRawAxis(0);
+    }
 
-  private void setJoystickButtonWhenPressed(Joystick driverStationJoystick, int button, CommandBase command) {
-    new JoystickButton(driverStationJoystick, button).whenPressed(command);
-  }
+    private double getLeftX() {
+        return driverStationJoystick.getRawAxis(1);
+    }
 
-  private void setJoystickButtonWhileHeld(Joystick driverStationJoystick, int button, CommandBase command) {
-    new JoystickButton(driverStationJoystick, button).whileHeld(command);
-  }
+    private double getRightY() {
+        return -driverStationJoystick.getRawAxis(2);
+    }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    SequentialCommandGroup twoBallAutoCommand = new SequentialCommandGroup(new WaitCommand(1),
-        new IntakeInCommand(intakeSubsystem).withTimeout(1), new NeckInCommand(neckSubsystem).withTimeout(1),
-        new WaitCommand(1));
-        
-    SequentialCommandGroup threeBallAutoCommand = new SequentialCommandGroup(new WaitCommand(1),
-        new IntakeInCommand(intakeSubsystem).withTimeout(1), new NeckInCommand(neckSubsystem).withTimeout(1),
-        new WaitCommand(1));
+    private double getRightX() {
+        return driverStationJoystick.getRawAxis(3);
+    }
 
-    SequentialCommandGroup fourBallAutoCommand = new SequentialCommandGroup(new WaitCommand(1),
-        new IntakeInCommand(intakeSubsystem).withTimeout(1), new NeckInCommand(neckSubsystem).withTimeout(1),
-        new WaitCommand(1), new IntakeInCommand(intakeSubsystem).withTimeout(1),
-        new NeckInCommand(neckSubsystem).withTimeout(1), new WaitCommand(1));
+    private void setJoystickButtonWhenPressed(Joystick driverStationJoystick, int button, CommandBase command) {
+        new JoystickButton(driverStationJoystick, button).whenPressed(command);
+    }
 
-    return new SequentialCommandGroup(
-        new PathFollowingCommand(drivetrainSubsystem, AutoConstants.twoBallPrimary).alongWith(twoBallAutoCommand),
-        new RunCommand(() -> drivetrainSubsystem.tankDriveVolts(0, 0), drivetrainSubsystem),
-        new SpinShooterCommand(shooterSubsystem, 0.5).withTimeout(1),
-        new SequentialCommandGroup(
-            new PathFollowingCommand(drivetrainSubsystem, AutoConstants.threeBallPrimary)
-                .alongWith(threeBallAutoCommand),
-            new RunCommand(() -> drivetrainSubsystem.tankDriveVolts(0, 0), drivetrainSubsystem),
-            new SpinShooterCommand(shooterSubsystem, 0.5).withTimeout(1)));
-  }
+    private void setJoystickButtonWhileHeld(Joystick driverStationJoystick, int button, CommandBase command) {
+        new JoystickButton(driverStationJoystick, button).whileHeld(command);
+    }
+
+    /**
+     * Use this to pass the autonomous command to the main {@link Robot} class.
+     *
+     * @return the command to run in autonomous
+     */
+    public Command getAutonomousCommand() {
+        SequentialCommandGroup twoBallAutoCommand = new SequentialCommandGroup(new WaitCommand(1),
+                new IntakeInCommand(intakeSubsystem).withTimeout(1), new NeckInCommand(neckSubsystem).withTimeout(1),
+                new WaitCommand(1));
+
+        SequentialCommandGroup threeBallAutoCommand = new SequentialCommandGroup(new WaitCommand(1),
+                new IntakeInCommand(intakeSubsystem).withTimeout(1), new NeckInCommand(neckSubsystem).withTimeout(1),
+                new WaitCommand(1));
+
+        SequentialCommandGroup fourBallAutoCommand = new SequentialCommandGroup(new WaitCommand(1),
+                new IntakeInCommand(intakeSubsystem).withTimeout(1), new NeckInCommand(neckSubsystem).withTimeout(1),
+                new WaitCommand(1), new IntakeInCommand(intakeSubsystem).withTimeout(1),
+                new NeckInCommand(neckSubsystem).withTimeout(1), new WaitCommand(1));
+
+        return new SequentialCommandGroup(
+                new PathFollowingCommand(drivetrainSubsystem, AutoConstants.exitTarmacLeft)
+        // new PathFollowingCommand(drivetrainSubsystem,
+        // AutoConstants.twoBallPrimary).alongWith(twoBallAutoCommand),
+        // new RunCommand(() -> drivetrainSubsystem.tankDriveVolts(0, 0),
+        // drivetrainSubsystem),
+        // new SpinShooterCommand(shooterSubsystem, 0.5).withTimeout(1),
+        // new SequentialCommandGroup(
+        // new PathFollowingCommand(drivetrainSubsystem, AutoConstants.threeBallPrimary)
+        // .alongWith(threeBallAutoCommand),
+        // new RunCommand(() -> drivetrainSubsystem.tankDriveVolts(0, 0),
+        // drivetrainSubsystem),
+        // new SpinShooterCommand(shooterSubsystem, 0.5).withTimeout(1)));
+        );
+    }
 
 }

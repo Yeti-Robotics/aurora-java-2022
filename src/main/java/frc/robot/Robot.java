@@ -59,7 +59,6 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("Flywheel RPM: ", robotContainer.shooterSubsystem.getFlywheelRPM());
 		SmartDashboard.putString("Turret Lock Status: ", ((robotContainer.turretSubsystem.lockStatus == robotContainer.turretSubsystem.lockStatus.UNLOCKED) ? "UNLOCKED" : "LOCKED"));
 		SmartDashboard.putBoolean("ShooterSubsystem.isShooting: ", ShooterSubsystem.isShooting);
-		// System.out.println("LIMELIGHT TX: " + Limelight.getTx());
 	}
 
 	@Override
@@ -76,11 +75,14 @@ public class Robot extends TimedRobot {
 		} else {
 			redLedCommand.schedule();
 		}
+
 	}
 
 	@Override
 	public void autonomousInit() {
 		robotContainer.ledSubsystem.setDefaultCommand(new AuroraLEDCommand(robotContainer.ledSubsystem));
+		
+		m_autonomousCommand = robotContainer.getAutonomousCommand();
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.schedule();
 		}

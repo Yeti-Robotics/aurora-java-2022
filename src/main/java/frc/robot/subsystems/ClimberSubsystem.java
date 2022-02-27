@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -18,7 +19,7 @@ import frc.robot.Constants.ClimberConstants;
 
 public class ClimberSubsystem extends SubsystemBase {
   private WPI_TalonFX climberFalcon1, climberFalcon2;
-  //private DoubleSolenoid climberBrake;
+  private TalonSRX climberWinch;
   private DoubleSolenoid climberStationaryHooks;
   private DoubleSolenoid climberMovingHook;
   private DoubleSolenoid climberLeanPiston;
@@ -27,12 +28,10 @@ public class ClimberSubsystem extends SubsystemBase {
     climberFalcon1 = new WPI_TalonFX(ClimberConstants.CLIMBER_1);
     climberFalcon2 = new WPI_TalonFX(ClimberConstants.CLIMBER_2);
     
-    //climberBrake = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.CLIMBER_BRAKE_SOLENOID[0], ClimberConstants.CLIMBER_BRAKE_SOLENOID[1]);
     climberStationaryHooks = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.CLIMBER_STATIONARY_PISTONS[0], ClimberConstants.CLIMBER_STATIONARY_PISTONS[1]);
     climberMovingHook = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.CLIMBER_MOVING_PISTON[0], ClimberConstants.CLIMBER_MOVING_PISTON[1]);
     climberLeanPiston = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.CLIMBER_LEAN_PISTON[0], ClimberConstants.CLIMBER_LEAN_PISTON[1]);
 
-    //climberBrake.set(Value.kReverse); // set value for toggling; assume reverse position on startup
     climberStationaryHooks.set(Value.kReverse);
     climberMovingHook.set(Value.kReverse);
     climberLeanPiston.set(Value.kReverse);
@@ -46,12 +45,11 @@ public class ClimberSubsystem extends SubsystemBase {
 
     climberFalcon1.setNeutralMode(NeutralMode.Brake);
     climberFalcon2.setNeutralMode(NeutralMode.Brake);
+    climberWinch.setNeutralMode(NeutralMode.Brake);
   }
 
   @Override
-  public void periodic() {
-		// System.out.println("CLIMBER RAW ENCODERS: " + getAverageEncoder());
-  }
+  public void periodic() {}
 
   public void climbUp() {
     climberFalcon1.set(ControlMode.PercentOutput, ClimberConstants.CLIMB_SPEED);
@@ -63,10 +61,6 @@ public class ClimberSubsystem extends SubsystemBase {
   public void stopClimb(){
     climberFalcon1.set(ControlMode.PercentOutput, 0.0);
   }
-
-  public void toggleBrake(){ 
-    // TODO 
-  } 
 
   public void toggleStaticHooks(){
     climberStationaryHooks.toggle();
@@ -97,11 +91,7 @@ public class ClimberSubsystem extends SubsystemBase {
     climberFalcon1.setSelectedSensorPosition(0.0);
   }
 
-  // public DoubleSolenoid.Value getBrakePos(){
-  //   return climberBrake.get(); // returns kOff, kForward, or kReverse
-  // }
-
-  // public DoubleSolenoid.Value getPistonsPos(){
-  //   return climberHookPiston1.get(); 
-  // }
+  public void moveWinch(double power){
+    climberWinch.set(ControlMode.PercentOutput, power);
+  }
 }

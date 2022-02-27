@@ -53,10 +53,11 @@ public final class Constants {
         public static final double MAX_SPEED = 3.0; // m/s
         public static final double MAX_ACCELERATION = 3.0; // m/s^2
 
-        public static final String twoBallPrimary = "output/twoBallPrimary.wpilib.json";
-        public static final String twoBallAlternative = "output/twoBallAlternative.wpilib.json";
-        public static final String threeBallPrimary = "output/threeBallPrimary.wpilib.json";
-        public static final String fourBallAuto = "output/fourBallAuto.wpilib.json";
+        public static final String exitTarmacLeft = "paths/exitTarmacLeft.wpilib.json";
+        public static final String twoBallPrimary = "paths/twoBallPrimary.wpilib.json";
+        public static final String twoBallAlternative = "paths/twoBallAlternative.wpilib.json";
+        public static final String threeBallPrimary = "paths/threeBallPrimary.wpilib.json";
+        public static final String fourBallAuto = "paths/fourBallAuto.wpilib.json";
     }
 
     public static final class LimelightConstants {
@@ -76,7 +77,7 @@ public final class Constants {
     }
     
     public static final class ClimberConstants {
-        public static final int CLIMBER_1 = 5; //front relative to robot
+        public static final int CLIMBER_1 = 5; // front relative to robot
         public static final int CLIMBER_2 = 6; // rear relative to robot
 
         public static final double CLIMB_SPEED = 0.3;
@@ -142,9 +143,10 @@ public final class Constants {
         public static final int TURRET_SPARK = 12; 
         public static final int MAG_SWITCH_PORT = 3;
         public static final double TURRET_SPEED = 0.15;
-        public static final double TURRET_P = 0.02; // not fully tuned*
+        public static final double TURRET_P = 0.0224; 
         public static final double TURRET_I = 0.0; 
         public static final double TURRET_D = 0.0; 
+        public static final double TURRET_F = 0.0;
         public static final double TURRET_MAX_RIGHT = 54.59563446044922; 
         public static final double TURRET_MAX_LEFT = -54.59563446044922;
         public static final double TURRET_TOLERANCE = 1.0; // tolerance for checking encoder limits
