@@ -23,6 +23,12 @@ public class ClimberSubsystem extends SubsystemBase {
   private DoubleSolenoid climberMovingHook;
   private DoubleSolenoid climberLeanPiston;
 
+  public enum MovingBrakeStatus {
+    ON, OFF
+  }
+
+  public MovingBrakeStatus movingBrakeStatus;
+
   public ClimberSubsystem() {
     climberFalcon1 = new WPI_TalonFX(ClimberConstants.CLIMBER_1);
     climberFalcon2 = new WPI_TalonFX(ClimberConstants.CLIMBER_2);
@@ -34,6 +40,8 @@ public class ClimberSubsystem extends SubsystemBase {
     climberStationaryHooks.set(Value.kReverse);
     climberMovingHook.set(Value.kReverse);
     climberLeanPiston.set(Value.kReverse);
+
+    movingBrakeStatus = MovingBrakeStatus.OFF;
 
     climberFalcon1.setInverted(true);
     climberFalcon2.follow(climberFalcon1);
@@ -53,7 +61,7 @@ public class ClimberSubsystem extends SubsystemBase {
     climberFalcon1.set(ControlMode.PercentOutput, ClimberConstants.CLIMB_SPEED);
   }
   public void climbDown(){
-    climberFalcon1.set(ControlMode.PercentOutput, -ClimberConstants.CLIMB_SPEED);
+    if (movingBrakeStatus == MovingBrakeStatus.OFF) climberFalcon1.set(ControlMode.PercentOutput, -ClimberConstants.CLIMB_SPEED);
   }
 
   public void stopClimb(){
@@ -66,6 +74,11 @@ public class ClimberSubsystem extends SubsystemBase {
 
   public void toggleMovingHook(){
     climberMovingHook.toggle();
+    if (movingBrakeStatus == MovingBrakeStatus.OFF) {
+      movingBrakeStatus = MovingBrakeStatus.ON;
+    } else {
+      movingBrakeStatus = MovingBrakeStatus.OFF;
+    }
   }
 
   public void toggleLeanPiston(){

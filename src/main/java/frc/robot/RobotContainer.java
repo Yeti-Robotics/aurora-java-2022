@@ -61,6 +61,7 @@ public class RobotContainer {
   public LEDSubsystem ledSubsystem;
 
   private double lastInputLeftY = 0.0;
+  private boolean mode = true;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -100,7 +101,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    setJoystickButtonWhileHeld(driverStationJoystick, 6, new AllOutCommand(intakeSubsystem, neckSubsystem));
+    setJoystickButtonWhileHeld(driverStationJoystick, 6, mode ? new AllOutCommand(intakeSubsystem, neckSubsystem) : new ToggleIntakeCommand(intakeSubsystem));
     setJoystickButtonWhileHeld(driverStationJoystick, 1, new AllInCommand(neckSubsystem, intakeSubsystem));
     
     setJoystickButtonWhenPressed(driverStationJoystick, 7, new ToggleTurretLockCommand(turretSubsystem).andThen(new HomeTurretCommand(turretSubsystem)));
@@ -108,6 +109,10 @@ public class RobotContainer {
 
     // 8 = nothing
     // 3 = nothing
+    setJoystickButtonWhenPressed(driverStationJoystick, 3, new RunCommand(() -> {
+      mode = !mode;
+      configureButtonBindings();
+    }));
 
     setJoystickButtonWhileHeld(driverStationJoystick, 9, new ClimbUpCommand(climberSubsystem));
     setJoystickButtonWhileHeld(driverStationJoystick, 4, new ClimbDownCommand(climberSubsystem));
