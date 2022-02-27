@@ -19,7 +19,6 @@ import frc.robot.Constants.ClimberConstants;
 
 public class ClimberSubsystem extends SubsystemBase {
   private WPI_TalonFX climberFalcon1, climberFalcon2;
-  private TalonSRX climberWinch;
   private DoubleSolenoid climberStationaryHooks;
   private DoubleSolenoid climberMovingHook;
   private DoubleSolenoid climberLeanPiston;
@@ -45,7 +44,6 @@ public class ClimberSubsystem extends SubsystemBase {
 
     climberFalcon1.setNeutralMode(NeutralMode.Brake);
     climberFalcon2.setNeutralMode(NeutralMode.Brake);
-    climberWinch.setNeutralMode(NeutralMode.Brake);
   }
 
   @Override
@@ -89,9 +87,5 @@ public class ClimberSubsystem extends SubsystemBase {
   public void resetEncoders(){
     climberFalcon2.setSelectedSensorPosition(0.0);
     climberFalcon1.setSelectedSensorPosition(0.0);
-  }
-
-  public void moveWinch(double power){
-    climberWinch.set(ControlMode.PercentOutput, power);
   }
 }
