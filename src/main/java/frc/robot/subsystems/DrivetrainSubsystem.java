@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
@@ -9,6 +8,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.ADIS16448_IMU;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
@@ -17,22 +17,24 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.ShiftingSubsystem.ShiftStatus;
 
 public class DrivetrainSubsystem extends SubsystemBase {
-  private WPI_TalonFX leftFalcon1, leftFalcon2, rightFalcon1, rightFalcon2;
+  private WPI_TalonFX leftFalcon1, leftFalcon2, rightFalcon1, rightFalcon2;  
   private MotorControllerGroup leftMotors;
   private MotorControllerGroup rightMotors;
 
-  private AHRS gyro;
-
-  private final DifferentialDrive drive;
-  private final DifferentialDriveOdometry odometry;
-
+  private AHRS gyro; 
+  private ADIS16448_IMU tempGyro; // for testing
+  
+  private DifferentialDrive drive;
   private DriveMode driveMode;
+  private DifferentialDriveOdometry odometry;
 
   public enum DriveMode {
     TANK, CHEEZY, ARCADE;
   }
 
-  public DrivetrainSubsystem() {
+  private NeutralMode neutralMode; 
+
+  public DrivetrainSubsystem() {   
     leftFalcon1 = new WPI_TalonFX(DriveConstants.LEFT_FALCON_1);
     leftFalcon2 = new WPI_TalonFX(DriveConstants.LEFT_FALCON_2);
     rightFalcon1 = new WPI_TalonFX(DriveConstants.RIGHT_FALCON_1);
@@ -40,25 +42,21 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     leftMotors = new MotorControllerGroup(leftFalcon1, leftFalcon2);
     rightMotors = new MotorControllerGroup(rightFalcon1, rightFalcon2);
-
     rightMotors.setInverted(true);
-    leftFalcon1.setNeutralMode(NeutralMode.Brake);
-    leftFalcon2.setNeutralMode(NeutralMode.Brake);
-    rightFalcon1.setNeutralMode(NeutralMode.Brake);
-    rightFalcon2.setNeutralMode(NeutralMode.Brake);
-
-    gyro = new AHRS(I2C.Port.kOnboard);
-    resetGyro();
+    setMotorsBrake();
+    
+    drive = new DifferentialDrive(leftMotors, rightMotors);
+    drive.setDeadband(0.05);
 
     leftFalcon1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
     rightFalcon1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
     resetEncoders();
-
-    drive = new DifferentialDrive(leftMotors, rightMotors);
-    drive.setDeadband(0.05);
+    
+    gyro = new AHRS(I2C.Port.kOnboard);
+    resetGyro();
 
     odometry = new DifferentialDriveOdometry(gyro.getRotation2d());
-
+  
     driveMode = DriveMode.CHEEZY;
   }
 
@@ -85,7 +83,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   public void cheezyDrive(double straight, double turn) {
-    drive.curvatureDrive(straight, -turn, false);
+    drive.curvatureDrive(straight, -turn, true);
   }
 
   public void arcadeDrive(double straight, double turn) {
@@ -93,10 +91,27 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   public void stopDrive() {
-    leftFalcon1.set(ControlMode.PercentOutput, 0.0);
-    rightFalcon1.set(ControlMode.PercentOutput, 0.0);
+    leftMotors.set(0.0);
+    rightMotors.set(0.0);
   }
 
+  public void setMotorsBrake(){
+    leftFalcon1.setNeutralMode(NeutralMode.Brake);
+    leftFalcon2.setNeutralMode(NeutralMode.Brake);
+    rightFalcon1.setNeutralMode(NeutralMode.Brake);
+    rightFalcon2.setNeutralMode(NeutralMode.Brake);
+    neutralMode = NeutralMode.Brake;
+  }
+
+  public void setMotorsCoast(){
+    leftFalcon1.setNeutralMode(NeutralMode.Coast);
+    leftFalcon2.setNeutralMode(NeutralMode.Coast);
+    rightFalcon1.setNeutralMode(NeutralMode.Coast);
+    rightFalcon2.setNeutralMode(NeutralMode.Coast);
+    neutralMode = NeutralMode.Coast;
+  }
+
+  // Distance in meters
   public double getLeftEncoderDistance() {
     return (leftFalcon1.getSelectedSensorPosition() * (DriveConstants.DISTANCE_PER_PULSE)
         / (ShiftingSubsystem.getShifterPosition() == ShiftStatus.HIGH ? DriveConstants.HIGH_GEAR_RATIO
@@ -118,6 +133,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     rightFalcon1.setSelectedSensorPosition(0.0);
   }
 
+  // Velocity in meters/second
   public double getLeftEncoderVelocity() {
     return (leftFalcon1.getSelectedSensorVelocity() * 10 * (DriveConstants.DISTANCE_PER_PULSE)
         / (ShiftingSubsystem.getShifterPosition() == ShiftStatus.HIGH ? DriveConstants.HIGH_GEAR_RATIO
@@ -125,9 +141,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   public double getRightEncoderVelocity() {
-    return (rightFalcon1.getSelectedSensorVelocity() * 10 * (DriveConstants.DISTANCE_PER_PULSE)
+    return (-rightFalcon1.getSelectedSensorVelocity() * 10 * (DriveConstants.DISTANCE_PER_PULSE)
         / (ShiftingSubsystem.getShifterPosition() == ShiftStatus.HIGH ? DriveConstants.HIGH_GEAR_RATIO
             : DriveConstants.LOW_GEAR_RATIO));
+  }
+  
+  public double getVelocity(){
+    return (getLeftEncoderVelocity() + getRightEncoderVelocity()) / 2.0;
   }
 
   public double getHeading() {
@@ -141,6 +161,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
     return new DifferentialDriveWheelSpeeds(getLeftEncoderDistance(), getRightEncoderDistance());
   }
+    
 
   public Pose2d getPose() {
     return odometry.getPoseMeters();
@@ -153,5 +174,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   public DriveMode getDriveMode() {
     return driveMode;
+  }
+
+  public NeutralMode getNeutralMode(){
+    return neutralMode;
+  }
+
+  public double getTempGyro(){
+    return tempGyro.getAngle(); 
   }
 }

@@ -2,18 +2,19 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.climber;
+package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
-public class TogglePistonsCommand extends CommandBase {
+public class SpinShooterVelocityCommand extends CommandBase {
+  private ShooterSubsystem shooterSubsystem;
+  private double vel;
 
-  private ClimberSubsystem climberSubsystem;
-  /** Creates a new TogglePistonsCommand. */
-  public TogglePistonsCommand(ClimberSubsystem climberSubsystem) {
-    this.climberSubsystem = climberSubsystem;
-    addRequirements(climberSubsystem);
+  public SpinShooterVelocityCommand(ShooterSubsystem shooterSubsystem, double vel) {
+    this.shooterSubsystem = shooterSubsystem;
+    this.vel = vel;
+    addRequirements(shooterSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -23,16 +24,18 @@ public class TogglePistonsCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    climberSubsystem.toggleHookPistons();
+    shooterSubsystem.setFlywheelVelocity(vel);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    shooterSubsystem.stopFlywheel();
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }

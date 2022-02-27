@@ -4,20 +4,43 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.RamseteController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.ShooterConstants;
+import frc.robot.Constants.TurretConstants;
 import frc.robot.subsystems.*;
+import frc.robot.commands.climber.ClimbDownCommand;
+import frc.robot.commands.climber.ClimbUpCommand;
+import frc.robot.commands.climber.ToggleMovingHookCommand;
+import frc.robot.commands.climber.ToggleStaticHooksCommand;
+import frc.robot.commands.commandgroups.AllInCommand;
+import frc.robot.commands.commandgroups.AllOutCommand;
+import frc.robot.commands.intake.IntakeInCommand;
+import frc.robot.commands.intake.ToggleIntakeCommand;
 import frc.robot.commands.neck.NeckInCommand;
-import frc.robot.commands.neck.NeckOutCommand;
 import frc.robot.commands.shifting.ToggleShiftCommand;
+import frc.robot.commands.shooter.FlywheelPIDCommand;
 import frc.robot.commands.shooter.SpinShooterCommand;
+import frc.robot.commands.shooter.SpinShooterVelocityCommand;
+import frc.robot.commands.shooter.ToggleBangBangCommand;
+import frc.robot.commands.turret.HomeTurretCommand;
+import frc.robot.commands.turret.MoveTurretCommand;
+import frc.robot.commands.turret.ToggleTurretLockCommand;
+import frc.robot.commands.turret.TurnToTargetCommand;
 import frc.robot.commands.turret.TurretLockCommand;
 import frc.robot.commands.autoRoutines.PathFollowingCommand;
 import frc.robot.commands.intake.IntakeInCommand;
@@ -32,15 +55,16 @@ import frc.robot.commands.intake.IntakeInCommand;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  private Joystick driverStationJoystick;
-  private DrivetrainSubsystem drivetrainSubsystem;
-  private ShiftingSubsystem shiftingSubsystem;
-  private IntakeSubsystem intakeSubsystem;
-  private NeckSubsystem neckSubsystem;
-  private TurretSubsystem turretSubsystem;
-  private ShooterSubsystem shooterSubsystem;
-  private ClimberSubsystem climberSubsystem;
-  public final LEDSubsystem ledSubsystem;
+  public Joystick driverStationJoystick;
+  public DrivetrainSubsystem drivetrainSubsystem;
+  public ShiftingSubsystem shiftingSubsystem;
+  public IntakeSubsystem intakeSubsystem;
+  public NeckSubsystem neckSubsystem;
+  public TurretSubsystem turretSubsystem;
+  public ShooterSubsystem shooterSubsystem;
+  public ClimberSubsystem climberSubsystem;
+  public PneumaticSubsystem pneumaticsSubsystem;
+  public LEDSubsystem ledSubsystem;
 
   // The robot's subsystems and commands are defined here...
   // private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
@@ -61,7 +85,8 @@ public class RobotContainer {
     shooterSubsystem = new ShooterSubsystem();
     climberSubsystem = new ClimberSubsystem();
     drivetrainSubsystem = new DrivetrainSubsystem();
-
+    pneumaticsSubsystem = new PneumaticSubsystem();
+    
     turretSubsystem.setDefaultCommand(new TurretLockCommand(turretSubsystem));
 
     switch (drivetrainSubsystem.getDriveMode()) {
@@ -91,15 +116,33 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    setJoystickButtonWhileHeld(driverStationJoystick, 1, new NeckInCommand(neckSubsystem));
-    setJoystickButtonWhileHeld(driverStationJoystick, 2, new NeckOutCommand(neckSubsystem));
-    setJoystickButtonWhileHeld(driverStationJoystick, 3, new SpinShooterCommand(shooterSubsystem, 0.5));
+    setJoystickButtonWhileHeld(driverStationJoystick, 1, new AllInCommand(neckSubsystem, intakeSubsystem));
+    setJoystickButtonWhileHeld(driverStationJoystick, 2, new SpinShooterCommand(shooterSubsystem, 0.6));
+    setJoystickButtonWhileHeld(driverStationJoystick, 3, new IntakeInCommand(intakeSubsystem));
+    setJoystickButtonWhenPressed(driverStationJoystick, 4, new ToggleTurretLockCommand(turretSubsystem));
+    setJoystickButtonWhenPressed(driverStationJoystick, 5, new ToggleStaticHooksCommand(climberSubsystem));
+    setJoystickButtonWhileHeld(driverStationJoystick, 6, new AllOutCommand(intakeSubsystem, neckSubsystem));
+    setJoystickButtonWhileHeld(driverStationJoystick, 7, new FlywheelPIDCommand(shooterSubsystem));
+    setJoystickButtonWhenPressed(driverStationJoystick, 9, new HomeTurretCommand(turretSubsystem));
+    setJoystickButtonWhenPressed(driverStationJoystick, 10, new ToggleMovingHookCommand(climberSubsystem));
     setJoystickButtonWhenPressed(driverStationJoystick, 11, new ToggleShiftCommand(shiftingSubsystem));
-
+    setJoystickButtonWhenPressed(driverStationJoystick, 12, new ToggleIntakeCommand(intakeSubsystem));
   }
 
   private double getLeftY() {
-    return -driverStationJoystick.getRawAxis(0);
+    // prevents tipping when stopping backward movement abruptly
+    double driveVel = drivetrainSubsystem.getVelocity();
+    double joyInput = -driverStationJoystick.getRawAxis(0);
+
+    if(drivetrainSubsystem.getNeutralMode() == NeutralMode.Brake && driveVel < 0.0 && joyInput >= 0.0){
+      drivetrainSubsystem.setMotorsCoast();
+    }
+
+    if(drivetrainSubsystem.getNeutralMode() == NeutralMode.Coast && driveVel >= 0.0){
+      drivetrainSubsystem.setMotorsBrake();
+    }
+
+    return joyInput;
   }
 
   private double getLeftX() {
@@ -114,12 +157,12 @@ public class RobotContainer {
     return driverStationJoystick.getRawAxis(3);
   }
 
-  private void setJoystickButtonWhenPressed(Joystick joystick, int button, CommandBase command) {
-    new JoystickButton(joystick, button).whenPressed(command);
+  private void setJoystickButtonWhenPressed(Joystick driverStationJoystick, int button, CommandBase command) {
+    new JoystickButton(driverStationJoystick, button).whenPressed(command);
   }
 
-  private void setJoystickButtonWhileHeld(Joystick joystick, int button, CommandBase command) {
-    new JoystickButton(joystick, button).whileHeld(command);
+  private void setJoystickButtonWhileHeld(Joystick driverStationJoystick, int button, CommandBase command) {
+    new JoystickButton(driverStationJoystick, button).whileHeld(command);
   }
 
   /**
@@ -128,26 +171,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // Trajectory customTrajectory = Robot.trajectory;
-
-    // RamseteCommand ramseteCommand = new RamseteCommand(
-    // customTrajectory,
-    // drivetrainSubsystem::getPose,
-    // new RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
-    // new SimpleMotorFeedforward(
-    // AutoConstants.ksVolts,
-    // AutoConstants.kvVoltSecondsPerMeters,
-    // AutoConstants.kaVoltSecondsSquaredPerMeter),
-    // AutoConstants.kinematics,
-    // drivetrainSubsystem::getWheelSpeeds,
-    // new PIDController(AutoConstants.kPDriveVel, 0, 0),
-    // new PIDController(AutoConstants.kPDriveVel, 0, 0),
-    // drivetrainSubsystem::tankDriveVolts,
-    // drivetrainSubsystem);
-
-    // drivetrainSubsystem.resetOdometry(customTrajectory.getInitialPose());
-    // return ramseteCommand.andThen(() -> drivetrainSubsystem.tankDriveVolts(0,
-    // 0));
     SequentialCommandGroup twoBallAutoCommand = new SequentialCommandGroup(new WaitCommand(1),
         new IntakeInCommand(intakeSubsystem).withTimeout(1), new NeckInCommand(neckSubsystem).withTimeout(1),
         new WaitCommand(1));

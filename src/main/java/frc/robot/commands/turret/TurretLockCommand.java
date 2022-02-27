@@ -5,7 +5,6 @@
 package frc.robot.commands.turret;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.subsystems.TurretSubsystem;
@@ -13,39 +12,40 @@ import frc.robot.subsystems.TurretSubsystem.TurretLockStatus;
 import frc.robot.utils.Limelight;
 
 public class TurretLockCommand extends PIDCommand {
-  private final TurretSubsystem turretSubsystem;
+	private final TurretSubsystem turretSubsystem;
 
-  public TurretLockCommand(TurretSubsystem turretSubsystem) {
-    super(
-        // Tune values later
-        new PIDController(TurretConstants.kPTurretVel, TurretConstants.kITurretVel, TurretConstants.kDTurretVel),
-        // This should return the measurement
-        Limelight::getTx,
-        // This should return the setpoint (can also be a constant)
-        0.0,
-        // This uses the output
-        output -> {
-          turretSubsystem.moveTurret(
-            (Math.abs(output) >= TurretConstants.TURRET_SPEED) ?
-              -Math.signum(output) * TurretConstants.TURRET_SPEED
-              : -output);
-        }
-    );
-    this.turretSubsystem = turretSubsystem;
-    addRequirements(turretSubsystem);
-  }
+	public TurretLockCommand(TurretSubsystem turretSubsystem) {
+		super(
+				// Tune values later
+				new PIDController(TurretConstants.TURRET_P, TurretConstants.TURRET_I, TurretConstants.TURRET_D),
+				// This should return the measurement
+				Limelight::getTx,
+				// This should return the setpoint (can also be a constant)
+				0.0,
+				// This uses the output
+				output -> {
+					turretSubsystem.moveTurret(-output);
+				});
+		this.turretSubsystem = turretSubsystem;
+		getController().setTolerance(TurretConstants.LIMELIGHT_TOLERANCE);
 
-  @Override
-  public void execute() {
-    if (turretSubsystem.lockStatus == TurretLockStatus.UNLOCKED) return;
-    super.execute();
-  }
+		addRequirements(turretSubsystem);
+	}
 
-  @Override
-  public void end(boolean interrupted) {}
+	@Override
+	public void execute() {
+		if (turretSubsystem.lockStatus == TurretLockStatus.UNLOCKED)
+			return;
+		super.execute();
+	}
 
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
+	@Override
+	public void end(boolean interrupted) {
+		turretSubsystem.stopTurret();
+	}
+
+	@Override
+	public boolean isFinished() {
+		return false;
+	}
 }

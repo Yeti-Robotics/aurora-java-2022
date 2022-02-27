@@ -53,15 +53,15 @@ public class PathFollowingCommand extends CommandBase {
     ramseteCommand = new RamseteCommand(
       trajectory,
       drivetrainSubsystem::getPose,
-      new RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
+      new RamseteController(AutoConstants.RAMSETE_B, AutoConstants.RAMSETE_ZETA),
       new SimpleMotorFeedforward(
-          AutoConstants.ksVolts,
-          AutoConstants.kvVoltSecondsPerMeters,
-          AutoConstants.kaVoltSecondsSquaredPerMeter),
-      AutoConstants.kinematics,
+          AutoConstants.AUTO_KS,
+          AutoConstants.AUTO_KV,
+          AutoConstants.AUTO_KA),
+      AutoConstants.KINEMATICS,
       drivetrainSubsystem::getWheelSpeeds,
-      new PIDController(AutoConstants.kPDriveVel, 0, 0),
-      new PIDController(AutoConstants.kPDriveVel, 0, 0),
+      new PIDController(AutoConstants.AUTO_P, 0, 0),
+      new PIDController(AutoConstants.AUTO_P, 0, 0),
       drivetrainSubsystem::tankDriveVolts,
       drivetrainSubsystem);
 

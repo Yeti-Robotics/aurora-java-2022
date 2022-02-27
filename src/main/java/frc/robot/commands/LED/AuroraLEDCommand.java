@@ -12,18 +12,24 @@ public class AuroraLEDCommand extends CommandBase {
   /** Creates a new AuroraLEDCommand. */
   private final LEDSubsystem ledSubsystem;
 
+  private final int NUM_LED_GROUPS = 6;
+  private final int NUM_COLORS = 4;
+  private final int LEDS_PER_COLOR = (LEDConstants.LED_COUNT / NUM_LED_GROUPS) / NUM_COLORS;
+
+  private final int[] boundaries = calcBoundaries();
+
   // RGB
   private final int[] mintGreen = {30, 222, 32};
-  private final int mintGreenPinkBoundary = LEDConstants.LED_COUNT / 36;
+  private final int mintGreenPinkBoundary = boundaries[0];
 
   private final int[] pink = {199, 68, 235};
-  private final int pinkLightBlueBoundary = LEDConstants.LED_COUNT / 18;
+  private final int pinkLightBlueBoundary = boundaries[1];
 
   private final int[] lightBlue = {4, 255, 219};
-  private final int lightBlueDarkBlueBoundary = (3 * LEDConstants.LED_COUNT) / 36;
+  private final int lightBlueDarkBlueBoundary = boundaries[2];
 
   private final int[] darkBlue = {62, 0, 216};
-  private final int darkBlueMintGreenBoundary = LEDConstants.LED_COUNT / 9;
+  private final int darkBlueMintGreenBoundary = boundaries[3];
 
   private final int gradientLength = 3;
   private final int[][] mintGreenPinkGradient = calcGradientColors(mintGreen, pink);
@@ -45,6 +51,14 @@ public class AuroraLEDCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {}
+
+  private int[] calcBoundaries() {
+    int[] result = new int[NUM_COLORS];
+    for (int i = 0; i < NUM_COLORS; i++) {
+      result[i] = ((i + 1) * LEDConstants.LED_COUNT) / (NUM_COLORS * NUM_LED_GROUPS);
+    }
+    return result;
+  }
 
   private int wrapValues(int num) {
     return num % LEDConstants.LED_COUNT;
@@ -82,7 +96,7 @@ public class AuroraLEDCommand extends CommandBase {
   @Override
   public void execute() {
     if (System.currentTimeMillis() - startTime >= waitTime) {
-      for (int j = 0; j < LEDConstants.LED_COUNT + 1; j += (LEDConstants.LED_COUNT / 9)) {
+      for (int j = 0; j < LEDConstants.LED_COUNT + 1; j += (LEDConstants.LED_COUNT / NUM_LED_GROUPS)) {
         int i = 0;
         for (i = i + j + position; i < (mintGreenPinkBoundary - gradientLength) + j + position; i++) {
           ledSubsystem.setRGB(wrapValues(i), mintGreen[0], mintGreen[1], mintGreen[2]);
