@@ -15,7 +15,7 @@ public class FlywheelPIDCommand extends PIDCommand {
   public FlywheelPIDCommand(ShooterSubsystem shooterSubsystem) {  
     super(
       // The controller that the command will use
-      new PIDController(ShooterConstants.SHOOTER_P, ShooterConstants.SHOOTER_I, ShooterConstants.SHOOTER_D),
+      new PIDController(ShooterConstants.SHOOTER_P, ShooterConstants.SHOOTER_I, (ShooterSubsystem.setPoint < 4000.0) ? 0.00004 : ShooterConstants.SHOOTER_D),
       // This should return the measurement
       shooterSubsystem::getFlywheelRPM,
       // This should return the setpoint (can also be a constant)

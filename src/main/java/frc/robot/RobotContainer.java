@@ -107,13 +107,6 @@ public class RobotContainer {
     setJoystickButtonWhenPressed(driverStationJoystick, 7, new ToggleTurretLockCommand(turretSubsystem).andThen(new HomeTurretCommand(turretSubsystem)));
     setJoystickButtonWhileHeld(driverStationJoystick, 2, new FlywheelPIDCommand(shooterSubsystem));
 
-    // 8 = nothing
-    // 3 = nothing
-    setJoystickButtonWhenPressed(driverStationJoystick, 3, new RunCommand(() -> {
-      mode = !mode;
-      configureButtonBindings();
-    }));
-
     setJoystickButtonWhileHeld(driverStationJoystick, 9, new ClimbUpCommand(climberSubsystem));
     setJoystickButtonWhileHeld(driverStationJoystick, 4, new ClimbDownCommand(climberSubsystem));
     

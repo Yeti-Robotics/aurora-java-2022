@@ -21,7 +21,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
     public static ShooterStatus shooterStatus;
 
-    public static double setPoint = 6000.0;
+    public static double setPoint = 5000.0;
     public static boolean atSetPoint = false;
 
     // for BangBangController
@@ -46,7 +46,7 @@ public class ShooterSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         // ShooterSubsystem.atSetPoint = Math.abs(getFlywheelRPM() - ShooterSubsystem.setPoint) <= ShooterConstants.RPM_TOLERANCE;
-        ShooterSubsystem.atSetPoint = getFlywheelRPM() >= 3000.0; // FOR TESTING PURPOSES ONLY!!!!!! do above commented code ^
+        ShooterSubsystem.atSetPoint = true;
         SmartDashboard.putNumber("Flywheel Set Point: ", ShooterSubsystem.setPoint);
         SmartDashboard.putNumber("Flywheel Voltage", shooterRightFalcon.getMotorOutputVoltage());
     }

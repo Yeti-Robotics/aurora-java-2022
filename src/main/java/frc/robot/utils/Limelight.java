@@ -115,9 +115,11 @@ public class Limelight {
     }
 
     public static double getDistance() {
-        double distance;
-        distance = (CalcConstants.KNOWN_TAPE_BOUND_WIDTH * CalcConstants.FOCAL_LENGTH) / getTlong();
-        return distance;
+        double angleToGoalDegrees = CalcConstants.MOUNTING_ANGLE + getTy();
+        double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
+        double distanceFromLimelightToGoalInches = (CalcConstants.GOAL_HEIGHT - CalcConstants.LIMELIGHT_HEIGHT) / Math.tan(angleToGoalRadians);
+
+        return distanceFromLimelightToGoalInches;
     }
 
     /**
