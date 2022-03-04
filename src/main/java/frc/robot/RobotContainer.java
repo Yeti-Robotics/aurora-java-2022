@@ -11,10 +11,7 @@ import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OIConstants;
@@ -101,20 +98,22 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    setJoystickButtonWhileHeld(driverStationJoystick, 6, mode ? new AllOutCommand(intakeSubsystem, neckSubsystem) : new ToggleIntakeCommand(intakeSubsystem));
-    setJoystickButtonWhileHeld(driverStationJoystick, 1, new AllInCommand(neckSubsystem, intakeSubsystem));
+    setConditionalJoystickButtonWhileHeld(6, new AllOutCommand(intakeSubsystem, neckSubsystem), new AllInCommand(neckSubsystem, intakeSubsystem));
+    setJoystickButtonWhileHeld(1, new AllInCommand(neckSubsystem, intakeSubsystem));
     
-    setJoystickButtonWhenPressed(driverStationJoystick, 7, new ToggleTurretLockCommand(turretSubsystem).andThen(new HomeTurretCommand(turretSubsystem)));
-    setJoystickButtonWhileHeld(driverStationJoystick, 2, new FlywheelPIDCommand(shooterSubsystem));
+    setJoystickButtonWhenPressed(7, new ToggleTurretLockCommand(turretSubsystem).andThen(new HomeTurretCommand(turretSubsystem)));
+    setJoystickButtonWhileHeld(2, new FlywheelPIDCommand(shooterSubsystem));
 
-    setJoystickButtonWhileHeld(driverStationJoystick, 9, new ClimbUpCommand(climberSubsystem));
-    setJoystickButtonWhileHeld(driverStationJoystick, 4, new ClimbDownCommand(climberSubsystem));
+    setJoystickButtonWhenPressed(3, new StartEndCommand(() -> mode = !mode, () -> {}));
+
+    setJoystickButtonWhileHeld(9, new ClimbUpCommand(climberSubsystem));
+    setJoystickButtonWhileHeld(4, new ClimbDownCommand(climberSubsystem));
     
-    setJoystickButtonWhenPressed(driverStationJoystick, 10, new ToggleStaticHooksCommand(climberSubsystem));
-    setJoystickButtonWhenPressed(driverStationJoystick, 5, new ToggleMovingHookCommand(climberSubsystem));
+    setJoystickButtonWhenPressed(10, new ToggleStaticHooksCommand(climberSubsystem));
+    setJoystickButtonWhenPressed(5, new ToggleMovingHookCommand(climberSubsystem));
 
-    setJoystickButtonWhenPressed(driverStationJoystick, 11, new ToggleShiftCommand(shiftingSubsystem));
-    setJoystickButtonWhenPressed(driverStationJoystick, 12, new ToggleIntakeCommand(intakeSubsystem));
+    setJoystickButtonWhenPressed(11, new ToggleShiftCommand(shiftingSubsystem));
+    setJoystickButtonWhenPressed(12, new ToggleIntakeCommand(intakeSubsystem));
   }
 
   private double getLeftY() {
@@ -144,12 +143,20 @@ public class RobotContainer {
     return driverStationJoystick.getRawAxis(3);
   }
 
-  private void setJoystickButtonWhenPressed(Joystick driverStationJoystick, int button, CommandBase command) {
+  private void setJoystickButtonWhenPressed(int button, CommandBase command) {
     new JoystickButton(driverStationJoystick, button).whenPressed(command);
   }
 
-  private void setJoystickButtonWhileHeld(Joystick driverStationJoystick, int button, CommandBase command) {
+  private void setConditionalJoystickButtonWhenPressed(int button, CommandBase command1, CommandBase command2) {
+    new JoystickButton(driverStationJoystick, button).whenPressed(new ConditionalCommand(command1, command2, () -> mode));
+  }
+
+  private void setJoystickButtonWhileHeld(int button, CommandBase command) {
     new JoystickButton(driverStationJoystick, button).whileHeld(command);
+  }
+
+  private void setConditionalJoystickButtonWhileHeld(int button, Command command1, Command command2) {
+    new JoystickButton(driverStationJoystick, button).whileHeld(new ConditionalCommand(command1, command2, () -> mode));
   }
 
   public Command getAutonomousCommand() {
