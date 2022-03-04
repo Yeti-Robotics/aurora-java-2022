@@ -64,11 +64,18 @@ public final class Constants {
         public static final int SHOOTER_LEFT_FALCON = 8; //left
         public static final int SHOOTER_RIGHT_FALCON = 7; //right
 
-        //PID constants
-        public static final double SHOOTER_P = 0.0012;
-        public static final double SHOOTER_I = 0.000056;
-        public static final double SHOOTER_D = 0.0000495;
-        public static final double SHOOTER_F = 0.45; 
+        // high RPM PID constants
+        public static final double HIGH_P = 0.0012;
+        public static final double HIGH_I = 0.000056;
+        public static final double HIGH_D = 0.0000495;
+        public static final double HIGH_F = 0.45; 
+
+        // low RPM PID constants
+        public static final double LOW_P = 0.0004;
+        public static final double LOW_I = 0.0; 
+        public static final double LOW_D = 0.00002;
+        public static final double LOW_F = 0.37;
+
         public static final double SHOOTER_MAX_VEL = 12242.5; // in native encoder units per 100 ms
 
         //feed forward values

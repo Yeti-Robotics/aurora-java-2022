@@ -12,6 +12,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -61,7 +62,6 @@ public class RobotContainer {
   public LEDSubsystem ledSubsystem;
 
   private double lastInputLeftY = 0.0;
-  private boolean mode = true;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -101,11 +101,13 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    setJoystickButtonWhileHeld(driverStationJoystick, 6, mode ? new AllOutCommand(intakeSubsystem, neckSubsystem) : new ToggleIntakeCommand(intakeSubsystem));
+    setJoystickButtonWhileHeld(driverStationJoystick, 6, new AllOutCommand(intakeSubsystem, neckSubsystem));
     setJoystickButtonWhileHeld(driverStationJoystick, 1, new AllInCommand(neckSubsystem, intakeSubsystem));
     
     setJoystickButtonWhenPressed(driverStationJoystick, 7, new ToggleTurretLockCommand(turretSubsystem).andThen(new HomeTurretCommand(turretSubsystem)));
     setJoystickButtonWhileHeld(driverStationJoystick, 2, new FlywheelPIDCommand(shooterSubsystem));
+
+    setJoystickButtonWhileHeld(driverStationJoystick, 3, new SpinShooterCommand(shooterSubsystem, 0.39));
 
     setJoystickButtonWhileHeld(driverStationJoystick, 9, new ClimbUpCommand(climberSubsystem));
     setJoystickButtonWhileHeld(driverStationJoystick, 4, new ClimbDownCommand(climberSubsystem));
