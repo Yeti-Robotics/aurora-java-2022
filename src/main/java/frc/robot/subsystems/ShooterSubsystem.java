@@ -11,6 +11,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.utils.Limelight;
 
 public class ShooterSubsystem extends SubsystemBase {
     private TalonFX shooterLeftFalcon;
@@ -21,7 +22,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
     public static ShooterStatus shooterStatus;
 
-    public static double setPoint = 5000.0;
+    public static double setPoint = 3000.0;
     public static boolean atSetPoint = false;
 
     // for BangBangController
@@ -46,9 +47,11 @@ public class ShooterSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         // ShooterSubsystem.atSetPoint = Math.abs(getFlywheelRPM() - ShooterSubsystem.setPoint) <= ShooterConstants.RPM_TOLERANCE;
-        ShooterSubsystem.atSetPoint = true;
+        ShooterSubsystem.atSetPoint = getFlywheelRPM() > 1000.0; // for testing !!!!!!!!
         SmartDashboard.putNumber("Flywheel Set Point: ", ShooterSubsystem.setPoint);
         SmartDashboard.putNumber("Flywheel Voltage", shooterRightFalcon.getMotorOutputVoltage());
+        System.out.println("Flywheel RPM: " + getFlywheelRPM());
+        System.out.println("Limelight calculated distance: " + Limelight.getDistance());
     }
 
     // toggles bang-bang control

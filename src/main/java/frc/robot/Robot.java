@@ -60,7 +60,7 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("Flywheel RPM: ", robotContainer.shooterSubsystem.getFlywheelRPM());
 		SmartDashboard.putString("Turret Lock Status: ", ((robotContainer.turretSubsystem.lockStatus == robotContainer.turretSubsystem.lockStatus.UNLOCKED) ? "UNLOCKED" : "LOCKED"));
 		SmartDashboard.putBoolean("ShooterSubsystem.isShooting: ", ShooterSubsystem.isShooting);
-		//System.out.println("Limelight Distance: " + Limelight.getDistance());
+		System.out.println("Limelight Distance: " + Limelight.getDistance());
 	}
 
 	@Override
