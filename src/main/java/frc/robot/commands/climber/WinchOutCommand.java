@@ -7,7 +7,8 @@ package frc.robot.commands.climber;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.subsystems.ClimberSubsystem;
-import frc.robot.subsystems.ClimberSubsystem.MovingBrakeStatus;
+import frc.robot.subsystems.ShiftingSubsystem;
+import frc.robot.subsystems.ShiftingSubsystem.ShiftStatus;
 
 public class WinchOutCommand extends CommandBase {
   
@@ -25,7 +26,7 @@ public class WinchOutCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (climberSubsystem.getBrakeStatus() == MovingBrakeStatus.OFF) {
+    if (ShiftingSubsystem.shiftStatus == ShiftStatus.HIGH) {
       climberSubsystem.moveWinch(-ClimberConstants.CLIMBER_WINCH_SPEED);
     }
   }

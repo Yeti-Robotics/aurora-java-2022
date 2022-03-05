@@ -22,8 +22,11 @@ import frc.robot.commands.climber.ClimbDownCommand;
 import frc.robot.commands.climber.ClimbUpCommand;
 import frc.robot.commands.climber.ToggleMovingHookCommand;
 import frc.robot.commands.climber.ToggleStaticHooksCommand;
+import frc.robot.commands.climber.WinchInCommand;
+import frc.robot.commands.climber.WinchOutCommand;
 import frc.robot.commands.commandgroups.AllInCommand;
 import frc.robot.commands.commandgroups.AllOutCommand;
+import frc.robot.commands.commandgroups.WinchAndClimbDownCommand;
 import frc.robot.commands.intake.IntakeInCommand;
 import frc.robot.commands.intake.ToggleIntakeCommand;
 import frc.robot.commands.neck.NeckInCommand;
@@ -98,16 +101,19 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    setConditionalJoystickButtonWhileHeld(6, new AllOutCommand(intakeSubsystem, neckSubsystem), new AllInCommand(neckSubsystem, intakeSubsystem));
+    // setConditionalJoystickButtonWhileHeld(6, new AllOutCommand(intakeSubsystem, neckSubsystem), new AllInCommand(neckSubsystem, intakeSubsystem));
+    setJoystickButtonWhileHeld(6, new AllOutCommand(intakeSubsystem, neckSubsystem));
     setJoystickButtonWhileHeld(1, new AllInCommand(neckSubsystem, intakeSubsystem));
     
     setJoystickButtonWhenPressed(7, new ToggleTurretLockCommand(turretSubsystem).andThen(new HomeTurretCommand(turretSubsystem)));
     setJoystickButtonWhileHeld(2, new FlywheelPIDCommand(shooterSubsystem));
 
-    setJoystickButtonWhenPressed(3, new StartEndCommand(() -> mode = !mode, () -> {}));
+    // setJoystickButtonWhenPressed(3, new StartEndCommand(() -> mode = !mode, () -> {}));
+    setJoystickButtonWhileHeld(8, new WinchOutCommand(climberSubsystem));
+    setJoystickButtonWhileHeld(3, new WinchInCommand(climberSubsystem));
 
     setJoystickButtonWhileHeld(9, new ClimbUpCommand(climberSubsystem));
-    setJoystickButtonWhileHeld(4, new ClimbDownCommand(climberSubsystem));
+    setJoystickButtonWhileHeld(4, new WinchAndClimbDownCommand(climberSubsystem));
     
     setJoystickButtonWhenPressed(10, new ToggleStaticHooksCommand(climberSubsystem));
     setJoystickButtonWhenPressed(5, new ToggleMovingHookCommand(climberSubsystem));

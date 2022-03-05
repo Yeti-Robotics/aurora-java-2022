@@ -14,9 +14,9 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimberConstants;
+import frc.robot.subsystems.ShiftingSubsystem.ShiftStatus;
 
 public class ClimberSubsystem extends SubsystemBase {
   private WPI_TalonFX climberFalcon1, climberFalcon2;
@@ -24,12 +24,6 @@ public class ClimberSubsystem extends SubsystemBase {
   private DoubleSolenoid climberStationaryHooks;
   private DoubleSolenoid climberMovingHook;
   private DoubleSolenoid climberLeanPiston;
-
-  public enum MovingBrakeStatus {
-    ON, OFF
-  }
-
-  public MovingBrakeStatus movingBrakeStatus;
 
   public ClimberSubsystem() {
     climberFalcon1 = new WPI_TalonFX(ClimberConstants.CLIMBER_1);
@@ -44,8 +38,6 @@ public class ClimberSubsystem extends SubsystemBase {
     climberStationaryHooks.set(Value.kReverse);
     climberMovingHook.set(Value.kReverse);
     climberLeanPiston.set(Value.kReverse);
-
-    movingBrakeStatus = MovingBrakeStatus.OFF;
 
     climberFalcon1.setInverted(true);
     climberFalcon2.follow(climberFalcon1);
@@ -63,10 +55,10 @@ public class ClimberSubsystem extends SubsystemBase {
   public void periodic() {}
 
   public void climbUp() {
-    climberFalcon1.set(ControlMode.PercentOutput, ClimberConstants.CLIMB_SPEED);
+    if (ShiftingSubsystem.shiftStatus == ShiftStatus.HIGH) climberFalcon1.set(ControlMode.PercentOutput, ClimberConstants.CLIMB_SPEED);
   }
   public void climbDown(){
-    if (movingBrakeStatus == MovingBrakeStatus.OFF) climberFalcon1.set(ControlMode.PercentOutput, -ClimberConstants.CLIMB_SPEED);
+    if (ShiftingSubsystem.shiftStatus == ShiftStatus.HIGH) climberFalcon1.set(ControlMode.PercentOutput, -ClimberConstants.CLIMB_SPEED);
   }
 
   public void stopClimb(){
@@ -79,11 +71,6 @@ public class ClimberSubsystem extends SubsystemBase {
 
   public void toggleMovingHook(){
     climberMovingHook.toggle();
-    if (movingBrakeStatus == MovingBrakeStatus.OFF) {
-      movingBrakeStatus = MovingBrakeStatus.ON;
-    } else {
-      movingBrakeStatus = MovingBrakeStatus.OFF;
-    }
   }
 
   public void toggleLeanPiston(){
@@ -96,10 +83,6 @@ public class ClimberSubsystem extends SubsystemBase {
 
   public void stopWinch() {
     climberWinch.set(ControlMode.PercentOutput, 0);
-  }
-
-  public MovingBrakeStatus getBrakeStatus() {
-    return movingBrakeStatus;
   }
 
   public double getLeftEncoder(){

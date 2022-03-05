@@ -8,15 +8,15 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.subsystems.ClimberSubsystem;
-import frc.robot.subsystems.ClimberSubsystem.MovingBrakeStatus;
+import frc.robot.subsystems.ShiftingSubsystem;
+import frc.robot.subsystems.ShiftingSubsystem.ShiftStatus;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class WinchAndClimbCommand extends CommandBase {
+public class WinchAndClimbDownCommand extends CommandBase {
   private ClimberSubsystem climberSubsystem;
-  /** Creates a new WinchAndClimbCommand. */
-  public WinchAndClimbCommand(ClimberSubsystem climberSubsystem) {
+  public WinchAndClimbDownCommand(ClimberSubsystem climberSubsystem) {
     this.climberSubsystem = climberSubsystem;
     addRequirements(climberSubsystem);
   }
@@ -27,7 +27,7 @@ public class WinchAndClimbCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (climberSubsystem.getBrakeStatus() == MovingBrakeStatus.OFF){
+    if (ShiftingSubsystem.shiftStatus == ShiftStatus.HIGH){
       climberSubsystem.climbDown();
       climberSubsystem.moveWinch(-ClimberConstants.CLIMBER_WINCH_SPEED); 
     }
