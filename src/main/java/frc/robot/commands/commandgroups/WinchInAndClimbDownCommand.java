@@ -14,9 +14,9 @@ import frc.robot.subsystems.ShiftingSubsystem.ShiftStatus;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class WinchAndClimbDownCommand extends CommandBase {
+public class WinchInAndClimbDownCommand extends CommandBase {
   private ClimberSubsystem climberSubsystem;
-  public WinchAndClimbDownCommand(ClimberSubsystem climberSubsystem) {
+  public WinchInAndClimbDownCommand(ClimberSubsystem climberSubsystem) {
     this.climberSubsystem = climberSubsystem;
     addRequirements(climberSubsystem);
   }
@@ -27,7 +27,7 @@ public class WinchAndClimbDownCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (ShiftingSubsystem.shiftStatus == ShiftStatus.HIGH){
+    if (ShiftingSubsystem.shiftStatus == ShiftStatus.HIGH && !climberSubsystem.getLimitSwitch()){
       climberSubsystem.climbDown();
       climberSubsystem.moveWinch(-ClimberConstants.CLIMBER_WINCH_SPEED); 
     }

@@ -57,6 +57,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     rightFalcon1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
 
     setMotorsBrake();
+
     resetEncoders();
   
     driveMode = DriveMode.CHEEZY;

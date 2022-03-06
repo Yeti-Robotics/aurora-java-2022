@@ -10,7 +10,7 @@ public class ClimbDownCommand extends CommandBase {
 
     public ClimbDownCommand(ClimberSubsystem climberSubsystem) {
         this.climberSubsystem = climberSubsystem;
-        addRequirements(climberSubsystem);
+        // addRequirements(climberSubsystem);
     }
 
     @Override

@@ -16,7 +16,7 @@ public class WinchOutCommand extends CommandBase {
 
   public WinchOutCommand(ClimberSubsystem climberSubsystem) {
     this.climberSubsystem = climberSubsystem;
-    addRequirements(climberSubsystem);
+    // addRequirements(climberSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -26,14 +26,14 @@ public class WinchOutCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (ShiftingSubsystem.shiftStatus == ShiftStatus.HIGH) {
-      climberSubsystem.moveWinch(-ClimberConstants.CLIMBER_WINCH_SPEED);
-    }
+    climberSubsystem.moveWinch(-ClimberConstants.CLIMBER_WINCH_SPEED);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    climberSubsystem.stopWinch();
+  }
 
   // Returns true when the command should end.
   @Override

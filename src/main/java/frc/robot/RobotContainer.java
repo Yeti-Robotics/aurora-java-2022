@@ -26,7 +26,7 @@ import frc.robot.commands.climber.WinchInCommand;
 import frc.robot.commands.climber.WinchOutCommand;
 import frc.robot.commands.commandgroups.AllInCommand;
 import frc.robot.commands.commandgroups.AllOutCommand;
-import frc.robot.commands.commandgroups.WinchAndClimbDownCommand;
+import frc.robot.commands.commandgroups.WinchInAndClimbDownCommand;
 import frc.robot.commands.intake.IntakeInCommand;
 import frc.robot.commands.intake.ToggleIntakeCommand;
 import frc.robot.commands.neck.NeckInCommand;
@@ -113,7 +113,7 @@ public class RobotContainer {
     setJoystickButtonWhileHeld(3, new WinchInCommand(climberSubsystem));
 
     setJoystickButtonWhileHeld(9, new ClimbUpCommand(climberSubsystem));
-    setJoystickButtonWhileHeld(4, new WinchAndClimbDownCommand(climberSubsystem));
+    setJoystickButtonWhileHeld(4, new ClimbDownCommand(climberSubsystem));
     
     setJoystickButtonWhenPressed(10, new ToggleStaticHooksCommand(climberSubsystem));
     setJoystickButtonWhenPressed(5, new ToggleMovingHookCommand(climberSubsystem));

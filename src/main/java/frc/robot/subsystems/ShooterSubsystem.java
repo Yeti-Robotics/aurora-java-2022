@@ -22,7 +22,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
     public static ShooterStatus shooterStatus;
 
-    public static double setPoint = 3000.0;
+    public static double setPoint = 4100.0;
     public static boolean atSetPoint = false;
 
     // for BangBangController
@@ -50,8 +50,6 @@ public class ShooterSubsystem extends SubsystemBase {
         ShooterSubsystem.atSetPoint = getFlywheelRPM() > 1000.0; // for testing !!!!!!!!
         SmartDashboard.putNumber("Flywheel Set Point: ", ShooterSubsystem.setPoint);
         SmartDashboard.putNumber("Flywheel Voltage", shooterRightFalcon.getMotorOutputVoltage());
-        System.out.println("Flywheel RPM: " + getFlywheelRPM());
-        System.out.println("Limelight calculated distance: " + Limelight.getDistance());
     }
 
     // toggles bang-bang control
