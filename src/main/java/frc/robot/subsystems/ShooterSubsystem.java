@@ -22,11 +22,8 @@ public class ShooterSubsystem extends SubsystemBase {
     }
     public static ShooterStatus shooterStatus;
 
-    public static double setPoint = 4100.0;
+    public static double setPoint = 4000.0;
     public static boolean atSetPoint = false;
-
-    // for BangBangController
-    public static boolean isShooting = false;
 
     public ShooterSubsystem() {
         shooterLeftFalcon = new TalonFX(ShooterConstants.SHOOTER_LEFT_FALCON);
@@ -50,11 +47,6 @@ public class ShooterSubsystem extends SubsystemBase {
         ShooterSubsystem.atSetPoint = getFlywheelRPM() > 1000.0; // for testing !!!!!!!!
         SmartDashboard.putNumber("Flywheel Set Point: ", ShooterSubsystem.setPoint);
         SmartDashboard.putNumber("Flywheel Voltage", shooterRightFalcon.getMotorOutputVoltage());
-    }
-
-    // toggles bang-bang control
-    public void toggleFlywheelBB(){
-        isShooting = !isShooting;
     }
 
     public void shootFlywheel() {
@@ -85,7 +77,6 @@ public class ShooterSubsystem extends SubsystemBase {
     public void stopFlywheel() {
         shooterRightFalcon.set(ControlMode.PercentOutput, 0.0);
         shooterStatus = ShooterStatus.OFF;
-        ShooterSubsystem.isShooting = false;
     }
 
     public double getLeftEncoder() {
