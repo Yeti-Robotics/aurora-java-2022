@@ -140,15 +140,15 @@ public final class Constants {
     }
 
     public static final class AutoConstants {
-        public static final double AUTO_KS = 0.72606; // volts
-        public static final double AUTO_KV = 2.136; // volt seconds per meter
-        public static final double AUTO_KA = 0.57982; // volt seconds squared per meter
-        public static final double AUTO_P = 0.0;
+        public static final double AUTO_KS = 0.71876; // volts
+        public static final double AUTO_KV = 2.143; // volt seconds per meter
+        public static final double AUTO_KA = 0.54127; // volt seconds squared per meter
+        public static final double AUTO_P = 3.2241;
 
         public static final double RAMSETE_B = 2.0;
         public static final double RAMSETE_ZETA = 0.7;
 
-        public static final double TRACK_WIDTH = 0.0; // m
+        public static final double TRACK_WIDTH = 0.7783; // m
         public static final DifferentialDriveKinematics KINEMATICS = new DifferentialDriveKinematics(TRACK_WIDTH);
         
         public static final double MAX_SPEED = 3.0; // m/s

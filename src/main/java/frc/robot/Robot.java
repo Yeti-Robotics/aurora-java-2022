@@ -59,6 +59,8 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("Current Pressure: ", robotContainer.pneumaticsSubsystem.getPressure());
 		SmartDashboard.putNumber("Flywheel RPM: ", robotContainer.shooterSubsystem.getFlywheelRPM());
 		SmartDashboard.putString("Turret Lock Status: ", ((robotContainer.turretSubsystem.lockStatus == robotContainer.turretSubsystem.lockStatus.UNLOCKED) ? "UNLOCKED" : "LOCKED"));
+		// System.out.println("LL Distance: " + Limelight.getDistance() + " in");
+		// System.out.println("Flywheel RPM: " + robotContainer.shooterSubsystem.getFlywheelRPM());
 	}
 
 	@Override
@@ -94,6 +96,8 @@ public class Robot extends TimedRobot {
 	public void teleopInit() {
 		robotContainer.turretSubsystem.resetEncoder();
 		robotContainer.climberSubsystem.resetEncoders();
+		robotContainer.drivetrainSubsystem.resetGyro();
+
 		robotContainer.ledSubsystem.getCurrentCommand().cancel();
 		robotContainer.ledSubsystem.setDefaultCommand(new SetLEDYetiBlueCommand(robotContainer.ledSubsystem));
 
@@ -107,6 +111,7 @@ public class Robot extends TimedRobot {
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.cancel();
 		}
+
 	}
 
 	@Override

@@ -12,6 +12,7 @@ import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.ADIS16448_IMU;
 import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.SerialPort.Port;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -24,7 +25,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private MotorControllerGroup rightMotors;
 
   private AHRS gyro; 
-  private ADIS16448_IMU tempGyro; // for testing
   
   private DifferentialDrive drive;
   private DriveMode driveMode;
@@ -46,7 +46,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     rightMotors = new MotorControllerGroup(rightFalcon1, rightFalcon2);
     rightMotors.setInverted(true);
 
-    gyro = new AHRS(I2C.Port.kOnboard);
+    gyro = new AHRS(Port.kUSB);
 
     drive = new DifferentialDrive(leftMotors, rightMotors);
     drive.setDeadband(0.05);
@@ -70,6 +70,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
       getLeftEncoder(),
       getRightEncoder()
     );
+    System.out.println("NavX: " + getHeading());
   }
 
   public void tankDriveVolts(double leftVolts, double rightVolts) {
@@ -163,9 +164,5 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   public NeutralMode getNeutralMode(){
     return neutralMode;
-  }
-
-  public double getTempGyro(){
-    return tempGyro.getAngle(); 
   }
 }
