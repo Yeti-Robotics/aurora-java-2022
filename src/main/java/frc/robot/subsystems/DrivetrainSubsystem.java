@@ -65,7 +65,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
         getLeftEncoderDistance(),
         getRightEncoderDistance());
 
-    System.out.println("NavX: " + getHeading());
+    System.out.printf("NavX: %f\nLeft Distance: %f   Right Distance: %f\nLeft Velocity: %f   Right Velocity: %f\n",
+        getHeading(), getLeftEncoderDistance(), getRightEncoderDistance(), getLeftEncoderVelocity(), getRightEncoderVelocity());
   }
 
   public void setMaxOutput(double maxOutput) {
@@ -119,7 +120,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   public double getRightEncoderDistance() {
-    return (rightFalcon1.getSelectedSensorPosition() * (DriveConstants.DISTANCE_PER_PULSE)
+    return (-rightFalcon1.getSelectedSensorPosition() * (DriveConstants.DISTANCE_PER_PULSE)
         / (ShiftingSubsystem.getShifterPosition() == ShiftStatus.HIGH ? DriveConstants.HIGH_GEAR_RATIO
             : DriveConstants.LOW_GEAR_RATIO));
   }
@@ -141,12 +142,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   public double getRightEncoderVelocity() {
-    return (rightFalcon1.getSelectedSensorVelocity() * 10 * (DriveConstants.DISTANCE_PER_PULSE)
+    return (-rightFalcon1.getSelectedSensorVelocity() * 10 * (DriveConstants.DISTANCE_PER_PULSE)
         / (ShiftingSubsystem.getShifterPosition() == ShiftStatus.HIGH ? DriveConstants.HIGH_GEAR_RATIO
             : DriveConstants.LOW_GEAR_RATIO));
   }
 
-  public double getVelocity() {
+  public double getAverageVelocity() {
     return (getLeftEncoderVelocity() + getRightEncoderVelocity()) / 2.0;
   }
 
@@ -159,7 +160,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-    return new DifferentialDriveWheelSpeeds(getLeftEncoderDistance(), getRightEncoderDistance());
+    return new DifferentialDriveWheelSpeeds(getLeftEncoderVelocity(), getRightEncoderVelocity());
   }
 
   public Pose2d getPose() {

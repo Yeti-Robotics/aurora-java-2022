@@ -30,7 +30,7 @@ public class Robot extends TimedRobot {
 
 	private RobotContainer robotContainer;
 
-	private String trajectoryJSON = "paths/scurve.wpilib.json"; //No path is loaded yet
+	private String trajectoryJSON = "paths/haangerToHaanger.wpilib.json"; //No path is loaded yet
 	public static Trajectory trajectory = new Trajectory();
 
 	@Override
@@ -91,6 +91,9 @@ public class Robot extends TimedRobot {
 		robotContainer.climberSubsystem.resetEncoders();
 		robotContainer.ledSubsystem.getCurrentCommand().cancel();
 		robotContainer.ledSubsystem.setDefaultCommand(new SetLEDYetiBlueCommand(robotContainer.ledSubsystem));
+
+		robotContainer.drivetrainSubsystem.resetEncoders();
+		robotContainer.drivetrainSubsystem.resetGyro();
 
 		CommandScheduler.getInstance().onCommandFinish(command -> {
 			if (command.getName().equals(new BlinkLEDCommand().getName())) {

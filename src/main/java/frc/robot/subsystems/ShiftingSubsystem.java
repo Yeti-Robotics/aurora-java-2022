@@ -17,7 +17,7 @@ public class ShiftingSubsystem extends SubsystemBase {
 
     public ShiftingSubsystem() {
         shifter = new DoubleSolenoid(PneumaticsModuleType.REVPH, DriveConstants.SOLENOID_SHIFTER[0], DriveConstants.SOLENOID_SHIFTER[1]);
-        shiftStatus = (shifter.get() == Value.kForward) ? ShiftStatus.HIGH : ShiftStatus.LOW;
+        shiftUp();
     }
 
     public void shiftUp() {

@@ -178,7 +178,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     Trajectory trajectory = Robot.trajectory;
-    drivetrainSubsystem.setMotorsBrake();
 
     RamseteCommand ramseteCommand = new RamseteCommand(
         trajectory,
