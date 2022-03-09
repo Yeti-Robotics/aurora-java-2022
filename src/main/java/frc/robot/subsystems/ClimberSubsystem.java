@@ -11,11 +11,13 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimberConstants;
+import frc.robot.subsystems.ShiftingSubsystem.ShiftStatus;
 
 public class ClimberSubsystem extends SubsystemBase {
   private WPI_TalonFX climberFalcon1, climberFalcon2;
@@ -23,10 +25,15 @@ public class ClimberSubsystem extends SubsystemBase {
   private DoubleSolenoid climberStationaryHooks;
   private DoubleSolenoid climberMovingHook;
   private DoubleSolenoid climberLeanPiston;
+  private DigitalInput limitSwitch;
 
   public ClimberSubsystem() {
     climberFalcon1 = new WPI_TalonFX(ClimberConstants.CLIMBER_1);
     climberFalcon2 = new WPI_TalonFX(ClimberConstants.CLIMBER_2);
+
+    climberWinch = new TalonSRX(ClimberConstants.CLIMBER_WINCH);
+
+    limitSwitch = new DigitalInput(ClimberConstants.CLIMBER_LIMIT_SWITCH);
     
     climberStationaryHooks = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.CLIMBER_STATIONARY_PISTONS[0], ClimberConstants.CLIMBER_STATIONARY_PISTONS[1]);
     climberMovingHook = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.CLIMBER_MOVING_PISTON[0], ClimberConstants.CLIMBER_MOVING_PISTON[1]);
@@ -52,10 +59,10 @@ public class ClimberSubsystem extends SubsystemBase {
   public void periodic() {}
 
   public void climbUp() {
-    climberFalcon1.set(ControlMode.PercentOutput, ClimberConstants.CLIMB_SPEED);
+    if (ShiftingSubsystem.shiftStatus == ShiftStatus.HIGH) climberFalcon1.set(ControlMode.PercentOutput, ClimberConstants.CLIMB_SPEED);
   }
   public void climbDown(){
-    climberFalcon1.set(ControlMode.PercentOutput, -ClimberConstants.CLIMB_SPEED);
+    if (ShiftingSubsystem.shiftStatus == ShiftStatus.HIGH) climberFalcon1.set(ControlMode.PercentOutput, -ClimberConstants.CLIMB_SPEED);
   }
 
   public void stopClimb(){
@@ -72,6 +79,18 @@ public class ClimberSubsystem extends SubsystemBase {
 
   public void toggleLeanPiston(){
     climberLeanPiston.toggle();
+  }
+
+  public void moveWinch(double power) {
+    if(power > 0 && getLimitSwitch()){
+      stopWinch();
+      return;
+    }
+    climberWinch.set(ControlMode.PercentOutput, power);
+  }
+
+  public void stopWinch() {
+    climberWinch.set(ControlMode.PercentOutput, 0.0);
   }
 
   public double getLeftEncoder(){
@@ -91,7 +110,7 @@ public class ClimberSubsystem extends SubsystemBase {
     climberFalcon1.setSelectedSensorPosition(0.0);
   }
 
-  public void moveWinch(double power){
-    climberWinch.set(ControlMode.PercentOutput, power);
+  public boolean getLimitSwitch(){
+    return !limitSwitch.get();
   }
 }

@@ -27,6 +27,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
 import frc.robot.subsystems.ShooterSubsystem.ShooterStatus;
 import frc.robot.subsystems.TurretSubsystem.TurretLockStatus;
+import frc.robot.utils.Limelight;
 
 public class Robot extends TimedRobot {
 	private Command m_autonomousCommand;
@@ -58,7 +59,8 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("Current Pressure: ", robotContainer.pneumaticsSubsystem.getPressure());
 		SmartDashboard.putNumber("Flywheel RPM: ", robotContainer.shooterSubsystem.getFlywheelRPM());
 		SmartDashboard.putString("Turret Lock Status: ", ((robotContainer.turretSubsystem.lockStatus == robotContainer.turretSubsystem.lockStatus.UNLOCKED) ? "UNLOCKED" : "LOCKED"));
-		SmartDashboard.putBoolean("ShooterSubsystem.isShooting: ", ShooterSubsystem.isShooting);
+		// System.out.println("LL Distance: " + Limelight.getDistance() + " in");
+		// System.out.println("Flywheel RPM: " + robotContainer.shooterSubsystem.getFlywheelRPM());
 	}
 
 	@Override
@@ -96,6 +98,8 @@ public class Robot extends TimedRobot {
 	public void teleopInit() {
 		robotContainer.turretSubsystem.resetEncoder();
 		robotContainer.climberSubsystem.resetEncoders();
+		robotContainer.drivetrainSubsystem.resetGyro();
+
 		robotContainer.ledSubsystem.getCurrentCommand().cancel();
 		robotContainer.ledSubsystem.setDefaultCommand(new SetLEDYetiBlueCommand(robotContainer.ledSubsystem));
 
@@ -109,6 +113,7 @@ public class Robot extends TimedRobot {
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.cancel();
 		}
+
 	}
 
 	@Override

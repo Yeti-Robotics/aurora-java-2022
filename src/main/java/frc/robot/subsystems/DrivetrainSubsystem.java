@@ -10,6 +10,7 @@ import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.ADIS16448_IMU;
 import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.SerialPort.Port;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -17,13 +18,12 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.ShiftingSubsystem.ShiftStatus;
 
 public class DrivetrainSubsystem extends SubsystemBase {
-  private WPI_TalonFX leftFalcon1, leftFalcon2, rightFalcon1, rightFalcon2;  
+  private WPI_TalonFX leftFalcon1, leftFalcon2, rightFalcon1, rightFalcon2;
   private MotorControllerGroup leftMotors;
   private MotorControllerGroup rightMotors;
 
-  private AHRS gyro; 
-  private ADIS16448_IMU tempGyro; // for testing
-  
+  private AHRS gyro;
+
   private DifferentialDrive drive;
   private DriveMode driveMode;
   private DifferentialDriveOdometry odometry;
@@ -32,9 +32,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
     TANK, CHEEZY, ARCADE;
   }
 
-  private NeutralMode neutralMode; 
+  private NeutralMode neutralMode;
 
-  public DrivetrainSubsystem() {   
+  public DrivetrainSubsystem() {
     leftFalcon1 = new WPI_TalonFX(DriveConstants.LEFT_FALCON_1);
     leftFalcon2 = new WPI_TalonFX(DriveConstants.LEFT_FALCON_2);
     rightFalcon1 = new WPI_TalonFX(DriveConstants.RIGHT_FALCON_1);
@@ -44,19 +44,19 @@ public class DrivetrainSubsystem extends SubsystemBase {
     rightMotors = new MotorControllerGroup(rightFalcon1, rightFalcon2);
     rightMotors.setInverted(true);
     setMotorsBrake();
-    
+
     drive = new DifferentialDrive(leftMotors, rightMotors);
     drive.setDeadband(0.05);
 
     leftFalcon1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
     rightFalcon1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
     resetEncoders();
-    
-    gyro = new AHRS(I2C.Port.kOnboard);
+
+    gyro = new AHRS(Port.kUSB);
     resetGyro();
 
     odometry = new DifferentialDriveOdometry(gyro.getRotation2d());
-  
+
     driveMode = DriveMode.CHEEZY;
   }
 
@@ -66,6 +66,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
         gyro.getRotation2d(),
         getLeftEncoderDistance(),
         getRightEncoderDistance());
+
+    System.out.println("NavX: " + getHeading());
   }
 
   public void setMaxOutput(double maxOutput) {
@@ -95,7 +97,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     rightMotors.set(0.0);
   }
 
-  public void setMotorsBrake(){
+  public void setMotorsBrake() {
     leftFalcon1.setNeutralMode(NeutralMode.Brake);
     leftFalcon2.setNeutralMode(NeutralMode.Brake);
     rightFalcon1.setNeutralMode(NeutralMode.Brake);
@@ -103,7 +105,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     neutralMode = NeutralMode.Brake;
   }
 
-  public void setMotorsCoast(){
+  public void setMotorsCoast() {
     leftFalcon1.setNeutralMode(NeutralMode.Coast);
     leftFalcon2.setNeutralMode(NeutralMode.Coast);
     rightFalcon1.setNeutralMode(NeutralMode.Coast);
@@ -145,8 +147,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
         / (ShiftingSubsystem.getShifterPosition() == ShiftStatus.HIGH ? DriveConstants.HIGH_GEAR_RATIO
             : DriveConstants.LOW_GEAR_RATIO));
   }
-  
-  public double getVelocity(){
+
+  public double getVelocity() {
     return (getLeftEncoderVelocity() + getRightEncoderVelocity()) / 2.0;
   }
 
@@ -161,7 +163,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
     return new DifferentialDriveWheelSpeeds(getLeftEncoderDistance(), getRightEncoderDistance());
   }
-    
 
   public Pose2d getPose() {
     return odometry.getPoseMeters();
@@ -176,11 +177,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     return driveMode;
   }
 
-  public NeutralMode getNeutralMode(){
+  public NeutralMode getNeutralMode() {
     return neutralMode;
-  }
-
-  public double getTempGyro(){
-    return tempGyro.getAngle(); 
   }
 }

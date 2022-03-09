@@ -39,15 +39,15 @@ public final class Constants {
     }
 
     public static final class AutoConstants {
-        public static final double AUTO_KS = 0.72606; // volts
-        public static final double AUTO_KV = 2.136; // volt seconds per meter
-        public static final double AUTO_KA = 0.57982; // volt seconds squared per meter
-        public static final double AUTO_P = 0.0;
+        public static final double AUTO_KS = 0.71876; // volts
+        public static final double AUTO_KV = 2.143; // volt seconds per meter
+        public static final double AUTO_KA = 0.54127; // volt seconds squared per meter
+        public static final double AUTO_P = 3.2241;
 
         public static final double RAMSETE_B = 2.0;
         public static final double RAMSETE_ZETA = 0.7;
 
-        public static final double TRACK_WIDTH = 0.0; // m
+        public static final double TRACK_WIDTH = 0.7783; // m
         public static final DifferentialDriveKinematics KINEMATICS = new DifferentialDriveKinematics(TRACK_WIDTH);
         
         public static final double MAX_SPEED = 3.0; // m/s
@@ -62,13 +62,16 @@ public final class Constants {
 
     public static final class LimelightConstants {
         // distance calc constants
-        public static final double KNOWN_DISTANCE = 161.3; // inches
-        public static final int PIXEL_WIDTH_KNOWN = 65; // pixels
-        public static final double KNOWN_TAPE_BOUND_WIDTH = 39.25; // inches
-        public static final double FOCAL_LENGTH = (KNOWN_DISTANCE * PIXEL_WIDTH_KNOWN) / KNOWN_TAPE_BOUND_WIDTH;
+        public static final double KNOWN_DISTANCE = 161.3; //inches
+        public static final int PIXEL_WIDTH_KNOWN = 65; //pixels
+        public static final double KNOWN_TAPE_BOUND_WIDTH = 39.25; //inches
+        public static final double FOCAL_LENGTH = ( KNOWN_DISTANCE * PIXEL_WIDTH_KNOWN) / KNOWN_TAPE_BOUND_WIDTH;
 
-        public static final int SHOOTER_HEIGHT = 23;
-        public static final double GRAVITY = 386.09;
+        //trajectory constants
+        public static final double LIMELIGHT_HEIGHT = 37.5; // inches
+        public static final double GOAL_HEIGHT = 108.0; // inches
+        public static final double GRAVITY = 386.09; // inches/ sec ^2
+        public static final double MOUNTING_ANGLE = 33.47; // deg
     }
     
     public static final class LEDConstants {
@@ -79,11 +82,14 @@ public final class Constants {
     public static final class ClimberConstants {
         public static final int CLIMBER_1 = 5; // front relative to robot
         public static final int CLIMBER_2 = 6; // rear relative to robot
+        public static final int CLIMBER_WINCH = 13; 
+        public static final int CLIMBER_LIMIT_SWITCH = 5;
 
         public static final double CLIMB_SPEED = 0.3;
         public static final double CLIMBER_LOWER_LIMIT = 0.0;
         public static final double CLIMBER_UPPER_LIMIT = 101331.5; 
         public static final double CLIMBER_TOLERANCE = 15.0; 
+        public static final double CLIMBER_WINCH_SPEED = 1.0;
 
         public static final int[] CLIMBER_LEAN_PISTON = {4, 5}; 
         public static final int[] CLIMBER_MOVING_PISTON = {6, 7}; 
@@ -99,11 +105,18 @@ public final class Constants {
         public static final int SHOOTER_LEFT_FALCON = 8; // left
         public static final int SHOOTER_RIGHT_FALCON = 7; // right
 
-        //PID constants
-        public static final double SHOOTER_P = 0.0012;
-        public static final double SHOOTER_I = 0.000056;
-        public static final double SHOOTER_D = 0.0000495;
-        public static final double SHOOTER_F = 0.45; 
+        // high RPM PID constants
+        public static final double HIGH_P = 0.0012;
+        public static final double HIGH_I = 0.000056;
+        public static final double HIGH_D = 0.0000495;
+        public static final double HIGH_F = 0.45; 
+
+        // low RPM PID constants
+        public static final double LOW_P = 0.0004;
+        public static final double LOW_I = 0.0; 
+        public static final double LOW_D = 0.00002;
+        public static final double LOW_F = 0.37;
+
         public static final double SHOOTER_MAX_VEL = 12242.5; // in native encoder units per 100 ms
 
         //feed forward values
@@ -127,7 +140,7 @@ public final class Constants {
     public static final class IntakeConstants {
         public static final int INTAKE_FALCON = 9;
         public static final int[] INTAKE_PISTONS_SOLENOID = {2, 3}; 
-        public static final double INTAKE_SPEED = 0.225; 
+        public static final double INTAKE_SPEED = 0.2; 
     }
 
     public static final class NeckConstants {

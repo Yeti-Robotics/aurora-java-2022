@@ -1,5 +1,7 @@
 package frc.robot.utils;
 
+import javax.naming.LimitExceededException;
+
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.Constants.LimelightConstants;
@@ -115,9 +117,11 @@ public class Limelight {
     }
 
     public static double getDistance() {
-        double distance;
-        distance = (LimelightConstants.KNOWN_TAPE_BOUND_WIDTH * LimelightConstants.FOCAL_LENGTH) / getTlong();
-        return distance;
+        double angleToGoalDegrees = LimelightConstants.MOUNTING_ANGLE + getTy();
+        double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
+        double distanceFromLimelightToGoalInches = (LimelightConstants.GOAL_HEIGHT - LimelightConstants.LIMELIGHT_HEIGHT) / Math.tan(angleToGoalRadians);
+
+        return distanceFromLimelightToGoalInches;
     }
 
     /**
