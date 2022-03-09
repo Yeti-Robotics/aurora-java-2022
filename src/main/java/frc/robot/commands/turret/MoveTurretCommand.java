@@ -5,9 +5,7 @@
 package frc.robot.commands.turret;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.TurretConstants;
 import frc.robot.subsystems.TurretSubsystem;
-import frc.robot.utils.Limelight;
 
 public class MoveTurretCommand extends CommandBase {
   private TurretSubsystem turretSubsystem;

@@ -8,8 +8,6 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.wpilibj.ADIS16448_IMU;
-import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.SerialPort.Port;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
@@ -75,8 +73,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   public void tankDriveVolts(double leftVolts, double rightVolts) {
-    leftFalcon1.setVoltage(leftVolts);
-    rightFalcon1.setVoltage(rightVolts);
+    leftMotors.setVoltage(leftVolts);
+    rightMotors.setVoltage(rightVolts);
     drive.feed();
   }
 
@@ -121,7 +119,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   public double getRightEncoderDistance() {
-    return (-rightFalcon1.getSelectedSensorPosition() * (DriveConstants.DISTANCE_PER_PULSE)
+    return (rightFalcon1.getSelectedSensorPosition() * (DriveConstants.DISTANCE_PER_PULSE)
         / (ShiftingSubsystem.getShifterPosition() == ShiftStatus.HIGH ? DriveConstants.HIGH_GEAR_RATIO
             : DriveConstants.LOW_GEAR_RATIO));
   }
@@ -143,7 +141,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   public double getRightEncoderVelocity() {
-    return (-rightFalcon1.getSelectedSensorVelocity() * 10 * (DriveConstants.DISTANCE_PER_PULSE)
+    return (rightFalcon1.getSelectedSensorVelocity() * 10 * (DriveConstants.DISTANCE_PER_PULSE)
         / (ShiftingSubsystem.getShifterPosition() == ShiftStatus.HIGH ? DriveConstants.HIGH_GEAR_RATIO
             : DriveConstants.LOW_GEAR_RATIO));
   }

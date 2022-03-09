@@ -7,7 +7,6 @@ package frc.robot;
 import java.io.IOException;
 import java.nio.file.Path;
 
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.CompressorConfigType;
@@ -17,17 +16,11 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.LED.AuroraLEDCommand;
 import frc.robot.commands.LED.BlinkLEDCommand;
 import frc.robot.commands.LED.SetLEDToRGBCommand;
 import frc.robot.commands.LED.SetLEDYetiBlueCommand;
-import frc.robot.commands.turret.HomeTurretCommand;
-import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.TurretSubsystem;
-import frc.robot.subsystems.ShooterSubsystem.ShooterStatus;
 import frc.robot.subsystems.TurretSubsystem.TurretLockStatus;
-import frc.robot.utils.Limelight;
 
 public class Robot extends TimedRobot {
 	private Command m_autonomousCommand;
@@ -37,7 +30,7 @@ public class Robot extends TimedRobot {
 
 	private RobotContainer robotContainer;
 
-	private String trajectoryJSON = "insert json here"; //No path is loaded yet
+	private String trajectoryJSON = "paths/scurve.wpilib.json"; //No path is loaded yet
 	public static Trajectory trajectory = new Trajectory();
 
 	@Override
@@ -59,8 +52,6 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("Current Pressure: ", robotContainer.pneumaticsSubsystem.getPressure());
 		SmartDashboard.putNumber("Flywheel RPM: ", robotContainer.shooterSubsystem.getFlywheelRPM());
 		SmartDashboard.putString("Turret Lock Status: ", ((robotContainer.turretSubsystem.lockStatus == robotContainer.turretSubsystem.lockStatus.UNLOCKED) ? "UNLOCKED" : "LOCKED"));
-		// System.out.println("LL Distance: " + Limelight.getDistance() + " in");
-		// System.out.println("Flywheel RPM: " + robotContainer.shooterSubsystem.getFlywheelRPM());
 	}
 
 	@Override
@@ -98,8 +89,6 @@ public class Robot extends TimedRobot {
 	public void teleopInit() {
 		robotContainer.turretSubsystem.resetEncoder();
 		robotContainer.climberSubsystem.resetEncoders();
-		robotContainer.drivetrainSubsystem.resetGyro();
-
 		robotContainer.ledSubsystem.getCurrentCommand().cancel();
 		robotContainer.ledSubsystem.setDefaultCommand(new SetLEDYetiBlueCommand(robotContainer.ledSubsystem));
 
@@ -113,7 +102,6 @@ public class Robot extends TimedRobot {
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.cancel();
 		}
-
 	}
 
 	@Override

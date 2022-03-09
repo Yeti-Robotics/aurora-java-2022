@@ -4,6 +4,7 @@
 
 package frc.robot.commands.autoRoutines;
 
+import frc.robot.Robot;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
@@ -24,50 +25,33 @@ public class PathFollowingCommand extends CommandBase {
   /** Creates a new PathFollowingCommand. */
   private final DrivetrainSubsystem drivetrainSubsystem;
   private RamseteCommand ramseteCommand;
-  String trajectoryJSON;
-  private Trajectory trajectory;
-  
-  
-  
-  
-  
-  public PathFollowingCommand(DrivetrainSubsystem drivetrainSubsystem, String trajectoryJSON) {
+  private Trajectory trajectory = Robot.trajectory;
+
+  public PathFollowingCommand(DrivetrainSubsystem drivetrainSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drivetrainSubsystem = drivetrainSubsystem;
     addRequirements(drivetrainSubsystem);
-    
-
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
-    try {
-      Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-      trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-    } catch (IOException ex) {
-      DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
-    }
-
     ramseteCommand = new RamseteCommand(
-      trajectory,
-      drivetrainSubsystem::getPose,
-      new RamseteController(AutoConstants.RAMSETE_B, AutoConstants.RAMSETE_ZETA),
-      new SimpleMotorFeedforward(
-          AutoConstants.AUTO_KS,
-          AutoConstants.AUTO_KV,
-          AutoConstants.AUTO_KA),
-      AutoConstants.KINEMATICS,
-      drivetrainSubsystem::getWheelSpeeds,
-      new PIDController(AutoConstants.AUTO_P, 0, 0),
-      new PIDController(AutoConstants.AUTO_P, 0, 0),
-      drivetrainSubsystem::tankDriveVolts,
-      drivetrainSubsystem);
+        trajectory,
+        drivetrainSubsystem::getPose,
+        new RamseteController(AutoConstants.RAMSETE_B, AutoConstants.RAMSETE_ZETA),
+        new SimpleMotorFeedforward(
+            AutoConstants.AUTO_KS,
+            AutoConstants.AUTO_KV,
+            AutoConstants.AUTO_KA),
+        AutoConstants.KINEMATICS,
+        drivetrainSubsystem::getWheelSpeeds,
+        new PIDController(AutoConstants.AUTO_P, 0, 0),
+        new PIDController(AutoConstants.AUTO_P, 0, 0),
+        drivetrainSubsystem::tankDriveVolts,
+        drivetrainSubsystem);
 
-  drivetrainSubsystem.resetOdometry(trajectory.getInitialPose());
-
-    ramseteCommand.schedule();
+    drivetrainSubsystem.resetOdometry(trajectory.getInitialPose());
 
   }
 
@@ -79,11 +63,12 @@ public class PathFollowingCommand extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -15,14 +13,10 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.Constants.ShooterConstants;
-import frc.robot.Constants.TurretConstants;
 import frc.robot.subsystems.*;
 import frc.robot.commands.climber.ClimbDownCommand;
 import frc.robot.commands.climber.ClimbUpCommand;
@@ -32,20 +26,13 @@ import frc.robot.commands.climber.WinchInCommand;
 import frc.robot.commands.climber.WinchOutCommand;
 import frc.robot.commands.commandgroups.AllInCommand;
 import frc.robot.commands.commandgroups.AllOutCommand;
-import frc.robot.commands.commandgroups.WinchInAndClimbDownCommand;
-import frc.robot.commands.intake.IntakeInCommand;
 import frc.robot.commands.intake.ToggleIntakeCommand;
-import frc.robot.commands.neck.NeckInCommand;
 import frc.robot.commands.shifting.ToggleShiftCommand;
 import frc.robot.commands.shooter.FlywheelPIDCommand;
-import frc.robot.commands.shooter.SpinShooterCommand;
-import frc.robot.commands.shooter.SpinShooterVelocityCommand;
 import frc.robot.commands.turret.HomeTurretCommand;
-import frc.robot.commands.turret.MoveTurretCommand;
 import frc.robot.commands.turret.ToggleTurretLockCommand;
-import frc.robot.commands.turret.TurnToTargetCommand;
 import frc.robot.commands.turret.TurretLockCommand;
-import frc.robot.commands.autoRoutines.PathFollowingCommand;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -146,6 +133,10 @@ public class RobotContainer {
       drivetrainSubsystem.setMotorsCoast();
     }
 
+    if (Math.abs(-driverStationJoystick.getRawAxis(0)) > 0.05) {
+      drivetrainSubsystem.setMotorsBrake();
+    }
+
     lastInputLeftY = -driverStationJoystick.getRawAxis(0);
 
     return -driverStationJoystick.getRawAxis(0);
@@ -186,21 +177,46 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    SequentialCommandGroup twoBallAutoCommand = new SequentialCommandGroup(new WaitCommand(1),
-        new IntakeInCommand(intakeSubsystem).withTimeout(1), new NeckInCommand(neckSubsystem).withTimeout(1),
-        new WaitCommand(1));
+    Trajectory trajectory = Robot.trajectory;
+    drivetrainSubsystem.setMotorsBrake();
 
-    SequentialCommandGroup threeBallAutoCommand = new SequentialCommandGroup(new WaitCommand(1),
-        new IntakeInCommand(intakeSubsystem).withTimeout(1), new NeckInCommand(neckSubsystem).withTimeout(1),
-        new WaitCommand(1));
+    RamseteCommand ramseteCommand = new RamseteCommand(
+        trajectory,
+        drivetrainSubsystem::getPose,
+        new RamseteController(AutoConstants.RAMSETE_B, AutoConstants.RAMSETE_ZETA),
+        new SimpleMotorFeedforward(
+            AutoConstants.AUTO_KS,
+            AutoConstants.AUTO_KV,
+            AutoConstants.AUTO_KA),
+        AutoConstants.KINEMATICS,
+        drivetrainSubsystem::getWheelSpeeds,
+        new PIDController(AutoConstants.AUTO_P, 0, 0),
+        new PIDController(AutoConstants.AUTO_P, 0, 0),
+        drivetrainSubsystem::tankDriveVolts,
+        drivetrainSubsystem);
 
-    SequentialCommandGroup fourBallAutoCommand = new SequentialCommandGroup(new WaitCommand(1),
-        new IntakeInCommand(intakeSubsystem).withTimeout(1), new NeckInCommand(neckSubsystem).withTimeout(1),
-        new WaitCommand(1), new IntakeInCommand(intakeSubsystem).withTimeout(1),
-        new NeckInCommand(neckSubsystem).withTimeout(1), new WaitCommand(1));
+    drivetrainSubsystem.resetOdometry(trajectory.getInitialPose());
 
-    return new SequentialCommandGroup(
-        new PathFollowingCommand(drivetrainSubsystem, AutoConstants.exitTarmacLeft)
+    return ramseteCommand.andThen(() -> drivetrainSubsystem.tankDriveVolts(0, 0));
+    // SequentialCommandGroup twoBallAutoCommand = new SequentialCommandGroup(new
+    // WaitCommand(1),
+    // new IntakeInCommand(intakeSubsystem).withTimeout(1), new
+    // NeckInCommand(neckSubsystem).withTimeout(1),
+    // new WaitCommand(1));
+
+    // SequentialCommandGroup threeBallAutoCommand = new SequentialCommandGroup(new
+    // WaitCommand(1),
+    // new IntakeInCommand(intakeSubsystem).withTimeout(1), new
+    // NeckInCommand(neckSubsystem).withTimeout(1),
+    // new WaitCommand(1));
+
+    // SequentialCommandGroup fourBallAutoCommand = new SequentialCommandGroup(new
+    // WaitCommand(1),
+    // new IntakeInCommand(intakeSubsystem).withTimeout(1), new
+    // NeckInCommand(neckSubsystem).withTimeout(1),
+    // new WaitCommand(1), new IntakeInCommand(intakeSubsystem).withTimeout(1),
+    // new NeckInCommand(neckSubsystem).withTimeout(1), new WaitCommand(1));
+
     // new PathFollowingCommand(drivetrainSubsystem,
     // AutoConstants.twoBallPrimary).alongWith(twoBallAutoCommand),
     // new RunCommand(() -> drivetrainSubsystem.tankDriveVolts(0, 0),
@@ -212,6 +228,5 @@ public class RobotContainer {
     // new RunCommand(() -> drivetrainSubsystem.tankDriveVolts(0, 0),
     // drivetrainSubsystem),
     // new SpinShooterCommand(shooterSubsystem, 0.5).withTimeout(1)));
-    );
   }
 }

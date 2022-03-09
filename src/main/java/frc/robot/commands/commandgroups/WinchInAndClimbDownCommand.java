@@ -5,7 +5,6 @@
 package frc.robot.commands.commandgroups;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ShiftingSubsystem;
