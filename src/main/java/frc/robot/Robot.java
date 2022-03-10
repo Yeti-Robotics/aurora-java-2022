@@ -30,7 +30,7 @@ public class Robot extends TimedRobot {
 
 	private RobotContainer robotContainer;
 
-	private String trajectoryJSON = "paths/haangerToHaanger.wpilib.json"; //No path is loaded yet
+	private String firstTwoBallsJSON = "paths/twoBallPrimary.wpilib.json"; //No path is loaded yet
 	public static Trajectory trajectory = new Trajectory();
 
 	@Override
@@ -39,10 +39,10 @@ public class Robot extends TimedRobot {
 		robotContainer.turretSubsystem.lockStatus = TurretLockStatus.UNLOCKED;
 
 		try {
-			Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+			Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(firstTwoBallsJSON);
 			trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
 		} catch (IOException ex) {
-			DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+			DriverStation.reportError("Unable to open trajectory: " + firstTwoBallsJSON, ex.getStackTrace());
 		}
 	}
 

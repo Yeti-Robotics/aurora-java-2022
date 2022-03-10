@@ -9,10 +9,6 @@ import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.AutoConstants;
@@ -26,7 +22,9 @@ import frc.robot.commands.climber.WinchInCommand;
 import frc.robot.commands.climber.WinchOutCommand;
 import frc.robot.commands.commandgroups.AllInCommand;
 import frc.robot.commands.commandgroups.AllOutCommand;
+import frc.robot.commands.intake.IntakeInCommand;
 import frc.robot.commands.intake.ToggleIntakeCommand;
+import frc.robot.commands.neck.NeckInCommand;
 import frc.robot.commands.shifting.ToggleShiftCommand;
 import frc.robot.commands.shooter.FlywheelPIDCommand;
 import frc.robot.commands.turret.HomeTurretCommand;
@@ -178,8 +176,30 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     Trajectory trajectory = Robot.trajectory;
+    
+    SequentialCommandGroup twoBallAutoCommand = new SequentialCommandGroup(new ToggleIntakeCommand(intakeSubsystem),
+    new WaitCommand(1),
+    new IntakeInCommand(intakeSubsystem).withTimeout(1), new
+    NeckInCommand(neckSubsystem).withTimeout(1),
+    new WaitCommand(1));
 
-    RamseteCommand ramseteCommand = new RamseteCommand(
+    SequentialCommandGroup threeBallAutoCommand = new SequentialCommandGroup(new
+    WaitCommand(1),
+    new IntakeInCommand(intakeSubsystem).withTimeout(1), new
+    NeckInCommand(neckSubsystem).withTimeout(1),
+    new WaitCommand(1));
+
+    SequentialCommandGroup fourBallAutoCommand = new SequentialCommandGroup(new
+    WaitCommand(1),
+    new IntakeInCommand(intakeSubsystem).withTimeout(1), new
+    NeckInCommand(neckSubsystem).withTimeout(1),
+    new WaitCommand(1), new IntakeInCommand(intakeSubsystem).withTimeout(1),
+    new NeckInCommand(neckSubsystem).withTimeout(1), new WaitCommand(1));
+
+    
+    drivetrainSubsystem.resetOdometry(trajectory.getInitialPose());
+    
+    RamseteCommand firstTwoBalls = new RamseteCommand(
         trajectory,
         drivetrainSubsystem::getPose,
         new RamseteController(AutoConstants.RAMSETE_B, AutoConstants.RAMSETE_ZETA),
@@ -187,35 +207,16 @@ public class RobotContainer {
             AutoConstants.AUTO_KS,
             AutoConstants.AUTO_KV,
             AutoConstants.AUTO_KA),
-        AutoConstants.KINEMATICS,
-        drivetrainSubsystem::getWheelSpeeds,
-        new PIDController(AutoConstants.AUTO_P, 0, 0),
+            AutoConstants.KINEMATICS,
+            drivetrainSubsystem::getWheelSpeeds,
+            new PIDController(AutoConstants.AUTO_P, 0, 0),
         new PIDController(AutoConstants.AUTO_P, 0, 0),
         drivetrainSubsystem::tankDriveVolts,
         drivetrainSubsystem);
+    
 
-    drivetrainSubsystem.resetOdometry(trajectory.getInitialPose());
-
-    return ramseteCommand.andThen(() -> drivetrainSubsystem.tankDriveVolts(0, 0));
-    // SequentialCommandGroup twoBallAutoCommand = new SequentialCommandGroup(new
-    // WaitCommand(1),
-    // new IntakeInCommand(intakeSubsystem).withTimeout(1), new
-    // NeckInCommand(neckSubsystem).withTimeout(1),
-    // new WaitCommand(1));
-
-    // SequentialCommandGroup threeBallAutoCommand = new SequentialCommandGroup(new
-    // WaitCommand(1),
-    // new IntakeInCommand(intakeSubsystem).withTimeout(1), new
-    // NeckInCommand(neckSubsystem).withTimeout(1),
-    // new WaitCommand(1));
-
-    // SequentialCommandGroup fourBallAutoCommand = new SequentialCommandGroup(new
-    // WaitCommand(1),
-    // new IntakeInCommand(intakeSubsystem).withTimeout(1), new
-    // NeckInCommand(neckSubsystem).withTimeout(1),
-    // new WaitCommand(1), new IntakeInCommand(intakeSubsystem).withTimeout(1),
-    // new NeckInCommand(neckSubsystem).withTimeout(1), new WaitCommand(1));
-
+    return firstTwoBalls.alongWith(twoBallAutoCommand).andThen(() -> drivetrainSubsystem.tankDriveVolts(0, 0));
+    
     // new PathFollowingCommand(drivetrainSubsystem,
     // AutoConstants.twoBallPrimary).alongWith(twoBallAutoCommand),
     // new RunCommand(() -> drivetrainSubsystem.tankDriveVolts(0, 0),
