@@ -30,7 +30,7 @@ public class Robot extends TimedRobot {
 
 	private RobotContainer robotContainer;
 
-	private String firstTwoBallsJSON = "paths/twoBallPrimary.wpilib.json"; //No path is loaded yet
+	private String firstTwoBallsJSON = "paths/twoBallAlternative.wpilib.json"; //No path is loaded yet
 	public static Trajectory trajectory = new Trajectory();
 
 	@Override

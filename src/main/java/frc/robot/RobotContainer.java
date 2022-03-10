@@ -27,8 +27,10 @@ import frc.robot.commands.intake.ToggleIntakeCommand;
 import frc.robot.commands.neck.NeckInCommand;
 import frc.robot.commands.shifting.ToggleShiftCommand;
 import frc.robot.commands.shooter.FlywheelPIDCommand;
+import frc.robot.commands.shooter.SpinShooterCommand;
 import frc.robot.commands.turret.HomeTurretCommand;
 import frc.robot.commands.turret.ToggleTurretLockCommand;
+import frc.robot.commands.turret.TurnToTargetCommand;
 import frc.robot.commands.turret.TurretLockCommand;
 
 
@@ -178,10 +180,15 @@ public class RobotContainer {
     Trajectory trajectory = Robot.trajectory;
     
     SequentialCommandGroup twoBallAutoCommand = new SequentialCommandGroup(new ToggleIntakeCommand(intakeSubsystem),
-    new WaitCommand(1),
-    new IntakeInCommand(intakeSubsystem).withTimeout(1), new
-    NeckInCommand(neckSubsystem).withTimeout(1),
-    new WaitCommand(1));
+    new AllInCommand(neckSubsystem, intakeSubsystem));
+
+    SequentialCommandGroup shootTwoBallsCommand = new SequentialCommandGroup(
+    new ToggleTurretLockCommand(turretSubsystem),
+    new FlywheelPIDCommand(shooterSubsystem).withTimeout(2.5),
+    new FlywheelPIDCommand(shooterSubsystem).withTimeout(2).alongWith
+    (new AllInCommand(neckSubsystem, intakeSubsystem).withTimeout(2)),
+    new HomeTurretCommand(turretSubsystem)
+    );
 
     SequentialCommandGroup threeBallAutoCommand = new SequentialCommandGroup(new
     WaitCommand(1),
@@ -215,7 +222,7 @@ public class RobotContainer {
         drivetrainSubsystem);
     
 
-    return firstTwoBalls.alongWith(twoBallAutoCommand).andThen(() -> drivetrainSubsystem.tankDriveVolts(0, 0));
+    return firstTwoBalls.alongWith(twoBallAutoCommand).andThen(shootTwoBallsCommand).andThen(() -> drivetrainSubsystem.tankDriveVolts(0, 0));
     
     // new PathFollowingCommand(drivetrainSubsystem,
     // AutoConstants.twoBallPrimary).alongWith(twoBallAutoCommand),
