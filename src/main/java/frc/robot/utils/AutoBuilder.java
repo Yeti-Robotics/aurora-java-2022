@@ -15,8 +15,10 @@ import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Robot;
@@ -31,6 +33,7 @@ import frc.robot.commands.intake.ToggleIntakeCommand;
 public class AutoBuilder {
     private RobotContainer robotContainer;
     private AutoModes autoMode;
+    // private Trajectory trajectory;
 
     private ParallelCommandGroup command;
     private SequentialCommandGroup subsystemCommandGroup;
@@ -45,7 +48,7 @@ public class AutoBuilder {
                 new WaitCommand(1));
 
         pathCommandGroup.addCommands(
-                runPath(AutoConstants.twoBallPrimary)
+                runPathCommand(AutoConstants.twoBallPrimary)
             );
 
         command.alongWith(pathCommandGroup, subsystemCommandGroup);
@@ -58,9 +61,8 @@ public class AutoBuilder {
         );
 
         pathCommandGroup.addCommands(
-            runPath("paths/scurve.wpilib.json"),
-            
-            runPath("paths/leftTurn.wpilib.json")
+            runPathCommand("paths/straightForward.wpilib.json"),
+            runPathCommand("paths/leftTurn.wpilib.json")
         );
 
         command.alongWith(pathCommandGroup, subsystemCommandGroup);
@@ -106,7 +108,7 @@ public class AutoBuilder {
         }
     }
 
-    private RamseteCommand runPath(String trajectoryJSON) {
+    private Command runPathCommand(String trajectoryJSON) {
         Trajectory trajectory = loadTrajectory(trajectoryJSON);
 
         RamseteCommand ramseteCommand = new RamseteCommand(
@@ -124,8 +126,6 @@ public class AutoBuilder {
                 robotContainer.drivetrainSubsystem::tankDriveVolts,
                 robotContainer.drivetrainSubsystem);
 
-        robotContainer.drivetrainSubsystem.resetOdometry(trajectory.getInitialPose());
-
-        return ramseteCommand;
+        return ramseteCommand.beforeStarting(() -> robotContainer.drivetrainSubsystem.resetOdometry(trajectory.getInitialPose()));
     }
 }
