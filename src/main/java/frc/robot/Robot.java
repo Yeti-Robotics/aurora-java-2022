@@ -4,15 +4,10 @@
 
 package frc.robot;
 
-import java.io.IOException;
-import java.nio.file.Path;
-
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.CompressorConfigType;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -30,20 +25,22 @@ public class Robot extends TimedRobot {
 
 	private RobotContainer robotContainer;
 
-	private String trajectoryJSON = "paths/haangerToHaanger.wpilib.json"; //No path is loaded yet
-	public static Trajectory trajectory = new Trajectory();
+	public static SendableChooser<AutoModes> autoChooser;
+
+	public static enum AutoModes {
+		ONE_BALL, TWO_BALL
+	}
 
 	@Override
 	public void robotInit() {
 		robotContainer = new RobotContainer();
 		robotContainer.turretSubsystem.lockStatus = TurretLockStatus.UNLOCKED;
 
-		try {
-			Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-			trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-		} catch (IOException ex) {
-			DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
-		}
+		autoChooser = new SendableChooser<>();
+    	autoChooser.setDefaultOption("ONE_BALL", AutoModes.ONE_BALL);
+    	autoChooser.addOption("TWO_BALL", AutoModes.TWO_BALL);
+		autoChooser.addOption("ONE_BALL", AutoModes.ONE_BALL);
+		SmartDashboard.putData("Auto Chooser", autoChooser);
 	}
 
 	@Override
@@ -51,7 +48,7 @@ public class Robot extends TimedRobot {
 		CommandScheduler.getInstance().run();
 		SmartDashboard.putNumber("Current Pressure: ", robotContainer.pneumaticsSubsystem.getPressure());
 		SmartDashboard.putNumber("Flywheel RPM: ", robotContainer.shooterSubsystem.getFlywheelRPM());
-		SmartDashboard.putString("Turret Lock Status: ", ((robotContainer.turretSubsystem.lockStatus == robotContainer.turretSubsystem.lockStatus.UNLOCKED) ? "UNLOCKED" : "LOCKED"));
+		SmartDashboard.putString("Turret Lock Status: ", ((robotContainer.turretSubsystem.lockStatus == TurretLockStatus.UNLOCKED) ? "UNLOCKED" : "LOCKED"));
 	}
 
 	@Override

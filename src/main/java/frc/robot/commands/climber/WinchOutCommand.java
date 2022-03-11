@@ -7,8 +7,6 @@ package frc.robot.commands.climber;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.subsystems.ClimberSubsystem;
-import frc.robot.subsystems.ShiftingSubsystem;
-import frc.robot.subsystems.ShiftingSubsystem.ShiftStatus;
 
 public class WinchOutCommand extends CommandBase {
   

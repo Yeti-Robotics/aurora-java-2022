@@ -39,21 +39,21 @@ public final class Constants {
     }
 
     public static final class AutoConstants {
-        public static final double AUTO_KS = 0.71876; // volts
-        public static final double AUTO_KV = 2.143; // volt seconds per meter
-        public static final double AUTO_KA = 0.54127; // volt seconds squared per meter
-        public static final double AUTO_P = 3.2241;
+        public static final double AUTO_KS = 0.72741; // volts
+        public static final double AUTO_KV = 2.1475; // volt seconds per meter
+        public static final double AUTO_KA = 0.49756; // volt seconds squared per meter
+        public static final double AUTO_P = 3.2023;
 
         public static final double RAMSETE_B = 2.0;
         public static final double RAMSETE_ZETA = 0.7;
 
-        public static final double TRACK_WIDTH = 0.7783; // m
+        public static final double TRACK_WIDTH = 0.77579; // m
         public static final DifferentialDriveKinematics KINEMATICS = new DifferentialDriveKinematics(TRACK_WIDTH);
         
         public static final double MAX_SPEED = 3.0; // m/s
         public static final double MAX_ACCELERATION = 3.0; // m/s^2
 
-        public static final String exitTarmacLeft = "paths/exitTarmacLeft.wpilib.json";
+        public static final String EXIT_TARMAC_LEFT = "paths/exitTarmacLeft.wpilib.json";
         public static final String twoBallPrimary = "paths/twoBallPrimary.wpilib.json";
         public static final String twoBallAlternative = "paths/twoBallAlternative.wpilib.json";
         public static final String threeBallPrimary = "paths/threeBallPrimary.wpilib.json";
