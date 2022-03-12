@@ -5,9 +5,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
@@ -54,7 +51,7 @@ public class RobotContainer {
     public LEDSubsystem ledSubsystem;
 
     private double lastInputLeftY = 0.0;
-    private boolean mode = true;
+    public boolean mode = true;
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -105,7 +102,7 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         setConditionalButton(1, new AllInCommand(neckSubsystem, intakeSubsystem), ActiveState.WHILE_HELD, new ToggleIntakeCommand(intakeSubsystem), ActiveState.WHEN_PRESSED);
-        setJoystickButtonWhenPressed(5, new StartEndCommand(() -> mode = !mode, () -> {}));
+        setJoystickButtonWhenPressed(5, new InstantCommand(() -> mode = !mode));
     }
 
     private double getLeftY() {
