@@ -27,6 +27,10 @@ import frc.robot.commands.shooter.ToggleFlywheelPIDCommand;
 import frc.robot.commands.turret.HomeTurretCommand;
 import frc.robot.commands.turret.ToggleTurretLockCommand;
 import frc.robot.commands.turret.TurretLockCommand;
+import frc.robot.utils.JoyButton;
+import frc.robot.utils.JoyButton.ActiveState;
+
+import java.util.function.BooleanSupplier;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -113,7 +117,7 @@ public class RobotContainer {
         setJoystickButtonWhileHeld(4, new ClimbDownCommand(climberSubsystem));
 
         setJoystickButtonWhenPressed(10, new ToggleStaticHooksCommand(climberSubsystem));
-        setJoystickButtonWhenPressed(5, new ToggleMovingHookCommand(climberSubsystem));
+        setJoystickButtonWhenPressed(5, new StartEndCommand(() -> mode = !mode, () -> {}));
 
         setJoystickButtonWhenPressed(11, new ToggleShiftCommand(shiftingSubsystem));
         setJoystickButtonWhenPressed(12, new ToggleIntakeCommand(intakeSubsystem));
@@ -162,6 +166,18 @@ public class RobotContainer {
     private void setConditionalJoystickButtonWhileHeld(int button, Command command1, Command command2) {
         new JoystickButton(driverStationJoystick, button)
                 .whileHeld(new ConditionalCommand(command1, command2, () -> mode));
+    }
+
+    private void setConditionalButton(
+            int button,
+            Command trueCommand,
+            ActiveState trueActiveState,
+            Command falseCommand,
+            ActiveState falseActiveState,
+            BooleanSupplier booleanSupplier
+    ) {
+        new JoyButton(driverStationJoystick, button)
+                .conditionalPressed(trueCommand, trueActiveState, falseCommand, falseActiveState, booleanSupplier);
     }
 
   /**
