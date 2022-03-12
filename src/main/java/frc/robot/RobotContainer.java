@@ -55,7 +55,7 @@ public class RobotContainer {
     public LEDSubsystem ledSubsystem;
 
     private double lastInputLeftY = 0.0;
-    private boolean shooterMode = true; // false = turretMode
+    public boolean shooterMode = true; // false = turretMode
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -104,23 +104,24 @@ public class RobotContainer {
      * it to a {@link
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
+
     private void configureButtonBindings() {
-        setJoystickButtonWhenPressed(11, new ToggleShiftCommand(shiftingSubsystem));
-        setConditionalJoystickButtonWhenPressed(12, new ToggleIntakeCommand(intakeSubsystem), new RunCommand(() -> {}));
+        setJoystickButtonWhenPressed(11, new ToggleIntakeCommand(intakeSubsystem));
+        setConditionalButton(12, new ToggleShiftCommand(shiftingSubsystem), ActiveState.WHEN_PRESSED, new RunCommand(() -> {}), ActiveState.WHEN_PRESSED);
 
-        setConditionalJoystickButtonWhileHeld(6, new AllOutCommand(intakeSubsystem, neckSubsystem), new ClimbUpCommand(climberSubsystem));
-        setConditionalJoystickButtonWhileHeld(1, new AllInCommand(intakeSubsystem, neckSubsystem), new ClimbDownCommand(climberSubsystem));
+        setConditionalButton(6, new AllOutCommand(intakeSubsystem, neckSubsystem), ActiveState.WHILE_HELD, new ClimbUpCommand(climberSubsystem), ActiveState.WHILE_HELD);
+        setConditionalButton(1, new AllInCommand(intakeSubsystem, neckSubsystem), ActiveState.WHILE_HELD, new ClimbDownCommand(climberSubsystem), ActiveState.WHILE_HELD);
 
-        setConditionalJoystickButtonWhenPressed(7, new ToggleTurretLockCommand(turretSubsystem).andThen(new HomeTurretCommand(turretSubsystem)), new WinchOutCommand(climberSubsystem));
-        setConditionalJoystickButtonWhenPressed(2, new ToggleFlywheelHighCommand(), new WinchInCommand(climberSubsystem));
+        setConditionalButton(7, new ToggleTurretLockCommand(turretSubsystem).andThen(new HomeTurretCommand(turretSubsystem)), ActiveState.WHEN_PRESSED, new WinchOutCommand(climberSubsystem), ActiveState.WHILE_HELD);
+        setConditionalButton(2, new ToggleFlywheelHighCommand(), ActiveState.WHEN_PRESSED, new WinchInCommand(climberSubsystem), ActiveState.WHILE_HELD);
 
-        setConditionalJoystickButtonWhenPressed(8, new HomeTurretCommand(turretSubsystem), new ToggleShiftCommand(shiftingSubsystem)); 
-        setConditionalJoystickButtonWhenPressed(3, new ToggleFlywheelLowCommand(), new ToggleStaticHooksCommand(climberSubsystem)); 
+        setConditionalButton(8, new HomeTurretCommand(turretSubsystem), ActiveState.WHEN_PRESSED, new ToggleShiftCommand(shiftingSubsystem), ActiveState.WHEN_PRESSED);
+        setConditionalButton(3, new ToggleFlywheelLowCommand(), ActiveState.WHEN_PRESSED, new ToggleStaticHooksCommand(climberSubsystem), ActiveState.WHEN_PRESSED);
 
-        setConditionalJoystickButtonWhenPressed(9, new SnapTurretLeftCommand(turretSubsystem), new RunCommand(() -> {}));
-        setConditionalJoystickButtonWhenPressed(4, new RunCommand(() -> {}), new WinchInAndClimbDownCommand(climberSubsystem));
+        setConditionalButton(9, new SnapTurretLeftCommand(turretSubsystem), ActiveState.WHEN_PRESSED, new RunCommand(() -> {}), ActiveState.WHEN_PRESSED);
+        setConditionalButton(4, new RunCommand(() -> {}), ActiveState.WHEN_PRESSED, new WinchInAndClimbDownCommand(climberSubsystem), ActiveState.WHILE_HELD);
 
-        setConditionalJoystickButtonWhenPressed(10, new SnapTurretRightCommand(turretSubsystem), new RunCommand(() -> {}));
+        setConditionalButton(10, new SnapTurretRightCommand(turretSubsystem), ActiveState.WHEN_PRESSED, new RunCommand(() -> {}), ActiveState.WHEN_PRESSED);
         setJoystickButtonWhenPressed(5, new InstantCommand(() -> shooterMode = !shooterMode));
     }
 
@@ -179,7 +180,7 @@ public class RobotContainer {
             ActiveState falseActiveState
     ) {
         new JoyButton(driverStationJoystick, button)
-                .conditionalPressed(trueCommand, trueActiveState, falseCommand, falseActiveState, () -> mode);
+                .conditionalPressed(trueCommand, trueActiveState, falseCommand, falseActiveState, () -> shooterMode);
     }
 
   /**

@@ -51,7 +51,7 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("Current Pressure: ", robotContainer.pneumaticsSubsystem.getPressure());
 		SmartDashboard.putNumber("Flywheel RPM: ", robotContainer.shooterSubsystem.getFlywheelRPM());
 		SmartDashboard.putString("Turret Lock Status: ", ((robotContainer.turretSubsystem.lockStatus == TurretLockStatus.UNLOCKED) ? "UNLOCKED" : "LOCKED"));
-		System.out.println("Mode: " + robotContainer.mode);
+		SmartDashboard.putString("Control Mode: ", (robotContainer.shooterMode) ? "SHOOTING" : "CLIMBING");
 	}
 
 	@Override
