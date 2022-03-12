@@ -7,35 +7,73 @@ package frc.robot;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 
 /**
- * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
- * constants. This class should not be used for any other purpose. All constants should be declared
+ * The Constants class provides a convenient place for teams to hold robot-wide
+ * numerical or boolean
+ * constants. This class should not be used for any other purpose. All constants
+ * should be declared
  * globally (i.e. public static). Do not put anything functional in this class.
  *
- * <p>It is advised to statically import this class (or one of its inner classes) wherever the
+ * <p>
+ * It is advised to statically import this class (or one of its inner classes)
+ * wherever the
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
 
     public static final class DriveConstants {
 
-        public static final int LEFT_FALCON_1 = 1; //front relative to robot
+        public static final int LEFT_FALCON_1 = 1; // front relative to robot
         public static final int LEFT_FALCON_2 = 2; // rear relative to robot
 
-        public static final int RIGHT_FALCON_1 = 3; //front relative to robot
+        public static final int RIGHT_FALCON_1 = 3; // front relative to robot
         public static final int RIGHT_FALCON_2 = 4; // rear relative to robot
-
-        public static final int GYRO_ID = 1;
 
         public static final int[] SOLENOID_SHIFTER = {0, 1};
 
         public static final double DRIVE_ENCODER_RESOLUTION = 2048.0;
-        public static final double DRIVE_WHEEL_DIAMETER = 4.0;
+        public static final double DRIVE_WHEEL_DIAMETER = 0.1016;
         public static final double DISTANCE_PER_PULSE = (DRIVE_WHEEL_DIAMETER * Math.PI) / DRIVE_ENCODER_RESOLUTION;
 
-        public static final double HIGH_GEAR_RATIO = 1.0;//placeholder
-        public static final double LOW_GEAR_RATIO = 2.0;//placeholder
+        public static final double HIGH_GEAR_RATIO = 6.32; // jvn
+        public static final double LOW_GEAR_RATIO = 11.90; // jvn
     }
 
+    public static final class AutoConstants {
+        public static final double AUTO_KS = 0.72741; // volts
+        public static final double AUTO_KV = 2.1475; // volt seconds per meter
+        public static final double AUTO_KA = 0.49756; // volt seconds squared per meter
+        public static final double AUTO_P = 3.2023;
+
+        public static final double RAMSETE_B = 2.0;
+        public static final double RAMSETE_ZETA = 0.7;
+
+        public static final double TRACK_WIDTH = 0.77579; // m
+        public static final DifferentialDriveKinematics KINEMATICS = new DifferentialDriveKinematics(TRACK_WIDTH);
+        
+        public static final double MAX_SPEED = 3.0; // m/s
+        public static final double MAX_ACCELERATION = 3.0; // m/s^2
+
+        public static final String EXIT_TARMAC_LEFT = "paths/exitTarmacLeft.wpilib.json";
+        public static final String twoBallPrimary = "paths/twoBallPrimary.wpilib.json";
+        public static final String twoBallAlternative = "paths/twoBallAlternative.wpilib.json";
+        public static final String threeBallPrimary = "paths/threeBallPrimary.wpilib.json";
+        public static final String fourBallAuto = "paths/fourBallAuto.wpilib.json";
+    }
+
+    public static final class LimelightConstants {
+        // distance calc constants
+        public static final double KNOWN_DISTANCE = 161.3; //inches
+        public static final int PIXEL_WIDTH_KNOWN = 65; //pixels
+        public static final double KNOWN_TAPE_BOUND_WIDTH = 39.25; //inches
+        public static final double FOCAL_LENGTH = ( KNOWN_DISTANCE * PIXEL_WIDTH_KNOWN) / KNOWN_TAPE_BOUND_WIDTH;
+
+        //trajectory constants
+        public static final double LIMELIGHT_HEIGHT = 37.5; // inches
+        public static final double GOAL_HEIGHT = 108.0; // inches
+        public static final double GRAVITY = 386.09; // inches/ sec ^2
+        public static final double MOUNTING_ANGLE = 33.47; // deg
+    }
+    
     public static final class LEDConstants {
         public static final int ADDRESSABLE_LED = 1;
         public static final int LED_COUNT = 120;
@@ -57,12 +95,15 @@ public final class Constants {
         public static final int[] CLIMBER_MOVING_PISTON = {6, 7}; 
         public static final int[] CLIMBER_STATIONARY_PISTONS = {8, 9}; 
 
+        // trajectory constants
+        public static final int SHOOTER_HEIGHT = 23; // inches
+        public static final double GRAVITY = 386.09; // inches/ sec ^2
     }
 
     public static final class ShooterConstants {
-        //shooter motor ports
-        public static final int SHOOTER_LEFT_FALCON = 8; //left
-        public static final int SHOOTER_RIGHT_FALCON = 7; //right
+        // shooter motor ports
+        public static final int SHOOTER_LEFT_FALCON = 8; // left
+        public static final int SHOOTER_RIGHT_FALCON = 7; // right
 
         // high RPM PID constants
         public static final double HIGH_P = 0.0012;
@@ -86,8 +127,8 @@ public final class Constants {
         //shooter motor speeds    
         public static final double SHOOTER_SPEED = 0.6;
 
-        //shooter rpm calc constants
-        public static final double PULLEY_RATIO = 48.0 / 36.0; //not completely known
+        // shooter rpm calc constants
+        public static final double PULLEY_RATIO = 48.0 / 36.0; // not completely known
         public static final double ENCODER_TIME_CONVERSION = 600.0; // 100 ms per minute
         public static final double ENCODER_RESOLUTION = 2048.0;
         public static final double QUAD_FACTOR = 4.0; // quadrature encoder factor
@@ -96,29 +137,15 @@ public final class Constants {
         public static final double FLYWHEEL_DIAMETER = 4.0; // inches
     }
 
-    public static final class CalcConstants {
-        // distance calc constants
-        public static final double KNOWN_DISTANCE = 161.3; //inches
-        public static final int PIXEL_WIDTH_KNOWN = 65; //pixels
-        public static final double KNOWN_TAPE_BOUND_WIDTH = 39.25; //inches
-        public static final double FOCAL_LENGTH = ( KNOWN_DISTANCE * PIXEL_WIDTH_KNOWN) / KNOWN_TAPE_BOUND_WIDTH;
-
-        //trajectory constants
-        public static final double LIMELIGHT_HEIGHT = 37.5; // inches
-        public static final double GOAL_HEIGHT = 108.0; // inches
-        public static final double GRAVITY = 386.09; // inches/ sec ^2
-        public static final double MOUNTING_ANGLE = 33.47; // deg
-    }
-
     public static final class IntakeConstants {
         public static final int INTAKE_FALCON = 9;
         public static final int[] INTAKE_PISTONS_SOLENOID = {2, 3}; 
         public static final double INTAKE_SPEED = 0.2; 
     }
 
-    public static final class NeckConstants{
+    public static final class NeckConstants {
         public static final int FRONT_INDEXER = 10;
-        public static final int REAR_INDEXER = 11;   
+        public static final int REAR_INDEXER = 11;
         public static final int NECK_LOWER_BEAM_BREAK = 4;
         public static final int NECK_UPPER_BEAM_BREAK = 2;
         public static final double NECK_FRONT_SPEED = 0.6;
@@ -137,22 +164,6 @@ public final class Constants {
         public static final double TURRET_MAX_LEFT = -54.59563446044922;
         public static final double TURRET_TOLERANCE = 1.0; // tolerance for checking encoder limits
         public static final double LIMELIGHT_TOLERANCE = 0.5; // tolerance for alignment of target using limelight
-    }
-
-    public static final class AutoConstants {
-        public static final double AUTO_KS = 0.71876; // volts
-        public static final double AUTO_KV = 2.143; // volt seconds per meter
-        public static final double AUTO_KA = 0.54127; // volt seconds squared per meter
-        public static final double AUTO_P = 3.2241;
-
-        public static final double RAMSETE_B = 2.0;
-        public static final double RAMSETE_ZETA = 0.7;
-
-        public static final double TRACK_WIDTH = 0.7783; // m
-        public static final DifferentialDriveKinematics KINEMATICS = new DifferentialDriveKinematics(TRACK_WIDTH);
-        
-        public static final double MAX_SPEED = 3.0; // m/s
-        public static final double MAX_ACCELERATION = 3.0; // m/s^2
     }
 
     public static final class OIConstants {

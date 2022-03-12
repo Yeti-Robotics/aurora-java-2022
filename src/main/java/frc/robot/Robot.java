@@ -4,30 +4,18 @@
 
 package frc.robot;
 
-import java.io.IOException;
-import java.nio.file.Path;
-
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.CompressorConfigType;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.LED.AuroraLEDCommand;
 import frc.robot.commands.LED.BlinkLEDCommand;
 import frc.robot.commands.LED.SetLEDToRGBCommand;
 import frc.robot.commands.LED.SetLEDYetiBlueCommand;
-import frc.robot.commands.turret.HomeTurretCommand;
-import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.TurretSubsystem;
-import frc.robot.subsystems.ShooterSubsystem.ShooterStatus;
 import frc.robot.subsystems.TurretSubsystem.TurretLockStatus;
-import frc.robot.utils.Limelight;
 
 public class Robot extends TimedRobot {
 	private Command m_autonomousCommand;
@@ -37,20 +25,22 @@ public class Robot extends TimedRobot {
 
 	private RobotContainer robotContainer;
 
-	private String trajectoryJSON = "insert json here"; //No path is loaded yet
-	public static Trajectory trajectory = new Trajectory();
+	public static SendableChooser<AutoModes> autoChooser;
+
+	public static enum AutoModes {
+		ONE_BALL, TWO_BALL
+	}
 
 	@Override
 	public void robotInit() {
 		robotContainer = new RobotContainer();
 		robotContainer.turretSubsystem.lockStatus = TurretLockStatus.UNLOCKED;
 
-		try {
-			Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-			trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-		} catch (IOException ex) {
-			DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
-		}
+		autoChooser = new SendableChooser<>();
+    	autoChooser.setDefaultOption("ONE_BALL", AutoModes.ONE_BALL);
+    	autoChooser.addOption("TWO_BALL", AutoModes.TWO_BALL);
+		autoChooser.addOption("ONE_BALL", AutoModes.ONE_BALL);
+		SmartDashboard.putData("Auto Chooser", autoChooser);
 	}
 
 	@Override
@@ -58,9 +48,7 @@ public class Robot extends TimedRobot {
 		CommandScheduler.getInstance().run();
 		SmartDashboard.putNumber("Current Pressure: ", robotContainer.pneumaticsSubsystem.getPressure());
 		SmartDashboard.putNumber("Flywheel RPM: ", robotContainer.shooterSubsystem.getFlywheelRPM());
-		SmartDashboard.putString("Turret Lock Status: ", ((robotContainer.turretSubsystem.lockStatus == robotContainer.turretSubsystem.lockStatus.UNLOCKED) ? "UNLOCKED" : "LOCKED"));
-		// System.out.println("LL Distance: " + Limelight.getDistance() + " in");
-		// System.out.println("Flywheel RPM: " + robotContainer.shooterSubsystem.getFlywheelRPM());
+		SmartDashboard.putString("Turret Lock Status: ", ((robotContainer.turretSubsystem.lockStatus == TurretLockStatus.UNLOCKED) ? "UNLOCKED" : "LOCKED"));
 	}
 
 	@Override
@@ -83,6 +71,8 @@ public class Robot extends TimedRobot {
 	@Override
 	public void autonomousInit() {
 		robotContainer.ledSubsystem.setDefaultCommand(new AuroraLEDCommand(robotContainer.ledSubsystem));
+		
+		m_autonomousCommand = robotContainer.getAutonomousCommand();
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.schedule();
 		}
@@ -96,10 +86,11 @@ public class Robot extends TimedRobot {
 	public void teleopInit() {
 		robotContainer.turretSubsystem.resetEncoder();
 		robotContainer.climberSubsystem.resetEncoders();
-		robotContainer.drivetrainSubsystem.resetGyro();
-
 		robotContainer.ledSubsystem.getCurrentCommand().cancel();
 		robotContainer.ledSubsystem.setDefaultCommand(new SetLEDYetiBlueCommand(robotContainer.ledSubsystem));
+
+		robotContainer.drivetrainSubsystem.resetEncoders();
+		robotContainer.drivetrainSubsystem.resetGyro();
 
 		CommandScheduler.getInstance().onCommandFinish(command -> {
 			if (command.getName().equals(new BlinkLEDCommand().getName())) {
@@ -111,7 +102,6 @@ public class Robot extends TimedRobot {
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.cancel();
 		}
-
 	}
 
 	@Override
