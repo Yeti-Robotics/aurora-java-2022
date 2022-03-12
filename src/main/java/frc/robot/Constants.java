@@ -125,7 +125,7 @@ public final class Constants {
         public static final double SHOOTER_KA = 0.033071;
 
         //shooter motor speeds    
-        public static final double SHOOTER_SPEED = 0.6;
+        public static final double SHOOTER_LOW_SPEED = 0.2; // for low goal shots
 
         // shooter rpm calc constants
         public static final double PULLEY_RATIO = 48.0 / 36.0; // not completely known
@@ -156,6 +156,7 @@ public final class Constants {
         public static final int TURRET_SPARK = 12; 
         public static final int MAG_SWITCH_PORT = 3;
         public static final double TURRET_SPEED = 0.15;
+        public static final double TURRET_SNAP_SPEED = 0.45;
         public static final double TURRET_P = 0.0224; 
         public static final double TURRET_I = 0.0; 
         public static final double TURRET_D = 0.0; 

@@ -10,11 +10,12 @@ import frc.robot.subsystems.ShooterSubsystem;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ToggleFlywheelPIDCommand extends InstantCommand {
-  public ToggleFlywheelPIDCommand() {}
+public class ToggleFlywheelHighCommand extends InstantCommand {
+  public ToggleFlywheelHighCommand() {}
 
   @Override
   public void initialize() {
     ShooterSubsystem.isShooting = !ShooterSubsystem.isShooting;
+    ShooterSubsystem.isHighGoal = true;
   }
 }

@@ -13,7 +13,7 @@ public class AllInCommand extends CommandBase {
 	private NeckSubsystem neckSubsystem;
 	private IntakeSubsystem intakeSubsystem;
 
-	public AllInCommand(NeckSubsystem neckSubsystem, IntakeSubsystem intakeSubsystem) {
+	public AllInCommand(IntakeSubsystem intakeSubsystem, NeckSubsystem neckSubsystem) {
 		this.neckSubsystem = neckSubsystem;
 		this.intakeSubsystem = intakeSubsystem;
 		addRequirements(neckSubsystem, intakeSubsystem);
