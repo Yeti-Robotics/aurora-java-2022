@@ -18,10 +18,14 @@ import frc.robot.commands.climber.WinchInCommand;
 import frc.robot.commands.climber.WinchOutCommand;
 import frc.robot.commands.commandgroups.AllInCommand;
 import frc.robot.commands.commandgroups.AllOutCommand;
+import frc.robot.commands.commandgroups.WinchInAndClimbDownCommand;
 import frc.robot.commands.intake.ToggleIntakeCommand;
 import frc.robot.commands.shifting.ToggleShiftCommand;
-import frc.robot.commands.shooter.ToggleFlywheelPIDCommand;
+import frc.robot.commands.shooter.ToggleFlywheelHighCommand;
+import frc.robot.commands.shooter.ToggleFlywheelLowCommand;
 import frc.robot.commands.turret.HomeTurretCommand;
+import frc.robot.commands.turret.SnapTurretLeftCommand;
+import frc.robot.commands.turret.SnapTurretRightCommand;
 import frc.robot.commands.turret.ToggleTurretLockCommand;
 import frc.robot.commands.turret.TurretLockCommand;
 import frc.robot.utils.JoyButton;
@@ -51,7 +55,7 @@ public class RobotContainer {
     public LEDSubsystem ledSubsystem;
 
     private double lastInputLeftY = 0.0;
-    public boolean mode = true;
+    private boolean shooterMode = true; // false = turretMode
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -101,8 +105,23 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-        setConditionalButton(1, new AllInCommand(neckSubsystem, intakeSubsystem), ActiveState.WHILE_HELD, new ToggleIntakeCommand(intakeSubsystem), ActiveState.WHEN_PRESSED);
-        setJoystickButtonWhenPressed(5, new InstantCommand(() -> mode = !mode));
+        setJoystickButtonWhenPressed(11, new ToggleShiftCommand(shiftingSubsystem));
+        setConditionalJoystickButtonWhenPressed(12, new ToggleIntakeCommand(intakeSubsystem), new RunCommand(() -> {}));
+
+        setConditionalJoystickButtonWhileHeld(6, new AllOutCommand(intakeSubsystem, neckSubsystem), new ClimbUpCommand(climberSubsystem));
+        setConditionalJoystickButtonWhileHeld(1, new AllInCommand(intakeSubsystem, neckSubsystem), new ClimbDownCommand(climberSubsystem));
+
+        setConditionalJoystickButtonWhenPressed(7, new ToggleTurretLockCommand(turretSubsystem).andThen(new HomeTurretCommand(turretSubsystem)), new WinchOutCommand(climberSubsystem));
+        setConditionalJoystickButtonWhenPressed(2, new ToggleFlywheelHighCommand(), new WinchInCommand(climberSubsystem));
+
+        setConditionalJoystickButtonWhenPressed(8, new HomeTurretCommand(turretSubsystem), new ToggleShiftCommand(shiftingSubsystem)); 
+        setConditionalJoystickButtonWhenPressed(3, new ToggleFlywheelLowCommand(), new ToggleStaticHooksCommand(climberSubsystem)); 
+
+        setConditionalJoystickButtonWhenPressed(9, new SnapTurretLeftCommand(turretSubsystem), new RunCommand(() -> {}));
+        setConditionalJoystickButtonWhenPressed(4, new RunCommand(() -> {}), new WinchInAndClimbDownCommand(climberSubsystem));
+
+        setConditionalJoystickButtonWhenPressed(10, new SnapTurretRightCommand(turretSubsystem), new RunCommand(() -> {}));
+        setJoystickButtonWhenPressed(5, new InstantCommand(() -> shooterMode = !shooterMode));
     }
 
     private double getLeftY() {
@@ -136,18 +155,20 @@ public class RobotContainer {
         new JoystickButton(driverStationJoystick, button).whenPressed(command);
     }
 
-    private void setConditionalJoystickButtonWhenPressed(int button, CommandBase command1, CommandBase command2) {
+    // commandOnTrue runs when shooterMode is true
+    private void setConditionalJoystickButtonWhenPressed(int button, Command commandOnTrue, Command commandOnFalse) {
         new JoystickButton(driverStationJoystick, button)
-                .whenPressed(new ConditionalCommand(command1, command2, () -> mode));
+                .whenPressed(new ConditionalCommand(commandOnTrue, commandOnFalse, () -> shooterMode));
     }
 
     private void setJoystickButtonWhileHeld(int button, CommandBase command) {
         new JoystickButton(driverStationJoystick, button).whileHeld(command);
     }
 
-    private void setConditionalJoystickButtonWhileHeld(int button, Command command1, Command command2) {
+    // commandOnTrue runs when shooterMode is true
+    private void setConditionalJoystickButtonWhileHeld(int button, Command commandOnTrue, Command commandOnFalse) {
         new JoystickButton(driverStationJoystick, button)
-                .whileHeld(new ConditionalCommand(command1, command2, () -> mode));
+                .whileHeld(new ConditionalCommand(commandOnTrue, commandOnFalse, () -> shooterMode));
     }
 
     private void setConditionalButton(
@@ -174,34 +195,4 @@ public class RobotContainer {
     builder.setAutoMode(Robot.autoChooser.getSelected());
     return builder.build();
   }
-    // SequentialCommandGroup twoBallAutoCommand = new SequentialCommandGroup(new
-    // WaitCommand(1),
-    // new IntakeInCommand(intakeSubsystem).withTimeout(1), new
-    // NeckInCommand(neckSubsystem).withTimeout(1),
-    // new WaitCommand(1));
-
-    // SequentialCommandGroup threeBallAutoCommand = new SequentialCommandGroup(new
-    // WaitCommand(1),
-    // new IntakeInCommand(intakeSubsystem).withTimeout(1), new
-    // NeckInCommand(neckSubsystem).withTimeout(1),
-    // new WaitCommand(1));
-
-    // SequentialCommandGroup fourBallAutoCommand = new SequentialCommandGroup(new
-    // WaitCommand(1),
-    // new IntakeInCommand(intakeSubsystem).withTimeout(1), new
-    // NeckInCommand(neckSubsystem).withTimeout(1),
-    // new WaitCommand(1), new IntakeInCommand(intakeSubsystem).withTimeout(1),
-    // new NeckInCommand(neckSubsystem).withTimeout(1), new WaitCommand(1));
-
-    // new PathFollowingCommand(drivetrainSubsystem,
-    // AutoConstants.twoBallPrimary).alongWith(twoBallAutoCommand),
-    // new RunCommand(() -> drivetrainSubsystem.tankDriveVolts(0, 0),
-    // drivetrainSubsystem),
-    // new SpinShooterCommand(shooterSubsystem, 0.5).withTimeout(1),
-    // new SequentialCommandGroup(
-    // new PathFollowingCommand(drivetrainSubsystem, AutoConstants.threeBallPrimary)
-    // .alongWith(threeBallAutoCommand),
-    // new RunCommand(() -> drivetrainSubsystem.tankDriveVolts(0, 0),
-    // drivetrainSubsystem),
-    // new SpinShooterCommand(shooterSubsystem, 0.5).withTimeout(1)));
 }

@@ -125,7 +125,7 @@ public final class Constants {
         public static final double SHOOTER_KA = 0.033071;
 
         //shooter motor speeds    
-        public static final double SHOOTER_SPEED = 0.6;
+        public static final double SHOOTER_LOW_SPEED = 0.2; // for low goal shots
 
         // shooter rpm calc constants
         public static final double PULLEY_RATIO = 48.0 / 36.0; // not completely known
@@ -156,12 +156,15 @@ public final class Constants {
         public static final int TURRET_SPARK = 12; 
         public static final int MAG_SWITCH_PORT = 3;
         public static final double TURRET_SPEED = 0.15;
+        public static final double TURRET_SNAP_SPEED = 0.45;
         public static final double TURRET_P = 0.0224; 
         public static final double TURRET_I = 0.0; 
         public static final double TURRET_D = 0.0; 
         public static final double TURRET_F = 0.0;
         public static final double TURRET_MAX_RIGHT = 54.59563446044922; 
         public static final double TURRET_MAX_LEFT = -54.59563446044922;
+        public static final double TURRET_45_RIGHT = TurretConstants.TURRET_MAX_RIGHT / 2.0; // ???
+        public static final double TURRET_45_LEFT = TurretConstants.TURRET_MAX_LEFT / 2.0; // ???
         public static final double TURRET_TOLERANCE = 1.0; // tolerance for checking encoder limits
         public static final double LIMELIGHT_TOLERANCE = 0.1; // tolerance for alignment of target using limelight
     }

@@ -24,6 +24,7 @@ public class ShooterSubsystem extends SubsystemBase {
     public static double setPoint = 3999.0;
     public static boolean atSetPoint = false;
     public static boolean isShooting = false;
+    public static boolean isHighGoal = true;
 
     private PIDController highPIDController; // high RPM shooting
     private PIDController lowPIDController; // low RPM shooting
@@ -54,19 +55,16 @@ public class ShooterSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Flywheel Set Point: ", ShooterSubsystem.setPoint);
         SmartDashboard.putNumber("Flywheel Voltage", shooterRightFalcon.getMotorOutputVoltage());
 
-        if(ShooterSubsystem.isShooting){
+        if(ShooterSubsystem.isShooting && ShooterSubsystem.isHighGoal){
             double setPoint = ShooterSubsystem.setPoint;
             double RPM = getFlywheelRPM();
             // 4000 RPM = set point at which we switch PIDs (value found through testing)
             shootFlywheel((setPoint < 4000.0) ? ShooterConstants.LOW_F + lowPIDController.calculate(RPM, setPoint) : ShooterConstants.HIGH_F + highPIDController.calculate(RPM, setPoint));
+        } else if(ShooterSubsystem.isShooting) {
+            shootFlywheel(ShooterConstants.SHOOTER_LOW_SPEED);
         } else {
             stopFlywheel();
         }
-    }
-
-    public void shootFlywheel() {
-        shooterRightFalcon.set(ControlMode.PercentOutput, ShooterConstants.SHOOTER_SPEED);
-        shooterStatus = ShooterStatus.FORWARD;
     }
 
     public void shootFlywheel(double speed) {
@@ -77,11 +75,6 @@ public class ShooterSubsystem extends SubsystemBase {
     public void setFlywheelVelocity(double vel){
         shooterRightFalcon.set(ControlMode.Velocity, vel);
         shooterStatus = ShooterStatus.FORWARD;
-    }
-
-    public void reverseFlywheel() {
-        shooterRightFalcon.set(ControlMode.PercentOutput, -ShooterConstants.SHOOTER_SPEED);
-        shooterStatus = ShooterStatus.BACKWARDS;
     }
 
     public void reverseFlywheel(double speed) {

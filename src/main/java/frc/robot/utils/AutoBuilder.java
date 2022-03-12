@@ -17,6 +17,8 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -28,16 +30,15 @@ import frc.robot.Robot.AutoModes;
 import frc.robot.commands.commandgroups.AllInCommand;
 import frc.robot.commands.intake.IntakeInCommand;
 import frc.robot.commands.intake.ToggleIntakeCommand;
-import frc.robot.commands.shooter.ToggleFlywheelPIDCommand;
+import frc.robot.commands.shooter.ToggleFlywheelHighCommand;
 import frc.robot.commands.turret.HomeTurretCommand;
 import frc.robot.commands.turret.ToggleTurretLockCommand;
+import frc.robot.commands.turret.TurretLockCommand;
 import frc.robot.subsystems.ShooterSubsystem;
 
-/** Add your docs here. */
 public class AutoBuilder {
     private RobotContainer robotContainer;
     private AutoModes autoMode;
-    // private Trajectory trajectory;
 
     private ParallelCommandGroup command;
     private SequentialCommandGroup subsystemCommandGroup;
@@ -47,14 +48,12 @@ public class AutoBuilder {
     private void twoBallAuto() {
         subsystemCommandGroup.addCommands(
                 new ToggleIntakeCommand(robotContainer.intakeSubsystem),
-                new AllInCommand(robotContainer.neckSubsystem, robotContainer.intakeSubsystem).withTimeout(3.0),
+                new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(3.0),
                 new ToggleIntakeCommand(robotContainer.intakeSubsystem), 
-                new ToggleTurretLockCommand(robotContainer.turretSubsystem), 
-                new ToggleFlywheelPIDCommand(), 
-                new WaitCommand(2.0), 
-                new AllInCommand(robotContainer.neckSubsystem, robotContainer.intakeSubsystem).withTimeout(1.0), 
-                new ToggleFlywheelPIDCommand(), 
-                new ToggleTurretLockCommand(robotContainer.turretSubsystem), 
+                new ToggleFlywheelHighCommand(), 
+                new WaitCommand(2.0).alongWith(new TurretLockCommand(robotContainer.turretSubsystem)), 
+                new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(1.0), 
+                new ToggleFlywheelHighCommand(), 
                 new HomeTurretCommand(robotContainer.turretSubsystem)
                 );
 
