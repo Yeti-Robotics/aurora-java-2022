@@ -120,7 +120,7 @@ public class RobotContainer {
         setConditionalJoystickButtonWhenPressed(4, new RunCommand(() -> {}), new WinchInAndClimbDownCommand(climberSubsystem));
 
         setConditionalJoystickButtonWhenPressed(10, new SnapTurretRightCommand(turretSubsystem), new RunCommand(() -> {}));
-        setJoystickButtonWhenPressed(5, new RunCommand(() -> shooterMode = !shooterMode));
+        setJoystickButtonWhenPressed(5, new StartEndCommand(() -> shooterMode = !shooterMode, () -> {}));
     }
 
     private double getLeftY() {

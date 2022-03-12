@@ -163,6 +163,8 @@ public final class Constants {
         public static final double TURRET_F = 0.0;
         public static final double TURRET_MAX_RIGHT = 54.59563446044922; 
         public static final double TURRET_MAX_LEFT = -54.59563446044922;
+        public static final double TURRET_45_RIGHT = TurretConstants.TURRET_MAX_RIGHT / 2.0; // ???
+        public static final double TURRET_45_LEFT = TurretConstants.TURRET_MAX_LEFT / 2.0; // ???
         public static final double TURRET_TOLERANCE = 1.0; // tolerance for checking encoder limits
         public static final double LIMELIGHT_TOLERANCE = 0.1; // tolerance for alignment of target using limelight
     }
