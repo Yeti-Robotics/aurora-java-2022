@@ -104,23 +104,8 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-        setJoystickButtonWhileHeld(6, new AllOutCommand(intakeSubsystem, neckSubsystem));
-        setJoystickButtonWhileHeld(1, new AllInCommand(neckSubsystem, intakeSubsystem));
-
-        setJoystickButtonWhenPressed(7, new ToggleTurretLockCommand(turretSubsystem).andThen(new HomeTurretCommand(turretSubsystem)));
-        setJoystickButtonWhenPressed(2, new ToggleFlywheelPIDCommand());
-
-        setJoystickButtonWhileHeld(8, new WinchOutCommand(climberSubsystem));
-        setJoystickButtonWhileHeld(3, new WinchInCommand(climberSubsystem));
-
-        setJoystickButtonWhileHeld(9, new ClimbUpCommand(climberSubsystem));
-        setJoystickButtonWhileHeld(4, new ClimbDownCommand(climberSubsystem));
-
-        setJoystickButtonWhenPressed(10, new ToggleStaticHooksCommand(climberSubsystem));
+        setConditionalButton(1, new AllInCommand(neckSubsystem, intakeSubsystem), ActiveState.WHILE_HELD, new ToggleIntakeCommand(intakeSubsystem), ActiveState.WHEN_PRESSED);
         setJoystickButtonWhenPressed(5, new StartEndCommand(() -> mode = !mode, () -> {}));
-
-        setJoystickButtonWhenPressed(11, new ToggleShiftCommand(shiftingSubsystem));
-        setJoystickButtonWhenPressed(12, new ToggleIntakeCommand(intakeSubsystem));
     }
 
     private double getLeftY() {
@@ -173,11 +158,10 @@ public class RobotContainer {
             Command trueCommand,
             ActiveState trueActiveState,
             Command falseCommand,
-            ActiveState falseActiveState,
-            BooleanSupplier booleanSupplier
+            ActiveState falseActiveState
     ) {
         new JoyButton(driverStationJoystick, button)
-                .conditionalPressed(trueCommand, trueActiveState, falseCommand, falseActiveState, booleanSupplier);
+                .conditionalPressed(trueCommand, trueActiveState, falseCommand, falseActiveState, () -> mode);
     }
 
   /**
