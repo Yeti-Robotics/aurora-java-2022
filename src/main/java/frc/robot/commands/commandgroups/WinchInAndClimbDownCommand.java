@@ -26,7 +26,7 @@ public class WinchInAndClimbDownCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (ShiftingSubsystem.shiftStatus == ShiftStatus.HIGH && !climberSubsystem.getLimitSwitch()){
+    if (ShiftingSubsystem.shiftStatus == ShiftStatus.HIGH && !climberSubsystem.getMagSwitch()){
       climberSubsystem.climbDown();
       climberSubsystem.moveWinch(-ClimberConstants.CLIMBER_WINCH_SPEED); 
     }

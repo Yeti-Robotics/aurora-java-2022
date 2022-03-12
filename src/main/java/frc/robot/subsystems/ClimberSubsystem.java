@@ -25,7 +25,7 @@ public class ClimberSubsystem extends SubsystemBase {
   private DoubleSolenoid climberStationaryHooks;
   private DoubleSolenoid climberMovingHook;
   private DoubleSolenoid climberLeanPiston;
-  private DigitalInput limitSwitch;
+  private DigitalInput magSwitch;
 
   public ClimberSubsystem() {
     climberFalcon1 = new WPI_TalonFX(ClimberConstants.CLIMBER_1);
@@ -33,7 +33,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
     climberWinch = new TalonSRX(ClimberConstants.CLIMBER_WINCH);
 
-    limitSwitch = new DigitalInput(ClimberConstants.CLIMBER_LIMIT_SWITCH);
+    magSwitch = new DigitalInput(ClimberConstants.CLIMBER_LIMIT_SWITCH);
     
     climberStationaryHooks = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.CLIMBER_STATIONARY_PISTONS[0], ClimberConstants.CLIMBER_STATIONARY_PISTONS[1]);
     climberMovingHook = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.CLIMBER_MOVING_PISTON[0], ClimberConstants.CLIMBER_MOVING_PISTON[1]);
@@ -82,7 +82,7 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public void moveWinch(double power) {
-    if(power > 0 && getLimitSwitch()){
+    if(power > 0 && getMagSwitch()){
       stopWinch();
       return;
     }
@@ -110,7 +110,7 @@ public class ClimberSubsystem extends SubsystemBase {
     climberFalcon1.setSelectedSensorPosition(0.0);
   }
 
-  public boolean getLimitSwitch(){
-    return !limitSwitch.get();
+  public boolean getMagSwitch(){
+    return !magSwitch.get();
   }
 }

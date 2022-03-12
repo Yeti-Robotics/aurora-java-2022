@@ -5,9 +5,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
@@ -31,6 +28,10 @@ import frc.robot.commands.turret.SnapTurretLeftCommand;
 import frc.robot.commands.turret.SnapTurretRightCommand;
 import frc.robot.commands.turret.ToggleTurretLockCommand;
 import frc.robot.commands.turret.TurretLockCommand;
+import frc.robot.utils.JoyButton;
+import frc.robot.utils.JoyButton.ActiveState;
+
+import java.util.function.BooleanSupplier;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -120,7 +121,7 @@ public class RobotContainer {
         setConditionalJoystickButtonWhenPressed(4, new RunCommand(() -> {}), new WinchInAndClimbDownCommand(climberSubsystem));
 
         setConditionalJoystickButtonWhenPressed(10, new SnapTurretRightCommand(turretSubsystem), new RunCommand(() -> {}));
-        setJoystickButtonWhenPressed(5, new StartEndCommand(() -> shooterMode = !shooterMode, () -> {}));
+        setJoystickButtonWhenPressed(5, new InstantCommand(() -> shooterMode = !shooterMode));
     }
 
     private double getLeftY() {
@@ -168,6 +169,17 @@ public class RobotContainer {
     private void setConditionalJoystickButtonWhileHeld(int button, Command commandOnTrue, Command commandOnFalse) {
         new JoystickButton(driverStationJoystick, button)
                 .whileHeld(new ConditionalCommand(commandOnTrue, commandOnFalse, () -> shooterMode));
+    }
+
+    private void setConditionalButton(
+            int button,
+            Command trueCommand,
+            ActiveState trueActiveState,
+            Command falseCommand,
+            ActiveState falseActiveState
+    ) {
+        new JoyButton(driverStationJoystick, button)
+                .conditionalPressed(trueCommand, trueActiveState, falseCommand, falseActiveState, () -> mode);
     }
 
   /**
