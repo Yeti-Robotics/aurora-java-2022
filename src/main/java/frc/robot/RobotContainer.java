@@ -23,7 +23,7 @@ import frc.robot.commands.commandgroups.AllInCommand;
 import frc.robot.commands.commandgroups.AllOutCommand;
 import frc.robot.commands.intake.ToggleIntakeCommand;
 import frc.robot.commands.shifting.ToggleShiftCommand;
-import frc.robot.commands.shooter.FlywheelPIDCommand;
+import frc.robot.commands.shooter.ToggleFlywheelPIDCommand;
 import frc.robot.commands.turret.HomeTurretCommand;
 import frc.robot.commands.turret.ToggleTurretLockCommand;
 import frc.robot.commands.turret.TurretLockCommand;
@@ -100,17 +100,12 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-        // setConditionalJoystickButtonWhileHeld(6, new AllOutCommand(intakeSubsystem,
-        // neckSubsystem), new AllInCommand(neckSubsystem, intakeSubsystem));
         setJoystickButtonWhileHeld(6, new AllOutCommand(intakeSubsystem, neckSubsystem));
         setJoystickButtonWhileHeld(1, new AllInCommand(neckSubsystem, intakeSubsystem));
 
-        setJoystickButtonWhenPressed(7,
-                new ToggleTurretLockCommand(turretSubsystem).andThen(new HomeTurretCommand(turretSubsystem)));
-        setJoystickButtonWhileHeld(2, new FlywheelPIDCommand(shooterSubsystem));
+        setJoystickButtonWhenPressed(7, new ToggleTurretLockCommand(turretSubsystem).andThen(new HomeTurretCommand(turretSubsystem)));
+        setJoystickButtonWhenPressed(2, new ToggleFlywheelPIDCommand());
 
-        // setJoystickButtonWhenPressed(3, new StartEndCommand(() -> mode = !mode, () ->
-        // {}));
         setJoystickButtonWhileHeld(8, new WinchOutCommand(climberSubsystem));
         setJoystickButtonWhileHeld(3, new WinchInCommand(climberSubsystem));
 

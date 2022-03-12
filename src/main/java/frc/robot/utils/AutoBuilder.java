@@ -28,6 +28,10 @@ import frc.robot.Robot.AutoModes;
 import frc.robot.commands.commandgroups.AllInCommand;
 import frc.robot.commands.intake.IntakeInCommand;
 import frc.robot.commands.intake.ToggleIntakeCommand;
+import frc.robot.commands.shooter.ToggleFlywheelPIDCommand;
+import frc.robot.commands.turret.HomeTurretCommand;
+import frc.robot.commands.turret.ToggleTurretLockCommand;
+import frc.robot.subsystems.ShooterSubsystem;
 
 /** Add your docs here. */
 public class AutoBuilder {
@@ -43,14 +47,20 @@ public class AutoBuilder {
     private void twoBallAuto() {
         subsystemCommandGroup.addCommands(
                 new ToggleIntakeCommand(robotContainer.intakeSubsystem),
-                new WaitCommand(.25),
-                new AllInCommand(robotContainer.neckSubsystem, robotContainer.intakeSubsystem).withTimeout(5.0),
-                new WaitCommand(1));
+                new AllInCommand(robotContainer.neckSubsystem, robotContainer.intakeSubsystem).withTimeout(3.0),
+                new ToggleIntakeCommand(robotContainer.intakeSubsystem), 
+                new ToggleTurretLockCommand(robotContainer.turretSubsystem), 
+                new ToggleFlywheelPIDCommand(), 
+                new WaitCommand(2.0), 
+                new AllInCommand(robotContainer.neckSubsystem, robotContainer.intakeSubsystem).withTimeout(1.0), 
+                new ToggleFlywheelPIDCommand(), 
+                new ToggleTurretLockCommand(robotContainer.turretSubsystem), 
+                new HomeTurretCommand(robotContainer.turretSubsystem)
+                );
 
-        pathCommandGroup.addCommands(
-                runPathCommand(AutoConstants.twoBallPrimary)
-            );
+        pathCommandGroup.addCommands(runPathCommand(AutoConstants.twoBallPrimary));
 
+        ShooterSubsystem.setPoint = 3435.0;
         command.alongWith(pathCommandGroup, subsystemCommandGroup);
     }
 

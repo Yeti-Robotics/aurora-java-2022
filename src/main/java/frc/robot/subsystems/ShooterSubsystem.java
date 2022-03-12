@@ -6,9 +6,11 @@ import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.utils.Limelight;
 
 public class ShooterSubsystem extends SubsystemBase {
     private TalonFX shooterLeftFalcon;
@@ -19,8 +21,12 @@ public class ShooterSubsystem extends SubsystemBase {
     }
     public static ShooterStatus shooterStatus;
 
-    public static double setPoint = 3910.0;
+    public static double setPoint = 3999.0;
     public static boolean atSetPoint = false;
+    public static boolean isShooting = false;
+
+    private PIDController highPIDController; // high RPM shooting
+    private PIDController lowPIDController; // low RPM shooting
 
     public ShooterSubsystem() {
         shooterLeftFalcon = new TalonFX(ShooterConstants.SHOOTER_LEFT_FALCON);
@@ -36,6 +42,9 @@ public class ShooterSubsystem extends SubsystemBase {
         
         shooterLeftFalcon.setNeutralMode(NeutralMode.Coast);
         shooterRightFalcon.setNeutralMode(NeutralMode.Coast);
+
+        highPIDController = new PIDController(ShooterConstants.HIGH_P, ShooterConstants.HIGH_I, ShooterConstants.HIGH_D);
+        lowPIDController = new PIDController(ShooterConstants.LOW_P, ShooterConstants.LOW_I, ShooterConstants.LOW_D);
     }
 
     @Override
@@ -44,6 +53,15 @@ public class ShooterSubsystem extends SubsystemBase {
         ShooterSubsystem.atSetPoint = getFlywheelRPM() > 1000.0; // for testing !!!!!!!!
         SmartDashboard.putNumber("Flywheel Set Point: ", ShooterSubsystem.setPoint);
         SmartDashboard.putNumber("Flywheel Voltage", shooterRightFalcon.getMotorOutputVoltage());
+
+        if(ShooterSubsystem.isShooting){
+            double setPoint = ShooterSubsystem.setPoint;
+            double RPM = getFlywheelRPM();
+            // 4000 RPM = set point at which we switch PIDs (value found through testing)
+            shootFlywheel((setPoint < 4000.0) ? ShooterConstants.LOW_F + lowPIDController.calculate(RPM, setPoint) : ShooterConstants.HIGH_F + highPIDController.calculate(RPM, setPoint));
+        } else {
+            stopFlywheel();
+        }
     }
 
     public void shootFlywheel() {
@@ -102,5 +120,22 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public void setSetPoint(double setPoint) {
         ShooterSubsystem.setPoint = setPoint;
+    }
+
+    // adjusts RPM setpoint based on Limelight distance
+    public void updateSetPoint(){
+        double dist = Limelight.getDistance(); // inches
+        
+        double lowA = 0.416609;
+        double lowH = -110.128;
+        double lowB = 1.03552;
+        double lowK = 2233.7;
+
+        if(dist <= 133.0){
+            ShooterSubsystem.setPoint = lowA * Math.pow(lowB, dist - lowH) + lowK;
+        } else {
+            // TODO
+            ShooterSubsystem.setPoint = 0.0;
+        }
     }
 }
