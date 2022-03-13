@@ -23,7 +23,7 @@ public class LEDSubsystem extends SubsystemBase {
   public LEDStripStatus stripStatus;
 
   public LEDSubsystem() {
-    ledStrip = new AddressableLED(LEDConstants.LEFT_ADDRESSABLE_LED);
+    ledStrip = new AddressableLED(LEDConstants.ADDRESSABLE_LED);
     ledBuffer = new AddressableLEDBuffer(LEDConstants.LED_COUNT);
 
     ledStrip.setLength(ledBuffer.getLength());
