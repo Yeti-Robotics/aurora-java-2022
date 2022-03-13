@@ -10,38 +10,49 @@ import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ShiftingSubsystem;
 import frc.robot.subsystems.ShiftingSubsystem.ShiftStatus;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class WinchInAndClimbDownCommand extends CommandBase {
-  private ClimberSubsystem climberSubsystem;
-  public WinchInAndClimbDownCommand(ClimberSubsystem climberSubsystem) {
+public class ClimbAndWinchInCommand extends CommandBase {
+  private final ClimberSubsystem climberSubsystem;
+  private ShiftingSubsystem shiftingSubsystem;
+
+  public ClimbAndWinchInCommand(ClimberSubsystem climberSubsystem, ShiftingSubsystem shiftingSubsystem) {
     this.climberSubsystem = climberSubsystem;
     addRequirements(climberSubsystem);
   }
 
+  // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    if(ShiftingSubsystem.shiftStatus == ShiftStatus.LOW){
+      shiftingSubsystem.shiftUp();
+    }
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (ShiftingSubsystem.shiftStatus == ShiftStatus.HIGH && !climberSubsystem.getMagSwitch()){
+    if (climberSubsystem.getLimitSwitch()) {
+      climberSubsystem.stopWinch();
+    } else {
+      climberSubsystem.moveWinch(ClimberConstants.CLIMBER_WINCH_SPEED);
+    }
+
+    if (climberSubsystem.getAverageEncoder() <= ClimberConstants.CLIMBER_TOLERANCE || ShiftingSubsystem.shiftStatus == ShiftStatus.LOW) {
+      climberSubsystem.stopClimb();
+    } else {
       climberSubsystem.climbDown();
-      climberSubsystem.moveWinch(-ClimberConstants.CLIMBER_WINCH_SPEED); 
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    climberSubsystem.stopClimb();
     climberSubsystem.stopWinch();
+    climberSubsystem.stopClimb();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return climberSubsystem.getAverageEncoder() <= ClimberConstants.CLIMBER_TOLERANCE && climberSubsystem.getLimitSwitch();
   }
 }

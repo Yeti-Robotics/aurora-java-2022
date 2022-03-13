@@ -28,6 +28,7 @@ public class Robot extends TimedRobot {
 	private RobotContainer robotContainer;
 
 	public static SendableChooser<AutoModes> autoChooser;
+	private SetLEDToRGBCommand redLedCommand;
 
 	public static enum AutoModes {
 		ONE_BALL, TWO_BALL
@@ -36,6 +37,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void robotInit() {
 		robotContainer = new RobotContainer();
+		redLedCommand  = new SetLEDToRGBCommand(robotContainer.ledSubsystem, 255, 0, 0);
 		robotContainer.turretSubsystem.lockStatus = TurretLockStatus.UNLOCKED;
 
 		autoChooser = new SendableChooser<>();
@@ -60,15 +62,13 @@ public class Robot extends TimedRobot {
 	}
 
 	@Override
-	public void disabledPeriodic() {
-		CommandScheduler.getInstance().run();
-		SetLEDToRGBCommand redLedCommand = new SetLEDToRGBCommand(robotContainer.ledSubsystem, 255, 0, 0);
+	public void disabledPeriodic() {	
 		if (robotContainer.turretSubsystem.getMagSwitch()) {
 			redLedCommand.cancel();
 		} else {
 			redLedCommand.schedule();
 		}
-
+		CommandScheduler.getInstance().run();
 	}
 
 	@Override
@@ -89,6 +89,7 @@ public class Robot extends TimedRobot {
 	public void teleopInit() {
 		robotContainer.turretSubsystem.resetEncoder();
 		robotContainer.climberSubsystem.resetEncoders();
+		robotContainer.shooterMode = true;
 		robotContainer.ledSubsystem.getCurrentCommand().cancel();
 		robotContainer.ledSubsystem.setDefaultCommand(new SetLEDYetiBlueCommand(robotContainer.ledSubsystem));
 

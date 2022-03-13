@@ -21,7 +21,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
     public static ShooterStatus shooterStatus;
 
-    public static double setPoint = 3999.0;
+    public static double setPoint = 5000.0;
     public static boolean atSetPoint = false;
     public static boolean isShooting = false;
     public static boolean isHighGoal = true;

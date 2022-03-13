@@ -64,9 +64,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
         gyro.getRotation2d(),
         getLeftEncoderDistance(),
         getRightEncoderDistance());
-
-    // System.out.printf("NavX: %f\nLeft Distance: %f   Right Distance: %f\nLeft Velocity: %f   Right Velocity: %f\n",
-    //     getHeading(), getLeftEncoderDistance(), getRightEncoderDistance(), getLeftEncoderVelocity(), getRightEncoderVelocity());
   }
 
   public void setMaxOutput(double maxOutput) {

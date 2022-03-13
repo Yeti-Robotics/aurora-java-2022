@@ -14,9 +14,9 @@ public class AllOutCommand extends CommandBase {
   private NeckSubsystem neckSubsystem;
   /** Creates a new AllOutCommand. */
   public AllOutCommand(IntakeSubsystem intakeSubsystem, NeckSubsystem neckSubsystem) {
-    addRequirements(intakeSubsystem, neckSubsystem);
     this.intakeSubsystem = intakeSubsystem;
     this.neckSubsystem = neckSubsystem;
+    addRequirements(neckSubsystem);
   }
 
   // Called when the command is initially scheduled.

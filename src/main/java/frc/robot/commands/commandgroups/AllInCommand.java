@@ -16,7 +16,7 @@ public class AllInCommand extends CommandBase {
 	public AllInCommand(IntakeSubsystem intakeSubsystem, NeckSubsystem neckSubsystem) {
 		this.neckSubsystem = neckSubsystem;
 		this.intakeSubsystem = intakeSubsystem;
-		addRequirements(neckSubsystem, intakeSubsystem);
+		addRequirements(neckSubsystem);
 	}
 
 	// Called when the command is initially scheduled.
