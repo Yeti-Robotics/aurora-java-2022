@@ -15,9 +15,7 @@ import frc.robot.commands.LED.AuroraLEDCommand;
 import frc.robot.commands.LED.BlinkLEDCommand;
 import frc.robot.commands.LED.SetLEDToRGBCommand;
 import frc.robot.commands.LED.SetLEDYetiBlueCommand;
-import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TurretSubsystem.TurretLockStatus;
-import frc.robot.utils.Limelight;
 
 public class Robot extends TimedRobot {
 	private Command m_autonomousCommand;
@@ -29,6 +27,8 @@ public class Robot extends TimedRobot {
 
 	public static SendableChooser<AutoModes> autoChooser;
 	private SetLEDToRGBCommand redLedCommand;
+	private AuroraLEDCommand auroraLedCommand;
+	
 
 	public static enum AutoModes {
 		ONE_BALL, TWO_BALL
@@ -38,6 +38,7 @@ public class Robot extends TimedRobot {
 	public void robotInit() {
 		robotContainer = new RobotContainer();
 		redLedCommand  = new SetLEDToRGBCommand(robotContainer.ledSubsystem, 255, 0, 0);
+		auroraLedCommand = new AuroraLEDCommand(robotContainer.ledSubsystem);
 		robotContainer.turretSubsystem.lockStatus = TurretLockStatus.UNLOCKED;
 
 		autoChooser = new SendableChooser<>();
@@ -57,18 +58,17 @@ public class Robot extends TimedRobot {
 	}
 
 	@Override
-	public void disabledInit() {
-		robotContainer.ledSubsystem.setDefaultCommand(new AuroraLEDCommand(robotContainer.ledSubsystem));
-	}
+	public void disabledInit() {}
 
 	@Override
 	public void disabledPeriodic() {	
 		if (robotContainer.turretSubsystem.getMagSwitch()) {
 			redLedCommand.cancel();
+			auroraLedCommand.schedule();
 		} else {
+			auroraLedCommand.cancel();
 			redLedCommand.schedule();
 		}
-		CommandScheduler.getInstance().run();
 	}
 
 	@Override
