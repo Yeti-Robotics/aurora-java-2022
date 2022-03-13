@@ -12,6 +12,6 @@ public class PhotonVision {
 
     public static double getX(){
         PhotonTrackedTarget latestTarget = camera.getLatestResult().getBestTarget();
-        return (latestTarget == null) ? 0.0 : -latestTarget.getYaw();
+        return (latestTarget == null) ? 0.0 : latestTarget.getYaw();
     }
 }
