@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.utils.Limelight;
+import frc.robot.utils.PhotonVision;
 
 public class ShooterSubsystem extends SubsystemBase {
     private TalonFX shooterLeftFalcon;
@@ -117,7 +118,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     // adjusts RPM setpoint based on Limelight distance
     public void updateSetPoint(){
-        double dist = Limelight.getDistance(); // inches
+        double dist = PhotonVision.getDistance(); // inches
         
         double lowA = 0.416609;
         double lowH = -110.128;
