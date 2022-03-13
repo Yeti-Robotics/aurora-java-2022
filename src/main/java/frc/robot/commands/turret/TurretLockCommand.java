@@ -10,6 +10,7 @@ import frc.robot.Constants.TurretConstants;
 import frc.robot.subsystems.TurretSubsystem;
 import frc.robot.subsystems.TurretSubsystem.TurretLockStatus;
 import frc.robot.utils.Limelight;
+import frc.robot.utils.PhotonVision;
 
 public class TurretLockCommand extends PIDCommand {
 	private final TurretSubsystem turretSubsystem;
@@ -19,7 +20,7 @@ public class TurretLockCommand extends PIDCommand {
 				// Tune values later
 				new PIDController(TurretConstants.TURRET_P, TurretConstants.TURRET_I, TurretConstants.TURRET_D),
 				// This should return the measurement
-				Limelight::getTx,
+				PhotonVision::getX,
 				// This should return the setpoint (can also be a constant)
 				0.0,
 				// This uses the output

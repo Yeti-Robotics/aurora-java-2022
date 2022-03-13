@@ -4,6 +4,14 @@
 
 package frc.robot.utils;
 
-/** Add your docs here. */
+import org.photonvision.PhotonCamera;
+import org.photonvision.targeting.PhotonTrackedTarget;
+
 public class PhotonVision {
+    public static PhotonCamera camera = new PhotonCamera("yetiworm");
+
+    public static double getX(){
+        PhotonTrackedTarget latestTarget = camera.getLatestResult().getBestTarget();
+        return (latestTarget == null) ? 0.0 : -latestTarget.getYaw();
+    }
 }

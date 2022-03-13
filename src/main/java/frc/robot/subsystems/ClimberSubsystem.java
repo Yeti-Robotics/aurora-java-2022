@@ -56,9 +56,7 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   @Override
-  public void periodic() {
-    System.out.println("CLIMBER LIMIT SWTICH: " + getLimitSwitch());
-  }
+  public void periodic() {}
 
   public void climbUp() {
     if (ShiftingSubsystem.shiftStatus == ShiftStatus.HIGH) climberFalcon1.set(ControlMode.PercentOutput, ClimberConstants.CLIMB_SPEED);

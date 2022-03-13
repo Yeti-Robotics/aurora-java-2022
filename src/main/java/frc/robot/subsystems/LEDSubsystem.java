@@ -11,9 +11,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LEDConstants;
 
 public class LEDSubsystem extends SubsystemBase {
-  private final AddressableLED ledStrip;
-  private final AddressableLEDBuffer ledBuffer;
-  private int r,g,b;
+  private AddressableLED leftStrip;
+  private AddressableLEDBuffer leftBuffer;
+  private AddressableLED rightStrip;
+  private AddressableLEDBuffer rightBuffer;
+
+  private int r, g, b;
 
   public enum LEDStripStatus {
     OFF, ON
@@ -22,11 +25,18 @@ public class LEDSubsystem extends SubsystemBase {
   public LEDStripStatus stripStatus;
 
   public LEDSubsystem() {
-    ledStrip = new AddressableLED(LEDConstants.ADDRESSABLE_LED);
-    ledBuffer = new AddressableLEDBuffer(LEDConstants.LED_COUNT);
-    ledStrip.setLength(ledBuffer.getLength());
-    ledStrip.setData(ledBuffer);
-    ledStrip.start();
+    leftStrip = new AddressableLED(LEDConstants.LEFT_ADDRESSABLE_LED);
+    leftBuffer = new AddressableLEDBuffer(LEDConstants.LED_COUNT);
+    rightStrip = new AddressableLED(LEDConstants.RIGHT_ADDRESSABLE_LED);
+    rightBuffer = new AddressableLEDBuffer(LEDConstants.LED_COUNT);
+
+    leftStrip.setLength(leftBuffer.getLength());
+    leftStrip.setData(leftBuffer);
+    leftStrip.start();
+
+    rightStrip.setLength(rightBuffer.getLength());
+    rightStrip.setData(rightBuffer);
+    rightStrip.start();
 
     stripStatus = LEDStripStatus.ON;
     SmartDashboard.putNumber("r", r);
@@ -46,28 +56,33 @@ public class LEDSubsystem extends SubsystemBase {
   }
 
   public void setHSV(int i, int hue, int saturation, int value){
-      ledBuffer.setHSV(i, hue, saturation, value);
+    leftBuffer.setHSV(i, hue, saturation, value);
+    rightBuffer.setHSV(i, hue, saturation, value);
   }
   
   public void setRGB(int i, int red, int green, int blue){
-   ledBuffer.setRGB(i, red, green, blue);
+    leftBuffer.setRGB(i, red, green, blue);
+    rightBuffer.setRGB(i, red, green, blue);
   }
 
   public int getBufferLength(){
-    return ledBuffer.getLength();
+    return leftBuffer.getLength();
   }
 
   public void sendData(){
-    ledStrip.setData(ledBuffer);
+    leftStrip.setData(leftBuffer);
+    rightStrip.setData(rightBuffer);
   }
 
   public void stopLEDStrip() {
-    ledStrip.stop();
+    leftStrip.stop();
+    rightStrip.stop();
     stripStatus = LEDStripStatus.OFF;
   }
 
   public void startLEDStrip() {
-    ledStrip.start();
+    leftStrip.start();
+    rightStrip.start();
     stripStatus = LEDStripStatus.ON;
   }
 

@@ -16,6 +16,7 @@ import frc.robot.commands.LED.BlinkLEDCommand;
 import frc.robot.commands.LED.SetLEDToRGBCommand;
 import frc.robot.commands.LED.SetLEDYetiBlueCommand;
 import frc.robot.subsystems.TurretSubsystem.TurretLockStatus;
+import frc.robot.utils.PhotonVision;
 
 public class Robot extends TimedRobot {
 	private Command m_autonomousCommand;
@@ -55,6 +56,7 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("Flywheel RPM: ", robotContainer.shooterSubsystem.getFlywheelRPM());
 		SmartDashboard.putString("Turret Lock Status: ", ((robotContainer.turretSubsystem.lockStatus == TurretLockStatus.UNLOCKED) ? "UNLOCKED" : "LOCKED"));
 		SmartDashboard.putString("Control Mode: ", (robotContainer.shooterMode) ? "SHOOTING" : "CLIMBING");
+		System.out.println("PhotonVision getX: " + PhotonVision.getX());
 	}
 
 	@Override
