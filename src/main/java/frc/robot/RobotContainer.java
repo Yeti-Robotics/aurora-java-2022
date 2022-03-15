@@ -17,9 +17,10 @@ import frc.robot.commands.climber.ToggleMovingHookCommand;
 import frc.robot.commands.climber.ToggleStaticHooksCommand;
 import frc.robot.commands.climber.WinchInCommand;
 import frc.robot.commands.climber.WinchOutCommand;
+import frc.robot.commands.commandgroups.AllInCommand;
 import frc.robot.commands.commandgroups.AllInCommandGroup;
 import frc.robot.commands.commandgroups.AllOutCommand;
-import frc.robot.commands.commandgroups.AutoMidClimbCommandGroup;
+import frc.robot.commands.commandgroups.AutoHighClimbCommandGroup;
 import frc.robot.commands.intake.ToggleIntakeCommand;
 import frc.robot.commands.shifting.ToggleShiftCommand;
 import frc.robot.commands.shooter.ToggleFlywheelHighCommand;
@@ -108,10 +109,10 @@ public class RobotContainer {
 
     private void configureButtonBindings() {
         setJoystickButtonWhenPressed(12, new ToggleIntakeCommand(intakeSubsystem));
-        setConditionalButton(11, new ToggleShiftCommand(shiftingSubsystem), ActiveState.WHEN_PRESSED, new RunCommand(() -> {}), ActiveState.WHEN_PRESSED);
+        setConditionalButton(11, new ToggleShiftCommand(shiftingSubsystem), ActiveState.WHEN_PRESSED, new InstantCommand(), ActiveState.WHEN_PRESSED);
 
-        setConditionalButton(6, new AllOutCommand(intakeSubsystem, neckSubsystem), ActiveState.WHILE_HELD, new ClimbUpCommand(climberSubsystem, ClimberConstants.CLIMBER_HEIGHT_LIMIT), ActiveState.WHILE_HELD);
-        setConditionalButton(1, new AllInCommandGroup(intakeSubsystem, neckSubsystem), ActiveState.WHILE_HELD, new ClimbDownCommand(climberSubsystem), ActiveState.WHILE_HELD);
+        setConditionalButton(6, new AllOutCommand(intakeSubsystem, neckSubsystem), ActiveState.WHILE_HELD, new ClimbUpCommand(climberSubsystem), ActiveState.WHILE_HELD);
+        setConditionalButton(1, new AllInCommand(intakeSubsystem, neckSubsystem), ActiveState.WHILE_HELD, new ClimbDownCommand(climberSubsystem), ActiveState.WHILE_HELD);
 
         setConditionalButton(7, new ToggleTurretLockCommand(turretSubsystem).andThen(new HomeTurretCommand(turretSubsystem)), ActiveState.WHEN_PRESSED, new WinchOutCommand(climberSubsystem), ActiveState.WHILE_HELD);
         setConditionalButton(2, new ToggleFlywheelHighCommand(), ActiveState.WHEN_PRESSED, new WinchInCommand(climberSubsystem), ActiveState.WHILE_HELD);
@@ -119,10 +120,11 @@ public class RobotContainer {
         setConditionalButton(8, new HomeTurretCommand(turretSubsystem), ActiveState.WHEN_PRESSED, new ToggleShiftCommand(shiftingSubsystem), ActiveState.WHEN_PRESSED);
         setConditionalButton(3, new ToggleFlywheelLowCommand(), ActiveState.WHEN_PRESSED, new ToggleStaticHooksCommand(climberSubsystem), ActiveState.WHEN_PRESSED);
 
-        setConditionalButton(9, new SnapTurretLeftCommand(turretSubsystem), ActiveState.WHEN_PRESSED, new AutoMidClimbCommandGroup(climberSubsystem, intakeSubsystem, shiftingSubsystem, driverStationJoystick), ActiveState.WHEN_PRESSED);
-        setConditionalButton(4, new RunCommand(() -> {}), ActiveState.WHEN_PRESSED, new RunCommand(() -> {}), ActiveState.WHILE_HELD);
+        setConditionalButton(9, new SnapTurretLeftCommand(turretSubsystem), ActiveState.WHEN_PRESSED, new AutoHighClimbCommandGroup(climberSubsystem, driverStationJoystick), ActiveState.WHEN_PRESSED);
+        setConditionalButton(4, new InstantCommand(), ActiveState.WHEN_PRESSED, new InstantCommand(), ActiveState.WHILE_HELD);
 
-        setConditionalButton(10, new SnapTurretRightCommand(turretSubsystem), ActiveState.WHEN_PRESSED, new RunCommand(() -> {}), ActiveState.WHEN_PRESSED);
+        // 10 = kill switch for climbing
+        setConditionalButton(10, new SnapTurretRightCommand(turretSubsystem), ActiveState.WHEN_PRESSED, new InstantCommand(), ActiveState.WHEN_PRESSED);
         setJoystickButtonWhenPressed(5, new InstantCommand(() -> shooterMode = !shooterMode));
     }
 

@@ -19,6 +19,7 @@ import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    public static final double MOTOR_VOLTAGE_COMP = 11.0;
 
     public static final class DriveConstants {
 
@@ -87,7 +88,8 @@ public final class Constants {
 
         public static final double CLIMB_SPEED = 0.3;
         public static final double CLIMBER_LOWER_LIMIT = 0.0;
-        public static final double CLIMBER_HEIGHT_LIMIT = 71545.0; // 5' 6" roughly; keeps underneath limit
+        public static final double CLIMBER_UPRIGHT_HEIGHT_LIMIT = 70000.0; // 5' 6" roughly; keeps underneath limit
+        public static final double CLIMBER_TILTED_HEIGHT_LIMIT = 98450.0;
         public static final double CLIMBER_UPPER_LIMIT = 101331.5; 
         public static final double CLIMBER_TOLERANCE = 15.0; 
         public static final double CLIMBER_WINCH_SPEED = 1.0;

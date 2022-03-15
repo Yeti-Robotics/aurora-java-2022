@@ -1,17 +1,13 @@
 package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.ClimberConstants;
 import frc.robot.subsystems.ClimberSubsystem;
 
 public class ClimbUpCommand extends CommandBase {
-
 	private final ClimberSubsystem climberSubsystem;
-	private double limit;
 
-	public ClimbUpCommand(ClimberSubsystem climberSubsystem, double limit) {
+	public ClimbUpCommand(ClimberSubsystem climberSubsystem) {
 		this.climberSubsystem = climberSubsystem;
-		this.limit = limit;
 		addRequirements(climberSubsystem);
 	}
 
@@ -22,14 +18,12 @@ public class ClimbUpCommand extends CommandBase {
 
 	@Override
 	public void execute() {
-		if (!(climberSubsystem.getAverageEncoder() >= limit - ClimberConstants.CLIMBER_TOLERANCE)) { // || climberSubsystem.getSolenoidPos() == Value.kForward)){
-			climberSubsystem.climbUp();
-		}
+		climberSubsystem.climbUp();
 	}
 
 	@Override
 	public boolean isFinished() {
-		return climberSubsystem.getAverageEncoder() >= limit - ClimberConstants.CLIMBER_TOLERANCE; // || climberSubsystem.getSolenoidPos() == Value.kForward;
+		return false;
 	}
 
 	@Override

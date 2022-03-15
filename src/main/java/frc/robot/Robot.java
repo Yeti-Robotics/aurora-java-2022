@@ -15,6 +15,7 @@ import frc.robot.commands.LED.AuroraLEDCommand;
 import frc.robot.commands.LED.BlinkLEDCommand;
 import frc.robot.commands.LED.SetLEDToRGBCommand;
 import frc.robot.commands.LED.SetLEDYetiBlueCommand;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.TurretSubsystem.TurretLockStatus;
 import frc.robot.utils.PhotonVision;
 
@@ -56,7 +57,8 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("Flywheel RPM: ", robotContainer.shooterSubsystem.getFlywheelRPM());
 		SmartDashboard.putString("Turret Lock Status: ", ((robotContainer.turretSubsystem.lockStatus == TurretLockStatus.UNLOCKED) ? "UNLOCKED" : "LOCKED"));
 		SmartDashboard.putString("Control Mode: ", (robotContainer.shooterMode) ? "SHOOTING" : "CLIMBING");
-		System.out.println("BUTTON 10: " + robotContainer.driverStationJoystick.getRawButton(10));
+		// System.out.println("Limelight: " + PhotonVision.getDistance());
+		System.out.println("Climber: " + robotContainer.climberSubsystem.getAverageEncoder());
 	}
 
 	@Override

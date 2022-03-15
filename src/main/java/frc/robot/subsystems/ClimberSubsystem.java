@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.subsystems.ShiftingSubsystem.ShiftStatus;
 
@@ -34,10 +35,13 @@ public class ClimberSubsystem extends SubsystemBase {
     climberWinch = new TalonSRX(ClimberConstants.CLIMBER_WINCH);
 
     limitSwitch = new DigitalInput(ClimberConstants.CLIMBER_LIMIT_SWITCH);
-    
-    climberStationaryHooks = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.CLIMBER_STATIONARY_PISTONS[0], ClimberConstants.CLIMBER_STATIONARY_PISTONS[1]);
-    climberMovingHook = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.CLIMBER_MOVING_PISTON[0], ClimberConstants.CLIMBER_MOVING_PISTON[1]);
-    climberLeanPiston = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.CLIMBER_LEAN_PISTON[0], ClimberConstants.CLIMBER_LEAN_PISTON[1]);
+
+    climberStationaryHooks = new DoubleSolenoid(PneumaticsModuleType.REVPH,
+        ClimberConstants.CLIMBER_STATIONARY_PISTONS[0], ClimberConstants.CLIMBER_STATIONARY_PISTONS[1]);
+    climberMovingHook = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.CLIMBER_MOVING_PISTON[0],
+        ClimberConstants.CLIMBER_MOVING_PISTON[1]);
+    climberLeanPiston = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.CLIMBER_LEAN_PISTON[0],
+        ClimberConstants.CLIMBER_LEAN_PISTON[1]);
 
     climberStationaryHooks.set(Value.kReverse);
     climberMovingHook.set(Value.kReverse);
@@ -47,42 +51,59 @@ public class ClimberSubsystem extends SubsystemBase {
     climberFalcon2.follow(climberFalcon1);
     climberFalcon2.setInverted(InvertType.FollowMaster);
 
+    climberFalcon1.configVoltageCompSaturation(Constants.MOTOR_VOLTAGE_COMP);
+    climberFalcon2.configVoltageCompSaturation(Constants.MOTOR_VOLTAGE_COMP);
+
     climberFalcon1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
     climberFalcon2.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
 
     climberFalcon1.setNeutralMode(NeutralMode.Brake);
     climberFalcon2.setNeutralMode(NeutralMode.Brake);
+
     climberWinch.setNeutralMode(NeutralMode.Brake);
   }
 
   @Override
-  public void periodic() {}
+  public void periodic() {
+  }
 
   public void climbUp() {
-    if (ShiftingSubsystem.shiftStatus == ShiftStatus.HIGH) climberFalcon1.set(ControlMode.PercentOutput, ClimberConstants.CLIMB_SPEED);
-  }
-  public void climbDown(){
-    if (ShiftingSubsystem.shiftStatus == ShiftStatus.HIGH) climberFalcon1.set(ControlMode.PercentOutput, -ClimberConstants.CLIMB_SPEED);
+    if (ShiftingSubsystem.shiftStatus == ShiftStatus.HIGH &&
+        getAverageEncoder() <= (getLimitSwitch() ? ClimberConstants.CLIMBER_UPRIGHT_HEIGHT_LIMIT
+            : ClimberConstants.CLIMBER_TILTED_HEIGHT_LIMIT)) {
+      climberFalcon1.set(ControlMode.PercentOutput, ClimberConstants.CLIMB_SPEED);
+    } else {
+      stopClimb();
+    }
   }
 
-  public void stopClimb(){
+  public void climbDown() {
+    if (ShiftingSubsystem.shiftStatus == ShiftStatus.HIGH
+        && getAverageEncoder() >= ClimberConstants.CLIMBER_TOLERANCE) {
+      climberFalcon1.set(ControlMode.PercentOutput, -ClimberConstants.CLIMB_SPEED);
+    } else {
+      stopClimb();
+    }
+  }
+
+  public void stopClimb() {
     climberFalcon1.set(ControlMode.PercentOutput, 0.0);
   }
 
-  public void toggleStaticHooks(){
+  public void toggleStaticHooks() {
     climberStationaryHooks.toggle();
   }
 
-  public void toggleMovingHook(){
+  public void toggleMovingHook() {
     climberMovingHook.toggle();
   }
 
-  public void toggleLeanPiston(){
+  public void toggleLeanPiston() {
     climberLeanPiston.toggle();
   }
 
   public void moveWinch(double power) {
-    if(power > 0 && getLimitSwitch()){
+    if (power > 0 && getLimitSwitch()) {
       stopWinch();
       return;
     }
@@ -93,28 +114,34 @@ public class ClimberSubsystem extends SubsystemBase {
     climberWinch.set(ControlMode.PercentOutput, 0.0);
   }
 
-  public double getLeftEncoder(){
+  public double getLeftEncoder() {
     return climberFalcon2.getSelectedSensorPosition();
   }
 
-  public double getRightEncoder(){
+  public double getRightEncoder() {
     return climberFalcon1.getSelectedSensorPosition();
   }
 
-  public double getAverageEncoder(){
+  public double getAverageEncoder() {
     return (getLeftEncoder() + getRightEncoder()) / 2.0;
   }
 
-  public void resetEncoders(){
+  public void resetEncoders() {
     climberFalcon2.setSelectedSensorPosition(0.0);
     climberFalcon1.setSelectedSensorPosition(0.0);
   }
 
-  public boolean getLimitSwitch(){
+  public boolean getLimitSwitch() {
     return !limitSwitch.get();
   }
 
-  public DoubleSolenoid.Value getStationaryPosition(){
+  public DoubleSolenoid.Value getStationaryPosition() {
     return climberStationaryHooks.get();
+  }
+
+  public boolean atEncoderLimit() {
+    return getAverageEncoder() <= ClimberConstants.CLIMBER_TOLERANCE || getAverageEncoder()
+        + ClimberConstants.CLIMBER_TOLERANCE >= (getLimitSwitch() ? ClimberConstants.CLIMBER_UPRIGHT_HEIGHT_LIMIT
+            : ClimberConstants.CLIMBER_TILTED_HEIGHT_LIMIT);
   }
 }
