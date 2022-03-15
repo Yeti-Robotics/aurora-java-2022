@@ -27,7 +27,7 @@ import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Robot.AutoModes;
-import frc.robot.commands.commandgroups.AllInCommand;
+import frc.robot.commands.commandgroups.AllInCommandGroup;
 import frc.robot.commands.intake.IntakeInCommand;
 import frc.robot.commands.intake.ToggleIntakeCommand;
 import frc.robot.commands.shooter.ToggleFlywheelHighCommand;
@@ -48,11 +48,11 @@ public class AutoBuilder {
     private void twoBallAuto() {
         subsystemCommandGroup.addCommands(
                 new ToggleIntakeCommand(robotContainer.intakeSubsystem),
-                new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(3.0),
+                new AllInCommandGroup(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(3.0),
                 new ToggleIntakeCommand(robotContainer.intakeSubsystem), 
                 new ToggleFlywheelHighCommand(), 
                 new WaitCommand(2.0).alongWith(new TurretLockCommand(robotContainer.turretSubsystem)), 
-                new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(1.0), 
+                new AllInCommandGroup(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(1.0), 
                 new ToggleFlywheelHighCommand(), 
                 new HomeTurretCommand(robotContainer.turretSubsystem)
                 );

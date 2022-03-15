@@ -7,9 +7,11 @@ import frc.robot.subsystems.ClimberSubsystem;
 public class ClimbUpCommand extends CommandBase {
 
 	private final ClimberSubsystem climberSubsystem;
+	private double limit;
 
-	public ClimbUpCommand(ClimberSubsystem climberSubsystem) {
+	public ClimbUpCommand(ClimberSubsystem climberSubsystem, double limit) {
 		this.climberSubsystem = climberSubsystem;
+		this.limit = limit;
 		addRequirements(climberSubsystem);
 	}
 
@@ -20,14 +22,14 @@ public class ClimbUpCommand extends CommandBase {
 
 	@Override
 	public void execute() {
-		if (!(climberSubsystem.getAverageEncoder() >= ClimberConstants.CLIMBER_UPPER_LIMIT - ClimberConstants.CLIMBER_TOLERANCE)) { // || climberSubsystem.getSolenoidPos() == Value.kForward)){
+		if (!(climberSubsystem.getAverageEncoder() >= limit - ClimberConstants.CLIMBER_TOLERANCE)) { // || climberSubsystem.getSolenoidPos() == Value.kForward)){
 			climberSubsystem.climbUp();
 		}
 	}
 
 	@Override
 	public boolean isFinished() {
-		return climberSubsystem.getAverageEncoder() >= ClimberConstants.CLIMBER_UPPER_LIMIT - ClimberConstants.CLIMBER_TOLERANCE; // || climberSubsystem.getSolenoidPos() == Value.kForward;
+		return climberSubsystem.getAverageEncoder() >= limit - ClimberConstants.CLIMBER_TOLERANCE; // || climberSubsystem.getSolenoidPos() == Value.kForward;
 	}
 
 	@Override

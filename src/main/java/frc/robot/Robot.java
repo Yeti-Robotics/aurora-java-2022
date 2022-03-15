@@ -56,6 +56,7 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("Flywheel RPM: ", robotContainer.shooterSubsystem.getFlywheelRPM());
 		SmartDashboard.putString("Turret Lock Status: ", ((robotContainer.turretSubsystem.lockStatus == TurretLockStatus.UNLOCKED) ? "UNLOCKED" : "LOCKED"));
 		SmartDashboard.putString("Control Mode: ", (robotContainer.shooterMode) ? "SHOOTING" : "CLIMBING");
+		System.out.println("BUTTON 10: " + robotContainer.driverStationJoystick.getRawButton(10));
 	}
 
 	@Override
@@ -91,7 +92,7 @@ public class Robot extends TimedRobot {
 		robotContainer.turretSubsystem.resetEncoder();
 		robotContainer.climberSubsystem.resetEncoders();
 		robotContainer.shooterMode = true;
-		robotContainer.ledSubsystem.getCurrentCommand().cancel();
+		// robotContainer.ledSubsystem.getCurrentCommand().cancel();
 		robotContainer.ledSubsystem.setDefaultCommand(new SetLEDYetiBlueCommand(robotContainer.ledSubsystem));
 
 		robotContainer.drivetrainSubsystem.resetEncoders();

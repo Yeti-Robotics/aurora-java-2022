@@ -20,7 +20,6 @@ public class PhotonVision {
     public static double getY(){
         PhotonTrackedTarget latestTarget = camera.getLatestResult().getBestTarget();
         return (latestTarget == null) ? 0.0 : latestTarget.getPitch();
-
     }
 
     public static double getDistance(){

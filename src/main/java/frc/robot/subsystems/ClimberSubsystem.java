@@ -113,4 +113,8 @@ public class ClimberSubsystem extends SubsystemBase {
   public boolean getLimitSwitch(){
     return !limitSwitch.get();
   }
+
+  public DoubleSolenoid.Value getStationaryPosition(){
+    return climberStationaryHooks.get();
+  }
 }
