@@ -17,9 +17,13 @@ import frc.robot.subsystems.ShooterSubsystem;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AllInCommandGroup extends SequentialCommandGroup {
+  IntakeSubsystem intakeSubsystem;
+  NeckSubsystem neckSubsystem;
   public AllInCommandGroup(IntakeSubsystem intakeSubsystem, NeckSubsystem neckSubsystem) {
+    this.intakeSubsystem = intakeSubsystem;
+    this.neckSubsystem = neckSubsystem;
     addCommands(
-        new RunCommand(() -> {
+        new InstantCommand(() -> {
           intakeSubsystem.stopRoll();
           neckSubsystem.stopNeck();
         }), 
@@ -34,5 +38,12 @@ public class AllInCommandGroup extends SequentialCommandGroup {
                     neckSubsystem.moveUp(0.3);
                 }),
             () -> ShooterSubsystem.atSetPoint));
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+      // TODO Auto-generated method stub
+      intakeSubsystem.stopRoll();
+      neckSubsystem.stopNeck();
   }
 }
