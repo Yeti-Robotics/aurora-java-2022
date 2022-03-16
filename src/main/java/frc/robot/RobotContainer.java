@@ -114,10 +114,10 @@ public class RobotContainer {
         setConditionalButton(6, new AllOutCommand(intakeSubsystem, neckSubsystem), ActiveState.WHILE_HELD, new ClimbUpCommand(climberSubsystem), ActiveState.WHILE_HELD);
         setConditionalButton(1, new AllInCommand(intakeSubsystem, neckSubsystem), ActiveState.WHILE_HELD, new ClimbDownCommand(climberSubsystem), ActiveState.WHILE_HELD);
 
-        setConditionalButton(7, new ToggleTurretLockCommand(turretSubsystem).andThen(new HomeTurretCommand(turretSubsystem)), ActiveState.WHEN_PRESSED, new WinchOutCommand(climberSubsystem), ActiveState.WHILE_HELD);
+        setConditionalButton(7, new ToggleTurretLockCommand(turretSubsystem).andThen(new HomeTurretCommand(turretSubsystem, false)), ActiveState.WHEN_PRESSED, new WinchOutCommand(climberSubsystem), ActiveState.WHILE_HELD);
         setConditionalButton(2, new ToggleFlywheelHighCommand(), ActiveState.WHEN_PRESSED, new WinchInCommand(climberSubsystem), ActiveState.WHILE_HELD);
 
-        setConditionalButton(8, new HomeTurretCommand(turretSubsystem), ActiveState.WHEN_PRESSED, new ToggleShiftCommand(shiftingSubsystem), ActiveState.WHEN_PRESSED);
+        setConditionalButton(8, new HomeTurretCommand(turretSubsystem, true), ActiveState.WHEN_PRESSED, new ToggleShiftCommand(shiftingSubsystem), ActiveState.WHEN_PRESSED);
         setConditionalButton(3, new ToggleFlywheelLowCommand(), ActiveState.WHEN_PRESSED, new ToggleStaticHooksCommand(climberSubsystem), ActiveState.WHEN_PRESSED);
 
         setConditionalButton(9, new SnapTurretLeftCommand(turretSubsystem), ActiveState.WHEN_PRESSED, new AutoHighClimbCommandGroup(climberSubsystem, driverStationJoystick), ActiveState.WHEN_PRESSED);

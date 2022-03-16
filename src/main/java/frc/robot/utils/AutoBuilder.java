@@ -14,6 +14,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -54,7 +55,7 @@ public class AutoBuilder {
                 new WaitCommand(2.0).alongWith(new TurretLockCommand(robotContainer.turretSubsystem)), 
                 new AllInCommandGroup(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(1.0), 
                 new ToggleFlywheelHighCommand(), 
-                new HomeTurretCommand(robotContainer.turretSubsystem)
+                new HomeTurretCommand(robotContainer.turretSubsystem, false)
                 );
 
         pathCommandGroup.addCommands(runPathCommand(AutoConstants.twoBallPrimary));

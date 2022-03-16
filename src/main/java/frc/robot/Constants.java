@@ -128,7 +128,7 @@ public final class Constants {
         public static final double SHOOTER_KA = 0.033071;
 
         //shooter motor speeds    
-        public static final double SHOOTER_LOW_SPEED = 0.2; // for low goal shots
+        public static final double SHOOTER_LOW_SPEED = 0.225; // for low goal shots
 
         // shooter rpm calc constants
         public static final double PULLEY_RATIO = 48.0 / 36.0; // not completely known
