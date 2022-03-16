@@ -22,7 +22,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
     public static ShooterStatus shooterStatus;
 
-    public static double setPoint = 5000.0;
+    public static double setPoint = 4000.0;
     public static boolean atSetPoint = false;
     public static boolean isShooting = false;
     public static boolean isHighGoal = true;
@@ -52,7 +52,7 @@ public class ShooterSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         // ShooterSubsystem.atSetPoint = Math.abs(getFlywheelRPM() - ShooterSubsystem.setPoint) <= ShooterConstants.RPM_TOLERANCE;
-        ShooterSubsystem.atSetPoint = getFlywheelRPM() > 1000.0; // for testing !!!!!!!!
+        ShooterSubsystem.atSetPoint = shooterStatus == ShooterStatus.FORWARD; // for testing !!!!!!!!
         SmartDashboard.putNumber("Flywheel Set Point: ", ShooterSubsystem.setPoint);
         SmartDashboard.putNumber("Flywheel Voltage", shooterRightFalcon.getMotorOutputVoltage());
 
