@@ -9,12 +9,11 @@ import frc.robot.Constants.LEDConstants;
 import frc.robot.subsystems.LEDSubsystem;
 
 public class AuroraLEDCommand extends CommandBase {
-  /** Creates a new AuroraLEDCommand. */
   private final LEDSubsystem ledSubsystem;
 
   private final int NUM_LED_GROUPS = 12;
   private final int NUM_COLORS = 4;
-  private final int LEDS_PER_COLOR = (LEDConstants.LED_COUNT / NUM_LED_GROUPS) / NUM_COLORS;
+ 
 
   private final int[] boundaries = calcBoundaries();
 
@@ -44,11 +43,9 @@ public class AuroraLEDCommand extends CommandBase {
 
   public AuroraLEDCommand(LEDSubsystem ledSubsystem) {
     this.ledSubsystem = ledSubsystem;
-    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(ledSubsystem);
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {}
 
@@ -76,8 +73,7 @@ public class AuroraLEDCommand extends CommandBase {
     int[] leftColor = getAvgValue(color1, color2);
     int[] rightColor = getAvgValue(color1, color2);
 
-    // [[], [], [], []]
-    // [[], [], [], [], [], [], []]
+    
     // if odd num of gradient leds set the middle to avg of both sides
     if (gradientLength % 2 != 0) gradientColors[(int) centerIndex] = leftColor;
 
@@ -92,7 +88,6 @@ public class AuroraLEDCommand extends CommandBase {
     return gradientColors;
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     if (System.currentTimeMillis() - startTime >= waitTime) {
@@ -139,11 +134,9 @@ public class AuroraLEDCommand extends CommandBase {
     return true;
   }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {}
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;

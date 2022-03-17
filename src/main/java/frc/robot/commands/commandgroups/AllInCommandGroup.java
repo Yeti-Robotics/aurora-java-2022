@@ -13,9 +13,6 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.NeckSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AllInCommandGroup extends SequentialCommandGroup {
   IntakeSubsystem intakeSubsystem;
   NeckSubsystem neckSubsystem;

@@ -20,13 +20,11 @@ public class AllInCommand extends CommandBase {
 		addRequirements(neckSubsystem, intakeSubsystem);
 	}
 
-	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
 		startTime = 0;
 	}
 
-	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
 		intakeSubsystem.rollIn();
@@ -38,14 +36,7 @@ public class AllInCommand extends CommandBase {
 				neckSubsystem.moveUp(0.8);
 			}
 
-			/* 
-			if (System.currentTimeMillis() - startTime <= 100) {
-				neckSubsystem.moveUp(0.8)
-			} else if (System.currentTimeMillis() - startTime <= 2100) {
-				return;
-			}
-			*/
-
+			
 			if (System.currentTimeMillis() - startTime >= 1000) {
 				neckSubsystem.moveUp(0.8);
 				startTime = 0;
@@ -55,7 +46,7 @@ public class AllInCommand extends CommandBase {
 		}
 	}
 
-	// Called once the command ends or is interrupted.
+	
 	@Override
 	public void end(boolean interrupted) {
 		neckSubsystem.stopNeck();

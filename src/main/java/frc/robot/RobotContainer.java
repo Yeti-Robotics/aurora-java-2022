@@ -7,19 +7,17 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.*;
 import frc.robot.utils.AutoBuilder;
 import frc.robot.commands.LED.ShooterLEDCommand;
 import frc.robot.commands.climber.ClimbDownCommand;
 import frc.robot.commands.climber.ClimbUpCommand;
-import frc.robot.commands.climber.ToggleMovingHookCommand;
 import frc.robot.commands.climber.ToggleStaticHooksCommand;
 import frc.robot.commands.climber.WinchInCommand;
 import frc.robot.commands.climber.WinchOutCommand;
 import frc.robot.commands.commandgroups.AllInCommand;
-import frc.robot.commands.commandgroups.AllInCommandGroup;
+
 import frc.robot.commands.commandgroups.AllOutCommand;
 import frc.robot.commands.commandgroups.AutoHighClimbCommandGroup;
 import frc.robot.commands.intake.ToggleIntakeCommand;
@@ -34,7 +32,7 @@ import frc.robot.commands.turret.TurretLockCommand;
 import frc.robot.utils.JoyButton;
 import frc.robot.utils.JoyButton.ActiveState;
 
-import java.util.function.BooleanSupplier;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -58,7 +56,7 @@ public class RobotContainer {
     public LEDSubsystem ledSubsystem;
 
     private double lastInputLeftY = 0.0;
-    public boolean shooterMode = true; // false = turretMode
+    public boolean shooterMode = true; 
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -145,10 +143,6 @@ public class RobotContainer {
         return -driverStationJoystick.getRawAxis(0);
     }
 
-    private double getLeftX() {
-        return driverStationJoystick.getRawAxis(1);
-    }
-
     private double getRightY() {
         return -driverStationJoystick.getRawAxis(2);
     }
@@ -159,23 +153,7 @@ public class RobotContainer {
 
     private void setJoystickButtonWhenPressed(int button, CommandBase command) {
         new JoystickButton(driverStationJoystick, button).whenPressed(command);
-    }
-
-    // commandOnTrue runs when shooterMode is true
-    private void setConditionalJoystickButtonWhenPressed(int button, Command commandOnTrue, Command commandOnFalse) {
-        new JoystickButton(driverStationJoystick, button)
-                .whenPressed(new ConditionalCommand(commandOnTrue, commandOnFalse, () -> shooterMode));
-    }
-
-    private void setJoystickButtonWhileHeld(int button, CommandBase command) {
-        new JoystickButton(driverStationJoystick, button).whileHeld(command);
-    }
-
-    // commandOnTrue runs when shooterMode is true
-    private void setConditionalJoystickButtonWhileHeld(int button, Command commandOnTrue, Command commandOnFalse) {
-        new JoystickButton(driverStationJoystick, button)
-                .whileHeld(new ConditionalCommand(commandOnTrue, commandOnFalse, () -> shooterMode));
-    }
+    } 
 
     private void setConditionalButton(
             int button,

@@ -7,7 +7,6 @@ package frc.robot.commands.LED;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.LEDSubsystem;
 public class RainbowLEDCommand extends CommandBase {
-  /** Creates a new RainbowCommand. */
   private final LEDSubsystem ledSubsystem;
   private int rainbowFirstPixelHue;
   public RainbowLEDCommand(LEDSubsystem ledSubsystem, int rainbowFirstPixelHue) {
@@ -16,9 +15,7 @@ public class RainbowLEDCommand extends CommandBase {
     addRequirements(ledSubsystem);
   }
 
-  // Called when the command is initially scheduled.
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     // For every pixel
@@ -36,12 +33,9 @@ public class RainbowLEDCommand extends CommandBase {
       ledSubsystem.sendData();
   }
   
-
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {}
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;

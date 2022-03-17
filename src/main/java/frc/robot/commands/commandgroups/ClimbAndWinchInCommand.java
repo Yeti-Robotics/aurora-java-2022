@@ -19,7 +19,6 @@ public class ClimbAndWinchInCommand extends CommandBase {
     addRequirements(climberSubsystem);
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     if(ShiftingSubsystem.shiftStatus == ShiftStatus.LOW){
@@ -27,7 +26,6 @@ public class ClimbAndWinchInCommand extends CommandBase {
     }
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     if (climberSubsystem.getLimitSwitch()) {
@@ -43,14 +41,12 @@ public class ClimbAndWinchInCommand extends CommandBase {
     }
   }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     climberSubsystem.stopWinch();
     climberSubsystem.stopClimb();
   }
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return climberSubsystem.getAverageEncoder() <= ClimberConstants.CLIMBER_TOLERANCE && climberSubsystem.getLimitSwitch();

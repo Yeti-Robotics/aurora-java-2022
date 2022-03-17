@@ -15,9 +15,8 @@ import frc.robot.commands.LED.AuroraLEDCommand;
 import frc.robot.commands.LED.BlinkLEDCommand;
 import frc.robot.commands.LED.SetLEDToRGBCommand;
 import frc.robot.commands.LED.SetLEDYetiBlueCommand;
-import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.TurretSubsystem.TurretLockStatus;
-import frc.robot.utils.PhotonVision;
+
 
 public class Robot extends TimedRobot {
 	private Command m_autonomousCommand;
@@ -92,7 +91,6 @@ public class Robot extends TimedRobot {
 		robotContainer.turretSubsystem.resetEncoder();
 		robotContainer.climberSubsystem.resetEncoders();
 		robotContainer.shooterMode = true;
-		// robotContainer.ledSubsystem.getCurrentCommand().cancel();
 		robotContainer.ledSubsystem.setDefaultCommand(new SetLEDYetiBlueCommand(robotContainer.ledSubsystem));
 
 		robotContainer.drivetrainSubsystem.resetEncoders();

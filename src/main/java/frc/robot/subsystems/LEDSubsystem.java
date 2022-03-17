@@ -37,14 +37,7 @@ public class LEDSubsystem extends SubsystemBase {
   }
   @Override
   public void periodic() {
-    // super.periodic();
-    // r = (int) SmartDashboard.getNumber("r", r);
-    // g = (int) SmartDashboard.getNumber("g", g);
-    // b = (int) SmartDashboard.getNumber("b", b);
-    // for (int i = 0; i < ledBuffer.getLength(); i++) {
-    //   setRGB(i, r, g, b);
-    // }
-    // sendData();
+    
   }
 
   public void setHSV(int i, int hue, int saturation, int value){

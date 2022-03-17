@@ -10,7 +10,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
-import frc.robot.utils.Limelight;
+
 import frc.robot.utils.PhotonVision;
 
 public class ShooterSubsystem extends SubsystemBase {
@@ -51,7 +51,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // ShooterSubsystem.atSetPoint = Math.abs(getFlywheelRPM() - ShooterSubsystem.setPoint) <= ShooterConstants.RPM_TOLERANCE;
         ShooterSubsystem.atSetPoint = shooterStatus == ShooterStatus.FORWARD; // for testing !!!!!!!!
         SmartDashboard.putNumber("Flywheel Set Point: ", ShooterSubsystem.setPoint);
         SmartDashboard.putNumber("Flywheel Voltage", shooterRightFalcon.getMotorOutputVoltage());
