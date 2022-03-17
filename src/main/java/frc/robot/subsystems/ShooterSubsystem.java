@@ -55,6 +55,7 @@ public class ShooterSubsystem extends SubsystemBase {
         ShooterSubsystem.atSetPoint = shooterStatus == ShooterStatus.FORWARD; // for testing !!!!!!!!
         SmartDashboard.putNumber("Flywheel Set Point: ", ShooterSubsystem.setPoint);
         SmartDashboard.putNumber("Flywheel Voltage", shooterRightFalcon.getMotorOutputVoltage());
+        System.out.println("Flywheel RPM: " + getFlywheelRPM());
 
         if(ShooterSubsystem.isShooting && ShooterSubsystem.isHighGoal){
             double setPoint = ShooterSubsystem.setPoint;

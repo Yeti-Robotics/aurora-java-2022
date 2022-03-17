@@ -57,8 +57,6 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("Flywheel RPM: ", robotContainer.shooterSubsystem.getFlywheelRPM());
 		SmartDashboard.putString("Turret Lock Status: ", ((robotContainer.turretSubsystem.lockStatus == TurretLockStatus.UNLOCKED) ? "UNLOCKED" : "LOCKED"));
 		SmartDashboard.putString("Control Mode: ", (robotContainer.shooterMode) ? "SHOOTING" : "CLIMBING");
-		// System.out.println("Limelight: " + PhotonVision.getDistance());
-		System.out.println("Climber: " + robotContainer.climberSubsystem.getAverageEncoder());
 	}
 
 	@Override

@@ -22,8 +22,7 @@ public class NeckSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // System.out.println("LOWER BB: " + getLowerBeamBreak());
-        // System.out.println("UPPER BB: " + getUpperBeamBreak());
+        System.out.println("UPPER BB: " + getUpperBeamBreak() + ", LOWER BB: " + getLowerBeamBreak());
     }
 
     public void moveUp(){
