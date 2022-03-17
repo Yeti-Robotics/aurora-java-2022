@@ -12,6 +12,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 public class AllInCommand extends CommandBase {
 	private NeckSubsystem neckSubsystem;
 	private IntakeSubsystem intakeSubsystem;
+	private long startTime = 0;
 
 	public AllInCommand(IntakeSubsystem intakeSubsystem, NeckSubsystem neckSubsystem) {
 		this.neckSubsystem = neckSubsystem;
@@ -22,6 +23,7 @@ public class AllInCommand extends CommandBase {
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
+		startTime = 0;
 	}
 
 	// Called every time the scheduler runs while the command is scheduled.
@@ -31,7 +33,23 @@ public class AllInCommand extends CommandBase {
 		neckSubsystem.stopNeck();
 
 		if(ShooterSubsystem.atSetPoint){
-			neckSubsystem.moveUp(0.8);
+			if (!neckSubsystem.getUpperBeamBreak() && startTime == 0) {
+				startTime = System.currentTimeMillis();
+				neckSubsystem.moveUp(0.8);
+			}
+
+			/* 
+			if (System.currentTimeMillis() - startTime <= 100) {
+				neckSubsystem.moveUp(0.8)
+			} else if (System.currentTimeMillis() - startTime <= 2100) {
+				return;
+			}
+			*/
+
+			if (System.currentTimeMillis() - startTime >= 1000) {
+				neckSubsystem.moveUp(0.8);
+				startTime = 0;
+			}
 		} else if(neckSubsystem.getLowerBeamBreak()){
 			neckSubsystem.moveUp(0.3);
 		}

@@ -28,6 +28,7 @@ import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Robot.AutoModes;
+import frc.robot.commands.LED.ShooterLEDCommand;
 import frc.robot.commands.commandgroups.AllInCommandGroup;
 import frc.robot.commands.intake.IntakeInCommand;
 import frc.robot.commands.intake.ToggleIntakeCommand;
@@ -39,6 +40,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 
 public class AutoBuilder {
     private RobotContainer robotContainer;
+    private ShooterLEDCommand shooterLEDCommand;
     private AutoModes autoMode;
 
     private ParallelCommandGroup command;
@@ -51,10 +53,10 @@ public class AutoBuilder {
                 new ToggleIntakeCommand(robotContainer.intakeSubsystem),
                 new AllInCommandGroup(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(3.0),
                 new ToggleIntakeCommand(robotContainer.intakeSubsystem), 
-                new ToggleFlywheelHighCommand(), 
+                new ToggleFlywheelHighCommand(shooterLEDCommand), 
                 new WaitCommand(2.0).alongWith(new TurretLockCommand(robotContainer.turretSubsystem)), 
                 new AllInCommandGroup(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(1.0), 
-                new ToggleFlywheelHighCommand(), 
+                new ToggleFlywheelHighCommand(shooterLEDCommand), 
                 new HomeTurretCommand(robotContainer.turretSubsystem, false)
                 );
 
@@ -81,6 +83,7 @@ public class AutoBuilder {
     // AutoBuilder build tools here
     public void setRobotContainer(RobotContainer robotContainer) {
         this.robotContainer = robotContainer;
+        this.shooterLEDCommand = new ShooterLEDCommand(robotContainer.ledSubsystem);
     }
 
     public void setAutoMode(AutoModes autoMode) {

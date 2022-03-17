@@ -6,11 +6,9 @@ import frc.robot.subsystems.ShooterSubsystem;
 
 public class ShooterLEDCommand extends CommandBase {
     private final LEDSubsystem ledSubsystem;
-    private final ShooterSubsystem shooterSubsystem;
 
-    public ShooterLEDCommand(LEDSubsystem ledSubsystem, ShooterSubsystem shooterSubsystem) {
+    public ShooterLEDCommand(LEDSubsystem ledSubsystem) {
         this.ledSubsystem = ledSubsystem;
-        this.shooterSubsystem = shooterSubsystem;
 
         addRequirements(ledSubsystem);
     }

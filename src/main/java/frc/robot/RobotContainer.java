@@ -11,6 +11,7 @@ import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.*;
 import frc.robot.utils.AutoBuilder;
+import frc.robot.commands.LED.ShooterLEDCommand;
 import frc.robot.commands.climber.ClimbDownCommand;
 import frc.robot.commands.climber.ClimbUpCommand;
 import frc.robot.commands.climber.ToggleMovingHookCommand;
@@ -108,6 +109,7 @@ public class RobotContainer {
      */
 
     private void configureButtonBindings() {
+        ShooterLEDCommand shooterLEDCommand = new ShooterLEDCommand(ledSubsystem);
         setJoystickButtonWhenPressed(12, new ToggleIntakeCommand(intakeSubsystem));
         setConditionalButton(11, new ToggleShiftCommand(shiftingSubsystem), ActiveState.WHEN_PRESSED, new InstantCommand(), ActiveState.WHEN_PRESSED);
 
@@ -115,10 +117,10 @@ public class RobotContainer {
         setConditionalButton(1, new AllInCommand(intakeSubsystem, neckSubsystem), ActiveState.WHILE_HELD, new ClimbDownCommand(climberSubsystem), ActiveState.WHILE_HELD);
 
         setConditionalButton(7, new ToggleTurretLockCommand(turretSubsystem).andThen(new HomeTurretCommand(turretSubsystem, false)), ActiveState.WHEN_PRESSED, new WinchOutCommand(climberSubsystem), ActiveState.WHILE_HELD);
-        setConditionalButton(2, new ToggleFlywheelHighCommand(), ActiveState.WHEN_PRESSED, new WinchInCommand(climberSubsystem), ActiveState.WHILE_HELD);
+        setConditionalButton(2, new ToggleFlywheelHighCommand(shooterLEDCommand), ActiveState.WHEN_PRESSED, new WinchInCommand(climberSubsystem), ActiveState.WHILE_HELD);
 
         setConditionalButton(8, new HomeTurretCommand(turretSubsystem, true), ActiveState.WHEN_PRESSED, new ToggleShiftCommand(shiftingSubsystem), ActiveState.WHEN_PRESSED);
-        setConditionalButton(3, new ToggleFlywheelLowCommand(), ActiveState.WHEN_PRESSED, new ToggleStaticHooksCommand(climberSubsystem), ActiveState.WHEN_PRESSED);
+        setConditionalButton(3, new ToggleFlywheelLowCommand(shooterLEDCommand), ActiveState.WHEN_PRESSED, new ToggleStaticHooksCommand(climberSubsystem), ActiveState.WHEN_PRESSED);
 
         setConditionalButton(9, new SnapTurretLeftCommand(turretSubsystem), ActiveState.WHEN_PRESSED, new AutoHighClimbCommandGroup(climberSubsystem, driverStationJoystick), ActiveState.WHEN_PRESSED);
         setConditionalButton(4, new InstantCommand(), ActiveState.WHEN_PRESSED, new InstantCommand(), ActiveState.WHILE_HELD);
