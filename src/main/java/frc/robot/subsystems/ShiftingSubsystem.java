@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 
@@ -17,7 +16,7 @@ public class ShiftingSubsystem extends SubsystemBase {
 
     public ShiftingSubsystem() {
         shifter = new DoubleSolenoid(PneumaticsModuleType.REVPH, DriveConstants.SOLENOID_SHIFTER[0], DriveConstants.SOLENOID_SHIFTER[1]);
-        shiftStatus = (shifter.get() == Value.kForward) ? ShiftStatus.HIGH : ShiftStatus.LOW;
+        shiftUp();
     }
 
     public void shiftUp() {

@@ -12,9 +12,8 @@ public class AuroraLEDCommand extends CommandBase {
   /** Creates a new AuroraLEDCommand. */
   private final LEDSubsystem ledSubsystem;
 
-  private final int NUM_LED_GROUPS = 6;
+  private final int NUM_LED_GROUPS = 12;
   private final int NUM_COLORS = 4;
-  private final int LEDS_PER_COLOR = (LEDConstants.LED_COUNT / NUM_LED_GROUPS) / NUM_COLORS;
 
   private final int[] boundaries = calcBoundaries();
 

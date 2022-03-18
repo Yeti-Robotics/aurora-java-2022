@@ -11,9 +11,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LEDConstants;
 
 public class LEDSubsystem extends SubsystemBase {
-  private final AddressableLED ledStrip;
-  private final AddressableLEDBuffer ledBuffer;
-  private int r,g,b;
+  private AddressableLED ledStrip;
+  private AddressableLEDBuffer ledBuffer;
+
+  private int r, g, b;
 
   public enum LEDStripStatus {
     OFF, ON
@@ -24,6 +25,7 @@ public class LEDSubsystem extends SubsystemBase {
   public LEDSubsystem() {
     ledStrip = new AddressableLED(LEDConstants.ADDRESSABLE_LED);
     ledBuffer = new AddressableLEDBuffer(LEDConstants.LED_COUNT);
+
     ledStrip.setLength(ledBuffer.getLength());
     ledStrip.setData(ledBuffer);
     ledStrip.start();
@@ -35,22 +37,14 @@ public class LEDSubsystem extends SubsystemBase {
   }
   @Override
   public void periodic() {
-    // super.periodic();
-    // r = (int) SmartDashboard.getNumber("r", r);
-    // g = (int) SmartDashboard.getNumber("g", g);
-    // b = (int) SmartDashboard.getNumber("b", b);
-    // for (int i = 0; i < ledBuffer.getLength(); i++) {
-    //   setRGB(i, r, g, b);
-    // }
-    // sendData();
   }
 
   public void setHSV(int i, int hue, int saturation, int value){
-      ledBuffer.setHSV(i, hue, saturation, value);
+    ledBuffer.setHSV(i, hue, saturation, value);
   }
   
   public void setRGB(int i, int red, int green, int blue){
-   ledBuffer.setRGB(i, red, green, blue);
+    ledBuffer.setRGB(i, red, green, blue);
   }
 
   public int getBufferLength(){

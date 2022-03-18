@@ -4,25 +4,20 @@
 
 package frc.robot;
 
-import java.io.IOException;
-import java.nio.file.Path;
-
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.CompressorConfigType;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.LED.AuroraLEDCommand;
 import frc.robot.commands.LED.BlinkLEDCommand;
+import frc.robot.commands.LED.SetLEDToRGBCommand;
 import frc.robot.commands.LED.SetLEDYetiBlueCommand;
+import frc.robot.commands.turret.HomeTurretCommand;
 import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.TurretSubsystem;
+import frc.robot.subsystems.TurretSubsystem.TurretLockStatus;
 
 public class Robot extends TimedRobot {
 	private Command m_autonomousCommand;
@@ -32,40 +27,27 @@ public class Robot extends TimedRobot {
 
 	private RobotContainer robotContainer;
 
-	private String trajectoryJSON = "insert json here"; //No path is loaded yet
-	public static Trajectory trajectory = new Trajectory();
+	public static SendableChooser<AutoModes> autoChooser;
+	private SetLEDToRGBCommand redLedCommand;
+	private AuroraLEDCommand auroraLedCommand;
 
-	public Robot() {
-		// addPeriodic(() -> {
-			// if (ShooterSubsystem.isShooting) {
-				// double kF = robotContainer.shooterSubsystem.getFeedForward();
-				// System.out.println("kF: " + kF);
-				// robotContainer.shooterSubsystem.setFlywheelVelocity(kF);
-
-				// double RPM = robotContainer.shooterSubsystem.getFlywheelRPM();
-				// double setPoint = ShooterSubsystem.setPoint;
-				// double error = Math.abs(setPoint - RPM); 
-				// if(RPM > setPoint){
-				// 	robotContainer.shooterSubsystem.shootFlywheel(0.0);
-				// } else {
-				// 	robotContainer.shooterSubsystem.shootFlywheel(ShooterConstants.SHOOTER_SPEED);
-				// }
-			// } else {
-			// 	robotContainer.shooterSubsystem.stopFlywheel();
-			// }
-		// }, 0.01, 0.005); // every 5ms with a 5ms offset so timing doesn't conflict with robotPeriodic // (every 20ms)
+	public static enum AutoModes {
+		ONE_BALL, TWO_BALL, TWO_BALL_ALTERNATIVE
 	}
 
 	@Override
 	public void robotInit() {
 		robotContainer = new RobotContainer();
+		redLedCommand = new SetLEDToRGBCommand(robotContainer.ledSubsystem, 255, 0, 0);
+		auroraLedCommand = new AuroraLEDCommand(robotContainer.ledSubsystem);
+		robotContainer.turretSubsystem.lockStatus = TurretLockStatus.UNLOCKED;
 
-		try {
-			Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-			trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-		} catch (IOException ex) {
-			DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
-		}
+		autoChooser = new SendableChooser<>();
+		autoChooser.setDefaultOption("ONE_BALL", AutoModes.ONE_BALL);
+		autoChooser.addOption("ONE_BALL", AutoModes.ONE_BALL);
+		autoChooser.addOption("TWO_BALL", AutoModes.TWO_BALL);
+		autoChooser.addOption("TWO_BALL_ALTERNATIVE", AutoModes.TWO_BALL_ALTERNATIVE);
+		SmartDashboard.putData("Auto Chooser", autoChooser);
 	}
 
 	@Override
@@ -73,24 +55,32 @@ public class Robot extends TimedRobot {
 		CommandScheduler.getInstance().run();
 		SmartDashboard.putNumber("Current Pressure: ", robotContainer.pneumaticsSubsystem.getPressure());
 		SmartDashboard.putNumber("Flywheel RPM: ", robotContainer.shooterSubsystem.getFlywheelRPM());
-		SmartDashboard.putString("Turret Lock Status: ", ((robotContainer.turretSubsystem.lockStatus == robotContainer.turretSubsystem.lockStatus.UNLOCKED) ? "UNLOCKED" : "LOCKED"));
-		SmartDashboard.putBoolean("ShooterSubsystem.isShooting: ", ShooterSubsystem.isShooting);
-		// System.out.println("LIMELIGHT TX: " + Limelight.getTx());
+		SmartDashboard.putString("Turret Lock Status: ",
+				((robotContainer.turretSubsystem.lockStatus == TurretLockStatus.UNLOCKED) ? "UNLOCKED" : "LOCKED"));
+		SmartDashboard.putString("Control Mode: ", (robotContainer.shooterMode) ? "SHOOTING" : "CLIMBING");
 	}
 
 	@Override
 	public void disabledInit() {
-		robotContainer.ledSubsystem.setDefaultCommand(new AuroraLEDCommand(robotContainer.ledSubsystem));
 	}
 
 	@Override
 	public void disabledPeriodic() {
-		CommandScheduler.getInstance().run();
+		if (robotContainer.turretSubsystem.getMagSwitch()) {
+			redLedCommand.cancel();
+			auroraLedCommand.schedule();
+		} else {
+			auroraLedCommand.cancel();
+			redLedCommand.schedule();
+		}
 	}
 
 	@Override
 	public void autonomousInit() {
+		robotContainer.turretSubsystem.resetEncoder();
 		robotContainer.ledSubsystem.setDefaultCommand(new AuroraLEDCommand(robotContainer.ledSubsystem));
+		
+		m_autonomousCommand = robotContainer.getAutonomousCommand();
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.schedule();
 		}
@@ -102,9 +92,17 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopInit() {
-		robotContainer.turretSubsystem.resetEncoder();
+		if (robotContainer.turretSubsystem.getMagSwitch()) {
+			robotContainer.turretSubsystem.resetEncoder();
+		}
 		robotContainer.climberSubsystem.resetEncoders();
-		robotContainer.ledSubsystem.getCurrentCommand().cancel();
+
+		robotContainer.shooterMode = true;
+		ShooterSubsystem.isShooting = false;
+		
+		robotContainer.drivetrainSubsystem.resetEncoders();
+		robotContainer.drivetrainSubsystem.resetGyro();
+
 		robotContainer.ledSubsystem.setDefaultCommand(new SetLEDYetiBlueCommand(robotContainer.ledSubsystem));
 
 		CommandScheduler.getInstance().onCommandFinish(command -> {
@@ -113,10 +111,11 @@ public class Robot extends TimedRobot {
 					beforeBlinkCommand.schedule();
 			}
 		});
-		robotContainer.climberSubsystem.resetEncoders();
+
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.cancel();
 		}
+		new HomeTurretCommand(robotContainer.turretSubsystem, true).schedule();
 	}
 
 	@Override

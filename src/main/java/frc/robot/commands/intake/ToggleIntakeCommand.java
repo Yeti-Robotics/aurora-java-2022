@@ -13,8 +13,6 @@ public class ToggleIntakeCommand extends CommandBase {
   /** Creates a new IntakeUpCommand. */
   public ToggleIntakeCommand(IntakeSubsystem intakeSubsystem) {
     this.intakeSubsystem = intakeSubsystem;
-    addRequirements(intakeSubsystem);
-    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
@@ -26,8 +24,7 @@ public class ToggleIntakeCommand extends CommandBase {
   public void execute() {
     if (intakeSubsystem.getIntakePostion() == IntakeStatus.OUT) {
       intakeSubsystem.retract();
-    } 
-    else {
+    } else {
       intakeSubsystem.extend();
     }
   }

@@ -11,11 +11,9 @@ public class GradientLEDCommand extends CommandBase {
   /** Creates a new GradientLEDCommand. */
   private final LEDSubsystem ledSubsystem;
   private int firstHueValue;
-  private int lastHueValue;
-  public GradientLEDCommand(LEDSubsystem ledSubsystem, int firstHueValue, int lastHueValue) {
+  public GradientLEDCommand(LEDSubsystem ledSubsystem, int firstHueValue) {
     this.ledSubsystem = ledSubsystem;
     this.firstHueValue = firstHueValue;
-    this.lastHueValue = lastHueValue;
     addRequirements(ledSubsystem);
   }
 
