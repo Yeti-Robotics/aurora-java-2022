@@ -14,14 +14,9 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Robot;
@@ -29,13 +24,9 @@ import frc.robot.RobotContainer;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Robot.AutoModes;
 import frc.robot.commands.LED.ShooterLEDCommand;
-import frc.robot.commands.commandgroups.AllInCommandGroup;
-import frc.robot.commands.intake.IntakeInCommand;
+import frc.robot.commands.commandgroups.AllInCommand;
 import frc.robot.commands.intake.ToggleIntakeCommand;
 import frc.robot.commands.shooter.ToggleFlywheelHighCommand;
-import frc.robot.commands.turret.HomeTurretCommand;
-import frc.robot.commands.turret.ToggleTurretLockCommand;
-import frc.robot.commands.turret.TurretLockCommand;
 import frc.robot.subsystems.ShooterSubsystem;
 
 public class AutoBuilder {
@@ -51,31 +42,41 @@ public class AutoBuilder {
     private void twoBallAuto() {
         subsystemCommandGroup.addCommands(
                 new ToggleIntakeCommand(robotContainer.intakeSubsystem),
-                new AllInCommandGroup(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(3.0),
-                new ToggleIntakeCommand(robotContainer.intakeSubsystem), 
-                new ToggleFlywheelHighCommand(shooterLEDCommand), 
-                new WaitCommand(2.0).alongWith(new TurretLockCommand(robotContainer.turretSubsystem)), 
-                new AllInCommandGroup(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(1.0), 
-                new ToggleFlywheelHighCommand(shooterLEDCommand), 
-                new HomeTurretCommand(robotContainer.turretSubsystem, false)
-                );
+                new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(3.0),
+                new ToggleIntakeCommand(robotContainer.intakeSubsystem),
+                new ToggleFlywheelHighCommand(shooterLEDCommand),
+                new WaitCommand(2.0),
+                new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(2.0),
+                new ToggleFlywheelHighCommand(shooterLEDCommand));
 
-        pathCommandGroup.addCommands(runPathCommand(AutoConstants.twoBallPrimary));
+        pathCommandGroup.addCommands(
+                runPathCommand(AutoConstants.twoBallPrimary));
+
+        ShooterSubsystem.setPoint = 3500.0;
+        command.alongWith(pathCommandGroup, subsystemCommandGroup);
+    }
+
+    private void twoBallAlternative() {
+        subsystemCommandGroup.addCommands(
+                new ToggleIntakeCommand(robotContainer.intakeSubsystem),
+                new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(3.0),
+                new ToggleIntakeCommand(robotContainer.intakeSubsystem),
+                new ToggleFlywheelHighCommand(shooterLEDCommand),
+                new WaitCommand(2.0),
+                new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(2.0),
+                new ToggleFlywheelHighCommand(shooterLEDCommand));
+
+        pathCommandGroup.addCommands(
+                runPathCommand(AutoConstants.twoBallAlternative));
 
         ShooterSubsystem.setPoint = 3435.0;
         command.alongWith(pathCommandGroup, subsystemCommandGroup);
     }
 
     private void testAuto() {
-        subsystemCommandGroup.addCommands(
-            new ToggleIntakeCommand(robotContainer.intakeSubsystem),
-            new IntakeInCommand(robotContainer.intakeSubsystem).withTimeout(5)
-        );
+        subsystemCommandGroup.addCommands();
 
-        pathCommandGroup.addCommands(
-            runPathCommand("paths/straightForward.wpilib.json"),
-            runPathCommand("paths/leftTurn.wpilib.json")
-        );
+        pathCommandGroup.addCommands();
 
         command.alongWith(pathCommandGroup, subsystemCommandGroup);
     }
@@ -102,7 +103,10 @@ public class AutoBuilder {
             case TWO_BALL:
                 twoBallAuto();
                 break;
-            default: 
+            case TWO_BALL_ALTERNATIVE:
+                twoBallAlternative();
+                break;
+            default:
                 testAuto();
                 break;
         }
@@ -129,9 +133,9 @@ public class AutoBuilder {
                 robotContainer.drivetrainSubsystem::getPose,
                 new RamseteController(AutoConstants.RAMSETE_B, AutoConstants.RAMSETE_ZETA),
                 new SimpleMotorFeedforward(
-                    AutoConstants.AUTO_KS,
-                    AutoConstants.AUTO_KV,
-                    AutoConstants.AUTO_KA),
+                        AutoConstants.AUTO_KS,
+                        AutoConstants.AUTO_KV,
+                        AutoConstants.AUTO_KA),
                 AutoConstants.KINEMATICS,
                 robotContainer.drivetrainSubsystem::getWheelSpeeds,
                 new PIDController(AutoConstants.AUTO_P, 0, 0),
@@ -139,6 +143,7 @@ public class AutoBuilder {
                 robotContainer.drivetrainSubsystem::tankDriveVolts,
                 robotContainer.drivetrainSubsystem);
 
-        return ramseteCommand.beforeStarting(() -> robotContainer.drivetrainSubsystem.resetOdometry(trajectory.getInitialPose()));
+        return ramseteCommand
+                .beforeStarting(() -> robotContainer.drivetrainSubsystem.resetOdometry(trajectory.getInitialPose()));
     }
 }

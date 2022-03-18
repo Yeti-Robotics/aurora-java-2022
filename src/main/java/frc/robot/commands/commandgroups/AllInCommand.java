@@ -38,15 +38,7 @@ public class AllInCommand extends CommandBase {
 				neckSubsystem.moveUp(0.8);
 			}
 
-			/* 
-			if (System.currentTimeMillis() - startTime <= 100) {
-				neckSubsystem.moveUp(0.8)
-			} else if (System.currentTimeMillis() - startTime <= 2100) {
-				return;
-			}
-			*/
-
-			if (System.currentTimeMillis() - startTime >= 1000) {
+			if (System.currentTimeMillis() - startTime >= 500) {
 				neckSubsystem.moveUp(0.8);
 				startTime = 0;
 			}

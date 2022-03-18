@@ -7,10 +7,12 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
-import frc.robot.utils.Limelight;
 import frc.robot.utils.PhotonVision;
 
 public class ShooterSubsystem extends SubsystemBase {
@@ -29,6 +31,9 @@ public class ShooterSubsystem extends SubsystemBase {
 
     private PIDController highPIDController; // high RPM shooting
     private PIDController lowPIDController; // low RPM shooting
+
+    private ShuffleboardTab flywheelTab = Shuffleboard.getTab("Flywheel");
+    private NetworkTableEntry setPointMultiplier = flywheelTab.add("Multiplier", 1.0).getEntry();
 
     public ShooterSubsystem() {
         shooterLeftFalcon = new TalonFX(ShooterConstants.SHOOTER_LEFT_FALCON);
@@ -51,14 +56,12 @@ public class ShooterSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // ShooterSubsystem.atSetPoint = Math.abs(getFlywheelRPM() - ShooterSubsystem.setPoint) <= ShooterConstants.RPM_TOLERANCE;
         ShooterSubsystem.atSetPoint = shooterStatus == ShooterStatus.FORWARD; // for testing !!!!!!!!
         SmartDashboard.putNumber("Flywheel Set Point: ", ShooterSubsystem.setPoint);
         SmartDashboard.putNumber("Flywheel Voltage", shooterRightFalcon.getMotorOutputVoltage());
-        System.out.println("Flywheel RPM: " + getFlywheelRPM());
 
         if(ShooterSubsystem.isShooting && ShooterSubsystem.isHighGoal){
-            double setPoint = ShooterSubsystem.setPoint;
+            double setPoint = ShooterSubsystem.setPoint * setPointMultiplier.getDouble(1.0);
             double RPM = getFlywheelRPM();
             // 4000 RPM = set point at which we switch PIDs (value found through testing)
             shootFlywheel((setPoint < 4000.0) ? ShooterConstants.LOW_F + lowPIDController.calculate(RPM, setPoint) : ShooterConstants.HIGH_F + highPIDController.calculate(RPM, setPoint));

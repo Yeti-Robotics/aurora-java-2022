@@ -53,6 +53,8 @@ public class ClimberSubsystem extends SubsystemBase {
 
     climberFalcon1.configVoltageCompSaturation(Constants.MOTOR_VOLTAGE_COMP);
     climberFalcon2.configVoltageCompSaturation(Constants.MOTOR_VOLTAGE_COMP);
+    climberFalcon1.enableVoltageCompensation(true);
+    climberFalcon2.enableVoltageCompensation(true);
 
     climberFalcon1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
     climberFalcon2.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);

@@ -7,19 +7,16 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.*;
 import frc.robot.utils.AutoBuilder;
 import frc.robot.commands.LED.ShooterLEDCommand;
 import frc.robot.commands.climber.ClimbDownCommand;
 import frc.robot.commands.climber.ClimbUpCommand;
-import frc.robot.commands.climber.ToggleMovingHookCommand;
 import frc.robot.commands.climber.ToggleStaticHooksCommand;
 import frc.robot.commands.climber.WinchInCommand;
 import frc.robot.commands.climber.WinchOutCommand;
 import frc.robot.commands.commandgroups.AllInCommand;
-import frc.robot.commands.commandgroups.AllInCommandGroup;
 import frc.robot.commands.commandgroups.AllOutCommand;
 import frc.robot.commands.commandgroups.AutoHighClimbCommandGroup;
 import frc.robot.commands.intake.ToggleIntakeCommand;
@@ -33,8 +30,6 @@ import frc.robot.commands.turret.ToggleTurretLockCommand;
 import frc.robot.commands.turret.TurretLockCommand;
 import frc.robot.utils.JoyButton;
 import frc.robot.utils.JoyButton.ActiveState;
-
-import java.util.function.BooleanSupplier;
 
 /**
  * This class is where the bulk of the robot should be declared. Since

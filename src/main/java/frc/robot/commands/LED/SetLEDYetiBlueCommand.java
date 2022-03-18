@@ -11,7 +11,6 @@ public class SetLEDYetiBlueCommand extends CommandBase {
   /** Creates a new SetLEDYetiBlueCommand. */
   private final LEDSubsystem ledSubsystem;
   public SetLEDYetiBlueCommand(LEDSubsystem ledSubsystem) {
-    // Use addRequirements() here to declare subsystem dependencies.
     this.ledSubsystem = ledSubsystem; 
     addRequirements(ledSubsystem);
   }
