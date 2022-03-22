@@ -14,10 +14,11 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.LED.AuroraLEDCommand;
 import frc.robot.commands.LED.BlinkLEDCommand;
 import frc.robot.commands.LED.SetLEDToRGBCommand;
-import frc.robot.commands.LED.SetLEDYetiBlueCommand;
+import frc.robot.commands.LED.TeleLEDDefaultCommand;
 import frc.robot.commands.turret.HomeTurretCommand;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TurretSubsystem.TurretLockStatus;
+import frc.robot.utils.PhotonVision;
 
 public class Robot extends TimedRobot {
 	private Command m_autonomousCommand;
@@ -32,7 +33,7 @@ public class Robot extends TimedRobot {
 	private AuroraLEDCommand auroraLedCommand;
 
 	public static enum AutoModes {
-		ONE_BALL, TWO_BALL, TWO_BALL_ALTERNATIVE
+		ONE_BALL, TWO_BALL, TWO_BALL_ALTERNATIVE, TEST_AUTO
 	}
 
 	@Override
@@ -47,6 +48,7 @@ public class Robot extends TimedRobot {
 		autoChooser.addOption("ONE_BALL", AutoModes.ONE_BALL);
 		autoChooser.addOption("TWO_BALL", AutoModes.TWO_BALL);
 		autoChooser.addOption("TWO_BALL_ALTERNATIVE", AutoModes.TWO_BALL_ALTERNATIVE);
+		autoChooser.addOption("TEST_AUTO", AutoModes.TEST_AUTO);
 		SmartDashboard.putData("Auto Chooser", autoChooser);
 	}
 
@@ -78,7 +80,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void autonomousInit() {
 		robotContainer.turretSubsystem.resetEncoder();
-		robotContainer.ledSubsystem.setDefaultCommand(new AuroraLEDCommand(robotContainer.ledSubsystem));
+		robotContainer.ledSubsystem.setDefaultCommand(auroraLedCommand);
 		
 		m_autonomousCommand = robotContainer.getAutonomousCommand();
 		if (m_autonomousCommand != null) {
@@ -99,11 +101,13 @@ public class Robot extends TimedRobot {
 
 		robotContainer.shooterMode = true;
 		ShooterSubsystem.isShooting = false;
+		ShooterSubsystem.setPoint = 3500.0;
 		
 		robotContainer.drivetrainSubsystem.resetEncoders();
 		robotContainer.drivetrainSubsystem.resetGyro();
 
-		robotContainer.ledSubsystem.setDefaultCommand(new SetLEDYetiBlueCommand(robotContainer.ledSubsystem));
+		auroraLedCommand.cancel();
+		robotContainer.ledSubsystem.setDefaultCommand(new TeleLEDDefaultCommand(robotContainer.ledSubsystem));
 
 		CommandScheduler.getInstance().onCommandFinish(command -> {
 			if (command.getName().equals(new BlinkLEDCommand().getName())) {

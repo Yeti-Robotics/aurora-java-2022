@@ -25,6 +25,8 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Robot.AutoModes;
 import frc.robot.commands.LED.ShooterLEDCommand;
 import frc.robot.commands.commandgroups.AllInCommand;
+import frc.robot.commands.drivetrain.DriveForDistanceCommand;
+import frc.robot.commands.drivetrain.TurnToTargetDriveCommand;
 import frc.robot.commands.intake.ToggleIntakeCommand;
 import frc.robot.commands.shooter.ToggleFlywheelHighCommand;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -41,45 +43,56 @@ public class AutoBuilder {
     // Autonomous sequences written here
     private void twoBallAuto() {
         subsystemCommandGroup.addCommands(
-                new ToggleIntakeCommand(robotContainer.intakeSubsystem),
-                new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(3.0),
-                new ToggleIntakeCommand(robotContainer.intakeSubsystem),
-                new ToggleFlywheelHighCommand(shooterLEDCommand),
-                new WaitCommand(2.0),
-                new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(2.0),
-                new ToggleFlywheelHighCommand(shooterLEDCommand));
+            new ToggleIntakeCommand(robotContainer.intakeSubsystem),
+            new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(3.0),
+            new ToggleIntakeCommand(robotContainer.intakeSubsystem),
+            new ToggleFlywheelHighCommand(shooterLEDCommand),
+            new WaitCommand(3.0),
+            new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(2.0),
+            new ToggleFlywheelHighCommand(shooterLEDCommand));
 
         pathCommandGroup.addCommands(
-                runPathCommand(AutoConstants.twoBallPrimary));
+            runPathCommand(AutoConstants.twoBallPrimary),
+            new TurnToTargetDriveCommand(robotContainer.drivetrainSubsystem).withTimeout(3.0));
 
-        ShooterSubsystem.setPoint = 3500.0;
+        ShooterSubsystem.setPoint = 4250.0;
         command.alongWith(pathCommandGroup, subsystemCommandGroup);
     }
 
     private void twoBallAlternative() {
         subsystemCommandGroup.addCommands(
-                new ToggleIntakeCommand(robotContainer.intakeSubsystem),
-                new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(3.0),
-                new ToggleIntakeCommand(robotContainer.intakeSubsystem),
-                new ToggleFlywheelHighCommand(shooterLEDCommand),
-                new WaitCommand(2.0),
-                new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(2.0),
-                new ToggleFlywheelHighCommand(shooterLEDCommand));
+            new ToggleIntakeCommand(robotContainer.intakeSubsystem),
+            new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(3.0),
+            new ToggleIntakeCommand(robotContainer.intakeSubsystem),
+            new ToggleFlywheelHighCommand(shooterLEDCommand),
+            new WaitCommand(3.0), 
+            new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(2.0),
+            new ToggleFlywheelHighCommand(shooterLEDCommand));
 
         pathCommandGroup.addCommands(
-                runPathCommand(AutoConstants.twoBallAlternative));
+            runPathCommand(AutoConstants.twoBallAlternative),
+            new TurnToTargetDriveCommand(robotContainer.drivetrainSubsystem).withTimeout(3.0));
 
-        ShooterSubsystem.setPoint = 3435.0;
+        ShooterSubsystem.setPoint = 4000.0;
         command.alongWith(pathCommandGroup, subsystemCommandGroup);
     }
 
-    private void testAuto() {
-        subsystemCommandGroup.addCommands();
+    private void oneBallAuto() {
+        subsystemCommandGroup.addCommands(
+            new DriveForDistanceCommand(robotContainer.drivetrainSubsystem, 48.0, -0.2, -0.2), 
+            new ToggleFlywheelHighCommand(shooterLEDCommand), 
+            new WaitCommand(1.0), 
+            new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(3.0), 
+            new ToggleFlywheelHighCommand(shooterLEDCommand)
+        );
 
         pathCommandGroup.addCommands();
 
+        ShooterSubsystem.setPoint = 3800;
         command.alongWith(pathCommandGroup, subsystemCommandGroup);
     }
+
+    private void testAuto() {}
 
     // AutoBuilder build tools here
     public void setRobotContainer(RobotContainer robotContainer) {
@@ -98,7 +111,7 @@ public class AutoBuilder {
 
         switch ((Robot.AutoModes) autoMode) {
             case ONE_BALL:
-                testAuto();
+                oneBallAuto();
                 break;
             case TWO_BALL:
                 twoBallAuto();
@@ -106,8 +119,11 @@ public class AutoBuilder {
             case TWO_BALL_ALTERNATIVE:
                 twoBallAlternative();
                 break;
+            case TEST_AUTO: 
+                // testAuto();
+                return new TurnToTargetDriveCommand(robotContainer.drivetrainSubsystem).withTimeout(3.0);
             default:
-                testAuto();
+                oneBallAuto();
                 break;
         }
 

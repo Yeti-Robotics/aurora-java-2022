@@ -12,7 +12,7 @@ public class DriveForDistanceCommand extends CommandBase {
 
     public DriveForDistanceCommand(DrivetrainSubsystem drivetrainSubsystem, double encoderGoal, double leftPower, double rightPower) {
         this.drivetrainSubsystem = drivetrainSubsystem;
-        this.distanceGoal = encoderGoal;
+        this.distanceGoal = Math.abs(encoderGoal);
         this.leftPower = leftPower;
         this.rightPower = rightPower;
         addRequirements(drivetrainSubsystem);
@@ -25,13 +25,12 @@ public class DriveForDistanceCommand extends CommandBase {
 
     @Override
     public void execute() {
-        drivetrainSubsystem.tankDrive(leftPower, rightPower);
-        System.out.println("Distance: " + distanceGoal + "; Encoder: " + this.drivetrainSubsystem.getAverageEncoder());
+        drivetrainSubsystem.cheezyDrive(0.2, 0.0);
     }
 
     @Override
     public boolean isFinished() {
-        return distanceGoal <= this.drivetrainSubsystem.getAverageEncoder();
+        return distanceGoal <= Math.abs(drivetrainSubsystem.getAverageEncoder());
     }
 
     @Override

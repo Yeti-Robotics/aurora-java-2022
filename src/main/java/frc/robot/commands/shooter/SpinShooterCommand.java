@@ -38,7 +38,7 @@ public class SpinShooterCommand extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     shooterSubsystem.stopFlywheel();
-    System.out.println("MAX VEL AT " + (power * 100) + "%: " + maxVel);
+    // System.out.println("MAX VEL AT " + (power * 100) + "%: " + maxVel);
   }
 
   // Returns true when the command should end.

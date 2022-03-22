@@ -138,6 +138,8 @@ public final class Constants {
         public static final double RPM_TOLERANCE = 10.0;
 
         public static final double FLYWHEEL_DIAMETER = 4.0; // inches
+        public static final double SHOOTER_HIGH_DIST = 82.0; // inches; ideal dist from shooter to go high
+        public static final double SHOOTER_DIST_TOLERANCE = 6.0; // inhces; see above
     }
 
     public static final class IntakeConstants {
