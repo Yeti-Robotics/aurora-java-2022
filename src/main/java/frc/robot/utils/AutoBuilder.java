@@ -7,6 +7,8 @@ package frc.robot.utils;
 import java.io.IOException;
 import java.nio.file.Path;
 
+import com.pathplanner.lib.PathPlanner;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -26,9 +28,13 @@ import frc.robot.Robot.AutoModes;
 import frc.robot.commands.LED.ShooterLEDCommand;
 import frc.robot.commands.commandgroups.AllInCommand;
 import frc.robot.commands.drivetrain.DriveForDistanceCommand;
+import frc.robot.commands.drivetrain.TurnForAngleCommand;
 import frc.robot.commands.drivetrain.TurnToTargetDriveCommand;
 import frc.robot.commands.intake.ToggleIntakeCommand;
 import frc.robot.commands.shooter.ToggleFlywheelHighCommand;
+import frc.robot.commands.turret.HomeTurretCommand;
+import frc.robot.commands.turret.ToggleTurretLockCommand;
+import frc.robot.commands.turret.TurretLockCommand;
 import frc.robot.subsystems.ShooterSubsystem;
 
 public class AutoBuilder {
@@ -52,7 +58,7 @@ public class AutoBuilder {
             new ToggleFlywheelHighCommand(shooterLEDCommand));
 
         pathCommandGroup.addCommands(
-            runPathCommand(AutoConstants.twoBallPrimary),
+            runTrajectoryJSON(AutoConstants.twoBallPrimary),
             new TurnToTargetDriveCommand(robotContainer.drivetrainSubsystem).withTimeout(3.0));
 
         ShooterSubsystem.setPoint = 4250.0;
@@ -70,7 +76,7 @@ public class AutoBuilder {
             new ToggleFlywheelHighCommand(shooterLEDCommand));
 
         pathCommandGroup.addCommands(
-            runPathCommand(AutoConstants.twoBallAlternative),
+            runTrajectoryJSON(AutoConstants.twoBallAlternative),
             new TurnToTargetDriveCommand(robotContainer.drivetrainSubsystem).withTimeout(3.0));
 
         ShooterSubsystem.setPoint = 4000.0;
@@ -79,7 +85,7 @@ public class AutoBuilder {
 
     private void oneBallAuto() {
         subsystemCommandGroup.addCommands(
-            new DriveForDistanceCommand(robotContainer.drivetrainSubsystem, 48.0, -0.2, -0.2), 
+            new DriveForDistanceCommand(robotContainer.drivetrainSubsystem, 48.0, -0.2), 
             new ToggleFlywheelHighCommand(shooterLEDCommand), 
             new WaitCommand(1.0), 
             new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(3.0), 
@@ -92,7 +98,30 @@ public class AutoBuilder {
         command.alongWith(pathCommandGroup, subsystemCommandGroup);
     }
 
-    private void testAuto() {}
+    private void testAuto() {
+        subsystemCommandGroup.addCommands(
+            new ToggleTurretLockCommand(robotContainer.turretSubsystem),
+            new ToggleIntakeCommand(robotContainer.intakeSubsystem), 
+            new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(2.0), 
+            new ToggleIntakeCommand(robotContainer.intakeSubsystem), 
+            new WaitCommand(3.0), 
+            new ToggleFlywheelHighCommand(shooterLEDCommand), 
+            new WaitCommand(1.0), 
+            new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(2.0),
+            new ToggleFlywheelHighCommand(shooterLEDCommand), 
+            new HomeTurretCommand(robotContainer.turretSubsystem, true)
+        );
+
+        pathCommandGroup.addCommands(
+            runTrajectoryJSON(AutoConstants.twoBallAlternative), 
+            new DriveForDistanceCommand(robotContainer.drivetrainSubsystem, -0.5, -0.4), 
+            new TurnForAngleCommand(robotContainer.drivetrainSubsystem, 160.0)
+        );
+
+        ShooterSubsystem.setPoint = 3700.0;
+
+        command.alongWith(pathCommandGroup, subsystemCommandGroup).raceWith(new TurretLockCommand(robotContainer.turretSubsystem));
+    }
 
     // AutoBuilder build tools here
     public void setRobotContainer(RobotContainer robotContainer) {
@@ -120,8 +149,8 @@ public class AutoBuilder {
                 twoBallAlternative();
                 break;
             case TEST_AUTO: 
-                // testAuto();
-                return new TurnToTargetDriveCommand(robotContainer.drivetrainSubsystem).withTimeout(3.0);
+                testAuto();
+                break;
             default:
                 oneBallAuto();
                 break;
@@ -130,7 +159,7 @@ public class AutoBuilder {
         return command;
     }
 
-    private Trajectory loadTrajectory(String trajectoryJSON) {
+    private Trajectory loadTrajectoryJSON(String trajectoryJSON) {
         try {
             Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
             Trajectory trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
@@ -141,8 +170,38 @@ public class AutoBuilder {
         }
     }
 
-    private Command runPathCommand(String trajectoryJSON) {
-        Trajectory trajectory = loadTrajectory(trajectoryJSON);
+    private Trajectory loadTrajectoryPath(String trajectoryPath){
+        Trajectory trajectory = PathPlanner.loadPath(AutoConstants.twoBallPrimaryTest, AutoConstants.MAX_SPEED, AutoConstants.MAX_ACCELERATION);
+        System.out.println(trajectory);
+        return trajectory;
+    }
+
+    // for PathWeaver
+    private Command runTrajectoryJSON(String trajectoryJSON) {
+        Trajectory trajectory = loadTrajectoryJSON(trajectoryJSON);
+
+        RamseteCommand ramseteCommand = new RamseteCommand(
+                trajectory,
+                robotContainer.drivetrainSubsystem::getPose,
+                new RamseteController(AutoConstants.RAMSETE_B, AutoConstants.RAMSETE_ZETA),
+                new SimpleMotorFeedforward(
+                        AutoConstants.AUTO_KS,
+                        AutoConstants.AUTO_KV,
+                        AutoConstants.AUTO_KA),
+                AutoConstants.KINEMATICS,
+                robotContainer.drivetrainSubsystem::getWheelSpeeds,
+                new PIDController(AutoConstants.AUTO_P, 0, 0),
+                new PIDController(AutoConstants.AUTO_P, 0, 0),
+                robotContainer.drivetrainSubsystem::tankDriveVolts,
+                robotContainer.drivetrainSubsystem);
+
+        return ramseteCommand
+                .beforeStarting(() -> robotContainer.drivetrainSubsystem.resetOdometry(trajectory.getInitialPose()));
+    }
+
+    // for PathPlanner
+    private Command runTrajectoryPath(String trajectoryPath){
+        Trajectory trajectory = loadTrajectoryPath(trajectoryPath);
 
         RamseteCommand ramseteCommand = new RamseteCommand(
                 trajectory,

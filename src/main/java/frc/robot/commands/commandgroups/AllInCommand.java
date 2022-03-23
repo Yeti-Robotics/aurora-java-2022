@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.NeckSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.IntakeSubsystem.IntakeStatus;
 
 public class AllInCommand extends CommandBase {
 	private NeckSubsystem neckSubsystem;
@@ -29,7 +30,9 @@ public class AllInCommand extends CommandBase {
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-		intakeSubsystem.rollIn();
+		if(intakeSubsystem.getIntakePostion() == IntakeStatus.OUT){
+			intakeSubsystem.rollIn();
+		}
 		neckSubsystem.stopNeck();
 
 		if(ShooterSubsystem.atSetPoint){

@@ -81,6 +81,7 @@ public class Robot extends TimedRobot {
 	public void autonomousInit() {
 		robotContainer.turretSubsystem.resetEncoder();
 		robotContainer.ledSubsystem.setDefaultCommand(auroraLedCommand);
+		robotContainer.turretSubsystem.lockStatus = TurretLockStatus.UNLOCKED;
 		
 		m_autonomousCommand = robotContainer.getAutonomousCommand();
 		if (m_autonomousCommand != null) {
