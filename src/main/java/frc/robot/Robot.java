@@ -16,6 +16,7 @@ import frc.robot.commands.LED.BlinkLEDCommand;
 import frc.robot.commands.LED.SetLEDToRGBCommand;
 import frc.robot.commands.LED.TeleLEDDefaultCommand;
 import frc.robot.commands.turret.HomeTurretCommand;
+import frc.robot.commands.turret.TurretLockCommand;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TurretSubsystem.TurretLockStatus;
 import frc.robot.utils.PhotonVision;
@@ -60,6 +61,7 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putString("Turret Lock Status: ",
 				((robotContainer.turretSubsystem.lockStatus == TurretLockStatus.UNLOCKED) ? "UNLOCKED" : "LOCKED"));
 		SmartDashboard.putString("Control Mode: ", (robotContainer.shooterMode) ? "SHOOTING" : "CLIMBING");
+		System.out.println("getDistance: " + PhotonVision.getDistance() + "; RPM: " + robotContainer.shooterSubsystem.getFlywheelRPM());
 	}
 
 	@Override
@@ -81,8 +83,6 @@ public class Robot extends TimedRobot {
 	public void autonomousInit() {
 		robotContainer.turretSubsystem.resetEncoder();
 		robotContainer.ledSubsystem.setDefaultCommand(auroraLedCommand);
-		robotContainer.turretSubsystem.lockStatus = TurretLockStatus.UNLOCKED;
-		
 		m_autonomousCommand = robotContainer.getAutonomousCommand();
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.schedule();
@@ -102,7 +102,7 @@ public class Robot extends TimedRobot {
 
 		robotContainer.shooterMode = true;
 		ShooterSubsystem.isShooting = false;
-		ShooterSubsystem.setPoint = 3500.0;
+		ShooterSubsystem.setPoint = 3500.0; // 3600
 		
 		robotContainer.drivetrainSubsystem.resetEncoders();
 		robotContainer.drivetrainSubsystem.resetGyro();

@@ -59,7 +59,8 @@ public final class Constants {
         public static final String twoBallPrimary = "paths/twoBallPrimary.wpilib.json";
         public static final String threeBallPrimary = "paths/threeBallPrimary.wpilib.json";
         public static final String twoBallAlternative = "paths/twoBallAlternative.wpilib.json";
-        public static final String fourBall = "fourBall2";
+        public static final String fourBall1 = "paths/fourBallAuto1.wpilib.json";
+        public static final String fourBall2 = "paths/fourBallAuto2.wpilib.json";
     }
 
     public static final class LimelightConstants {

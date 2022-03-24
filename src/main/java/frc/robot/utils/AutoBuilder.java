@@ -17,6 +17,7 @@ import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -100,27 +101,43 @@ public class AutoBuilder {
 
     private void testAuto() {
         subsystemCommandGroup.addCommands(
-            new ToggleTurretLockCommand(robotContainer.turretSubsystem),
             new ToggleIntakeCommand(robotContainer.intakeSubsystem), 
             new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(2.0), 
             new ToggleIntakeCommand(robotContainer.intakeSubsystem), 
-            new WaitCommand(3.0), 
-            new ToggleFlywheelHighCommand(shooterLEDCommand), 
             new WaitCommand(1.0), 
+            new ToggleFlywheelHighCommand(shooterLEDCommand), 
+            new WaitCommand(1.5), 
             new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(2.0),
             new ToggleFlywheelHighCommand(shooterLEDCommand), 
-            new HomeTurretCommand(robotContainer.turretSubsystem, true)
+            new ToggleIntakeCommand(robotContainer.intakeSubsystem), 
+            new WaitCommand(0.5), 
+            new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(1.0),
+            new WaitCommand(1.0),
+            new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(1.0),
+            new ToggleIntakeCommand(robotContainer.intakeSubsystem), 
+            new WaitCommand(6.0), 
+            new ToggleFlywheelHighCommand(shooterLEDCommand), 
+            new WaitCommand(1.5), 
+            new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(2.0),
+            new ToggleFlywheelHighCommand(shooterLEDCommand)
         );
 
         pathCommandGroup.addCommands(
             runTrajectoryJSON(AutoConstants.twoBallAlternative), 
             new DriveForDistanceCommand(robotContainer.drivetrainSubsystem, -0.5, -0.4), 
-            new TurnForAngleCommand(robotContainer.drivetrainSubsystem, 160.0)
+            new TurnForAngleCommand(robotContainer.drivetrainSubsystem, 160.0),
+            new WaitCommand(3.0), 
+            runTrajectoryJSON(AutoConstants.fourBall1), 
+            new InstantCommand(() -> robotContainer.drivetrainSubsystem.setMotorsCoast()),
+            new DriveForDistanceCommand(robotContainer.drivetrainSubsystem, -1.5, -0.5),
+            new InstantCommand(() -> robotContainer.drivetrainSubsystem.setMotorsBrake()),
+            new WaitCommand(0.5),
+            runTrajectoryJSON(AutoConstants.fourBall2)
         );
 
-        ShooterSubsystem.setPoint = 3700.0;
+        ShooterSubsystem.setPoint = 3500.0;
 
-        command.alongWith(pathCommandGroup, subsystemCommandGroup).raceWith(new TurretLockCommand(robotContainer.turretSubsystem));
+        command.alongWith(pathCommandGroup, subsystemCommandGroup);
     }
 
     // AutoBuilder build tools here
