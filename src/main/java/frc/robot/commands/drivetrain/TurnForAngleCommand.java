@@ -13,15 +13,14 @@ public class TurnForAngleCommand extends CommandBase {
 
   public TurnForAngleCommand(DrivetrainSubsystem drivetrainSubsystem, double angle) {
     this.drivetrainSubsystem = drivetrainSubsystem;
-    double initialAngle = drivetrainSubsystem.getHeading();
-    this.angle = initialAngle + angle;
+    this.angle = angle;
 
     addRequirements(drivetrainSubsystem);
   }
 
   @Override
   public void initialize() {
-    System.out.println("TURNING TO " + angle + " FROM " + drivetrainSubsystem.getHeading());
+    drivetrainSubsystem.resetGyro();
   }
 
   @Override

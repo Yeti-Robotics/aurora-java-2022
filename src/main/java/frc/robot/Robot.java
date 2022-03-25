@@ -11,6 +11,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.LED.AuroraLEDCommand;
 import frc.robot.commands.LED.BlinkLEDCommand;
 import frc.robot.commands.LED.SetLEDToRGBCommand;
@@ -18,6 +23,7 @@ import frc.robot.commands.LED.TeleLEDDefaultCommand;
 import frc.robot.commands.turret.HomeTurretCommand;
 import frc.robot.commands.turret.TurretLockCommand;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.TurretSubsystem;
 import frc.robot.subsystems.TurretSubsystem.TurretLockStatus;
 import frc.robot.utils.PhotonVision;
 
@@ -61,7 +67,6 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putString("Turret Lock Status: ",
 				((robotContainer.turretSubsystem.lockStatus == TurretLockStatus.UNLOCKED) ? "UNLOCKED" : "LOCKED"));
 		SmartDashboard.putString("Control Mode: ", (robotContainer.shooterMode) ? "SHOOTING" : "CLIMBING");
-		System.out.println("getDistance: " + PhotonVision.getDistance() + "; RPM: " + robotContainer.shooterSubsystem.getFlywheelRPM());
 	}
 
 	@Override
@@ -84,8 +89,16 @@ public class Robot extends TimedRobot {
 		robotContainer.turretSubsystem.resetEncoder();
 		robotContainer.ledSubsystem.setDefaultCommand(auroraLedCommand);
 		m_autonomousCommand = robotContainer.getAutonomousCommand();
+		SequentialCommandGroup turretAuto = new SequentialCommandGroup(
+			new InstantCommand(() -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED), 
+			new WaitCommand(6.0), 
+			new HomeTurretCommand(robotContainer.turretSubsystem, true), 
+			new WaitCommand(4.5), 
+			new InstantCommand(() -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED)
+		);
+
 		if (m_autonomousCommand != null) {
-			m_autonomousCommand.schedule();
+			new ParallelCommandGroup(m_autonomousCommand.alongWith(new TurretLockCommand(robotContainer.turretSubsystem), turretAuto)).schedule();
 		}
 	}
 

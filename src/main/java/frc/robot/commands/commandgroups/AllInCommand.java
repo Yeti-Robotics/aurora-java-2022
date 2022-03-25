@@ -30,9 +30,7 @@ public class AllInCommand extends CommandBase {
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-		if(intakeSubsystem.getIntakePostion() == IntakeStatus.OUT){
-			intakeSubsystem.rollIn();
-		}
+		intakeSubsystem.rollIn();
 		neckSubsystem.stopNeck();
 
 		if(ShooterSubsystem.atSetPoint){
