@@ -20,6 +20,8 @@ import frc.robot.commands.climber.WinchOutCommand;
 import frc.robot.commands.commandgroups.AllInCommand;
 import frc.robot.commands.commandgroups.AllOutCommand;
 import frc.robot.commands.commandgroups.AutoHighClimbCommandGroup;
+import frc.robot.commands.drivetrain.TurnForAngleCommand;
+import frc.robot.commands.drivetrain.TurnForAnglePIDCommand;
 import frc.robot.commands.drivetrain.TurnToTargetDriveCommand;
 import frc.robot.commands.intake.ToggleIntakeCommand;
 import frc.robot.commands.shifting.ToggleShiftCommand;
@@ -63,8 +65,8 @@ public class RobotContainer {
     public RobotContainer() {
         ledSubsystem = new LEDSubsystem();
         driverStationJoystick = new Joystick(OIConstants.DRIVER_STATION_JOY);
-        shiftingSubsystem = new ShiftingSubsystem();
         intakeSubsystem = new IntakeSubsystem();
+        shiftingSubsystem = new ShiftingSubsystem();
         neckSubsystem = new NeckSubsystem();
         turretSubsystem = new TurretSubsystem();
         shooterSubsystem = new ShooterSubsystem();
@@ -120,7 +122,7 @@ public class RobotContainer {
         setConditionalButton(3, new ToggleFlywheelLowCommand(shooterLEDCommand), ActiveState.WHEN_PRESSED, new ToggleStaticHooksCommand(climberSubsystem), ActiveState.WHEN_PRESSED);
 
         setConditionalButton(9, new SnapTurretLeftCommand(turretSubsystem), ActiveState.WHEN_PRESSED, new AutoHighClimbCommandGroup(climberSubsystem, driverStationJoystick), ActiveState.WHEN_PRESSED);
-        setConditionalButton(4, new SnowfallLEDCommand(ledSubsystem, 100), ActiveState.WHEN_PRESSED, new InstantCommand(), ActiveState.WHILE_HELD);
+        setConditionalButton(4, new TurnForAnglePIDCommand(drivetrainSubsystem, 175.0), ActiveState.WHEN_PRESSED, new InstantCommand(), ActiveState.WHILE_HELD);
 
         // 10 = kill switch for climbing
         setConditionalButton(10, new SnapTurretRightCommand(turretSubsystem), ActiveState.WHEN_PRESSED, new InstantCommand(), ActiveState.WHEN_PRESSED);

@@ -89,11 +89,12 @@ public class Robot extends TimedRobot {
 		robotContainer.turretSubsystem.resetEncoder();
 		robotContainer.ledSubsystem.setDefaultCommand(auroraLedCommand);
 		m_autonomousCommand = robotContainer.getAutonomousCommand();
+
 		SequentialCommandGroup turretAuto = new SequentialCommandGroup(
 			new InstantCommand(() -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED), 
-			new WaitCommand(6.0), 
-			new HomeTurretCommand(robotContainer.turretSubsystem, true), 
 			new WaitCommand(4.5), 
+			new HomeTurretCommand(robotContainer.turretSubsystem, true), 
+			new WaitCommand(5.5), 
 			new InstantCommand(() -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED)
 		);
 

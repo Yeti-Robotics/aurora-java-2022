@@ -22,7 +22,6 @@ public final class Constants {
     public static final double MOTOR_VOLTAGE_COMP = 11.0;
 
     public static final class DriveConstants {
-
         public static final int LEFT_FALCON_1 = 1; // front relative to robot
         public static final int LEFT_FALCON_2 = 2; // rear relative to robot
 
@@ -37,6 +36,10 @@ public final class Constants {
 
         public static final double HIGH_GEAR_RATIO = 6.32; // jvn
         public static final double LOW_GEAR_RATIO = 11.90; // jvn
+
+        public static final double DRIVE_P = 0.024;
+        public static final double DRIVE_I = 0.0;
+        public static final double DRIVE_D = 0.0047;
     }
 
     public static final class AutoConstants {
@@ -59,8 +62,8 @@ public final class Constants {
         public static final String twoBallPrimary = "paths/twoBallPrimary.wpilib.json";
         public static final String threeBallPrimary = "paths/threeBallPrimary.wpilib.json";
         public static final String twoBallAlternative = "paths/twoBallAlternative.wpilib.json";
-        public static final String fourBall1 = "paths/fourBallAuto1.wpilib.json";
-        public static final String fourBall2 = "paths/fourBallAuto2.wpilib.json";
+        public static final String fourBall1 = "fourBall1";
+        public static final String fourBall2 = "fourBall2";
     }
 
     public static final class LimelightConstants {
@@ -147,7 +150,7 @@ public final class Constants {
     public static final class IntakeConstants {
         public static final int INTAKE_FALCON = 9;
         public static final int[] INTAKE_PISTONS_SOLENOID = {2, 3}; 
-        public static final double INTAKE_SPEED = 0.2; 
+        public static final double INTAKE_SPEED = 0.25; 
     }
 
     public static final class NeckConstants {

@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
@@ -25,6 +26,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private DifferentialDrive drive;
   private DriveMode driveMode;
   private DifferentialDriveOdometry odometry;
+
+  private PIDController drivePID;
 
   public enum DriveMode {
     TANK, CHEEZY, ARCADE;
@@ -56,6 +59,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     odometry = new DifferentialDriveOdometry(gyro.getRotation2d());
 
     driveMode = DriveMode.CHEEZY;
+
+    drivePID = new PIDController(DriveConstants.DRIVE_P, DriveConstants.DRIVE_I, DriveConstants.DRIVE_D);
   }
 
   @Override
@@ -173,7 +178,17 @@ public class DrivetrainSubsystem extends SubsystemBase {
     return driveMode;
   }
 
+  public void setDriveMode(DriveMode driveMode){
+    this.driveMode = driveMode;
+  }
+
   public NeutralMode getNeutralMode() {
     return neutralMode;
+  }
+  
+  public void turnToAnglePID(double angle){
+    double output = drivePID.calculate(getHeading(), angle);
+    System.out.println("OUTPUT: " + output);
+    cheezyDrive(0.0, output);
   }
 }

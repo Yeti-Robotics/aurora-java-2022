@@ -30,6 +30,7 @@ import frc.robot.commands.LED.ShooterLEDCommand;
 import frc.robot.commands.commandgroups.AllInCommand;
 import frc.robot.commands.drivetrain.DriveForDistanceCommand;
 import frc.robot.commands.drivetrain.TurnForAngleCommand;
+import frc.robot.commands.drivetrain.TurnForAnglePIDCommand;
 import frc.robot.commands.drivetrain.TurnToTargetDriveCommand;
 import frc.robot.commands.intake.ToggleIntakeCommand;
 import frc.robot.commands.shooter.ToggleFlywheelHighCommand;
@@ -104,13 +105,12 @@ public class AutoBuilder {
             new ToggleIntakeCommand(robotContainer.intakeSubsystem), 
             new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(2.0), 
             new ToggleIntakeCommand(robotContainer.intakeSubsystem), 
-            new WaitCommand(1.0), 
             new InstantCommand(() -> ShooterSubsystem.setPoint = 3200.0),
+            new WaitCommand(0.5), 
             new ToggleFlywheelHighCommand(shooterLEDCommand), 
-            new WaitCommand(1.25), 
+            new WaitCommand(1.5), 
             new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(1.5),
             new ToggleFlywheelHighCommand(shooterLEDCommand),
-            new WaitCommand(0.25), 
             new ToggleIntakeCommand(robotContainer.intakeSubsystem), 
             new WaitCommand(0.5), 
             new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(3.25),
@@ -124,14 +124,9 @@ public class AutoBuilder {
         );
 
         pathCommandGroup.addCommands(
-            runTrajectoryJSON(AutoConstants.twoBallAlternative), 
-            new DriveForDistanceCommand(robotContainer.drivetrainSubsystem, -0.5, -0.4), 
-            new TurnForAngleCommand(robotContainer.drivetrainSubsystem, 160.0),
-            new WaitCommand(2.0), 
-            runTrajectoryJSON(AutoConstants.fourBall1), 
-            new DriveForDistanceCommand(robotContainer.drivetrainSubsystem, -0.5, -0.5),
-            new TurnForAngleCommand(robotContainer.drivetrainSubsystem, 140.0),
-            runTrajectoryJSON(AutoConstants.fourBall2)
+            runTrajectoryPath(AutoConstants.fourBall1), 
+            new WaitCommand(2.0),
+            runTrajectoryPath(AutoConstants.fourBall2)
         );
 
         ShooterSubsystem.setPoint = 3500.0;
@@ -187,8 +182,7 @@ public class AutoBuilder {
     }
 
     private Trajectory loadTrajectoryPath(String trajectoryPath){
-        Trajectory trajectory = PathPlanner.loadPath(AutoConstants.twoBallPrimaryTest, AutoConstants.MAX_SPEED, AutoConstants.MAX_ACCELERATION);
-        System.out.println(trajectory);
+        Trajectory trajectory = PathPlanner.loadPath(trajectoryPath, AutoConstants.MAX_SPEED, AutoConstants.MAX_ACCELERATION);
         return trajectory;
     }
 
