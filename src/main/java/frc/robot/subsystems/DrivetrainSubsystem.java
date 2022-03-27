@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.SerialPort.Port;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.ShiftingSubsystem.ShiftStatus;
 
@@ -40,6 +41,16 @@ public class DrivetrainSubsystem extends SubsystemBase {
     leftFalcon2 = new WPI_TalonFX(DriveConstants.LEFT_FALCON_2);
     rightFalcon1 = new WPI_TalonFX(DriveConstants.RIGHT_FALCON_1);
     rightFalcon2 = new WPI_TalonFX(DriveConstants.RIGHT_FALCON_2);
+
+    leftFalcon1.configVoltageCompSaturation(Constants.MOTOR_VOLTAGE_COMP);
+    leftFalcon2.configVoltageCompSaturation(Constants.MOTOR_VOLTAGE_COMP);
+    rightFalcon1.configVoltageCompSaturation(Constants.MOTOR_VOLTAGE_COMP);
+    rightFalcon2.configVoltageCompSaturation(Constants.MOTOR_VOLTAGE_COMP);
+
+    leftFalcon1.enableVoltageCompensation(true);
+    leftFalcon2.enableVoltageCompensation(true);
+    rightFalcon1.enableVoltageCompensation(true);
+    rightFalcon2.enableVoltageCompensation(true);
 
     leftMotors = new MotorControllerGroup(leftFalcon1, leftFalcon2);
     rightMotors = new MotorControllerGroup(rightFalcon1, rightFalcon2);

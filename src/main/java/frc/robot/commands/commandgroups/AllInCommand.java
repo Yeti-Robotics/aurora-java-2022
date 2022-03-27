@@ -34,15 +34,16 @@ public class AllInCommand extends CommandBase {
 		neckSubsystem.stopNeck();
 
 		if(ShooterSubsystem.atSetPoint){
-			if (!neckSubsystem.getUpperBeamBreak() && startTime == 0) {
-				startTime = System.currentTimeMillis();
-				neckSubsystem.moveUp(0.8);
-			}
+			// if (!neckSubsystem.getUpperBeamBreak() && startTime == 0) {
+			// 	startTime = System.currentTimeMillis();
+			// 	neckSubsystem.moveUp(0.8);
+			// }
 
-			if (System.currentTimeMillis() - startTime >= 500) {
-				neckSubsystem.moveUp(0.8);
-				startTime = 0;
-			}
+			// if (System.currentTimeMillis() - startTime >= 500) {
+			// 	neckSubsystem.moveUp(0.8);
+			// 	startTime = 0;
+			// }
+			neckSubsystem.moveUp(0.6);
 		} else if(neckSubsystem.getLowerBeamBreak()){
 			neckSubsystem.moveUp(0.3);
 		}

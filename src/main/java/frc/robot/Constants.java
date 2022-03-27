@@ -58,10 +58,11 @@ public final class Constants {
         public static final double MAX_ACCELERATION = 3.0; // m/s^2
 
         public static final String EXIT_TARMAC_LEFT = "paths/exitTarmacLeft.wpilib.json";
-        public static final String twoBallPrimaryTest = "twoBallPrimary";
-        public static final String twoBallPrimary = "paths/twoBallPrimary.wpilib.json";
+        public static final String twoBallPrimary = "twoBallPrimary";
         public static final String threeBallPrimary = "paths/threeBallPrimary.wpilib.json";
         public static final String twoBallAlternative = "paths/twoBallAlternative.wpilib.json";
+        public static final String threeBall1 = "threeBall1";
+        public static final String threeBall2 = "threeBall2";
         public static final String fourBall1 = "fourBall1";
         public static final String fourBall2 = "fourBall2";
     }
@@ -113,17 +114,10 @@ public final class Constants {
         public static final int SHOOTER_LEFT_FALCON = 8; // left
         public static final int SHOOTER_RIGHT_FALCON = 7; // right
 
-        // high RPM PID constants
-        public static final double HIGH_P = 0.0012;
-        public static final double HIGH_I = 0.000056;
-        public static final double HIGH_D = 0.0000495;
-        public static final double HIGH_F = 0.45; 
-
-        // low RPM PID constants
-        public static final double LOW_P = 0.0004;
-        public static final double LOW_I = 0.0; 
-        public static final double LOW_D = 0.00002;
-        public static final double LOW_F = 0.37;
+        public static final double SHOOTER_P = 0.00015;
+        public static final double SHOOTER_I = 0.00006;
+        public static final double SHOOTER_D = 0.00001;
+        public static final double SHOOTER_F = 0.4; 
 
         public static final double SHOOTER_MAX_VEL = 12242.5; // in native encoder units per 100 ms
 
@@ -150,7 +144,7 @@ public final class Constants {
     public static final class IntakeConstants {
         public static final int INTAKE_FALCON = 9;
         public static final int[] INTAKE_PISTONS_SOLENOID = {2, 3}; 
-        public static final double INTAKE_SPEED = 0.25; 
+        public static final double INTAKE_SPEED = 0.4; 
     }
 
     public static final class NeckConstants {

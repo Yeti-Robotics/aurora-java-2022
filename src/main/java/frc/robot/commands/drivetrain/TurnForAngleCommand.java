@@ -25,13 +25,12 @@ public class TurnForAngleCommand extends CommandBase {
 
   @Override
   public void execute() {
-    drivetrainSubsystem.turnToAnglePID(angle);
+    drivetrainSubsystem.cheezyDrive(0.0, 0.4);
   }
 
   @Override
   public void end(boolean interrupted) {
     drivetrainSubsystem.stopDrive();
-    System.out.println("GYRO ANGLE: " + drivetrainSubsystem.getHeading());
   }
 
   @Override

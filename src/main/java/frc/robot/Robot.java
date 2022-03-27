@@ -21,6 +21,7 @@ import frc.robot.commands.LED.BlinkLEDCommand;
 import frc.robot.commands.LED.SetLEDToRGBCommand;
 import frc.robot.commands.LED.TeleLEDDefaultCommand;
 import frc.robot.commands.turret.HomeTurretCommand;
+import frc.robot.commands.turret.SnapTurretRightCommand;
 import frc.robot.commands.turret.TurretLockCommand;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
@@ -40,7 +41,7 @@ public class Robot extends TimedRobot {
 	private AuroraLEDCommand auroraLedCommand;
 
 	public static enum AutoModes {
-		ONE_BALL, TWO_BALL, TWO_BALL_ALTERNATIVE, TEST_AUTO
+		ONE_BALL, TWO_BALL, TWO_BALL_ALTERNATIVE, THREE_BALL, FOUR_BALL, TEST_AUTO
 	}
 
 	@Override
@@ -55,6 +56,8 @@ public class Robot extends TimedRobot {
 		autoChooser.addOption("ONE_BALL", AutoModes.ONE_BALL);
 		autoChooser.addOption("TWO_BALL", AutoModes.TWO_BALL);
 		autoChooser.addOption("TWO_BALL_ALTERNATIVE", AutoModes.TWO_BALL_ALTERNATIVE);
+		autoChooser.addOption("THREE_BALL", AutoModes.THREE_BALL);
+		autoChooser.addOption("FOUR_BALL", AutoModes.FOUR_BALL);
 		autoChooser.addOption("TEST_AUTO", AutoModes.TEST_AUTO);
 		SmartDashboard.putData("Auto Chooser", autoChooser);
 	}
@@ -90,16 +93,26 @@ public class Robot extends TimedRobot {
 		robotContainer.ledSubsystem.setDefaultCommand(auroraLedCommand);
 		m_autonomousCommand = robotContainer.getAutonomousCommand();
 
-		SequentialCommandGroup turretAuto = new SequentialCommandGroup(
-			new InstantCommand(() -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED), 
-			new WaitCommand(4.5), 
-			new HomeTurretCommand(robotContainer.turretSubsystem, true), 
-			new WaitCommand(5.5), 
-			new InstantCommand(() -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED)
-		);
+		SequentialCommandGroup turretAuto;
+		switch((Robot.AutoModes) autoChooser.getSelected()){
+			case FOUR_BALL:
+				turretAuto = new SequentialCommandGroup(
+					new InstantCommand(() -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED),
+					new WaitCommand(4.5),
+					new HomeTurretCommand(robotContainer.turretSubsystem, true), 
+					new WaitCommand(6.0),
+					new InstantCommand(() -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED)
+				);
+				break;
+			default: 
+				turretAuto = new SequentialCommandGroup(new InstantCommand(() -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED));
+				break; 
+		}
+
+		
 
 		if (m_autonomousCommand != null) {
-			new ParallelCommandGroup(m_autonomousCommand.alongWith(new TurretLockCommand(robotContainer.turretSubsystem), turretAuto)).schedule();
+			new ParallelCommandGroup(m_autonomousCommand.alongWith(new TurretLockCommand(robotContainer.turretSubsystem)), turretAuto).schedule();
 		}
 	}
 
@@ -116,8 +129,8 @@ public class Robot extends TimedRobot {
 
 		robotContainer.shooterMode = true;
 		ShooterSubsystem.isShooting = false;
-		ShooterSubsystem.setPoint = 3500.0; // 3600
-		
+		ShooterSubsystem.setPoint = 4000.0;
+
 		robotContainer.drivetrainSubsystem.resetEncoders();
 		robotContainer.drivetrainSubsystem.resetGyro();
 
