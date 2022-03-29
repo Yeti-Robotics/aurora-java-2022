@@ -29,7 +29,5 @@ public class ToggleFlywheelHighCommand extends InstantCommand {
 
     ShooterSubsystem.isShooting = !ShooterSubsystem.isShooting;
     ShooterSubsystem.isHighGoal = true;
-
-    RobotContainer.time = System.currentTimeMillis();
   }
 }

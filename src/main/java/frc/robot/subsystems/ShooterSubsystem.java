@@ -76,8 +76,6 @@ public class ShooterSubsystem extends SubsystemBase {
         } else {
             stopFlywheel();
         }
-
-        // System.out.println("FLYWHEEL RPM: " + getFlywheelRPM() + "; MS: " + (System.currentTimeMillis() - RobotContainer.time));
     }
 
     public void shootFlywheel(double speed) {
