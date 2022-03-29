@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.ShooterConstants;
 
 public class ShooterSubsystem extends SubsystemBase {
@@ -76,7 +77,7 @@ public class ShooterSubsystem extends SubsystemBase {
             stopFlywheel();
         }
 
-        System.out.println("FLYWHEEL RPM: " + getFlywheelRPM());
+        // System.out.println("FLYWHEEL RPM: " + getFlywheelRPM() + "; MS: " + (System.currentTimeMillis() - RobotContainer.time));
     }
 
     public void shootFlywheel(double speed) {

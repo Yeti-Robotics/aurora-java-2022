@@ -5,6 +5,7 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.RobotContainer;
 import frc.robot.commands.LED.ShooterLEDCommand;
 import frc.robot.subsystems.ShooterSubsystem;
 
@@ -28,5 +29,7 @@ public class ToggleFlywheelHighCommand extends InstantCommand {
 
     ShooterSubsystem.isShooting = !ShooterSubsystem.isShooting;
     ShooterSubsystem.isHighGoal = true;
+
+    RobotContainer.time = System.currentTimeMillis();
   }
 }

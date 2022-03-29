@@ -58,7 +58,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     setMotorsBrake();
 
     drive = new DifferentialDrive(leftMotors, rightMotors);
-    drive.setDeadband(0.05);
+    drive.setDeadband(0.0525);
 
     leftFalcon1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
     rightFalcon1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);

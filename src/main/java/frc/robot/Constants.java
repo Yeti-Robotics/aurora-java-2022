@@ -43,15 +43,15 @@ public final class Constants {
     }
 
     public static final class AutoConstants {
-        public static final double AUTO_KS = 0.72741; // volts
-        public static final double AUTO_KV = 2.1475; // volt seconds per meter
-        public static final double AUTO_KA = 0.49756; // volt seconds squared per meter
-        public static final double AUTO_P = 3.2023;
+        public static final double AUTO_KS = 0.70497; // volts
+        public static final double AUTO_KV = 2.1533; // volt seconds per meter
+        public static final double AUTO_KA = 0.37337; // volt seconds squared per meter
+        public static final double AUTO_P = 3.0758;
 
         public static final double RAMSETE_B = 2.0;
         public static final double RAMSETE_ZETA = 0.7;
 
-        public static final double TRACK_WIDTH = 0.77579; // m
+        public static final double TRACK_WIDTH = 0.80532; // m
         public static final DifferentialDriveKinematics KINEMATICS = new DifferentialDriveKinematics(TRACK_WIDTH);
         
         public static final double MAX_SPEED = 3.0; // m/s
@@ -115,7 +115,7 @@ public final class Constants {
         public static final int SHOOTER_RIGHT_FALCON = 7; // right
 
         public static final double SHOOTER_P = 0.00015;
-        public static final double SHOOTER_I = 0.00006;
+        public static final double SHOOTER_I = 0.0;
         public static final double SHOOTER_D = 0.00001;
         public static final double SHOOTER_F = 0.4; 
 
@@ -144,7 +144,7 @@ public final class Constants {
     public static final class IntakeConstants {
         public static final int INTAKE_FALCON = 9;
         public static final int[] INTAKE_PISTONS_SOLENOID = {2, 3}; 
-        public static final double INTAKE_SPEED = 0.4; 
+        public static final double INTAKE_SPEED = 0.375; 
     }
 
     public static final class NeckConstants {
@@ -171,6 +171,7 @@ public final class Constants {
         public static final double TURRET_45_LEFT = TurretConstants.TURRET_MAX_LEFT / 2.0; // ???
         public static final double TURRET_TOLERANCE = 1.0; // tolerance for checking encoder limits
         public static final double LIMELIGHT_TOLERANCE = 0.1; // tolerance for alignment of target using limelight
+        public static final double TURRET_OFFSET = 9.0; // inches
     }
 
     public static final class OIConstants {

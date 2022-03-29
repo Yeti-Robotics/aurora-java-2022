@@ -59,6 +59,8 @@ public class RobotContainer {
     private double lastInputLeftY = 0.0;
     public boolean shooterMode = true; // false = turretMode
 
+    public static double time = 0.0;
+
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
