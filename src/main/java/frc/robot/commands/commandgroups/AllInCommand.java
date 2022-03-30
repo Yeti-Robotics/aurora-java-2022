@@ -5,6 +5,8 @@
 package frc.robot.commands.commandgroups;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.AgitatorConstants;
+import frc.robot.subsystems.AgitatorSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.NeckSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -14,10 +16,12 @@ public class AllInCommand extends CommandBase {
 	private NeckSubsystem neckSubsystem;
 	private IntakeSubsystem intakeSubsystem;
 	private long startTime = 0;
+	private AgitatorSubsystem agitatorSubsystem; 
 
 	public AllInCommand(IntakeSubsystem intakeSubsystem, NeckSubsystem neckSubsystem) {
 		this.neckSubsystem = neckSubsystem;
 		this.intakeSubsystem = intakeSubsystem;
+		this.agitatorSubsystem = agitatorSubsystem;
 		addRequirements(neckSubsystem, intakeSubsystem);
 	}
 
@@ -32,6 +36,7 @@ public class AllInCommand extends CommandBase {
 	public void execute() {
 		intakeSubsystem.rollIn();
 		neckSubsystem.stopNeck();
+		agitatorSubsystem.Spin();
 
 		if(ShooterSubsystem.atSetPoint){
 			// if (!neckSubsystem.getUpperBeamBreak() && startTime == 0) {

@@ -177,4 +177,9 @@ public final class Constants {
     public static final class OIConstants {
         public static final int DRIVER_STATION_JOY = 0;
     }
+
+    public static final class AgitatorConstants {
+       public static final int AGITATOR_MOTOR = 19;
+       public static final double AGITATER_SPEED = .5;
+    }
 }
