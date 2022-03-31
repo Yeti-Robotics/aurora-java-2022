@@ -6,7 +6,9 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.CompressorConfigType;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -33,6 +35,7 @@ public class Robot extends TimedRobot {
 	private Command beforeBlinkCommand = null;
 	private boolean blinkWarningRan = false;
 	public CompressorConfigType compressorConfigType;
+	private PowerDistribution revPDH;
 
 	private RobotContainer robotContainer;
 
@@ -44,12 +47,18 @@ public class Robot extends TimedRobot {
 		ONE_BALL, TWO_BALL, TWO_BALL_ALTERNATIVE, THREE_BALL, FOUR_BALL, TEST_AUTO
 	}
 
+	long timer;
+
 	@Override
 	public void robotInit() {
 		robotContainer = new RobotContainer();
+		revPDH = new PowerDistribution(1, ModuleType.kRev);
 		redLedCommand = new SetLEDToRGBCommand(robotContainer.ledSubsystem, 255, 0, 0);
 		auroraLedCommand = new AuroraLEDCommand(robotContainer.ledSubsystem);
 		robotContainer.turretSubsystem.lockStatus = TurretLockStatus.UNLOCKED;
+
+		revPDH.setSwitchableChannel(false);
+		timer = System.currentTimeMillis();
 
 		autoChooser = new SendableChooser<>();
 		autoChooser.setDefaultOption("ONE_BALL", AutoModes.ONE_BALL);
@@ -65,6 +74,11 @@ public class Robot extends TimedRobot {
 	@Override
 	public void robotPeriodic() {
 		CommandScheduler.getInstance().run();
+
+		if (System.currentTimeMillis() - timer >= 500) {
+			revPDH.setSwitchableChannel(true);
+		}
+
 		SmartDashboard.putNumber("Current Pressure: ", robotContainer.pneumaticsSubsystem.getPressure());
 		SmartDashboard.putNumber("Flywheel RPM: ", robotContainer.shooterSubsystem.getFlywheelRPM());
 		SmartDashboard.putString("Turret Lock Status: ",
