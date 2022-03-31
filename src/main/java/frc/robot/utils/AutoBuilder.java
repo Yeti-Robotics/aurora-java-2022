@@ -105,7 +105,7 @@ public class AutoBuilder {
         subsystemCommandGroup.addCommands(
             new ToggleIntakeCommand(robotContainer.intakeSubsystem), 
             new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(1.5), 
-            new InstantCommand(() -> ShooterSubsystem.setPoint = 5000.0),
+            new InstantCommand(() -> ShooterSubsystem.setPoint = 3700),
             new ToggleFlywheelHighCommand(shooterLEDCommand), 
             new WaitCommand(0.5), 
             new ToggleIntakeCommand(robotContainer.intakeSubsystem), 
@@ -115,7 +115,7 @@ public class AutoBuilder {
             new ToggleIntakeCommand(robotContainer.intakeSubsystem), 
             new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(4.25),
             new WaitCommand(2.5),
-            new InstantCommand(() -> ShooterSubsystem.setPoint = 5000.0),
+            new InstantCommand(() -> ShooterSubsystem.setPoint = 3700.0),
             new ToggleFlywheelHighCommand(shooterLEDCommand), 
             new WaitCommand(0.75), 
             new ToggleIntakeCommand(robotContainer.intakeSubsystem), 

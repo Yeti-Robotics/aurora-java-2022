@@ -23,6 +23,9 @@ public class PhotonVision {
     }
 
     public static double getDistance(){
+        if(!camera.getLatestResult().hasTargets())
+            return 0.0;
+
         double angleToGoalDegrees = LimelightConstants.MOUNTING_ANGLE + getY();
         double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
         double distanceFromLimelightToGoalInches = (LimelightConstants.GOAL_HEIGHT - LimelightConstants.LIMELIGHT_HEIGHT) / Math.tan(angleToGoalRadians);

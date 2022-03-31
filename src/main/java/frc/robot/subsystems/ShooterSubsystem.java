@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.utils.PhotonVision;
 
 public class ShooterSubsystem extends SubsystemBase {
     private TalonFX shooterLeftFalcon;
@@ -128,6 +129,7 @@ public class ShooterSubsystem extends SubsystemBase {
     public double getVelocityUnitsFromRPM(double RPM) {
         return RPM / (ShooterConstants.PULLEY_RATIO * (ShooterConstants.ENCODER_TIME_CONVERSION / ShooterConstants.ENCODER_RESOLUTION));
     }
+
 
     public void setSetPoint(double setPoint) {
         ShooterSubsystem.setPoint = setPoint;

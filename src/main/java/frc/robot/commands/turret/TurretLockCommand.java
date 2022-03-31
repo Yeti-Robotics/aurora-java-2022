@@ -8,6 +8,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.robot.Constants.TurretConstants;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
 import frc.robot.subsystems.TurretSubsystem.TurretLockStatus;
 import frc.robot.utils.PhotonVision;
@@ -39,6 +40,8 @@ public class TurretLockCommand extends PIDCommand {
 		if (turretSubsystem.lockStatus == TurretLockStatus.UNLOCKED)
 			return;
 		super.execute();
+		if(PhotonVision.getDistance() > 0.0)
+			ShooterSubsystem.setPoint = ((25/3) * PhotonVision.getDistance()) + 2991.66667;
 	}
 
 	@Override
