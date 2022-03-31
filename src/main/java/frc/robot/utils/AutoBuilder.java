@@ -29,16 +29,10 @@ import frc.robot.Robot.AutoModes;
 import frc.robot.commands.LED.ShooterLEDCommand;
 import frc.robot.commands.commandgroups.AllInCommand;
 import frc.robot.commands.commandgroups.AllInCommandGroup;
-import frc.robot.commands.commandgroups.AllOutCommand;
 import frc.robot.commands.drivetrain.DriveForDistanceCommand;
-import frc.robot.commands.drivetrain.TurnForAngleCommand;
-import frc.robot.commands.drivetrain.TurnForAnglePIDCommand;
 import frc.robot.commands.drivetrain.TurnToTargetDriveCommand;
 import frc.robot.commands.intake.ToggleIntakeCommand;
 import frc.robot.commands.shooter.ToggleFlywheelHighCommand;
-import frc.robot.commands.turret.HomeTurretCommand;
-import frc.robot.commands.turret.ToggleTurretLockCommand;
-import frc.robot.commands.turret.TurretLockCommand;
 import frc.robot.subsystems.ShooterSubsystem;
 
 public class AutoBuilder {
@@ -110,7 +104,9 @@ public class AutoBuilder {
             new WaitCommand(0.5), 
             new ToggleIntakeCommand(robotContainer.intakeSubsystem), 
             new WaitCommand(0.75), 
-            new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(1.5),
+            new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(0.3),
+            new WaitCommand(0.5), 
+            new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(0.7),
             new ToggleFlywheelHighCommand(shooterLEDCommand),
             new ToggleIntakeCommand(robotContainer.intakeSubsystem), 
             new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(4.25),
@@ -120,7 +116,9 @@ public class AutoBuilder {
             new WaitCommand(0.75), 
             new ToggleIntakeCommand(robotContainer.intakeSubsystem), 
             new WaitCommand(0.25), 
-            new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(1.25),
+            new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(0.3),
+            new WaitCommand(0.5), 
+            new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(0.7),
             new ToggleFlywheelHighCommand(shooterLEDCommand)
         );
 

@@ -122,7 +122,11 @@ public class RobotContainer {
         setConditionalButton(3, new ToggleFlywheelLowCommand(shooterLEDCommand), ActiveState.WHEN_PRESSED, new ToggleStaticHooksCommand(climberSubsystem), ActiveState.WHEN_PRESSED);
 
         setConditionalButton(9, new SnapTurretLeftCommand(turretSubsystem), ActiveState.WHEN_PRESSED, new AutoHighClimbCommandGroup(climberSubsystem, driverStationJoystick), ActiveState.WHEN_PRESSED);
-        setConditionalButton(4, new TurnForAnglePIDCommand(drivetrainSubsystem, 175.0), ActiveState.WHEN_PRESSED, new InstantCommand(), ActiveState.WHILE_HELD);
+        setConditionalButton(4, new SequentialCommandGroup(
+            new AllInCommand(intakeSubsystem, neckSubsystem).withTimeout(0.3),
+            new WaitCommand(0.5), 
+            new AllInCommand(intakeSubsystem, neckSubsystem).withTimeout(0.5)
+        ), ActiveState.WHEN_PRESSED, new InstantCommand(), ActiveState.WHILE_HELD);
 
         // 10 = kill switch for climbing
         setConditionalButton(10, new SnapTurretRightCommand(turretSubsystem), ActiveState.WHEN_PRESSED, new InstantCommand(), ActiveState.WHEN_PRESSED);

@@ -99,11 +99,11 @@ public class Robot extends TimedRobot {
 		switch((Robot.AutoModes) autoChooser.getSelected()){
 			case FOUR_BALL:
 				turretAuto = new SequentialCommandGroup(
-					new WaitCommand(1.75), 
+					new WaitCommand(2.0), 
 					new InstantCommand(() -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED),
 					new WaitCommand(5.0),
 					new HomeTurretCommand(robotContainer.turretSubsystem, true), 
-					new WaitCommand(3.5),
+					new WaitCommand(2.5),
 					new InstantCommand(() -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED)
 				);
 				break;
@@ -132,7 +132,6 @@ public class Robot extends TimedRobot {
 
 		robotContainer.shooterMode = true;
 		ShooterSubsystem.isShooting = false;
-		ShooterSubsystem.setPoint = 4300;
 
 		robotContainer.drivetrainSubsystem.resetEncoders();
 		robotContainer.drivetrainSubsystem.resetGyro();
@@ -150,6 +149,7 @@ public class Robot extends TimedRobot {
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.cancel();
 		}
+
 		new HomeTurretCommand(robotContainer.turretSubsystem, true).schedule();
 	}
 
