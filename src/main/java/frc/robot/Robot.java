@@ -132,7 +132,7 @@ public class Robot extends TimedRobot {
 
 		robotContainer.shooterMode = true;
 		ShooterSubsystem.isShooting = false;
-		ShooterSubsystem.setPoint = 3400.0;
+		ShooterSubsystem.setPoint = 4300;
 
 		robotContainer.drivetrainSubsystem.resetEncoders();
 		robotContainer.drivetrainSubsystem.resetGyro();

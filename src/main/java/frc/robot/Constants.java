@@ -94,8 +94,7 @@ public final class Constants {
 
         public static final double CLIMB_SPEED = 0.3;
         public static final double CLIMBER_LOWER_LIMIT = 0.0;
-        public static final double CLIMBER_UPRIGHT_HEIGHT_LIMIT = 70000.0; // 5' 6" roughly; keeps underneath limit
-        public static final double CLIMBER_TILTED_HEIGHT_LIMIT = 98450.0;
+        public static final double CLIMBER_UPRIGHT_HEIGHT_LIMIT = 98890; // 5' 6" roughly; keeps underneath limit
         public static final double CLIMBER_UPPER_LIMIT = 101331.5; 
         public static final double CLIMBER_TOLERANCE = 15.0; 
         public static final double CLIMBER_WINCH_SPEED = 1.0;
@@ -176,10 +175,5 @@ public final class Constants {
 
     public static final class OIConstants {
         public static final int DRIVER_STATION_JOY = 0;
-    }
-
-    public static final class AgitatorConstants {
-       public static final int AGITATOR_MOTOR = 19;
-       public static final double AGITATER_SPEED = .5;
     }
 }

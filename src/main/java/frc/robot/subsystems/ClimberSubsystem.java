@@ -141,7 +141,6 @@ public class ClimberSubsystem extends SubsystemBase {
 
   public boolean atEncoderLimit() {
     return getAverageEncoder() <= ClimberConstants.CLIMBER_TOLERANCE || getAverageEncoder()
-        + ClimberConstants.CLIMBER_TOLERANCE >= (getLimitSwitch() ? ClimberConstants.CLIMBER_UPRIGHT_HEIGHT_LIMIT
-            : ClimberConstants.CLIMBER_TILTED_HEIGHT_LIMIT);
+        + ClimberConstants.CLIMBER_TOLERANCE >= ClimberConstants.CLIMBER_UPRIGHT_HEIGHT_LIMIT;
   }
 }
