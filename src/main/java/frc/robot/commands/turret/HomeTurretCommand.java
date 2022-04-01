@@ -18,7 +18,6 @@ public class HomeTurretCommand extends CommandBase {
   public HomeTurretCommand(TurretSubsystem turretSubsystem, boolean interruptLock) {
     this.turretSubsystem = turretSubsystem;
     this.interruptLock = interruptLock;
-    addRequirements(turretSubsystem);
   }
 
   @Override

@@ -70,9 +70,7 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public void climbUp() {
-    if (ShiftingSubsystem.shiftStatus == ShiftStatus.HIGH &&
-        getAverageEncoder() <= (getLimitSwitch() ? ClimberConstants.CLIMBER_UPRIGHT_HEIGHT_LIMIT
-            : ClimberConstants.CLIMBER_TILTED_HEIGHT_LIMIT)) {
+    if (ShiftingSubsystem.shiftStatus == ShiftStatus.HIGH && getAverageEncoder() <= ClimberConstants.CLIMBER_UPRIGHT_HEIGHT_LIMIT) {
       climberFalcon1.set(ControlMode.PercentOutput, ClimberConstants.CLIMB_SPEED);
     } else {
       stopClimb();
@@ -143,7 +141,6 @@ public class ClimberSubsystem extends SubsystemBase {
 
   public boolean atEncoderLimit() {
     return getAverageEncoder() <= ClimberConstants.CLIMBER_TOLERANCE || getAverageEncoder()
-        + ClimberConstants.CLIMBER_TOLERANCE >= (getLimitSwitch() ? ClimberConstants.CLIMBER_UPRIGHT_HEIGHT_LIMIT
-            : ClimberConstants.CLIMBER_TILTED_HEIGHT_LIMIT);
+        + ClimberConstants.CLIMBER_TOLERANCE >= ClimberConstants.CLIMBER_UPRIGHT_HEIGHT_LIMIT;
   }
 }

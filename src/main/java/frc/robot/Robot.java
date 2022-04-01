@@ -6,24 +6,36 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.CompressorConfigType;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.LED.AuroraLEDCommand;
 import frc.robot.commands.LED.BlinkLEDCommand;
 import frc.robot.commands.LED.SetLEDToRGBCommand;
-import frc.robot.commands.LED.SetLEDYetiBlueCommand;
+import frc.robot.commands.LED.TeleLEDDefaultCommand;
 import frc.robot.commands.turret.HomeTurretCommand;
+import frc.robot.commands.turret.SnapTurretRightCommand;
+import frc.robot.commands.turret.TurretLockCommand;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.TurretSubsystem;
 import frc.robot.subsystems.TurretSubsystem.TurretLockStatus;
+import frc.robot.utils.PhotonVision;
 
 public class Robot extends TimedRobot {
 	private Command m_autonomousCommand;
 	private Command beforeBlinkCommand = null;
 	private boolean blinkWarningRan = false;
 	public CompressorConfigType compressorConfigType;
+	private PowerDistribution revPDH;
 
 	private RobotContainer robotContainer;
 
@@ -32,32 +44,48 @@ public class Robot extends TimedRobot {
 	private AuroraLEDCommand auroraLedCommand;
 
 	public static enum AutoModes {
-		ONE_BALL, TWO_BALL, TWO_BALL_ALTERNATIVE
+		ONE_BALL, TWO_BALL, TWO_BALL_ALTERNATIVE, THREE_BALL, FOUR_BALL, TEST_AUTO
 	}
+
+	long timer;
 
 	@Override
 	public void robotInit() {
 		robotContainer = new RobotContainer();
+		revPDH = new PowerDistribution(1, ModuleType.kRev);
 		redLedCommand = new SetLEDToRGBCommand(robotContainer.ledSubsystem, 255, 0, 0);
 		auroraLedCommand = new AuroraLEDCommand(robotContainer.ledSubsystem);
 		robotContainer.turretSubsystem.lockStatus = TurretLockStatus.UNLOCKED;
+
+		revPDH.setSwitchableChannel(false);
+		timer = System.currentTimeMillis();
 
 		autoChooser = new SendableChooser<>();
 		autoChooser.setDefaultOption("ONE_BALL", AutoModes.ONE_BALL);
 		autoChooser.addOption("ONE_BALL", AutoModes.ONE_BALL);
 		autoChooser.addOption("TWO_BALL", AutoModes.TWO_BALL);
 		autoChooser.addOption("TWO_BALL_ALTERNATIVE", AutoModes.TWO_BALL_ALTERNATIVE);
+		autoChooser.addOption("THREE_BALL", AutoModes.THREE_BALL);
+		autoChooser.addOption("FOUR_BALL", AutoModes.FOUR_BALL);
+		autoChooser.addOption("TEST_AUTO", AutoModes.TEST_AUTO);
 		SmartDashboard.putData("Auto Chooser", autoChooser);
 	}
 
 	@Override
 	public void robotPeriodic() {
 		CommandScheduler.getInstance().run();
+
+		if (System.currentTimeMillis() - timer >= 500) {
+			revPDH.setSwitchableChannel(true);
+		}
+
 		SmartDashboard.putNumber("Current Pressure: ", robotContainer.pneumaticsSubsystem.getPressure());
 		SmartDashboard.putNumber("Flywheel RPM: ", robotContainer.shooterSubsystem.getFlywheelRPM());
 		SmartDashboard.putString("Turret Lock Status: ",
 				((robotContainer.turretSubsystem.lockStatus == TurretLockStatus.UNLOCKED) ? "UNLOCKED" : "LOCKED"));
 		SmartDashboard.putString("Control Mode: ", (robotContainer.shooterMode) ? "SHOOTING" : "CLIMBING");
+		System.out.println("DIST: " + PhotonVision.getDistance() + "; setPoint: " + ShooterSubsystem.setPoint);
+		System.out.println("getFlywheelRPM: " + robotContainer.shooterSubsystem.getFlywheelRPM());
 	}
 
 	@Override
@@ -78,11 +106,34 @@ public class Robot extends TimedRobot {
 	@Override
 	public void autonomousInit() {
 		robotContainer.turretSubsystem.resetEncoder();
-		robotContainer.ledSubsystem.setDefaultCommand(new AuroraLEDCommand(robotContainer.ledSubsystem));
-		
+		robotContainer.ledSubsystem.setDefaultCommand(auroraLedCommand);
 		m_autonomousCommand = robotContainer.getAutonomousCommand();
+
+		SequentialCommandGroup turretAuto;
+		switch((Robot.AutoModes) autoChooser.getSelected()){
+			case TWO_BALL: 
+				turretAuto = new SequentialCommandGroup(
+					new WaitCommand(8.0),
+					new InstantCommand(() -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED)
+				);
+				break;
+			case FOUR_BALL:
+				turretAuto = new SequentialCommandGroup(
+					new WaitCommand(2.7), 
+					new InstantCommand(() -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED),
+					new WaitCommand(5.0),
+					new HomeTurretCommand(robotContainer.turretSubsystem, true), 
+					new WaitCommand(1.5),
+					new InstantCommand(() -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED)
+				);
+				break;
+			default: 
+				turretAuto = new SequentialCommandGroup(new InstantCommand(() -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED));
+				break; 
+		}	
+
 		if (m_autonomousCommand != null) {
-			m_autonomousCommand.schedule();
+			new ParallelCommandGroup(m_autonomousCommand.alongWith(new TurretLockCommand(robotContainer.turretSubsystem)), turretAuto).schedule();
 		}
 	}
 
@@ -99,11 +150,12 @@ public class Robot extends TimedRobot {
 
 		robotContainer.shooterMode = true;
 		ShooterSubsystem.isShooting = false;
-		
+
 		robotContainer.drivetrainSubsystem.resetEncoders();
 		robotContainer.drivetrainSubsystem.resetGyro();
 
-		robotContainer.ledSubsystem.setDefaultCommand(new SetLEDYetiBlueCommand(robotContainer.ledSubsystem));
+		auroraLedCommand.cancel();
+		robotContainer.ledSubsystem.setDefaultCommand(new TeleLEDDefaultCommand(robotContainer.ledSubsystem));
 
 		CommandScheduler.getInstance().onCommandFinish(command -> {
 			if (command.getName().equals(new BlinkLEDCommand().getName())) {
@@ -115,11 +167,15 @@ public class Robot extends TimedRobot {
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.cancel();
 		}
+
 		new HomeTurretCommand(robotContainer.turretSubsystem, true).schedule();
 	}
 
 	@Override
 	public void teleopPeriodic() {
+		if(PhotonVision.getDistance() > 0.0)
+			ShooterSubsystem.setPoint = ((25/3) * PhotonVision.getDistance()) + 2991.66667;
+
 		if (DriverStation.getMatchTime() < 30 && !blinkWarningRan) {
 			beforeBlinkCommand = robotContainer.ledSubsystem.getCurrentCommand();
 			new BlinkLEDCommand(robotContainer.ledSubsystem, 300, 255, 34,

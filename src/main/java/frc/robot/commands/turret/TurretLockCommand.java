@@ -4,9 +4,11 @@
 
 package frc.robot.commands.turret;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.robot.Constants.TurretConstants;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
 import frc.robot.subsystems.TurretSubsystem.TurretLockStatus;
 import frc.robot.utils.PhotonVision;
@@ -21,10 +23,10 @@ public class TurretLockCommand extends PIDCommand {
 				// This should return the measurement
 				PhotonVision::getX,
 				// This should return the setpoint (can also be a constant)
-				0.0,
+				() -> Math.toDegrees(Math.atan(TurretConstants.TURRET_OFFSET / PhotonVision.getDistance())),
 				// This uses the output
 				output -> {
-					turretSubsystem.moveTurret(TurretConstants.TURRET_F + -output);
+					turretSubsystem.moveTurret(TurretConstants.TURRET_F 	+ -output);
 				});
 				
 		this.turretSubsystem = turretSubsystem;

@@ -7,14 +7,12 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 public class DriveForDistanceCommand extends CommandBase {
     private final DrivetrainSubsystem drivetrainSubsystem;
     private double distanceGoal;
-    private double leftPower;
-    private double rightPower;
+    private double power;
 
-    public DriveForDistanceCommand(DrivetrainSubsystem drivetrainSubsystem, double encoderGoal, double leftPower, double rightPower) {
+    public DriveForDistanceCommand(DrivetrainSubsystem drivetrainSubsystem, double encoderGoal, double power) {
         this.drivetrainSubsystem = drivetrainSubsystem;
         this.distanceGoal = encoderGoal;
-        this.leftPower = leftPower;
-        this.rightPower = rightPower;
+        this.power = Math.abs(power);
         addRequirements(drivetrainSubsystem);
     }
 
@@ -25,17 +23,22 @@ public class DriveForDistanceCommand extends CommandBase {
 
     @Override
     public void execute() {
-        drivetrainSubsystem.tankDrive(leftPower, rightPower);
-        System.out.println("Distance: " + distanceGoal + "; Encoder: " + this.drivetrainSubsystem.getAverageEncoder());
+        if(distanceGoal < 0){
+            drivetrainSubsystem.cheezyDrive(-power, 0.0);
+        } else {
+            drivetrainSubsystem.cheezyDrive(power, 0.0);
+        }
+        System.out.println(drivetrainSubsystem.getAverageEncoder() + "; " + distanceGoal);
     }
 
     @Override
     public boolean isFinished() {
-        return distanceGoal <= this.drivetrainSubsystem.getAverageEncoder();
+        return (distanceGoal < 0) ? drivetrainSubsystem.getAverageEncoder() <= distanceGoal : drivetrainSubsystem.getAverageEncoder() >= distanceGoal;
     }
 
     @Override
     public void end(boolean interrupted) {
+        System.out.println("stop");
         drivetrainSubsystem.stopDrive();
     }
 }

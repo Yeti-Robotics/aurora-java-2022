@@ -31,7 +31,7 @@ public class SnowfallLEDCommand extends CommandBase {
         ledSubsystem.setRGB(i, 255, 255, 255);
         continue;
       }
-      ledSubsystem.setRGB(i, 20, 120, 255); 
+      ledSubsystem.setRGB(i, 0, 255, 0); 
       }
       ledSubsystem.sendData();
       stage++;
@@ -46,7 +46,7 @@ public class SnowfallLEDCommand extends CommandBase {
           ledSubsystem.setRGB(i, 255, 255, 255);
           continue;
         }
-        ledSubsystem.setRGB(i, 20, 120, 255); 
+        ledSubsystem.setRGB(i, 0, 255, 0); 
         }
         ledSubsystem.sendData();
         stage = stage + 1 > 3 ? 0 : stage + 1;

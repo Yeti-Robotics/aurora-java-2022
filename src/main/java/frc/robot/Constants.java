@@ -22,7 +22,6 @@ public final class Constants {
     public static final double MOTOR_VOLTAGE_COMP = 11.0;
 
     public static final class DriveConstants {
-
         public static final int LEFT_FALCON_1 = 1; // front relative to robot
         public static final int LEFT_FALCON_2 = 2; // rear relative to robot
 
@@ -37,28 +36,36 @@ public final class Constants {
 
         public static final double HIGH_GEAR_RATIO = 6.32; // jvn
         public static final double LOW_GEAR_RATIO = 11.90; // jvn
+
+        public static final double DRIVE_P = 0.024;
+        public static final double DRIVE_I = 0.0;
+        public static final double DRIVE_D = 0.0047;
     }
 
     public static final class AutoConstants {
-        public static final double AUTO_KS = 0.72741; // volts
-        public static final double AUTO_KV = 2.1475; // volt seconds per meter
-        public static final double AUTO_KA = 0.49756; // volt seconds squared per meter
-        public static final double AUTO_P = 3.2023;
+        public static final double AUTO_KS = 0.70497; // volts
+        public static final double AUTO_KV = 2.1533; // volt seconds per meter
+        public static final double AUTO_KA = 0.37337; // volt seconds squared per meter
+        public static final double AUTO_P = 3.0758;
 
         public static final double RAMSETE_B = 2.0;
         public static final double RAMSETE_ZETA = 0.7;
 
-        public static final double TRACK_WIDTH = 0.77579; // m
+        public static final double TRACK_WIDTH = 0.80532; // m
         public static final DifferentialDriveKinematics KINEMATICS = new DifferentialDriveKinematics(TRACK_WIDTH);
         
         public static final double MAX_SPEED = 3.0; // m/s
         public static final double MAX_ACCELERATION = 3.0; // m/s^2
 
         public static final String EXIT_TARMAC_LEFT = "paths/exitTarmacLeft.wpilib.json";
-        public static final String twoBallPrimary = "paths/twoBallPrimary.wpilib.json";
-        public static final String twoBallAlternative = "paths/twoBallAlternative.wpilib.json";
+        public static final String twoBallPrimary1 = "twoBallPrimary1";
+        public static final String twoBallPrimary2 = "twoBallPrimary2";
         public static final String threeBallPrimary = "paths/threeBallPrimary.wpilib.json";
-        public static final String fourBallAuto = "paths/fourBallAuto.wpilib.json";
+        public static final String twoBallAlternative = "paths/twoBallAlternative.wpilib.json";
+        public static final String threeBall1 = "threeBall1";
+        public static final String threeBall2 = "threeBall2";
+        public static final String fourBall1 = "fourBall1";
+        public static final String fourBall2 = "fourBall2";
     }
 
     public static final class LimelightConstants {
@@ -88,8 +95,7 @@ public final class Constants {
 
         public static final double CLIMB_SPEED = 0.3;
         public static final double CLIMBER_LOWER_LIMIT = 0.0;
-        public static final double CLIMBER_UPRIGHT_HEIGHT_LIMIT = 70000.0; // 5' 6" roughly; keeps underneath limit
-        public static final double CLIMBER_TILTED_HEIGHT_LIMIT = 98450.0;
+        public static final double CLIMBER_UPRIGHT_HEIGHT_LIMIT = 98890; // 5' 6" roughly; keeps underneath limit
         public static final double CLIMBER_UPPER_LIMIT = 101331.5; 
         public static final double CLIMBER_TOLERANCE = 15.0; 
         public static final double CLIMBER_WINCH_SPEED = 1.0;
@@ -108,17 +114,10 @@ public final class Constants {
         public static final int SHOOTER_LEFT_FALCON = 8; // left
         public static final int SHOOTER_RIGHT_FALCON = 7; // right
 
-        // high RPM PID constants
-        public static final double HIGH_P = 0.0012;
-        public static final double HIGH_I = 0.000056;
-        public static final double HIGH_D = 0.0000495;
-        public static final double HIGH_F = 0.45; 
-
-        // low RPM PID constants
-        public static final double LOW_P = 0.0004;
-        public static final double LOW_I = 0.0; 
-        public static final double LOW_D = 0.00002;
-        public static final double LOW_F = 0.37;
+        public static final double SHOOTER_P = 0.00015;
+        public static final double SHOOTER_I = 0.0;
+        public static final double SHOOTER_D = 0.00001;
+        public static final double SHOOTER_F = 0.4; 
 
         public static final double SHOOTER_MAX_VEL = 12242.5; // in native encoder units per 100 ms
 
@@ -128,7 +127,7 @@ public final class Constants {
         public static final double SHOOTER_KA = 0.033071;
 
         //shooter motor speeds    
-        public static final double SHOOTER_LOW_SPEED = 0.225; // for low goal shots
+        public static final double SHOOTER_LOW_SPEED = 0.2; // for low goal shots
 
         // shooter rpm calc constants
         public static final double PULLEY_RATIO = 48.0 / 36.0; // not completely known
@@ -138,12 +137,14 @@ public final class Constants {
         public static final double RPM_TOLERANCE = 10.0;
 
         public static final double FLYWHEEL_DIAMETER = 4.0; // inches
+        public static final double SHOOTER_HIGH_DIST = 82.0; // inches; ideal dist from shooter to go high
+        public static final double SHOOTER_DIST_TOLERANCE = 6.0; // inhces; see above
     }
 
     public static final class IntakeConstants {
         public static final int INTAKE_FALCON = 9;
         public static final int[] INTAKE_PISTONS_SOLENOID = {2, 3}; 
-        public static final double INTAKE_SPEED = 0.2; 
+        public static final double INTAKE_SPEED = 0.375; 
     }
 
     public static final class NeckConstants {
@@ -170,6 +171,7 @@ public final class Constants {
         public static final double TURRET_45_LEFT = TurretConstants.TURRET_MAX_LEFT / 2.0; // ???
         public static final double TURRET_TOLERANCE = 1.0; // tolerance for checking encoder limits
         public static final double LIMELIGHT_TOLERANCE = 0.1; // tolerance for alignment of target using limelight
+        public static final double TURRET_OFFSET = 8.0; // inches
     }
 
     public static final class OIConstants {
