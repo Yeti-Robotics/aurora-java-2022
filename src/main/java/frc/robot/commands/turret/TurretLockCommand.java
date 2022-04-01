@@ -26,7 +26,7 @@ public class TurretLockCommand extends PIDCommand {
 				() -> Math.toDegrees(Math.atan(TurretConstants.TURRET_OFFSET / PhotonVision.getDistance())),
 				// This uses the output
 				output -> {
-					turretSubsystem.moveTurret(TurretConstants.TURRET_F + -output);
+					turretSubsystem.moveTurret(TurretConstants.TURRET_F 	+ -output);
 				});
 				
 		this.turretSubsystem = turretSubsystem;
@@ -40,8 +40,6 @@ public class TurretLockCommand extends PIDCommand {
 		if (turretSubsystem.lockStatus == TurretLockStatus.UNLOCKED)
 			return;
 		super.execute();
-		if(PhotonVision.getDistance() > 0.0)
-			ShooterSubsystem.setPoint = ((25/3) * PhotonVision.getDistance()) + 2991.66667;
 	}
 
 	@Override

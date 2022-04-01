@@ -111,22 +111,26 @@ public class Robot extends TimedRobot {
 
 		SequentialCommandGroup turretAuto;
 		switch((Robot.AutoModes) autoChooser.getSelected()){
+			case TWO_BALL: 
+				turretAuto = new SequentialCommandGroup(
+					new WaitCommand(8.0),
+					new InstantCommand(() -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED)
+				);
+				break;
 			case FOUR_BALL:
 				turretAuto = new SequentialCommandGroup(
-					new WaitCommand(2.0), 
+					new WaitCommand(2.7), 
 					new InstantCommand(() -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED),
 					new WaitCommand(5.0),
 					new HomeTurretCommand(robotContainer.turretSubsystem, true), 
-					new WaitCommand(2.5),
+					new WaitCommand(1.5),
 					new InstantCommand(() -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED)
 				);
 				break;
 			default: 
 				turretAuto = new SequentialCommandGroup(new InstantCommand(() -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED));
 				break; 
-		}
-
-		
+		}	
 
 		if (m_autonomousCommand != null) {
 			new ParallelCommandGroup(m_autonomousCommand.alongWith(new TurretLockCommand(robotContainer.turretSubsystem)), turretAuto).schedule();
@@ -169,6 +173,9 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopPeriodic() {
+		if(PhotonVision.getDistance() > 0.0)
+			ShooterSubsystem.setPoint = ((25/3) * PhotonVision.getDistance()) + 2991.66667;
+
 		if (DriverStation.getMatchTime() < 30 && !blinkWarningRan) {
 			beforeBlinkCommand = robotContainer.ledSubsystem.getCurrentCommand();
 			new BlinkLEDCommand(robotContainer.ledSubsystem, 300, 255, 34,
