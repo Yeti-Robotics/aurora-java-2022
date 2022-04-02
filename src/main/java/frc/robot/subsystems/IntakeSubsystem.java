@@ -39,6 +39,10 @@ public class IntakeSubsystem extends SubsystemBase {
         intakeFalcon.set(ControlMode.PercentOutput, IntakeConstants.INTAKE_SPEED);
     }
 
+    public void rollIn(double speed){
+        intakeFalcon.set(ControlMode.PercentOutput, speed);
+    }
+
     public void rollOut(){
         intakeFalcon.set(ControlMode.PercentOutput, -IntakeConstants.INTAKE_SPEED);
     }

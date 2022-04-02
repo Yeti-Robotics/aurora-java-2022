@@ -106,7 +106,7 @@ public class AutoBuilder {
         subsystemCommandGroup.addCommands(
             new ToggleIntakeCommand(robotContainer.intakeSubsystem), 
             new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(1.5), 
-            new InstantCommand(() -> ShooterSubsystem.setPoint = 4300.0),
+            new InstantCommand(() -> ShooterSubsystem.setPoint = 4400.0),
             new ToggleFlywheelHighCommand(shooterLEDCommand), 
             new WaitCommand(0.75), 
             new ToggleIntakeCommand(robotContainer.intakeSubsystem), 
@@ -116,15 +116,15 @@ public class AutoBuilder {
             new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(0.7),
             new ToggleFlywheelHighCommand(shooterLEDCommand),
             new ToggleIntakeCommand(robotContainer.intakeSubsystem), 
-            new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(4.25),
+            new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem, 0.375).withTimeout(4.25),
             new WaitCommand(2.5),
-            new InstantCommand(() -> ShooterSubsystem.setPoint = 4100.0),
+            new InstantCommand(() -> ShooterSubsystem.setPoint = 4200.0),
             new ToggleFlywheelHighCommand(shooterLEDCommand), 
             new WaitCommand(0.75), 
             new ToggleIntakeCommand(robotContainer.intakeSubsystem), 
             new WaitCommand(0.25), 
-            new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(0.3),
-            new WaitCommand(0.6), 
+            new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(0.4),
+            new WaitCommand(0.5), 
             new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(0.7),
             new ToggleFlywheelHighCommand(shooterLEDCommand)
         );

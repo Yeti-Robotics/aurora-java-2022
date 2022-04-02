@@ -37,7 +37,7 @@ public class TurretLockCommand extends PIDCommand {
 
 	@Override
 	public void execute() {
-		if (turretSubsystem.lockStatus == TurretLockStatus.UNLOCKED)
+		if (turretSubsystem.lockStatus == TurretLockStatus.UNLOCKED || PhotonVision.getDistance() < 36.0 || PhotonVision.getDistance() > 200.0)
 			return;
 		super.execute();
 	}
