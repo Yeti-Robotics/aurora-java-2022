@@ -90,6 +90,7 @@ public class AutoBuilder {
     private void oneBallAuto() {
         subsystemCommandGroup.addCommands(
             new DriveForDistanceCommand(robotContainer.drivetrainSubsystem, 48.0, -0.2), 
+            new InstantCommand(() -> ShooterSubsystem.setPoint = ((25/3) * PhotonVision.getDistance()) + 2991.66667),
             new ToggleFlywheelHighCommand(shooterLEDCommand), 
             new WaitCommand(1.0), 
             new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(3.0), 
@@ -98,15 +99,16 @@ public class AutoBuilder {
 
         pathCommandGroup.addCommands();
 
-        ShooterSubsystem.setPoint = 3800;
+        // ShooterSubsystem.setPoint = 3800;
         command.alongWith(pathCommandGroup, subsystemCommandGroup);
     }
 
     private void fourBall() {
         subsystemCommandGroup.addCommands(
             new ToggleIntakeCommand(robotContainer.intakeSubsystem), 
+            new InstantCommand(() -> TurretConstants.TURRET_OFFSET = 0.0),
             new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(1.5), 
-            new InstantCommand(() -> ShooterSubsystem.setPoint = 4400.0),
+            new InstantCommand(() -> ShooterSubsystem.setPoint = 4900.0),
             new ToggleFlywheelHighCommand(shooterLEDCommand), 
             new WaitCommand(0.75), 
             new ToggleIntakeCommand(robotContainer.intakeSubsystem), 
@@ -118,7 +120,7 @@ public class AutoBuilder {
             new ToggleIntakeCommand(robotContainer.intakeSubsystem), 
             new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem, 0.375).withTimeout(4.25),
             new WaitCommand(2.5),
-            new InstantCommand(() -> ShooterSubsystem.setPoint = 4200.0),
+            new InstantCommand(() -> ShooterSubsystem.setPoint = 4600.0),
             new ToggleFlywheelHighCommand(shooterLEDCommand), 
             new WaitCommand(0.75), 
             new ToggleIntakeCommand(robotContainer.intakeSubsystem), 
@@ -126,7 +128,8 @@ public class AutoBuilder {
             new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(0.4),
             new WaitCommand(0.5), 
             new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(0.7),
-            new ToggleFlywheelHighCommand(shooterLEDCommand)
+            new ToggleFlywheelHighCommand(shooterLEDCommand), 
+            new InstantCommand(() -> TurretConstants.TURRET_OFFSET = 8.0)
         );
 
         pathCommandGroup.addCommands(

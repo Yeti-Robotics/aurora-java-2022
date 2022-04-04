@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import frc.robot.Constants.TurretConstants;
+import frc.robot.utils.PhotonVision;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -57,5 +58,9 @@ public class TurretSubsystem extends SubsystemBase {
 
     public boolean getMagSwitch(){
         return !magSwitch.get();
+    }
+
+    public double getTurretOffset(){
+        return Math.toDegrees(Math.atan(TurretConstants.TURRET_OFFSET / PhotonVision.getDistance()));
     }
 }
