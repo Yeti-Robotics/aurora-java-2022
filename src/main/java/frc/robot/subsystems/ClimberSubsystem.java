@@ -36,11 +36,11 @@ public class ClimberSubsystem extends SubsystemBase {
 
     limitSwitch = new DigitalInput(ClimberConstants.CLIMBER_LIMIT_SWITCH);
 
-    climberStationaryHooks = new DoubleSolenoid(PneumaticsModuleType.REVPH,
+    climberStationaryHooks = new DoubleSolenoid(PneumaticsModuleType.CTREPCM,
         ClimberConstants.CLIMBER_STATIONARY_PISTONS[0], ClimberConstants.CLIMBER_STATIONARY_PISTONS[1]);
-    climberMovingHook = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.CLIMBER_MOVING_PISTON[0],
+    climberMovingHook = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, ClimberConstants.CLIMBER_MOVING_PISTON[0],
         ClimberConstants.CLIMBER_MOVING_PISTON[1]);
-    climberLeanPiston = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClimberConstants.CLIMBER_LEAN_PISTON[0],
+    climberLeanPiston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, ClimberConstants.CLIMBER_LEAN_PISTON[0],
         ClimberConstants.CLIMBER_LEAN_PISTON[1]);
 
     climberStationaryHooks.set(Value.kReverse);
