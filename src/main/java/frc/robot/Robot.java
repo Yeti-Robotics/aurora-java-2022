@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CompressorConfigType;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -79,12 +81,13 @@ public class Robot extends TimedRobot {
 		if (System.currentTimeMillis() - timer >= 500) {
 			revPDH.setSwitchableChannel(true);
 		}
-
-		SmartDashboard.putNumber("Current Pressure: ", robotContainer.pneumaticsSubsystem.getPressure());
+		
 		SmartDashboard.putNumber("Flywheel RPM: ", robotContainer.shooterSubsystem.getFlywheelRPM());
 		SmartDashboard.putString("Turret Lock Status: ",
 				((robotContainer.turretSubsystem.lockStatus == TurretLockStatus.UNLOCKED) ? "UNLOCKED" : "LOCKED"));
 		SmartDashboard.putString("Control Mode: ", (robotContainer.shooterMode) ? "SHOOTING" : "CLIMBING");
+		UsbCamera driverCam = CameraServer.startAutomaticCapture();
+
 		// System.out.println("DIST: " + PhotonVision.getDistance() + "; setPoint: " + ShooterSubsystem.setPoint);
 		//System.out.println("getFlywheelRPM: " + robotContainer.shooterSubsystem.getFlywheelRPM());
 		// System.out.println("GYRO: " + robotContainer.drivetrainSubsystem.getHeading());
