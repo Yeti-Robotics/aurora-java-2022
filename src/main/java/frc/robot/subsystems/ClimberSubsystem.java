@@ -11,7 +11,6 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -23,29 +22,16 @@ import frc.robot.subsystems.ShiftingSubsystem.ShiftStatus;
 public class ClimberSubsystem extends SubsystemBase {
   private WPI_TalonFX climberFalcon1, climberFalcon2;
   private TalonSRX climberWinch;
-  private DoubleSolenoid climberStationaryHooks;
-  private DoubleSolenoid climberMovingHook;
-  private DoubleSolenoid climberLeanPiston;
-  private DigitalInput limitSwitch;
+  private DoubleSolenoid climberBrake;
 
   public ClimberSubsystem() {
     climberFalcon1 = new WPI_TalonFX(ClimberConstants.CLIMBER_1);
     climberFalcon2 = new WPI_TalonFX(ClimberConstants.CLIMBER_2);
 
-    climberWinch = new TalonSRX(ClimberConstants.CLIMBER_WINCH);
+    climberBrake = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, ClimberConstants.CLIMBER_BRAKE[0],
+        ClimberConstants.CLIMBER_BRAKE[1]);
 
-    limitSwitch = new DigitalInput(ClimberConstants.CLIMBER_LIMIT_SWITCH);
-
-    climberStationaryHooks = new DoubleSolenoid(PneumaticsModuleType.CTREPCM,
-        ClimberConstants.CLIMBER_STATIONARY_PISTONS[0], ClimberConstants.CLIMBER_STATIONARY_PISTONS[1]);
-    climberMovingHook = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, ClimberConstants.CLIMBER_MOVING_PISTON[0],
-        ClimberConstants.CLIMBER_MOVING_PISTON[1]);
-    climberLeanPiston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, ClimberConstants.CLIMBER_LEAN_PISTON[0],
-        ClimberConstants.CLIMBER_LEAN_PISTON[1]);
-
-    climberStationaryHooks.set(Value.kReverse);
-    climberMovingHook.set(Value.kReverse);
-    climberLeanPiston.set(Value.kReverse);
+    climberBrake.set(Value.kReverse);
 
     climberFalcon1.setInverted(true);
     climberFalcon2.follow(climberFalcon1);
@@ -70,7 +56,8 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public void climbUp() {
-    if (ShiftingSubsystem.shiftStatus == ShiftStatus.HIGH && getAverageEncoder() <= ClimberConstants.CLIMBER_UPRIGHT_HEIGHT_LIMIT) {
+    if (ShiftingSubsystem.shiftStatus == ShiftStatus.HIGH
+        && getAverageEncoder() <= ClimberConstants.CLIMBER_UPRIGHT_HEIGHT_LIMIT) {
       climberFalcon1.set(ControlMode.PercentOutput, ClimberConstants.CLIMB_SPEED);
     } else {
       stopClimb();
@@ -83,6 +70,7 @@ public class ClimberSubsystem extends SubsystemBase {
       climberFalcon1.set(ControlMode.PercentOutput, -ClimberConstants.CLIMB_SPEED);
     } else {
       stopClimb();
+      brakeClimb();
     }
   }
 
@@ -90,24 +78,9 @@ public class ClimberSubsystem extends SubsystemBase {
     climberFalcon1.set(ControlMode.PercentOutput, 0.0);
   }
 
-  public void toggleStaticHooks() {
-    climberStationaryHooks.toggle();
-  }
-
-  public void toggleMovingHook() {
-    climberMovingHook.toggle();
-  }
-
-  public void toggleLeanPiston() {
-    climberLeanPiston.toggle();
-  }
-
-  public void moveWinch(double power) {
-    if (power > 0 && getLimitSwitch()) {
-      stopWinch();
-      return;
-    }
-    climberWinch.set(ControlMode.PercentOutput, power);
+  public void brakeClimb() {
+    if (ShiftingSubsystem.shiftStatus != ShiftStatus.HIGH)
+      climberBrake.set(DoubleSolenoid.Value.kForward);
   }
 
   public void stopWinch() {
@@ -129,14 +102,6 @@ public class ClimberSubsystem extends SubsystemBase {
   public void resetEncoders() {
     climberFalcon2.setSelectedSensorPosition(0.0);
     climberFalcon1.setSelectedSensorPosition(0.0);
-  }
-
-  public boolean getLimitSwitch() {
-    return !limitSwitch.get();
-  }
-
-  public DoubleSolenoid.Value getStationaryPosition() {
-    return climberStationaryHooks.get();
   }
 
   public boolean atEncoderLimit() {
