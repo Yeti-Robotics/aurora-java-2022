@@ -4,25 +4,21 @@
 
 package frc.robot;
 
-import java.util.Calendar;
-
-import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj2.command.*;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
-import frc.robot.Constants.TurretConstants;
-import frc.robot.subsystems.*;
-import frc.robot.utils.AutoBuilder;
 import frc.robot.commands.LED.ShooterLEDCommand;
-import frc.robot.commands.LED.SnowfallLEDCommand;
 import frc.robot.commands.climber.ClimbDownCommand;
 import frc.robot.commands.climber.ClimbUpCommand;
 import frc.robot.commands.commandgroups.AllInCommand;
 import frc.robot.commands.commandgroups.AllOutCommand;
-import frc.robot.commands.drivetrain.TurnForAngleCommand;
-import frc.robot.commands.drivetrain.TurnForAnglePIDCommand;
-import frc.robot.commands.drivetrain.TurnToTargetDriveCommand;
 import frc.robot.commands.intake.ToggleIntakeCommand;
 import frc.robot.commands.shifting.ToggleShiftCommand;
 import frc.robot.commands.shooter.ToggleFlywheelHighCommand;
@@ -32,6 +28,16 @@ import frc.robot.commands.turret.SnapTurretLeftCommand;
 import frc.robot.commands.turret.SnapTurretRightCommand;
 import frc.robot.commands.turret.ToggleTurretLockCommand;
 import frc.robot.commands.turret.TurretLockCommand;
+import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
+import frc.robot.subsystems.NeckSubsystem;
+import frc.robot.subsystems.ShiftingSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.ShooterSubsystem.ShooterMode;
+import frc.robot.subsystems.TurretSubsystem;
+import frc.robot.utils.AutoBuilder;
 import frc.robot.utils.JoyButton;
 import frc.robot.utils.JoyButton.ActiveState;
 
@@ -116,11 +122,14 @@ public class RobotContainer {
         setConditionalButton(7, new ToggleTurretLockCommand(turretSubsystem).andThen(new HomeTurretCommand(turretSubsystem, false)), ActiveState.WHEN_PRESSED, new InstantCommand(), ActiveState.WHILE_HELD);
         setConditionalButton(2, new ToggleFlywheelHighCommand(shooterLEDCommand), ActiveState.WHEN_PRESSED, new InstantCommand(), ActiveState.WHILE_HELD);
 
-        setConditionalButton(8, new HomeTurretCommand(turretSubsystem, true), ActiveState.WHEN_PRESSED, new ToggleShiftCommand(shiftingSubsystem), ActiveState.WHEN_PRESSED);
+        setConditionalButton(8, new HomeTurretCommand(turretSubsystem, true), ActiveState.WHEN_PRESSED, new InstantCommand(() -> climberSubsystem.toggleClimberBrake()), ActiveState.WHEN_PRESSED);
         setConditionalButton(3, new ToggleFlywheelLowCommand(shooterLEDCommand), ActiveState.WHEN_PRESSED, new InstantCommand(), ActiveState.WHEN_PRESSED);
 
         setConditionalButton(9, new SnapTurretLeftCommand(turretSubsystem), ActiveState.WHEN_PRESSED, new InstantCommand(), ActiveState.WHEN_PRESSED);
-        setConditionalButton(4, new InstantCommand(() -> TurretConstants.TURRET_OFFSET = 2.0), ActiveState.WHEN_PRESSED, new InstantCommand(), ActiveState.WHILE_HELD);
+        setConditionalButton(4, new InstantCommand(() -> {
+            ShooterSubsystem.shooterMode = ShooterMode.LAUNCHPAD;
+            ShooterSubsystem.isShooting = !ShooterSubsystem.isShooting;
+        }), ActiveState.WHEN_PRESSED, new InstantCommand(), ActiveState.WHILE_HELD);
 
         // 10 = kill switch for climbing
         setConditionalButton(10, new SnapTurretRightCommand(turretSubsystem), ActiveState.WHEN_PRESSED, new InstantCommand(), ActiveState.WHEN_PRESSED);

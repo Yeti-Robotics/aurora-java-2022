@@ -21,7 +21,6 @@ import frc.robot.subsystems.ShiftingSubsystem.ShiftStatus;
 
 public class ClimberSubsystem extends SubsystemBase {
   private WPI_TalonFX climberFalcon1, climberFalcon2;
-  private TalonSRX climberWinch;
   private DoubleSolenoid climberBrake;
 
   public ClimberSubsystem() {
@@ -31,9 +30,9 @@ public class ClimberSubsystem extends SubsystemBase {
     climberBrake = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, ClimberConstants.CLIMBER_BRAKE[0],
         ClimberConstants.CLIMBER_BRAKE[1]);
 
-    climberBrake.set(Value.kReverse);
+    climberBrake.set(Value.kForward);
 
-    climberFalcon1.setInverted(true);
+    climberFalcon1.setInverted(false);
     climberFalcon2.follow(climberFalcon1);
     climberFalcon2.setInverted(InvertType.FollowMaster);
 
@@ -47,8 +46,6 @@ public class ClimberSubsystem extends SubsystemBase {
 
     climberFalcon1.setNeutralMode(NeutralMode.Brake);
     climberFalcon2.setNeutralMode(NeutralMode.Brake);
-
-    climberWinch.setNeutralMode(NeutralMode.Brake);
   }
 
   @Override
@@ -56,7 +53,7 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public void climbUp() {
-    if (ShiftingSubsystem.shiftStatus == ShiftStatus.HIGH
+    if (Value.kForward == climberBrake.get()
         && getAverageEncoder() <= ClimberConstants.CLIMBER_UPRIGHT_HEIGHT_LIMIT) {
       climberFalcon1.set(ControlMode.PercentOutput, ClimberConstants.CLIMB_SPEED);
     } else {
@@ -65,26 +62,16 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public void climbDown() {
-    if (ShiftingSubsystem.shiftStatus == ShiftStatus.HIGH
+    if (Value.kForward == climberBrake.get()
         && getAverageEncoder() >= ClimberConstants.CLIMBER_TOLERANCE) {
       climberFalcon1.set(ControlMode.PercentOutput, -ClimberConstants.CLIMB_SPEED);
     } else {
       stopClimb();
-      brakeClimb();
     }
   }
 
   public void stopClimb() {
     climberFalcon1.set(ControlMode.PercentOutput, 0.0);
-  }
-
-  public void brakeClimb() {
-    if (ShiftingSubsystem.shiftStatus != ShiftStatus.HIGH)
-      climberBrake.set(DoubleSolenoid.Value.kForward);
-  }
-
-  public void stopWinch() {
-    climberWinch.set(ControlMode.PercentOutput, 0.0);
   }
 
   public double getLeftEncoder() {
@@ -107,5 +94,9 @@ public class ClimberSubsystem extends SubsystemBase {
   public boolean atEncoderLimit() {
     return getAverageEncoder() <= ClimberConstants.CLIMBER_TOLERANCE || getAverageEncoder()
         + ClimberConstants.CLIMBER_TOLERANCE >= ClimberConstants.CLIMBER_UPRIGHT_HEIGHT_LIMIT;
+  }
+
+  public void toggleClimberBrake() {
+    climberBrake.toggle();
   }
 }

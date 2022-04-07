@@ -20,12 +20,12 @@ public class ShiftingSubsystem extends SubsystemBase {
     }
 
     public void shiftUp() {
-        shifter.set(DoubleSolenoid.Value.kForward);
+        shifter.set(DoubleSolenoid.Value.kReverse);
         shiftStatus = ShiftStatus.HIGH;
     }
 
     public void shiftDown() {
-        shifter.set(DoubleSolenoid.Value.kReverse);
+        shifter.set(DoubleSolenoid.Value.kForward);
         shiftStatus = ShiftStatus.LOW;
     }
 

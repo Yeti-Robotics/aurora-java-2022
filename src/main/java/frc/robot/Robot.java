@@ -9,15 +9,14 @@ import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CompressorConfigType;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.TurretConstants;
@@ -26,12 +25,9 @@ import frc.robot.commands.LED.BlinkLEDCommand;
 import frc.robot.commands.LED.SetLEDToRGBCommand;
 import frc.robot.commands.LED.TeleLEDDefaultCommand;
 import frc.robot.commands.turret.HomeTurretCommand;
-import frc.robot.commands.turret.SnapTurretRightCommand;
 import frc.robot.commands.turret.TurretLockCommand;
 import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.TurretSubsystem;
 import frc.robot.subsystems.TurretSubsystem.TurretLockStatus;
-import frc.robot.utils.PhotonVision;
 
 public class Robot extends TimedRobot {
 	private Command m_autonomousCommand;
@@ -63,6 +59,8 @@ public class Robot extends TimedRobot {
 		revPDH.setSwitchableChannel(false);
 		timer = System.currentTimeMillis();
 
+		UsbCamera driverCam = CameraServer.startAutomaticCapture();
+
 		autoChooser = new SendableChooser<>();
 		autoChooser.setDefaultOption("ONE_BALL", AutoModes.ONE_BALL);
 		autoChooser.addOption("ONE_BALL", AutoModes.ONE_BALL);
@@ -86,7 +84,6 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putString("Turret Lock Status: ",
 				((robotContainer.turretSubsystem.lockStatus == TurretLockStatus.UNLOCKED) ? "UNLOCKED" : "LOCKED"));
 		SmartDashboard.putString("Control Mode: ", (robotContainer.shooterMode) ? "SHOOTING" : "CLIMBING");
-		UsbCamera driverCam = CameraServer.startAutomaticCapture();
 
 		// System.out.println("DIST: " + PhotonVision.getDistance() + "; setPoint: " + ShooterSubsystem.setPoint);
 		//System.out.println("getFlywheelRPM: " + robotContainer.shooterSubsystem.getFlywheelRPM());
@@ -183,9 +180,6 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopPeriodic() {
-		if(PhotonVision.getDistance() > 0.0)
-			ShooterSubsystem.setPoint = ((25/3) * PhotonVision.getDistance()) + 2991.66667;
-
 		if (DriverStation.getMatchTime() < 30 && !blinkWarningRan) {
 			beforeBlinkCommand = robotContainer.ledSubsystem.getCurrentCommand();
 			new BlinkLEDCommand(robotContainer.ledSubsystem, 300, 255, 34,
