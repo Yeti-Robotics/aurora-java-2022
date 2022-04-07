@@ -138,8 +138,8 @@ public final class Constants {
 
     public static final class IntakeConstants {
         public static final int INTAKE_FALCON = 9;
-        public static final int[] INTAKE_PISTONS_SOLENOID = {2, 3}; 
-        public static final double INTAKE_SPEED = 0.25; 
+        public static final int[] INTAKE_PISTONS_SOLENOID = {2, 3};
+        public static final double INTAKE_SPEED = 0.35;
     }
 
     public static final class NeckConstants {
