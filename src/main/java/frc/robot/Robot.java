@@ -165,6 +165,7 @@ public class Robot extends TimedRobot {
 		robotContainer.drivetrainSubsystem.resetGyro();
 
 		snowfallLedCommand.cancel();
+		redLedCommand.cancel();
 		robotContainer.ledSubsystem.setDefaultCommand(new TeleLEDDefaultCommand(robotContainer.ledSubsystem));
 
 		CommandScheduler.getInstance().onCommandFinish(command -> {
