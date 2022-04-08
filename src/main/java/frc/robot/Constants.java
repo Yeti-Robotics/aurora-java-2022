@@ -66,6 +66,7 @@ public final class Constants {
         public static final String threeBall2 = "threeBall2";
         public static final String fourBall1 = "fourBall1";
         public static final String fourBall2 = "fourBall2";
+        public static final String twoBallDump = "twoBallDump";
     }
 
     public static final class LimelightConstants {
@@ -90,19 +91,14 @@ public final class Constants {
     public static final class ClimberConstants {
         public static final int CLIMBER_1 = 5; // front relative to robot
         public static final int CLIMBER_2 = 6; // rear relative to robot
-        public static final int CLIMBER_WINCH = 13; 
-        public static final int CLIMBER_LIMIT_SWITCH = 5;
 
         public static final double CLIMB_SPEED = 0.3;
         public static final double CLIMBER_LOWER_LIMIT = 0.0;
         public static final double CLIMBER_UPRIGHT_HEIGHT_LIMIT = 98890; // 5' 6" roughly; keeps underneath limit
         public static final double CLIMBER_UPPER_LIMIT = 101331.5; 
         public static final double CLIMBER_TOLERANCE = 15.0; 
-        public static final double CLIMBER_WINCH_SPEED = 1.0;
 
-        public static final int[] CLIMBER_LEAN_PISTON = {4, 5}; 
-        public static final int[] CLIMBER_MOVING_PISTON = {6, 7}; 
-        public static final int[] CLIMBER_STATIONARY_PISTONS = {8, 9}; 
+        public static final int[] CLIMBER_BRAKE = {4,5}; 
 
         // trajectory constants
         public static final int SHOOTER_HEIGHT = 23; // inches
@@ -143,8 +139,9 @@ public final class Constants {
 
     public static final class IntakeConstants {
         public static final int INTAKE_FALCON = 9;
-        public static final int[] INTAKE_PISTONS_SOLENOID = {2, 3}; 
-        public static final double INTAKE_SPEED = 0.375; 
+        public static final int[] INTAKE_PISTONS_SOLENOID = {2, 3};
+        public static final double INTAKE_SPEED = 0.35;
+        public static final double INTAKE_OUT_SPEED = 0.35;
     }
 
     public static final class NeckConstants {
@@ -154,6 +151,8 @@ public final class Constants {
         public static final int NECK_UPPER_BEAM_BREAK = 2;
         public static final double NECK_FRONT_SPEED = 0.6;
         public static final double NECK_REAR_SPEED = 0.6;
+        public static final double NECK_FRONT_OUT_SPEED = 0.4;
+        public static final double NECK_REAR_OUT_SPEED = 0.4;
     }
 
     public static final class TurretConstants {
@@ -171,7 +170,7 @@ public final class Constants {
         public static final double TURRET_45_LEFT = TurretConstants.TURRET_MAX_LEFT / 2.0; // ???
         public static final double TURRET_TOLERANCE = 1.0; // tolerance for checking encoder limits
         public static final double LIMELIGHT_TOLERANCE = 0.1; // tolerance for alignment of target using limelight
-        public static final double TURRET_OFFSET = 8.0; // inches
+        public static double TURRET_OFFSET = 8.0; // inches
     }
 
     public static final class OIConstants {

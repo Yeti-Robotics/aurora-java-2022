@@ -55,6 +55,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     leftMotors = new MotorControllerGroup(leftFalcon1, leftFalcon2);
     rightMotors = new MotorControllerGroup(rightFalcon1, rightFalcon2);
     rightMotors.setInverted(true);
+    leftMotors.setInverted(false);
     setMotorsBrake();
 
     drive = new DifferentialDrive(leftMotors, rightMotors);

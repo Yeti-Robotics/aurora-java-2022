@@ -5,6 +5,7 @@
 package frc.robot.commands.commandgroups;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.NeckSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -13,10 +14,19 @@ public class AllInCommand extends CommandBase {
 	private NeckSubsystem neckSubsystem;
 	private IntakeSubsystem intakeSubsystem;
 	private long startTime;
+	private double intakeSpeed;
+
+	public AllInCommand(IntakeSubsystem intakeSubsystem, NeckSubsystem neckSubsystem, double intakeSpeed) {
+		this.neckSubsystem = neckSubsystem;
+		this.intakeSubsystem = intakeSubsystem;
+		this.intakeSpeed = intakeSpeed;
+		addRequirements(neckSubsystem, intakeSubsystem);
+	}
 
 	public AllInCommand(IntakeSubsystem intakeSubsystem, NeckSubsystem neckSubsystem) {
 		this.neckSubsystem = neckSubsystem;
 		this.intakeSubsystem = intakeSubsystem;
+		this.intakeSpeed = IntakeConstants.INTAKE_SPEED;
 		addRequirements(neckSubsystem, intakeSubsystem);
 	}
 
@@ -29,7 +39,7 @@ public class AllInCommand extends CommandBase {
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-		intakeSubsystem.rollIn();
+		intakeSubsystem.rollIn(intakeSpeed);
 		neckSubsystem.stopNeck();
 
 		if(ShooterSubsystem.atSetPoint){

@@ -7,6 +7,7 @@ package frc.robot.commands.shooter;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.LED.ShooterLEDCommand;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.ShooterSubsystem.ShooterMode;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -27,6 +28,6 @@ public class ToggleFlywheelLowCommand extends InstantCommand {
     }
 
     ShooterSubsystem.isShooting = !ShooterSubsystem.isShooting;
-    ShooterSubsystem.isHighGoal = false;
+    ShooterSubsystem.shooterMode = ShooterMode.LOWGOAL;
   }
 }

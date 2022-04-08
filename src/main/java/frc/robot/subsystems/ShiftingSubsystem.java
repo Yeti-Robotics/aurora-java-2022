@@ -15,17 +15,17 @@ public class ShiftingSubsystem extends SubsystemBase {
     public static ShiftStatus shiftStatus;
 
     public ShiftingSubsystem() {
-        shifter = new DoubleSolenoid(PneumaticsModuleType.REVPH, DriveConstants.SOLENOID_SHIFTER[0], DriveConstants.SOLENOID_SHIFTER[1]);
+        shifter = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, DriveConstants.SOLENOID_SHIFTER[0], DriveConstants.SOLENOID_SHIFTER[1]);
         shiftUp();
     }
 
     public void shiftUp() {
-        shifter.set(DoubleSolenoid.Value.kForward);
+        shifter.set(DoubleSolenoid.Value.kReverse);
         shiftStatus = ShiftStatus.HIGH;
     }
 
     public void shiftDown() {
-        shifter.set(DoubleSolenoid.Value.kReverse);
+        shifter.set(DoubleSolenoid.Value.kForward);
         shiftStatus = ShiftStatus.LOW;
     }
 

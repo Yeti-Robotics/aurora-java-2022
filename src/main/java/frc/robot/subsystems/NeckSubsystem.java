@@ -43,8 +43,8 @@ public class NeckSubsystem extends SubsystemBase {
     }
 
     public void moveDown(){
-        frontSpark.set(-NeckConstants.NECK_FRONT_SPEED);
-        rearSpark.set(-NeckConstants.NECK_REAR_SPEED);
+        frontSpark.set(-NeckConstants.NECK_FRONT_OUT_SPEED);
+        rearSpark.set(-NeckConstants.NECK_REAR_OUT_SPEED);
     }
 
     public void stopNeck(){

@@ -20,7 +20,6 @@ public class SnowfallLEDCommand extends CommandBase {
     this.startTime = System.currentTimeMillis();
     stage = 0;
     addRequirements(ledSubsystem);
-
   }
 
   // Called when the command is initially scheduled.
@@ -31,7 +30,7 @@ public class SnowfallLEDCommand extends CommandBase {
         ledSubsystem.setRGB(i, 255, 255, 255);
         continue;
       }
-      ledSubsystem.setRGB(i, 0, 255, 0); 
+      ledSubsystem.setRGB(i, 20, 120, 255);
       }
       ledSubsystem.sendData();
       stage++;
@@ -46,12 +45,16 @@ public class SnowfallLEDCommand extends CommandBase {
           ledSubsystem.setRGB(i, 255, 255, 255);
           continue;
         }
-        ledSubsystem.setRGB(i, 0, 255, 0); 
+        ledSubsystem.setRGB(i, 20, 120, 255); 
         }
         ledSubsystem.sendData();
         stage = stage + 1 > 3 ? 0 : stage + 1;
       startTime = System.currentTimeMillis();
     }
+  }
+
+  public boolean runsWhenDisabled() {
+    return true;
   }
 
   // Called once the command ends or is interrupted.
