@@ -140,6 +140,7 @@ public final class Constants {
         public static final int INTAKE_FALCON = 9;
         public static final int[] INTAKE_PISTONS_SOLENOID = {2, 3};
         public static final double INTAKE_SPEED = 0.35;
+        public static final double INTAKE_OUT_SPEED = 0.35;
     }
 
     public static final class NeckConstants {
@@ -149,6 +150,8 @@ public final class Constants {
         public static final int NECK_UPPER_BEAM_BREAK = 2;
         public static final double NECK_FRONT_SPEED = 0.6;
         public static final double NECK_REAR_SPEED = 0.6;
+        public static final double NECK_FRONT_OUT_SPEED = 0.4;
+        public static final double NECK_REAR_OUT_SPEED = 0.4;
     }
 
     public static final class TurretConstants {
