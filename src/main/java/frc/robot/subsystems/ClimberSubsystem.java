@@ -32,7 +32,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
     climberBrake.set(Value.kForward);
 
-    climberFalcon1.setInverted(false);
+    climberFalcon1.setInverted(true);
     climberFalcon2.follow(climberFalcon1);
     climberFalcon2.setInverted(InvertType.FollowMaster);
 

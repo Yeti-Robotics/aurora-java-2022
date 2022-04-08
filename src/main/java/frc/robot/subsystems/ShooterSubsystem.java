@@ -85,7 +85,7 @@ public class ShooterSubsystem extends SubsystemBase {
                             + shooterPID.calculate(getFlywheelRPM(), ShooterSubsystem.setPoint));
                     break;
                 case LAUNCHPAD:
-                    shootFlywheel(ShooterConstants.SHOOTER_F + shooterPID.calculate(getFlywheelRPM(), 6250));
+                    shootFlywheel(ShooterConstants.SHOOTER_F + shooterPID.calculate(getFlywheelRPM(), ShooterSubsystem.setPoint));
                     break;
                 case LOWGOAL:
                     shootFlywheel(ShooterConstants.SHOOTER_LOW_SPEED);

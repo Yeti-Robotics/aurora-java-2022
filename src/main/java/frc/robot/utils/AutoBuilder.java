@@ -30,6 +30,8 @@ import frc.robot.Robot.AutoModes;
 import frc.robot.commands.LED.ShooterLEDCommand;
 import frc.robot.commands.commandgroups.AllInCommand;
 import frc.robot.commands.commandgroups.AllInCommandGroup;
+import frc.robot.commands.commandgroups.AllOutCommand;
+import frc.robot.commands.commandgroups.DeadReckon2BallAuto;
 import frc.robot.commands.drivetrain.DriveForDistanceCommand;
 import frc.robot.commands.drivetrain.TurnToTargetDriveCommand;
 import frc.robot.commands.intake.ToggleIntakeCommand;
@@ -53,7 +55,7 @@ public class AutoBuilder {
             new ToggleIntakeCommand(robotContainer.intakeSubsystem),
             new WaitCommand(1.0), 
             new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(1.0),
-            new InstantCommand(() -> ShooterSubsystem.setPoint = 3600.0),
+            new InstantCommand(() -> ShooterSubsystem.setPoint = 4400.0),
             new ToggleFlywheelHighCommand(shooterLEDCommand),
             new WaitCommand(1.5),
             new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(0.3),
@@ -62,8 +64,7 @@ public class AutoBuilder {
             new ToggleFlywheelHighCommand(shooterLEDCommand));
 
         pathCommandGroup.addCommands(
-            runTrajectoryPath(AutoConstants.twoBallPrimary1),
-            runTrajectoryPath(AutoConstants.twoBallPrimary2)
+            runTrajectoryPath(AutoConstants.twoBallPrimary1)
         );
 
         command.alongWith(pathCommandGroup, subsystemCommandGroup);
@@ -106,29 +107,29 @@ public class AutoBuilder {
     private void fourBall() {
         subsystemCommandGroup.addCommands(
             new ToggleIntakeCommand(robotContainer.intakeSubsystem), 
-            new InstantCommand(() -> TurretConstants.TURRET_OFFSET = 0.0),
+            // new InstantCommand(() -> TurretConstants.TURRET_OFFSET = 0.0),
             new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(1.5), 
-            new InstantCommand(() -> ShooterSubsystem.setPoint = 4900.0),
-            new ToggleFlywheelHighCommand(shooterLEDCommand), 
+            new InstantCommand(() -> ShooterSubsystem.setPoint = 4400.0),
+            new InstantCommand(() -> ShooterSubsystem.isShooting = true),
             new WaitCommand(0.75), 
             new ToggleIntakeCommand(robotContainer.intakeSubsystem), 
             new WaitCommand(0.5), 
             new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(0.3),
             new WaitCommand(0.5), 
             new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(0.7),
-            new ToggleFlywheelHighCommand(shooterLEDCommand),
+            new InstantCommand(() -> ShooterSubsystem.isShooting = false),
             new ToggleIntakeCommand(robotContainer.intakeSubsystem), 
             new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem, 0.375).withTimeout(4.25),
             new WaitCommand(2.5),
-            new InstantCommand(() -> ShooterSubsystem.setPoint = 4600.0),
-            new ToggleFlywheelHighCommand(shooterLEDCommand), 
+            new InstantCommand(() -> ShooterSubsystem.setPoint = 4200.0),
+            new InstantCommand(() -> ShooterSubsystem.isShooting = true),
             new WaitCommand(0.75), 
             new ToggleIntakeCommand(robotContainer.intakeSubsystem), 
             new WaitCommand(0.25), 
             new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(0.4),
             new WaitCommand(0.5), 
             new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(0.7),
-            new ToggleFlywheelHighCommand(shooterLEDCommand), 
+            new InstantCommand(() -> ShooterSubsystem.isShooting = false),
             new InstantCommand(() -> TurretConstants.TURRET_OFFSET = 8.0)
         );
 
@@ -169,6 +170,38 @@ public class AutoBuilder {
             runTrajectoryPath(AutoConstants.threeBall1), 
             new WaitCommand(2.0), 
             runTrajectoryPath(AutoConstants.threeBall2)
+        );
+
+        command.alongWith(pathCommandGroup, subsystemCommandGroup);
+    }
+
+    private void twoBallDump(){
+
+        subsystemCommandGroup.addCommands(
+            new ToggleIntakeCommand(robotContainer.intakeSubsystem),
+            new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(3.0),
+            new WaitCommand(3.0), 
+            new ToggleIntakeCommand(robotContainer.intakeSubsystem),
+            new WaitCommand(1.0), 
+            new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(1.0),
+            new InstantCommand(() -> ShooterSubsystem.setPoint = 3600.0),
+            new ToggleFlywheelHighCommand(shooterLEDCommand),
+            new WaitCommand(1.5),
+            new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(0.3),
+            new WaitCommand(0.5), 
+            new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(0.7),                
+            new ToggleFlywheelHighCommand(shooterLEDCommand),
+            new ToggleIntakeCommand(robotContainer.intakeSubsystem),
+            new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(4),
+            new WaitCommand(2),
+            new ToggleIntakeCommand(robotContainer.intakeSubsystem),
+            new AllOutCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(1.5)
+            );
+
+        pathCommandGroup.addCommands(
+            runTrajectoryPath(AutoConstants.twoBallPrimary1),
+            runTrajectoryPath(AutoConstants.twoBallPrimary2),
+            runTrajectoryPath(AutoConstants.twoBallDump)
         );
 
         command.alongWith(pathCommandGroup, subsystemCommandGroup);
@@ -242,6 +275,9 @@ public class AutoBuilder {
                 break;
             case TEST_AUTO: 
                 testAuto();
+                break;
+            case TWO_BALL_DUMP:
+                twoBallDump();
                 break;
             default:
                 fourBall();

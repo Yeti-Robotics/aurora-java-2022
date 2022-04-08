@@ -43,7 +43,7 @@ public class Robot extends TimedRobot {
 	private SnowfallLEDCommand snowfallLedCommand;
 
 	public static enum AutoModes {
-		ONE_BALL, TWO_BALL, TWO_BALL_ALTERNATIVE, THREE_BALL, FOUR_BALL, TEST_AUTO
+		ONE_BALL, TWO_BALL, TWO_BALL_ALTERNATIVE, THREE_BALL, FOUR_BALL, TEST_AUTO, TWO_BALL_DUMP 
 	}
 
 	long timer;
@@ -108,6 +108,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void autonomousInit() {
+		ShooterSubsystem.shooterMode = ShooterSubsystem.ShooterMode.LAUNCHPAD;
 		robotContainer.turretSubsystem.resetEncoder();
 		Command currLEDCommand = robotContainer.ledSubsystem.getCurrentCommand();
 		if(currLEDCommand != null){
@@ -120,7 +121,7 @@ public class Robot extends TimedRobot {
 		switch((Robot.AutoModes) autoChooser.getSelected()){
 			case TWO_BALL: 
 				turretAuto = new SequentialCommandGroup(
-					new WaitCommand(8.0),
+					new WaitCommand(6.0),
 					new InstantCommand(() -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED)
 				);
 				break;
@@ -130,7 +131,7 @@ public class Robot extends TimedRobot {
 					new InstantCommand(() -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED),
 					new WaitCommand(5.0),
 					new HomeTurretCommand(robotContainer.turretSubsystem, true), 
-					new WaitCommand(1.5),
+					new WaitCommand(1.25),
 					new InstantCommand(() -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED)
 				);
 				break;
@@ -150,6 +151,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopInit() {
+		ShooterSubsystem.shooterMode = ShooterSubsystem.ShooterMode.LIMELIGHT;
 		if (robotContainer.turretSubsystem.getMagSwitch()) {
 			robotContainer.turretSubsystem.resetEncoder();
 		}

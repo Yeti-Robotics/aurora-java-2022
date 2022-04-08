@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.NeckSubsystem;
+import frc.robot.subsystems.TurretSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.commands.drivetrain.DriveForDistanceCommand;
 import frc.robot.commands.LED.ShooterLEDCommand;
@@ -15,12 +16,14 @@ import frc.robot.commands.commandgroups.AllInCommand;
 import frc.robot.commands.drivetrain.TurnForAngleCommand;
 import frc.robot.commands.intake.ToggleIntakeCommand;
 import frc.robot.commands.shooter.ToggleFlywheelHighCommand;
+import frc.robot.commands.turret.TurretLockCommand;
 
 public class DeadReckon2BallAuto extends CommandBase {
 
   private IntakeSubsystem intakeSubsystem;
   private NeckSubsystem neckSubsystem;
   private DrivetrainSubsystem drivetrainSubsystem;
+  private TurretSubsystem turretSubsystem;
   private ShooterLEDCommand shooterLEDCommand;
 
   /** Creates a new AllOutCommand. */
@@ -44,6 +47,7 @@ public class DeadReckon2BallAuto extends CommandBase {
     new ToggleIntakeCommand(intakeSubsystem);
     new TurnForAngleCommand(drivetrainSubsystem, 160);
     new DriveForDistanceCommand(drivetrainSubsystem, 0.5715, 50);
+    new TurretLockCommand(turretSubsystem);
     new ToggleFlywheelHighCommand(shooterLEDCommand);
     new WaitCommand(0.75);
     new AllInCommand(intakeSubsystem, neckSubsystem).withTimeout(0.3);
