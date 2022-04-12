@@ -68,15 +68,15 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-        ledSubsystem = new LEDSubsystem();
+        ledSubsystem = LEDSubsystem.getInstance();
         driverStationJoystick = new Joystick(OIConstants.DRIVER_STATION_JOY);
-        intakeSubsystem = new IntakeSubsystem();
-        shiftingSubsystem = new ShiftingSubsystem();
-        neckSubsystem = new NeckSubsystem();
-        turretSubsystem = new TurretSubsystem();
-        shooterSubsystem = new ShooterSubsystem();
-        climberSubsystem = new ClimberSubsystem();
-        drivetrainSubsystem = new DrivetrainSubsystem();
+        intakeSubsystem = IntakeSubsystem.getInstance();
+        shiftingSubsystem = ShiftingSubsystem.getInstance();
+        neckSubsystem = NeckSubsystem.getInstance();
+        turretSubsystem = TurretSubsystem.getInstance();
+        shooterSubsystem = ShooterSubsystem.getInstance();
+        climberSubsystem = ClimberSubsystem.getInstance();
+        drivetrainSubsystem = DrivetrainSubsystem.getInstance();
 
         turretSubsystem.setDefaultCommand(new TurretLockCommand(turretSubsystem));
 

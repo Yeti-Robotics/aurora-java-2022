@@ -38,7 +38,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     private PIDController shooterPID;
 
-    public ShooterSubsystem() {
+    private ShooterSubsystem() {
         shooterLeftFalcon = new TalonFX(ShooterConstants.SHOOTER_LEFT_FALCON);
         shooterRightFalcon = new TalonFX(ShooterConstants.SHOOTER_RIGHT_FALCON);
 
@@ -67,6 +67,11 @@ public class ShooterSubsystem extends SubsystemBase {
 
         shooterPID = new PIDController(ShooterConstants.SHOOTER_P, ShooterConstants.SHOOTER_I,
                 ShooterConstants.SHOOTER_D);
+    }
+
+    private static final ShooterSubsystem instance = new ShooterSubsystem();
+    public static ShooterSubsystem getInstance() {
+        return instance;
     }
 
     @Override

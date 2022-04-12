@@ -14,9 +14,14 @@ public class ShiftingSubsystem extends SubsystemBase {
 
     public static ShiftStatus shiftStatus;
 
-    public ShiftingSubsystem() {
+    private ShiftingSubsystem() {
         shifter = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, DriveConstants.SOLENOID_SHIFTER[0], DriveConstants.SOLENOID_SHIFTER[1]);
         shiftUp();
+    }
+
+    private static final ShiftingSubsystem instance = new ShiftingSubsystem();
+    public static ShiftingSubsystem getInstance() {
+        return instance;
     }
 
     public void shiftUp() {

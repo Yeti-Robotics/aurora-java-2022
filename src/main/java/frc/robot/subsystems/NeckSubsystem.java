@@ -13,11 +13,16 @@ public class NeckSubsystem extends SubsystemBase {
     private DigitalInput lowerBeamBreak;
     private DigitalInput upperBeamBreak;
 
-    public NeckSubsystem() {
+    private NeckSubsystem() {
         frontSpark = new CANSparkMax(NeckConstants.FRONT_INDEXER, MotorType.kBrushless);
         rearSpark = new CANSparkMax(NeckConstants.REAR_INDEXER, MotorType.kBrushless);
         lowerBeamBreak = new DigitalInput(NeckConstants.NECK_LOWER_BEAM_BREAK);
         upperBeamBreak = new DigitalInput(NeckConstants.NECK_UPPER_BEAM_BREAK);
+    }
+
+    private static final NeckSubsystem instance = new NeckSubsystem();
+    public static NeckSubsystem getInstance() {
+        return instance;
     }
 
     @Override

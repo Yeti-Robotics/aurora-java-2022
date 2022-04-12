@@ -19,12 +19,17 @@ public class IntakeSubsystem extends SubsystemBase {
     private TalonFX intakeFalcon;
     private DoubleSolenoid pistons;
 
-    public IntakeSubsystem() {
+    private IntakeSubsystem() {
         pistons = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, IntakeConstants.INTAKE_PISTONS_SOLENOID[0], IntakeConstants.INTAKE_PISTONS_SOLENOID[1]);
         intakeFalcon = new TalonFX(IntakeConstants.INTAKE_FALCON);
         intakeStatus = IntakeStatus.IN;
         pistons.set(Value.kForward);
         intakeFalcon.setInverted(true);
+    }
+
+    private static final IntakeSubsystem instance = new IntakeSubsystem();
+    public static IntakeSubsystem getInstance() {
+        return instance;
     }
 
     public void extend(){

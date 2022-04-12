@@ -22,7 +22,7 @@ public class LEDSubsystem extends SubsystemBase {
 
   public LEDStripStatus stripStatus;
 
-  public LEDSubsystem() {
+  private LEDSubsystem() {
     ledStrip = new AddressableLED(LEDConstants.ADDRESSABLE_LED);
     ledBuffer = new AddressableLEDBuffer(LEDConstants.LED_COUNT);
 
@@ -35,6 +35,12 @@ public class LEDSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("g", g);
     SmartDashboard.putNumber("b", b);
   }
+
+  private static final LEDSubsystem instance = new LEDSubsystem();
+  public static LEDSubsystem getInstance() {
+    return instance;
+  }
+
   @Override
   public void periodic() {
   }

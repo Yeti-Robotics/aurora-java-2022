@@ -23,7 +23,7 @@ public class ClimberSubsystem extends SubsystemBase {
   private WPI_TalonFX climberFalcon1, climberFalcon2;
   private DoubleSolenoid climberBrake;
 
-  public ClimberSubsystem() {
+  private ClimberSubsystem() {
     climberFalcon1 = new WPI_TalonFX(ClimberConstants.CLIMBER_1);
     climberFalcon2 = new WPI_TalonFX(ClimberConstants.CLIMBER_2);
 
@@ -46,6 +46,11 @@ public class ClimberSubsystem extends SubsystemBase {
 
     climberFalcon1.setNeutralMode(NeutralMode.Brake);
     climberFalcon2.setNeutralMode(NeutralMode.Brake);
+  }
+
+  private static final ClimberSubsystem instance = new ClimberSubsystem();
+  public static ClimberSubsystem getInstance() {
+    return instance;
   }
 
   @Override

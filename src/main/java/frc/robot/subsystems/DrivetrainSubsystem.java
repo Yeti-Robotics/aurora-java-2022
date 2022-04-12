@@ -36,7 +36,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   private NeutralMode neutralMode;
 
-  public DrivetrainSubsystem() {
+  private DrivetrainSubsystem() {
     leftFalcon1 = new WPI_TalonFX(DriveConstants.LEFT_FALCON_1);
     leftFalcon2 = new WPI_TalonFX(DriveConstants.LEFT_FALCON_2);
     rightFalcon1 = new WPI_TalonFX(DriveConstants.RIGHT_FALCON_1);
@@ -73,6 +73,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
     driveMode = DriveMode.CHEEZY;
 
     drivePID = new PIDController(DriveConstants.DRIVE_P, DriveConstants.DRIVE_I, DriveConstants.DRIVE_D);
+  }
+
+  private static final DrivetrainSubsystem instance = new DrivetrainSubsystem();
+  public static DrivetrainSubsystem getInstance() {
+    return instance;
   }
 
   @Override

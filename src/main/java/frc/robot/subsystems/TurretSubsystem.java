@@ -25,7 +25,7 @@ public class TurretSubsystem extends SubsystemBase {
 
     public TurretLockStatus lockStatus;
 
-	public TurretSubsystem() {
+	private TurretSubsystem() {
 		turretSpark = new CANSparkMax(TurretConstants.TURRET_SPARK, MotorType.kBrushless);
 		magSwitch = new DigitalInput(TurretConstants.MAG_SWITCH_PORT);
         turretEncoder = turretSpark.getEncoder();
@@ -35,6 +35,11 @@ public class TurretSubsystem extends SubsystemBase {
         turretSpark.enableSoftLimit(SoftLimitDirection.kReverse, true);
         turretSpark.setSoftLimit(SoftLimitDirection.kForward, (float) TurretConstants.TURRET_MAX_RIGHT);
         turretSpark.setSoftLimit(SoftLimitDirection.kReverse, (float) TurretConstants.TURRET_MAX_LEFT);
+    }
+
+    private static final TurretSubsystem instance = new TurretSubsystem();
+    public static TurretSubsystem getInstance() {
+        return instance;
     }
 
     @Override
