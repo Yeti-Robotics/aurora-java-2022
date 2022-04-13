@@ -19,9 +19,10 @@ import frc.robot.Constants;
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.subsystems.ShiftingSubsystem.ShiftStatus;
 
-public class ClimberSubsystem extends SubsystemBase {
-  private WPI_TalonFX climberFalcon1, climberFalcon2;
-  private DoubleSolenoid climberBrake;
+public class ClimberSubsystem extends SubsystemBase implements AutoCloseable {
+  private final WPI_TalonFX climberFalcon1;
+  private final WPI_TalonFX climberFalcon2;
+  private final DoubleSolenoid climberBrake;
 
   public ClimberSubsystem() {
     climberFalcon1 = new WPI_TalonFX(ClimberConstants.CLIMBER_1);
@@ -30,8 +31,21 @@ public class ClimberSubsystem extends SubsystemBase {
     climberBrake = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, ClimberConstants.CLIMBER_BRAKE[0],
         ClimberConstants.CLIMBER_BRAKE[1]);
 
-    climberBrake.set(Value.kForward);
+    configClimberFalcons(climberFalcon1, climberFalcon2);
+    configClimberBrake(climberBrake);
+  }
 
+  /** For testing only */
+  public ClimberSubsystem(WPI_TalonFX climberFalcon1, WPI_TalonFX climberFalcon2, DoubleSolenoid climberBrake) {
+    configClimberFalcons(climberFalcon1, climberFalcon2);
+    configClimberBrake(climberBrake);
+
+    this.climberFalcon1 = climberFalcon1;
+    this.climberFalcon2 = climberFalcon2;
+    this.climberBrake = climberBrake;
+  }
+
+  public static void configClimberFalcons(WPI_TalonFX climberFalcon1, WPI_TalonFX climberFalcon2) {
     climberFalcon1.setInverted(true);
     climberFalcon2.follow(climberFalcon1);
     climberFalcon2.setInverted(InvertType.FollowMaster);
@@ -48,6 +62,10 @@ public class ClimberSubsystem extends SubsystemBase {
     climberFalcon2.setNeutralMode(NeutralMode.Brake);
   }
 
+  public static void configClimberBrake(DoubleSolenoid climberBrake) {
+    climberBrake.set(Value.kForward);
+  }
+
   @Override
   public void periodic() {
   }
@@ -55,8 +73,10 @@ public class ClimberSubsystem extends SubsystemBase {
   public void climbUp() {
     if (Value.kForward == climberBrake.get()
         && getAverageEncoder() <= ClimberConstants.CLIMBER_UPRIGHT_HEIGHT_LIMIT) {
-      climberFalcon1.set(ControlMode.PercentOutput, ClimberConstants.CLIMB_SPEED);
+      System.out.println("climb up success");
+      climberFalcon1.set(ClimberConstants.CLIMB_SPEED);
     } else {
+      System.out.println("climb up fail");
       stopClimb();
     }
   }
@@ -64,14 +84,16 @@ public class ClimberSubsystem extends SubsystemBase {
   public void climbDown() {
     if (Value.kForward == climberBrake.get()
         && getAverageEncoder() >= ClimberConstants.CLIMBER_TOLERANCE) {
-      climberFalcon1.set(ControlMode.PercentOutput, -ClimberConstants.CLIMB_SPEED);
+      System.out.println("climb down success");
+      climberFalcon1.set(-ClimberConstants.CLIMB_SPEED);
     } else {
+      System.out.println("climb down fail");
       stopClimb();
     }
   }
 
   public void stopClimb() {
-    climberFalcon1.set(ControlMode.PercentOutput, 0.0);
+    climberFalcon1.set(0.0);
   }
 
   public double getLeftEncoder() {
@@ -98,5 +120,12 @@ public class ClimberSubsystem extends SubsystemBase {
 
   public void toggleClimberBrake() {
     climberBrake.toggle();
+  }
+
+  @Override
+  public void close() {
+    climberBrake.close();
+    climberFalcon1.close();
+    climberFalcon2.close();
   }
 }
