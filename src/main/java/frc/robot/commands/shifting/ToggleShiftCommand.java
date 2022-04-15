@@ -1,6 +1,7 @@
 package frc.robot.commands.shifting;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+
 import frc.robot.subsystems.ShiftingSubsystem;
 
 public class ToggleShiftCommand extends CommandBase {
@@ -12,9 +13,7 @@ public class ToggleShiftCommand extends CommandBase {
     }
 
     @Override
-    public void initialize() {
-
-    }
+    public void initialize() {}
 
     @Override
     public void execute() {
@@ -31,7 +30,5 @@ public class ToggleShiftCommand extends CommandBase {
     }
 
     @Override
-    public void end(boolean interrupted) {
-
-    }
+    public void end(boolean interrupted) {}
 }

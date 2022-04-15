@@ -10,6 +10,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.utils.PhotonVision;
@@ -21,13 +22,17 @@ public class ShooterSubsystem extends SubsystemBase {
     private MotorControllerGroup shooterFalcons;
 
     public enum ShooterStatus {
-        FORWARD, BACKWARDS, OFF
+        FORWARD,
+        BACKWARDS,
+        OFF
     }
 
     public static ShooterStatus shooterStatus;
 
     public enum ShooterMode {
-        LIMELIGHT, LAUNCHPAD, LOWGOAL
+        LIMELIGHT,
+        LAUNCHPAD,
+        LOWGOAL
     }
 
     public static ShooterMode shooterMode;
@@ -65,8 +70,11 @@ public class ShooterSubsystem extends SubsystemBase {
         shooterLeftFalcon.enableVoltageCompensation(true);
         shooterRightFalcon.enableVoltageCompensation(true);
 
-        shooterPID = new PIDController(ShooterConstants.SHOOTER_P, ShooterConstants.SHOOTER_I,
-                ShooterConstants.SHOOTER_D);
+        shooterPID =
+                new PIDController(
+                        ShooterConstants.SHOOTER_P,
+                        ShooterConstants.SHOOTER_I,
+                        ShooterConstants.SHOOTER_D);
     }
 
     @Override
@@ -79,13 +87,19 @@ public class ShooterSubsystem extends SubsystemBase {
             switch (shooterMode) {
                 case LIMELIGHT:
                     if (PhotonVision.getDistance() > 0.0) {
-                        ShooterSubsystem.setPoint = ((25 / 3) * PhotonVision.getDistance()) + 2991.66667;
+                        ShooterSubsystem.setPoint =
+                                ((25 / 3) * PhotonVision.getDistance()) + 2991.66667;
                     }
-                    shootFlywheel(ShooterConstants.SHOOTER_F
-                            + shooterPID.calculate(getFlywheelRPM(), ShooterSubsystem.setPoint));
+                    shootFlywheel(
+                            ShooterConstants.SHOOTER_F
+                                    + shooterPID.calculate(
+                                            getFlywheelRPM(), ShooterSubsystem.setPoint));
                     break;
                 case LAUNCHPAD:
-                    shootFlywheel(ShooterConstants.SHOOTER_F + shooterPID.calculate(getFlywheelRPM(), ShooterSubsystem.setPoint));
+                    shootFlywheel(
+                            ShooterConstants.SHOOTER_F
+                                    + shooterPID.calculate(
+                                            getFlywheelRPM(), ShooterSubsystem.setPoint));
                     break;
                 case LOWGOAL:
                     shootFlywheel(ShooterConstants.SHOOTER_LOW_SPEED);
@@ -135,7 +149,8 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public double getFlywheelRPM() {
-        return getAverageEncoder() * ShooterConstants.PULLEY_RATIO
+        return getAverageEncoder()
+                * ShooterConstants.PULLEY_RATIO
                 * (ShooterConstants.ENCODER_TIME_CONVERSION / ShooterConstants.ENCODER_RESOLUTION);
     }
 
@@ -144,8 +159,10 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public double getVelocityUnitsFromRPM(double RPM) {
-        return RPM / (ShooterConstants.PULLEY_RATIO
-                * (ShooterConstants.ENCODER_TIME_CONVERSION / ShooterConstants.ENCODER_RESOLUTION));
+        return RPM
+                / (ShooterConstants.PULLEY_RATIO
+                        * (ShooterConstants.ENCODER_TIME_CONVERSION
+                                / ShooterConstants.ENCODER_RESOLUTION));
     }
 
     public void setSetPoint(double setPoint) {

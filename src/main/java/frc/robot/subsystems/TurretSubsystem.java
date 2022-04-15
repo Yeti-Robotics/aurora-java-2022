@@ -5,62 +5,67 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
 
-import frc.robot.Constants.TurretConstants;
-import frc.robot.utils.PhotonVision;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import frc.robot.Constants.TurretConstants;
+import frc.robot.utils.PhotonVision;
+
 public class TurretSubsystem extends SubsystemBase {
-	private CANSparkMax turretSpark;
-	private DigitalInput magSwitch;
+    private CANSparkMax turretSpark;
+    private DigitalInput magSwitch;
     private RelativeEncoder turretEncoder;
 
     public enum TurretLockStatus {
-        LOCKED, UNLOCKED
+        LOCKED,
+        UNLOCKED
     }
 
     public TurretLockStatus lockStatus;
 
-	public TurretSubsystem() {
-		turretSpark = new CANSparkMax(TurretConstants.TURRET_SPARK, MotorType.kBrushless);
-		magSwitch = new DigitalInput(TurretConstants.MAG_SWITCH_PORT);
+    public TurretSubsystem() {
+        turretSpark = new CANSparkMax(TurretConstants.TURRET_SPARK, MotorType.kBrushless);
+        magSwitch = new DigitalInput(TurretConstants.MAG_SWITCH_PORT);
         turretEncoder = turretSpark.getEncoder();
         lockStatus = TurretLockStatus.UNLOCKED;
 
         turretSpark.enableSoftLimit(SoftLimitDirection.kForward, true);
         turretSpark.enableSoftLimit(SoftLimitDirection.kReverse, true);
-        turretSpark.setSoftLimit(SoftLimitDirection.kForward, (float) TurretConstants.TURRET_MAX_RIGHT);
-        turretSpark.setSoftLimit(SoftLimitDirection.kReverse, (float) TurretConstants.TURRET_MAX_LEFT);
+        turretSpark.setSoftLimit(
+                SoftLimitDirection.kForward, (float) TurretConstants.TURRET_MAX_RIGHT);
+        turretSpark.setSoftLimit(
+                SoftLimitDirection.kReverse, (float) TurretConstants.TURRET_MAX_LEFT);
     }
 
     @Override
     public void periodic() {}
 
-	public void moveTurret(double power) {
+    public void moveTurret(double power) {
         turretSpark.set(power);
     }
-    
+
     public void stopTurret() {
         turretSpark.set(0.0);
     }
 
-    public void resetEncoder(){
+    public void resetEncoder() {
         turretEncoder.setPosition(0.0);
     }
 
-    public double getEncoder(){
+    public double getEncoder() {
         return turretEncoder.getPosition();
     }
 
-    public boolean getMagSwitch(){
+    public boolean getMagSwitch() {
         return !magSwitch.get();
     }
 
-    public double getTurretOffset(){
-        return Math.toDegrees(Math.atan(TurretConstants.TURRET_OFFSET / PhotonVision.getDistance()));
+    public double getTurretOffset() {
+        return Math.toDegrees(
+                Math.atan(TurretConstants.TURRET_OFFSET / PhotonVision.getDistance()));
     }
 }
