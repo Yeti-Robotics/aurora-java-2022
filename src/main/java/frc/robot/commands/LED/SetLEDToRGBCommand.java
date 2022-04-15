@@ -1,8 +1,8 @@
 package frc.robot.commands.LED;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.LEDSubsystem;
 
+import frc.robot.subsystems.LEDSubsystem;
 
 public class SetLEDToRGBCommand extends CommandBase {
     private final LEDSubsystem lEDSubsystem;

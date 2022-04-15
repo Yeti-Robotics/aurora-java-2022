@@ -2,8 +2,8 @@ package frc.robot.utils;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import frc.robot.Constants.LimelightConstants;
 
+import frc.robot.Constants.LimelightConstants;
 
 public class Limelight {
     private static NetworkTableInstance table = null;
@@ -14,16 +14,19 @@ public class Limelight {
      * @author Dan Waxman
      */
     public static enum LightMode {
-        eOn, eOff, eBlink
+        eOn,
+        eOff,
+        eBlink
     }
 
     /**
      * Camera modes for Limelight.
      *
      * @author Dan Waxman
-     */ 
+     */
     public static enum CameraMode {
-        eVision, eDriver
+        eVision,
+        eDriver
     }
 
     /**
@@ -87,8 +90,7 @@ public class Limelight {
     /**
      * Sets LED mode of Limelight.
      *
-     * @param mode
-     *            Light mode for Limelight.
+     * @param mode Light mode for Limelight.
      */
     public static void setLedMode(LightMode mode) {
         getValue("ledMode").setNumber(mode.ordinal());
@@ -97,8 +99,7 @@ public class Limelight {
     /**
      * Sets camera mode for Limelight.
      *
-     * @param mode
-     *            Camera mode for Limelight.
+     * @param mode Camera mode for Limelight.
      */
     public static void setCameraMode(CameraMode mode) {
         getValue("camMode").setNumber(mode.ordinal());
@@ -107,8 +108,7 @@ public class Limelight {
     /**
      * Sets pipeline number (0-9 value).
      *
-     * @param number
-     *            Pipeline number (0-9).
+     * @param number Pipeline number (0-9).
      */
     public static void setPipeline(int number) {
         getValue("pipeline").setNumber(number);
@@ -117,7 +117,9 @@ public class Limelight {
     public static double getDistance() {
         double angleToGoalDegrees = LimelightConstants.MOUNTING_ANGLE + getTy();
         double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
-        double distanceFromLimelightToGoalInches = (LimelightConstants.GOAL_HEIGHT - LimelightConstants.LIMELIGHT_HEIGHT) / Math.tan(angleToGoalRadians);
+        double distanceFromLimelightToGoalInches =
+                (LimelightConstants.GOAL_HEIGHT - LimelightConstants.LIMELIGHT_HEIGHT)
+                        / Math.tan(angleToGoalRadians);
 
         return distanceFromLimelightToGoalInches;
     }
@@ -125,8 +127,7 @@ public class Limelight {
     /**
      * Helper method to get an entry from the Limelight NetworkTable.
      *
-     * @param key
-     *            Key for entry.
+     * @param key Key for entry.
      * @return NetworkTableEntry of given entry.
      */
     private static NetworkTableEntry getValue(String key) {
@@ -141,7 +142,10 @@ public class Limelight {
         double horDistance;
         final double HEIGHT_OF_TARGET_INCHES = 104;
         // pythagorean theorem
-        horDistance = Math.sqrt((getDistance() * getDistance()) - (HEIGHT_OF_TARGET_INCHES * HEIGHT_OF_TARGET_INCHES));
+        horDistance =
+                Math.sqrt(
+                        (getDistance() * getDistance())
+                                - (HEIGHT_OF_TARGET_INCHES * HEIGHT_OF_TARGET_INCHES));
         return horDistance;
     }
 }

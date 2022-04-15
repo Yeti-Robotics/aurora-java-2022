@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import frc.robot.Constants.NeckConstants;
 
 public class NeckSubsystem extends SubsystemBase {
@@ -21,41 +22,41 @@ public class NeckSubsystem extends SubsystemBase {
     }
 
     @Override
-    public void periodic() {
-    }
+    public void periodic() {}
 
-    public void moveUp(){
+    public void moveUp() {
         frontSpark.set(NeckConstants.NECK_FRONT_SPEED);
         rearSpark.set(NeckConstants.NECK_REAR_SPEED);
     }
 
-    public void moveUp(double speed){
+    public void moveUp(double speed) {
         frontSpark.set(speed);
         rearSpark.set(speed);
     }
 
-    public void moveFrontUp(){
+    public void moveFrontUp() {
         frontSpark.set(NeckConstants.NECK_FRONT_SPEED);
     }
 
-    public void moveRearUp(){
+    public void moveRearUp() {
         rearSpark.set(NeckConstants.NECK_REAR_SPEED);
     }
 
-    public void moveDown(){
+    public void moveDown() {
         frontSpark.set(-NeckConstants.NECK_FRONT_OUT_SPEED);
         rearSpark.set(-NeckConstants.NECK_REAR_OUT_SPEED);
     }
 
-    public void stopNeck(){
+    public void stopNeck() {
         frontSpark.set(0.0);
         rearSpark.set(0.0);
     }
 
-    public boolean getLowerBeamBreak(){
+    public boolean getLowerBeamBreak() {
         return lowerBeamBreak.get();
     }
-    public boolean getUpperBeamBreak(){
+
+    public boolean getUpperBeamBreak() {
         return upperBeamBreak.get();
     }
 }
