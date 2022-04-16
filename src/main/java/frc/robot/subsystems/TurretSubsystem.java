@@ -62,6 +62,7 @@ public class TurretSubsystem extends SubsystemBase {
   }
 
   public double getTurretOffset() {
-    return Math.toDegrees(Math.atan(TurretConstants.TURRET_OFFSET / (Limelight.getDistance() + 24.0)));
+    return Math.toDegrees(
+        Math.atan(TurretConstants.TURRET_OFFSET / (Limelight.getDistance() + 24.0)));
   }
 }
