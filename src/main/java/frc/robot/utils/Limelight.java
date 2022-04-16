@@ -6,6 +6,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.Constants.LimelightConstants;
 
 public class Limelight {
+
     private static NetworkTableInstance table = null;
 
     /**
@@ -13,7 +14,7 @@ public class Limelight {
      *
      * @author Dan Waxman
      */
-    public static enum LightMode {
+    public enum LightMode {
         eOn,
         eOff,
         eBlink
@@ -24,7 +25,7 @@ public class Limelight {
      *
      * @author Dan Waxman
      */
-    public static enum CameraMode {
+    public enum CameraMode {
         eVision,
         eDriver
     }

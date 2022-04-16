@@ -20,13 +20,15 @@ import frc.robot.subsystems.TurretSubsystem;
 
 public class DeadReckon2BallAuto extends CommandBase {
 
-    private IntakeSubsystem intakeSubsystem;
-    private NeckSubsystem neckSubsystem;
-    private DrivetrainSubsystem drivetrainSubsystem;
+    private final IntakeSubsystem intakeSubsystem;
+    private final NeckSubsystem neckSubsystem;
+    private final DrivetrainSubsystem drivetrainSubsystem;
     private TurretSubsystem turretSubsystem;
     private ShooterLEDCommand shooterLEDCommand;
 
-    /** Creates a new AllOutCommand. */
+    /**
+     * Creates a new AllOutCommand.
+     */
     public DeadReckon2BallAuto(
             IntakeSubsystem intakeSubsystem,
             NeckSubsystem neckSubsystem,
@@ -39,7 +41,8 @@ public class DeadReckon2BallAuto extends CommandBase {
 
     // Called when the command is initially scheduled.
     @Override
-    public void initialize() {}
+    public void initialize() {
+    }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override

@@ -9,11 +9,14 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ShooterSubsystem;
 
 public class SpinShooterCommand extends CommandBase {
-    private ShooterSubsystem shooterSubsystem;
-    private double power;
+
+    private final ShooterSubsystem shooterSubsystem;
+    private final double power;
     private double maxVel = 0.0;
 
-    /** Creates a new SpinShooterCommand. */
+    /**
+     * Creates a new SpinShooterCommand.
+     */
     public SpinShooterCommand(ShooterSubsystem shooterSubsystem, double power) {
         this.shooterSubsystem = shooterSubsystem;
         this.power = power;
@@ -22,7 +25,8 @@ public class SpinShooterCommand extends CommandBase {
 
     // Called when the command is initially scheduled.
     @Override
-    public void initialize() {}
+    public void initialize() {
+    }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override

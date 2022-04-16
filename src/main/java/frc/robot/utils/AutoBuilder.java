@@ -39,6 +39,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 public class AutoBuilder {
+
     private RobotContainer robotContainer;
     private ShooterLEDCommand shooterLEDCommand;
     private AutoModes autoMode;
@@ -130,7 +131,7 @@ public class AutoBuilder {
                 new InstantCommand(() -> ShooterSubsystem.isShooting = false),
                 new ToggleIntakeCommand(robotContainer.intakeSubsystem),
                 new AllInCommand(
-                                robotContainer.intakeSubsystem, robotContainer.neckSubsystem, 0.375)
+                        robotContainer.intakeSubsystem, robotContainer.neckSubsystem, 0.375)
                         .withTimeout(4.25),
                 new WaitCommand(2.5),
                 new InstantCommand(() -> ShooterSubsystem.setPoint = 4200.0),
@@ -257,7 +258,7 @@ public class AutoBuilder {
                 // new AllInCommand(robotContainer.intakeSubsystem,
                 // robotContainer.neckSubsystem).withTimeout(0.5),
                 // new ToggleFlywheelHighCommand(shooterLEDCommand)
-                );
+        );
 
         pathCommandGroup.addCommands(
                 runTrajectoryPath(AutoConstants.fourBall1),
@@ -282,7 +283,7 @@ public class AutoBuilder {
         subsystemCommandGroup = new SequentialCommandGroup();
         pathCommandGroup = new SequentialCommandGroup();
 
-        switch ((Robot.AutoModes) autoMode) {
+        switch (autoMode) {
             case ONE_BALL:
                 oneBallAuto();
                 break;

@@ -11,9 +11,12 @@ import frc.robot.subsystems.NeckSubsystem;
 
 public class AllOutCommand extends CommandBase {
 
-    private IntakeSubsystem intakeSubsystem;
-    private NeckSubsystem neckSubsystem;
-    /** Creates a new AllOutCommand. */
+    private final IntakeSubsystem intakeSubsystem;
+    private final NeckSubsystem neckSubsystem;
+
+    /**
+     * Creates a new AllOutCommand.
+     */
     public AllOutCommand(IntakeSubsystem intakeSubsystem, NeckSubsystem neckSubsystem) {
         this.intakeSubsystem = intakeSubsystem;
         this.neckSubsystem = neckSubsystem;
@@ -22,7 +25,8 @@ public class AllOutCommand extends CommandBase {
 
     // Called when the command is initially scheduled.
     @Override
-    public void initialize() {}
+    public void initialize() {
+    }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override

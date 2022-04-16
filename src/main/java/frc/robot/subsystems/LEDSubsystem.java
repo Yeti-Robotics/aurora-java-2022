@@ -12,8 +12,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LEDConstants;
 
 public class LEDSubsystem extends SubsystemBase {
-    private AddressableLED ledStrip;
-    private AddressableLEDBuffer ledBuffer;
+
+    private final AddressableLED ledStrip;
+    private final AddressableLEDBuffer ledBuffer;
 
     private int r, g, b;
 
@@ -39,7 +40,8 @@ public class LEDSubsystem extends SubsystemBase {
     }
 
     @Override
-    public void periodic() {}
+    public void periodic() {
+    }
 
     public void setHSV(int i, int hue, int saturation, int value) {
         ledBuffer.setHSV(i, hue, saturation, value);

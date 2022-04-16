@@ -16,8 +16,9 @@ import frc.robot.Constants.ShooterConstants;
 import frc.robot.utils.PhotonVision;
 
 public class ShooterSubsystem extends SubsystemBase {
-    private TalonFX shooterLeftFalcon;
-    private TalonFX shooterRightFalcon;
+
+    private final TalonFX shooterLeftFalcon;
+    private final TalonFX shooterRightFalcon;
 
     private MotorControllerGroup shooterFalcons;
 
@@ -41,7 +42,7 @@ public class ShooterSubsystem extends SubsystemBase {
     public static boolean atSetPoint = false;
     public static boolean isShooting = false;
 
-    private PIDController shooterPID;
+    private final PIDController shooterPID;
 
     public ShooterSubsystem() {
         shooterLeftFalcon = new TalonFX(ShooterConstants.SHOOTER_LEFT_FALCON);
@@ -93,13 +94,13 @@ public class ShooterSubsystem extends SubsystemBase {
                     shootFlywheel(
                             ShooterConstants.SHOOTER_F
                                     + shooterPID.calculate(
-                                            getFlywheelRPM(), ShooterSubsystem.setPoint));
+                                    getFlywheelRPM(), ShooterSubsystem.setPoint));
                     break;
                 case LAUNCHPAD:
                     shootFlywheel(
                             ShooterConstants.SHOOTER_F
                                     + shooterPID.calculate(
-                                            getFlywheelRPM(), ShooterSubsystem.setPoint));
+                                    getFlywheelRPM(), ShooterSubsystem.setPoint));
                     break;
                 case LOWGOAL:
                     shootFlywheel(ShooterConstants.SHOOTER_LOW_SPEED);
@@ -161,8 +162,8 @@ public class ShooterSubsystem extends SubsystemBase {
     public double getVelocityUnitsFromRPM(double RPM) {
         return RPM
                 / (ShooterConstants.PULLEY_RATIO
-                        * (ShooterConstants.ENCODER_TIME_CONVERSION
-                                / ShooterConstants.ENCODER_RESOLUTION));
+                * (ShooterConstants.ENCODER_TIME_CONVERSION
+                / ShooterConstants.ENCODER_RESOLUTION));
     }
 
     public void setSetPoint(double setPoint) {

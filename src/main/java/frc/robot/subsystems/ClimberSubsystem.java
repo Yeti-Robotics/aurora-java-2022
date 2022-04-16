@@ -1,7 +1,6 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -19,8 +18,10 @@ import frc.robot.Constants;
 import frc.robot.Constants.ClimberConstants;
 
 public class ClimberSubsystem extends SubsystemBase {
-    private WPI_TalonFX climberFalcon1, climberFalcon2;
-    private DoubleSolenoid climberBrake;
+
+    private final WPI_TalonFX climberFalcon1;
+    private final WPI_TalonFX climberFalcon2;
+    private final DoubleSolenoid climberBrake;
 
     public ClimberSubsystem() {
         climberFalcon1 = new WPI_TalonFX(ClimberConstants.CLIMBER_1);
@@ -51,7 +52,8 @@ public class ClimberSubsystem extends SubsystemBase {
     }
 
     @Override
-    public void periodic() {}
+    public void periodic() {
+    }
 
     public void climbUp() {
         if (Value.kForward == climberBrake.get()
@@ -95,7 +97,7 @@ public class ClimberSubsystem extends SubsystemBase {
     public boolean atEncoderLimit() {
         return getAverageEncoder() <= ClimberConstants.CLIMBER_TOLERANCE
                 || getAverageEncoder() + ClimberConstants.CLIMBER_TOLERANCE
-                        >= ClimberConstants.CLIMBER_UPRIGHT_HEIGHT_LIMIT;
+                >= ClimberConstants.CLIMBER_UPRIGHT_HEIGHT_LIMIT;
     }
 
     public void toggleClimberBrake() {

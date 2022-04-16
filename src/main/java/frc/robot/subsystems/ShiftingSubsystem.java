@@ -7,7 +7,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 
 public class ShiftingSubsystem extends SubsystemBase {
-    private DoubleSolenoid shifter;
+
+    private final DoubleSolenoid shifter;
 
     public enum ShiftStatus {
         HIGH,

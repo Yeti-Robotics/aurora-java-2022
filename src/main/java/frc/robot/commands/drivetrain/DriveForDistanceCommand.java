@@ -5,9 +5,10 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
 public class DriveForDistanceCommand extends CommandBase {
+
     private final DrivetrainSubsystem drivetrainSubsystem;
-    private double distanceGoal;
-    private double power;
+    private final double distanceGoal;
+    private final double power;
 
     public DriveForDistanceCommand(
             DrivetrainSubsystem drivetrainSubsystem, double encoderGoal, double power) {

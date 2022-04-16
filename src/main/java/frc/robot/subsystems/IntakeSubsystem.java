@@ -19,8 +19,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private IntakeStatus intakeStatus;
 
-    private TalonFX intakeFalcon;
-    private DoubleSolenoid pistons;
+    private final TalonFX intakeFalcon;
+    private final DoubleSolenoid pistons;
 
     public IntakeSubsystem() {
         pistons =

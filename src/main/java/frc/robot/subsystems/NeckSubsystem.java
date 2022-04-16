@@ -9,10 +9,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.NeckConstants;
 
 public class NeckSubsystem extends SubsystemBase {
-    private CANSparkMax frontSpark;
-    private CANSparkMax rearSpark;
-    private DigitalInput lowerBeamBreak;
-    private DigitalInput upperBeamBreak;
+
+    private final CANSparkMax frontSpark;
+    private final CANSparkMax rearSpark;
+    private final DigitalInput lowerBeamBreak;
+    private final DigitalInput upperBeamBreak;
 
     public NeckSubsystem() {
         frontSpark = new CANSparkMax(NeckConstants.FRONT_INDEXER, MotorType.kBrushless);
@@ -22,7 +23,8 @@ public class NeckSubsystem extends SubsystemBase {
     }
 
     @Override
-    public void periodic() {}
+    public void periodic() {
+    }
 
     public void moveUp() {
         frontSpark.set(NeckConstants.NECK_FRONT_SPEED);

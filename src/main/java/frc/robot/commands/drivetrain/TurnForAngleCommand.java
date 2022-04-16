@@ -9,8 +9,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
 public class TurnForAngleCommand extends CommandBase {
-    private DrivetrainSubsystem drivetrainSubsystem;
-    private double angle; // in degrees
+
+    private final DrivetrainSubsystem drivetrainSubsystem;
+    private final double angle; // in degrees
 
     public TurnForAngleCommand(DrivetrainSubsystem drivetrainSubsystem, double angle) {
         this.drivetrainSubsystem = drivetrainSubsystem;

@@ -11,7 +11,8 @@ import frc.robot.subsystems.TurretSubsystem;
 import frc.robot.utils.Limelight;
 
 public class TurnToTargetCommand extends CommandBase {
-    private TurretSubsystem turretSubsystem;
+
+    private final TurretSubsystem turretSubsystem;
     private double power;
     private boolean atLimit = false;
     private boolean isAligned = false;
@@ -25,7 +26,8 @@ public class TurnToTargetCommand extends CommandBase {
     }
 
     @Override
-    public void initialize() {}
+    public void initialize() {
+    }
 
     @Override
     public void execute() {
@@ -35,11 +37,11 @@ public class TurnToTargetCommand extends CommandBase {
         atLimit =
                 (power > 0)
                         ? turretSubsystem.getEncoder()
-                                >= TurretConstants.TURRET_MAX_RIGHT
-                                        - TurretConstants.TURRET_TOLERANCE
+                        >= TurretConstants.TURRET_MAX_RIGHT
+                        - TurretConstants.TURRET_TOLERANCE
                         : turretSubsystem.getEncoder()
                                 <= TurretConstants.TURRET_MAX_LEFT
-                                        + TurretConstants.TURRET_TOLERANCE;
+                                + TurretConstants.TURRET_TOLERANCE;
         if (!isAligned || !atLimit) {
             turretSubsystem.moveTurret(power);
         }

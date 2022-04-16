@@ -11,10 +11,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ShooterLEDCommand extends CommandBase {
-    private LEDSubsystem ledSubsystem;
-    private int[] red = {255, 0, 0};
-    private int[] green = {0, 255, 0};
-    private int[] white = {255, 255, 255};
+
+    private final LEDSubsystem ledSubsystem;
+    private final int[] red = {255, 0, 0};
+    private final int[] green = {0, 255, 0};
+    private final int[] white = {255, 255, 255};
     private ArrayList<int[]> colorQueue;
 
     public ShooterLEDCommand(LEDSubsystem ledSubsystem) {
@@ -30,19 +31,21 @@ public class ShooterLEDCommand extends CommandBase {
 
         int end = (int) Math.ceil(ledSubsystem.getBufferLength() / 2.0);
         int[] increments = {
-            (white[0] - green[0]) / end, (white[1] - green[1]) / end, (white[2] - green[2]) / end
+                (white[0] - green[0]) / end, (white[1] - green[1]) / end, (white[2] - green[2]) / end
         };
 
         for (int i = 0; i < end; i++) {
-            initialState[i] = new int[] {currRGB[0], currRGB[1], currRGB[2]};
+            initialState[i] = new int[]{currRGB[0], currRGB[1], currRGB[2]};
 
-            for (int j = 0; j < 3; j++) currRGB[j] += increments[j];
+            for (int j = 0; j < 3; j++) {
+                currRGB[j] += increments[j];
+            }
         }
 
         int idx = (ledSubsystem.getBufferLength() / 2) - 1;
         for (int i = end; i < ledSubsystem.getBufferLength(); i++) {
             initialState[i] =
-                    new int[] {initialState[idx][0], initialState[idx][1], initialState[idx][2]};
+                    new int[]{initialState[idx][0], initialState[idx][1], initialState[idx][2]};
             idx--;
         }
 
@@ -53,7 +56,7 @@ public class ShooterLEDCommand extends CommandBase {
     public void execute() {
         if (ShooterSubsystem.atSetPoint
                 && Math.abs(PhotonVision.getDistance() - ShooterConstants.SHOOTER_HIGH_DIST)
-                        <= ShooterConstants.SHOOTER_DIST_TOLERANCE) {
+                <= ShooterConstants.SHOOTER_DIST_TOLERANCE) {
             // wave effect
             for (int i = 0; i < ledSubsystem.getBufferLength(); i++) {
                 ledSubsystem.setRGB(
@@ -73,7 +76,8 @@ public class ShooterLEDCommand extends CommandBase {
     }
 
     @Override
-    public void end(boolean interrupted) {}
+    public void end(boolean interrupted) {
+    }
 
     @Override
     public boolean isFinished() {

@@ -10,7 +10,8 @@ import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 public class PhotonVision {
-    private static PhotonCamera camera = new PhotonCamera("yetiworm");
+
+    private static final PhotonCamera camera = new PhotonCamera("yetiworm");
 
     public static double getX() {
         PhotonTrackedTarget latestTarget = camera.getLatestResult().getBestTarget();
@@ -23,7 +24,9 @@ public class PhotonVision {
     }
 
     public static double getDistance() {
-        if (!camera.getLatestResult().hasTargets()) return 0.0;
+        if (!camera.getLatestResult().hasTargets()) {
+            return 0.0;
+        }
 
         double angleToGoalDegrees = LimelightConstants.MOUNTING_ANGLE + getY();
         double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);

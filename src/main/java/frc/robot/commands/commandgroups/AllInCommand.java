@@ -12,10 +12,11 @@ import frc.robot.subsystems.NeckSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
 public class AllInCommand extends CommandBase {
-    private NeckSubsystem neckSubsystem;
-    private IntakeSubsystem intakeSubsystem;
+
+    private final NeckSubsystem neckSubsystem;
+    private final IntakeSubsystem intakeSubsystem;
     private long startTime;
-    private double intakeSpeed;
+    private final double intakeSpeed;
 
     public AllInCommand(
             IntakeSubsystem intakeSubsystem, NeckSubsystem neckSubsystem, double intakeSpeed) {

@@ -16,9 +16,10 @@ import frc.robot.Constants.TurretConstants;
 import frc.robot.utils.PhotonVision;
 
 public class TurretSubsystem extends SubsystemBase {
-    private CANSparkMax turretSpark;
-    private DigitalInput magSwitch;
-    private RelativeEncoder turretEncoder;
+
+    private final CANSparkMax turretSpark;
+    private final DigitalInput magSwitch;
+    private final RelativeEncoder turretEncoder;
 
     public enum TurretLockStatus {
         LOCKED,
@@ -42,7 +43,8 @@ public class TurretSubsystem extends SubsystemBase {
     }
 
     @Override
-    public void periodic() {}
+    public void periodic() {
+    }
 
     public void moveTurret(double power) {
         turretSpark.set(power);

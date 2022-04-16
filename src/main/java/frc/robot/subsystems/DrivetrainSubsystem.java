@@ -19,22 +19,26 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.ShiftingSubsystem.ShiftStatus;
 
 public class DrivetrainSubsystem extends SubsystemBase {
-    private WPI_TalonFX leftFalcon1, leftFalcon2, rightFalcon1, rightFalcon2;
-    private MotorControllerGroup leftMotors;
-    private MotorControllerGroup rightMotors;
 
-    private AHRS gyro;
+    private final WPI_TalonFX leftFalcon1;
+    private final WPI_TalonFX leftFalcon2;
+    private final WPI_TalonFX rightFalcon1;
+    private final WPI_TalonFX rightFalcon2;
+    private final MotorControllerGroup leftMotors;
+    private final MotorControllerGroup rightMotors;
 
-    private DifferentialDrive drive;
+    private final AHRS gyro;
+
+    private final DifferentialDrive drive;
     private DriveMode driveMode;
-    private DifferentialDriveOdometry odometry;
+    private final DifferentialDriveOdometry odometry;
 
-    private PIDController drivePID;
+    private final PIDController drivePID;
 
     public enum DriveMode {
         TANK,
         CHEEZY,
-        ARCADE;
+        ARCADE
     }
 
     private NeutralMode neutralMode;
@@ -133,16 +137,16 @@ public class DrivetrainSubsystem extends SubsystemBase {
         return (leftFalcon1.getSelectedSensorPosition()
                 * (DriveConstants.DISTANCE_PER_PULSE)
                 / (ShiftingSubsystem.getShifterPosition() == ShiftStatus.HIGH
-                        ? DriveConstants.HIGH_GEAR_RATIO
-                        : DriveConstants.LOW_GEAR_RATIO));
+                ? DriveConstants.HIGH_GEAR_RATIO
+                : DriveConstants.LOW_GEAR_RATIO));
     }
 
     public double getRightEncoderDistance() {
         return (-rightFalcon1.getSelectedSensorPosition()
                 * (DriveConstants.DISTANCE_PER_PULSE)
                 / (ShiftingSubsystem.getShifterPosition() == ShiftStatus.HIGH
-                        ? DriveConstants.HIGH_GEAR_RATIO
-                        : DriveConstants.LOW_GEAR_RATIO));
+                ? DriveConstants.HIGH_GEAR_RATIO
+                : DriveConstants.LOW_GEAR_RATIO));
     }
 
     public double getAverageEncoder() {
@@ -160,8 +164,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
                 * 10
                 * (DriveConstants.DISTANCE_PER_PULSE)
                 / (ShiftingSubsystem.getShifterPosition() == ShiftStatus.HIGH
-                        ? DriveConstants.HIGH_GEAR_RATIO
-                        : DriveConstants.LOW_GEAR_RATIO));
+                ? DriveConstants.HIGH_GEAR_RATIO
+                : DriveConstants.LOW_GEAR_RATIO));
     }
 
     public double getRightEncoderVelocity() {
@@ -169,8 +173,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
                 * 10
                 * (DriveConstants.DISTANCE_PER_PULSE)
                 / (ShiftingSubsystem.getShifterPosition() == ShiftStatus.HIGH
-                        ? DriveConstants.HIGH_GEAR_RATIO
-                        : DriveConstants.LOW_GEAR_RATIO));
+                ? DriveConstants.HIGH_GEAR_RATIO
+                : DriveConstants.LOW_GEAR_RATIO));
     }
 
     public double getAverageVelocity() {

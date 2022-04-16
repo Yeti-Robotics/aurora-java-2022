@@ -10,7 +10,8 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.utils.PhotonVision;
 
 public class TurnToTargetDriveCommand extends CommandBase {
-    private DrivetrainSubsystem drivetrainSubsystem;
+
+    private final DrivetrainSubsystem drivetrainSubsystem;
 
     public TurnToTargetDriveCommand(DrivetrainSubsystem drivetrainSubsystem) {
         this.drivetrainSubsystem = drivetrainSubsystem;
@@ -18,7 +19,8 @@ public class TurnToTargetDriveCommand extends CommandBase {
     }
 
     @Override
-    public void initialize() {}
+    public void initialize() {
+    }
 
     @Override
     public void execute() {

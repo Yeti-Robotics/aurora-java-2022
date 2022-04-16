@@ -14,8 +14,9 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class TurnForAnglePIDCommand extends PIDCommand {
-    private DrivetrainSubsystem drivetrainSubsystem;
-    private double angle;
+
+    private final DrivetrainSubsystem drivetrainSubsystem;
+    private final double angle;
 
     public TurnForAnglePIDCommand(DrivetrainSubsystem drivetrainSubsystem, double angle) {
         super(
