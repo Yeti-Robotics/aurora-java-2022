@@ -11,12 +11,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
-import frc.robot.utils.PhotonVision;
+import frc.robot.utils.Limelight;
 
 public class ShooterSubsystem extends SubsystemBase {
-
-  private final TalonFX shooterLeftFalcon;
-  private final TalonFX shooterRightFalcon;
+  private TalonFX shooterLeftFalcon;
+  private TalonFX shooterRightFalcon;
 
   private MotorControllerGroup shooterFalcons;
 
@@ -40,7 +39,7 @@ public class ShooterSubsystem extends SubsystemBase {
   public static boolean atSetPoint = false;
   public static boolean isShooting = false;
 
-  private final PIDController shooterPID;
+  private PIDController shooterPID;
 
   public ShooterSubsystem() {
     shooterLeftFalcon = new TalonFX(ShooterConstants.SHOOTER_LEFT_FALCON);
@@ -83,8 +82,12 @@ public class ShooterSubsystem extends SubsystemBase {
     if (ShooterSubsystem.isShooting) {
       switch (shooterMode) {
         case LIMELIGHT:
-          if (PhotonVision.getDistance() > 0.0) {
-            ShooterSubsystem.setPoint = ((25 / 3) * PhotonVision.getDistance()) + 2991.66667;
+          // if (PhotonVision.getDistance() > 0.0) {
+          // ShooterSubsystem.setPoint = ((25 / 3) * PhotonVision.getDistance()) +
+          // 2991.66667;
+          // }
+          if (Limelight.getDistance() > 0.0) {
+            ShooterSubsystem.setPoint = ((25 / 3) * Limelight.getDistance()) + 2991.66667;
           }
           shootFlywheel(
               ShooterConstants.SHOOTER_F

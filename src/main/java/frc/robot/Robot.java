@@ -30,7 +30,6 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TurretSubsystem.TurretLockStatus;
 
 public class Robot extends TimedRobot {
-
   private Command m_autonomousCommand;
   private Command beforeBlinkCommand = null;
   private boolean blinkWarningRan = false;
@@ -43,7 +42,7 @@ public class Robot extends TimedRobot {
   private SetLEDToRGBCommand redLedCommand;
   private SnowfallLEDCommand snowfallLedCommand;
 
-  public enum AutoModes {
+  public static enum AutoModes {
     ONE_BALL,
     TWO_BALL,
     TWO_BALL_ALTERNATIVE,
@@ -98,9 +97,14 @@ public class Robot extends TimedRobot {
 
     // System.out.println("DIST: " + PhotonVision.getDistance() + "; setPoint: " +
     // ShooterSubsystem.setPoint);
-    // System.out.println("getFlywheelRPM: " +
-    // robotContainer.shooterSubsystem.getFlywheelRPM());
     // System.out.println("GYRO: " + robotContainer.drivetrainSubsystem.getHeading());
+    // System.out.println("SETPOINT: " + ShooterSubsystem.setPoint + " RPM");
+    // System.out.println("GETTX: " + Limelight.getTx());
+    // System.out.println("GETDISTANCE: " + Limelight.getDistance());
+    // System.out.println("LEFT DRIVE: " +
+    // robotContainer.drivetrainSubsystem.getLeftEncoderVelocity() + "; RIGHT DRIVE: " +
+    // robotContainer.drivetrainSubsystem.getRightEncoderVelocity());
+
   }
 
   @Override
@@ -130,7 +134,7 @@ public class Robot extends TimedRobot {
     m_autonomousCommand = robotContainer.getAutonomousCommand();
 
     SequentialCommandGroup turretAuto;
-    switch (autoChooser.getSelected()) {
+    switch ((Robot.AutoModes) autoChooser.getSelected()) {
       case TWO_BALL:
         turretAuto =
             new SequentialCommandGroup(
@@ -185,6 +189,7 @@ public class Robot extends TimedRobot {
     robotContainer.drivetrainSubsystem.resetGyro();
 
     snowfallLedCommand.cancel();
+    redLedCommand.cancel();
     robotContainer.ledSubsystem.setDefaultCommand(
         new TeleLEDDefaultCommand(robotContainer.ledSubsystem));
 
@@ -192,9 +197,7 @@ public class Robot extends TimedRobot {
         .onCommandFinish(
             command -> {
               if (command.getName().equals(new BlinkLEDCommand().getName())) {
-                if (beforeBlinkCommand != null) {
-                  beforeBlinkCommand.schedule();
-                }
+                if (beforeBlinkCommand != null) beforeBlinkCommand.schedule();
               }
             });
 

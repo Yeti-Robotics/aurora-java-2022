@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.subsystems.TurretSubsystem;
 import frc.robot.subsystems.TurretSubsystem.TurretLockStatus;
-import frc.robot.utils.PhotonVision;
+import frc.robot.utils.Limelight;
 
 public class TurretLockCommand extends PIDCommand {
   private final TurretSubsystem turretSubsystem;
@@ -20,7 +20,8 @@ public class TurretLockCommand extends PIDCommand {
         new PIDController(
             TurretConstants.TURRET_P, TurretConstants.TURRET_I, TurretConstants.TURRET_D),
         // This should return the measurement
-        PhotonVision::getX,
+        // PhotonVision::getX,
+        Limelight::getTx,
         // This should return the setpoint (can also be a constant)
         turretSubsystem::getTurretOffset,
         // This uses the output
@@ -37,8 +38,8 @@ public class TurretLockCommand extends PIDCommand {
   @Override
   public void execute() {
     if (turretSubsystem.lockStatus == TurretLockStatus.UNLOCKED
-        || PhotonVision.getDistance() < 36.0
-        || PhotonVision.getDistance() > 250.0) return;
+        || Limelight.getDistance() < 36.0
+        || Limelight.getDistance() > 250.0) return;
     super.execute();
   }
 

@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.utils.PhotonVision;
+import frc.robot.utils.Limelight;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -45,15 +45,15 @@ public class ShooterLEDCommand extends CommandBase {
       initialState[i] =
           new int[] {initialState[idx][0], initialState[idx][1], initialState[idx][2]};
       idx--;
-    }
 
-    colorQueue = new ArrayList<int[]>(Arrays.asList(initialState));
+      colorQueue = new ArrayList<int[]>(Arrays.asList(initialState));
+    }
   }
 
   @Override
   public void execute() {
     if (ShooterSubsystem.atSetPoint
-        && Math.abs(PhotonVision.getDistance() - ShooterConstants.SHOOTER_HIGH_DIST)
+        && Math.abs(Limelight.getDistance() - ShooterConstants.SHOOTER_HIGH_DIST)
             <= ShooterConstants.SHOOTER_DIST_TOLERANCE) {
       // wave effect
       for (int i = 0; i < ledSubsystem.getBufferLength(); i++) {

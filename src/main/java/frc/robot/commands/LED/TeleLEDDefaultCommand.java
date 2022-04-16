@@ -7,7 +7,7 @@ package frc.robot.commands.LED;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.LEDSubsystem;
-import frc.robot.utils.PhotonVision;
+import frc.robot.utils.Limelight;
 
 public class TeleLEDDefaultCommand extends CommandBase {
 
@@ -28,7 +28,7 @@ public class TeleLEDDefaultCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (Math.abs(PhotonVision.getDistance() - ShooterConstants.SHOOTER_HIGH_DIST)
+    if (Math.abs(Limelight.getDistance() - ShooterConstants.SHOOTER_HIGH_DIST)
         <= ShooterConstants.SHOOTER_DIST_TOLERANCE) {
       currColor = white;
     } else {

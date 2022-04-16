@@ -11,7 +11,7 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.TurretConstants;
-import frc.robot.utils.PhotonVision;
+import frc.robot.utils.Limelight;
 
 public class TurretSubsystem extends SubsystemBase {
 
@@ -62,6 +62,6 @@ public class TurretSubsystem extends SubsystemBase {
   }
 
   public double getTurretOffset() {
-    return Math.toDegrees(Math.atan(TurretConstants.TURRET_OFFSET / (PhotonVision.getDistance() + 24.0)));
+    return Math.toDegrees(Math.atan(TurretConstants.TURRET_OFFSET / (Limelight.getDistance() + 24.0)));
   }
 }

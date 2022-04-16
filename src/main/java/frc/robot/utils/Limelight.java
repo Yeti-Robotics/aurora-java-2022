@@ -115,6 +115,10 @@ public class Limelight {
   }
 
   public static double getDistance() {
+    if (!Limelight.isTarget()) {
+      return 0.0;
+    }
+
     double angleToGoalDegrees = LimelightConstants.MOUNTING_ANGLE + getTy();
     double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
     double distanceFromLimelightToGoalInches =
