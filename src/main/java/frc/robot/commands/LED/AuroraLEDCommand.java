@@ -30,7 +30,7 @@ public class AuroraLEDCommand extends CommandBase {
   private final int[] darkBlue = {62, 0, 216};
   private final int darkBlueMintGreenBoundary = boundaries[3];
 
-  private final int gradientLength = 3;
+  private final int gradientLength = 6;
   private final int[][] mintGreenPinkGradient = calcGradientColors(mintGreen, pink);
   private final int[][] pinkLightBlueGradient = calcGradientColors(pink, lightBlue);
   private final int[][] lightBlueDarkBlueGradient = calcGradientColors(lightBlue, darkBlue);
@@ -97,32 +97,35 @@ public class AuroraLEDCommand extends CommandBase {
     if (System.currentTimeMillis() - startTime >= waitTime) {
       for (int j = 0; j < LEDConstants.LED_COUNT + 1; j += (LEDConstants.LED_COUNT / NUM_LED_GROUPS)) {
         int i = 0;
-        for (i = i + j + position; i < (mintGreenPinkBoundary - gradientLength) + j + position; i++) {
+        int offset = j + position;
+        int gradientOffset = j - position; // 0
+
+        for (i = i + offset; i < (mintGreenPinkBoundary - gradientLength) + offset; i++) {
           ledSubsystem.setRGB(wrapValues(i), mintGreen[0], mintGreen[1], mintGreen[2]);
         }
-        for (; i < mintGreenPinkBoundary + j + position; i++) {
+        for (; i < mintGreenPinkBoundary + offset; i++) {
           // makes i (0 through gradientLength - 1) for selecting each color out of the gradient
           int gradientPos = i - j - position - (mintGreenPinkBoundary - gradientLength);
           ledSubsystem.setRGB(wrapValues(i), mintGreenPinkGradient[gradientPos][0], mintGreenPinkGradient[gradientPos][1], mintGreenPinkGradient[gradientPos][2]);
         }
-        for (; i < (pinkLightBlueBoundary - gradientLength) + j + position; i++) {
+        for (; i < (pinkLightBlueBoundary - gradientLength) + offset; i++) {
           ledSubsystem.setRGB(wrapValues(i), pink[0], pink[1], pink[2]);
         }
-        for (; i < pinkLightBlueBoundary + j + position; i++) {
+        for (; i < pinkLightBlueBoundary + offset; i++) {
           int gradientPos = i - j - position - (pinkLightBlueBoundary - gradientLength);
           ledSubsystem.setRGB(wrapValues(i), pinkLightBlueGradient[gradientPos][0], pinkLightBlueGradient[gradientPos][1], pinkLightBlueGradient[gradientPos][2]);
         }
-        for (; i < (lightBlueDarkBlueBoundary - gradientLength) + j + position; i++) {
+        for (; i < (lightBlueDarkBlueBoundary - gradientLength) + offset; i++) {
           ledSubsystem.setRGB(wrapValues(i), lightBlue[0], lightBlue[1], lightBlue[2]);
         }
-        for (; i < lightBlueDarkBlueBoundary + j + position; i++) {
+        for (; i < lightBlueDarkBlueBoundary + offset; i++) {
           int gradientPos = i - j - position - (lightBlueDarkBlueBoundary - gradientLength);
           ledSubsystem.setRGB(wrapValues(i), lightBlueDarkBlueGradient[gradientPos][0], lightBlueDarkBlueGradient[gradientPos][1], lightBlueDarkBlueGradient[gradientPos][2]);
         }
-        for (; i < (darkBlueMintGreenBoundary - gradientLength) + j + position; i++) {
+        for (; i < (darkBlueMintGreenBoundary - gradientLength) + offset; i++) {
           ledSubsystem.setRGB(wrapValues(i), darkBlue[0], darkBlue[1], darkBlue[2]);
         }
-        for (; i < darkBlueMintGreenBoundary + j + position; i++) {
+        for (; i < darkBlueMintGreenBoundary + offset; i++) {
           int gradientPos = i - j - position - (darkBlueMintGreenBoundary - gradientLength);
           ledSubsystem.setRGB(wrapValues(i), darkBlueMintGreenGradient[gradientPos][0], darkBlueMintGreenGradient[gradientPos][1], darkBlueMintGreenGradient[gradientPos][2]);
         }

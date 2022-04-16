@@ -20,10 +20,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.TurretConstants;
-import frc.robot.commands.LED.SnowfallLEDCommand;
-import frc.robot.commands.LED.BlinkLEDCommand;
-import frc.robot.commands.LED.SetLEDToRGBCommand;
-import frc.robot.commands.LED.TeleLEDDefaultCommand;
+import frc.robot.commands.LED.*;
 import frc.robot.commands.turret.HomeTurretCommand;
 import frc.robot.commands.turret.TurretLockCommand;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -40,7 +37,7 @@ public class Robot extends TimedRobot {
 
 	public static SendableChooser<AutoModes> autoChooser;
 	private SetLEDToRGBCommand redLedCommand;
-	private SnowfallLEDCommand snowfallLedCommand;
+	private AuroraLEDCommand autoDisabledCommand;
 
 	public static enum AutoModes {
 		ONE_BALL, TWO_BALL, TWO_BALL_ALTERNATIVE, THREE_BALL, FOUR_BALL, TEST_AUTO
@@ -53,7 +50,7 @@ public class Robot extends TimedRobot {
 		robotContainer = new RobotContainer();
 		revPDH = new PowerDistribution(1, ModuleType.kRev);
 		redLedCommand = new SetLEDToRGBCommand(robotContainer.ledSubsystem, 255, 0, 0);
-		snowfallLedCommand = new SnowfallLEDCommand(robotContainer.ledSubsystem, 250);
+		autoDisabledCommand = new AuroraLEDCommand(robotContainer.ledSubsystem);
 		robotContainer.turretSubsystem.lockStatus = TurretLockStatus.UNLOCKED;
 
 		revPDH.setSwitchableChannel(false);
@@ -99,9 +96,9 @@ public class Robot extends TimedRobot {
 		CommandScheduler.getInstance().run();
 		if (robotContainer.turretSubsystem.getMagSwitch()) {
 			redLedCommand.cancel();
-			snowfallLedCommand.schedule();
+			autoDisabledCommand.schedule();
 		} else {
-			snowfallLedCommand.cancel();
+			autoDisabledCommand.cancel();
 			redLedCommand.schedule();
 		}
 	}
@@ -113,7 +110,7 @@ public class Robot extends TimedRobot {
 		if(currLEDCommand != null){
 			currLEDCommand.cancel();
 		}
-		robotContainer.ledSubsystem.setDefaultCommand(snowfallLedCommand);
+		robotContainer.ledSubsystem.setDefaultCommand(autoDisabledCommand);
 		m_autonomousCommand = robotContainer.getAutonomousCommand();
 
 		SequentialCommandGroup turretAuto;
@@ -162,7 +159,7 @@ public class Robot extends TimedRobot {
 		robotContainer.drivetrainSubsystem.resetEncoders();
 		robotContainer.drivetrainSubsystem.resetGyro();
 
-		snowfallLedCommand.cancel();
+		autoDisabledCommand.cancel();
 		robotContainer.ledSubsystem.setDefaultCommand(new TeleLEDDefaultCommand(robotContainer.ledSubsystem));
 
 		CommandScheduler.getInstance().onCommandFinish(command -> {
