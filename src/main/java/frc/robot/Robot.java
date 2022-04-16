@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-
 import frc.robot.Constants.TurretConstants;
 import frc.robot.commands.LED.BlinkLEDCommand;
 import frc.robot.commands.LED.SetLEDToRGBCommand;
@@ -88,8 +87,7 @@ public class Robot extends TimedRobot {
       revPDH.setSwitchableChannel(true);
     }
 
-    SmartDashboard.putNumber(
-        "Flywheel RPM: ", robotContainer.shooterSubsystem.getFlywheelRPM());
+    SmartDashboard.putNumber("Flywheel RPM: ", robotContainer.shooterSubsystem.getFlywheelRPM());
     SmartDashboard.putString(
         "Turret Lock Status: ",
         ((robotContainer.turretSubsystem.lockStatus == TurretLockStatus.UNLOCKED)
@@ -106,8 +104,7 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void disabledInit() {
-  }
+  public void disabledInit() {}
 
   @Override
   public void disabledPeriodic() {
@@ -139,48 +136,38 @@ public class Robot extends TimedRobot {
             new SequentialCommandGroup(
                 new WaitCommand(6.0),
                 new InstantCommand(
-                    () ->
-                        robotContainer.turretSubsystem.lockStatus =
-                            TurretLockStatus.LOCKED));
+                    () -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED));
         break;
       case FOUR_BALL:
         turretAuto =
             new SequentialCommandGroup(
                 new WaitCommand(2.7),
                 new InstantCommand(
-                    () ->
-                        robotContainer.turretSubsystem.lockStatus =
-                            TurretLockStatus.LOCKED),
+                    () -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED),
                 new WaitCommand(5.0),
                 new HomeTurretCommand(robotContainer.turretSubsystem, true),
                 new WaitCommand(1.25),
                 new InstantCommand(
-                    () ->
-                        robotContainer.turretSubsystem.lockStatus =
-                            TurretLockStatus.LOCKED));
+                    () -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED));
         break;
       default:
         turretAuto =
             new SequentialCommandGroup(
                 new InstantCommand(
-                    () ->
-                        robotContainer.turretSubsystem.lockStatus =
-                            TurretLockStatus.LOCKED));
+                    () -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED));
         break;
     }
 
     if (m_autonomousCommand != null) {
       new ParallelCommandGroup(
-          m_autonomousCommand.alongWith(
-              new TurretLockCommand(robotContainer.turretSubsystem)),
-          turretAuto)
+              m_autonomousCommand.alongWith(new TurretLockCommand(robotContainer.turretSubsystem)),
+              turretAuto)
           .schedule();
     }
   }
 
   @Override
-  public void autonomousPeriodic() {
-  }
+  public void autonomousPeriodic() {}
 
   @Override
   public void teleopInit() {
@@ -233,6 +220,5 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void testPeriodic() {
-  }
+  public void testPeriodic() {}
 }

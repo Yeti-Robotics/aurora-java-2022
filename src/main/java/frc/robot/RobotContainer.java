@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.LED.ShooterLEDCommand;
 import frc.robot.commands.climber.ClimbDownCommand;
@@ -49,220 +48,212 @@ import frc.robot.utils.JoyButton.ActiveState;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-    public Joystick driverStationJoystick;
-    public DrivetrainSubsystem drivetrainSubsystem;
-    public ShiftingSubsystem shiftingSubsystem;
-    public IntakeSubsystem intakeSubsystem;
-    public NeckSubsystem neckSubsystem;
-    public TurretSubsystem turretSubsystem;
-    public ShooterSubsystem shooterSubsystem;
-    public ClimberSubsystem climberSubsystem;
-    public LEDSubsystem ledSubsystem;
+  public Joystick driverStationJoystick;
+  public DrivetrainSubsystem drivetrainSubsystem;
+  public ShiftingSubsystem shiftingSubsystem;
+  public IntakeSubsystem intakeSubsystem;
+  public NeckSubsystem neckSubsystem;
+  public TurretSubsystem turretSubsystem;
+  public ShooterSubsystem shooterSubsystem;
+  public ClimberSubsystem climberSubsystem;
+  public LEDSubsystem ledSubsystem;
 
-    private double lastInputLeftY = 0.0;
-    public boolean shooterMode = true; // false = turretMode
+  private double lastInputLeftY = 0.0;
+  public boolean shooterMode = true; // false = turretMode
 
-    /** The container for the robot. Contains subsystems, OI devices, and commands. */
-    public RobotContainer() {
-        ledSubsystem = new LEDSubsystem();
-        driverStationJoystick = new Joystick(OIConstants.DRIVER_STATION_JOY);
-        intakeSubsystem = new IntakeSubsystem();
-        shiftingSubsystem = new ShiftingSubsystem();
-        neckSubsystem = new NeckSubsystem();
-        turretSubsystem = new TurretSubsystem();
-        shooterSubsystem = new ShooterSubsystem();
-        climberSubsystem = new ClimberSubsystem();
-        drivetrainSubsystem = new DrivetrainSubsystem();
+  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  public RobotContainer() {
+    ledSubsystem = new LEDSubsystem();
+    driverStationJoystick = new Joystick(OIConstants.DRIVER_STATION_JOY);
+    intakeSubsystem = new IntakeSubsystem();
+    shiftingSubsystem = new ShiftingSubsystem();
+    neckSubsystem = new NeckSubsystem();
+    turretSubsystem = new TurretSubsystem();
+    shooterSubsystem = new ShooterSubsystem();
+    climberSubsystem = new ClimberSubsystem();
+    drivetrainSubsystem = new DrivetrainSubsystem();
 
-        turretSubsystem.setDefaultCommand(new TurretLockCommand(turretSubsystem));
+    turretSubsystem.setDefaultCommand(new TurretLockCommand(turretSubsystem));
 
-        switch (drivetrainSubsystem.getDriveMode()) {
-            case TANK:
-                drivetrainSubsystem.setDefaultCommand(
-                        new RunCommand(
-                                () -> drivetrainSubsystem.tankDrive(getLeftY(), getRightY()),
-                                drivetrainSubsystem));
-                break;
-            case CHEEZY:
-                drivetrainSubsystem.setDefaultCommand(
-                        new RunCommand(
-                                () -> drivetrainSubsystem.cheezyDrive(getLeftY(), getRightX()),
-                                drivetrainSubsystem));
-                break;
-            case ARCADE:
-                drivetrainSubsystem.setDefaultCommand(
-                        new RunCommand(
-                                () -> drivetrainSubsystem.arcadeDrive(getLeftY(), getRightX()),
-                                drivetrainSubsystem));
-                break;
-        }
-
-        // Configure the button bindings
-        configureButtonBindings();
+    switch (drivetrainSubsystem.getDriveMode()) {
+      case TANK:
+        drivetrainSubsystem.setDefaultCommand(
+            new RunCommand(
+                () -> drivetrainSubsystem.tankDrive(getLeftY(), getRightY()), drivetrainSubsystem));
+        break;
+      case CHEEZY:
+        drivetrainSubsystem.setDefaultCommand(
+            new RunCommand(
+                () -> drivetrainSubsystem.cheezyDrive(getLeftY(), getRightX()),
+                drivetrainSubsystem));
+        break;
+      case ARCADE:
+        drivetrainSubsystem.setDefaultCommand(
+            new RunCommand(
+                () -> drivetrainSubsystem.arcadeDrive(getLeftY(), getRightX()),
+                drivetrainSubsystem));
+        break;
     }
 
-    /**
-     * Use this method to define your button->command mappings. Buttons can be created by
-     * instantiating a {@link GenericHID} or one of its subclasses ({@link
-     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
-     * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-     */
-    private void configureButtonBindings() {
-        ShooterLEDCommand shooterLEDCommand = new ShooterLEDCommand(ledSubsystem);
-        setJoystickButtonWhenPressed(12, new ToggleIntakeCommand(intakeSubsystem));
-        setConditionalButton(
-                11,
-                new ToggleShiftCommand(shiftingSubsystem),
-                ActiveState.WHEN_PRESSED,
-                new InstantCommand(),
-                ActiveState.WHEN_PRESSED);
+    // Configure the button bindings
+    configureButtonBindings();
+  }
 
-        setConditionalButton(
-                6,
-                new AllOutCommand(intakeSubsystem, neckSubsystem),
-                ActiveState.WHILE_HELD,
-                new ClimbUpCommand(climberSubsystem),
-                ActiveState.WHILE_HELD);
-        setConditionalButton(
-                1,
-                new AllInCommand(intakeSubsystem, neckSubsystem),
-                ActiveState.WHILE_HELD,
-                new ClimbDownCommand(climberSubsystem),
-                ActiveState.WHILE_HELD);
+  /**
+   * Use this method to define your button->command mappings. Buttons can be created by
+   * instantiating a {@link GenericHID} or one of its subclasses ({@link
+   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
+   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+   */
+  private void configureButtonBindings() {
+    ShooterLEDCommand shooterLEDCommand = new ShooterLEDCommand(ledSubsystem);
+    setJoystickButtonWhenPressed(12, new ToggleIntakeCommand(intakeSubsystem));
+    setConditionalButton(
+        11,
+        new ToggleShiftCommand(shiftingSubsystem),
+        ActiveState.WHEN_PRESSED,
+        new InstantCommand(),
+        ActiveState.WHEN_PRESSED);
 
-        setConditionalButton(
-                7,
-                new ToggleTurretLockCommand(turretSubsystem)
-                        .andThen(new HomeTurretCommand(turretSubsystem, false)),
-                ActiveState.WHEN_PRESSED,
-                new InstantCommand(),
-                ActiveState.WHILE_HELD);
-        setConditionalButton(
-                2,
-                new ToggleFlywheelHighCommand(shooterLEDCommand),
-                ActiveState.WHEN_PRESSED,
-                new InstantCommand(),
-                ActiveState.WHILE_HELD);
+    setConditionalButton(
+        6,
+        new AllOutCommand(intakeSubsystem, neckSubsystem),
+        ActiveState.WHILE_HELD,
+        new ClimbUpCommand(climberSubsystem),
+        ActiveState.WHILE_HELD);
+    setConditionalButton(
+        1,
+        new AllInCommand(intakeSubsystem, neckSubsystem),
+        ActiveState.WHILE_HELD,
+        new ClimbDownCommand(climberSubsystem),
+        ActiveState.WHILE_HELD);
 
-        setConditionalButton(
-                8,
-                new HomeTurretCommand(turretSubsystem, true),
-                ActiveState.WHEN_PRESSED,
-                new InstantCommand(() -> climberSubsystem.toggleClimberBrake()),
-                ActiveState.WHEN_PRESSED);
-        setConditionalButton(
-                3,
-                new ToggleFlywheelLowCommand(shooterLEDCommand),
-                ActiveState.WHEN_PRESSED,
-                new InstantCommand(),
-                ActiveState.WHEN_PRESSED);
+    setConditionalButton(
+        7,
+        new ToggleTurretLockCommand(turretSubsystem)
+            .andThen(new HomeTurretCommand(turretSubsystem, false)),
+        ActiveState.WHEN_PRESSED,
+        new InstantCommand(),
+        ActiveState.WHILE_HELD);
+    setConditionalButton(
+        2,
+        new ToggleFlywheelHighCommand(shooterLEDCommand),
+        ActiveState.WHEN_PRESSED,
+        new InstantCommand(),
+        ActiveState.WHILE_HELD);
 
-        setConditionalButton(
-                9,
-                new SnapTurretLeftCommand(turretSubsystem),
-                ActiveState.WHEN_PRESSED,
-                new InstantCommand(),
-                ActiveState.WHEN_PRESSED);
-        setConditionalButton(
-                4,
-                new InstantCommand(
-                        () -> {
-                            ShooterSubsystem.shooterMode = ShooterMode.LAUNCHPAD;
-                            ShooterSubsystem.isShooting = !ShooterSubsystem.isShooting;
-                        }),
-                ActiveState.WHEN_PRESSED,
-                new InstantCommand(),
-                ActiveState.WHILE_HELD);
+    setConditionalButton(
+        8,
+        new HomeTurretCommand(turretSubsystem, true),
+        ActiveState.WHEN_PRESSED,
+        new InstantCommand(() -> climberSubsystem.toggleClimberBrake()),
+        ActiveState.WHEN_PRESSED);
+    setConditionalButton(
+        3,
+        new ToggleFlywheelLowCommand(shooterLEDCommand),
+        ActiveState.WHEN_PRESSED,
+        new InstantCommand(),
+        ActiveState.WHEN_PRESSED);
 
-        // 10 = kill switch for climbing
-        setConditionalButton(
-                10,
-                new SnapTurretRightCommand(turretSubsystem),
-                ActiveState.WHEN_PRESSED,
-                new InstantCommand(),
-                ActiveState.WHEN_PRESSED);
-        setJoystickButtonWhenPressed(5, new InstantCommand(() -> shooterMode = !shooterMode));
+    setConditionalButton(
+        9,
+        new SnapTurretLeftCommand(turretSubsystem),
+        ActiveState.WHEN_PRESSED,
+        new InstantCommand(),
+        ActiveState.WHEN_PRESSED);
+    setConditionalButton(
+        4,
+        new InstantCommand(
+            () -> {
+              ShooterSubsystem.shooterMode = ShooterMode.LAUNCHPAD;
+              ShooterSubsystem.isShooting = !ShooterSubsystem.isShooting;
+            }),
+        ActiveState.WHEN_PRESSED,
+        new InstantCommand(),
+        ActiveState.WHILE_HELD);
+
+    // 10 = kill switch for climbing
+    setConditionalButton(
+        10,
+        new SnapTurretRightCommand(turretSubsystem),
+        ActiveState.WHEN_PRESSED,
+        new InstantCommand(),
+        ActiveState.WHEN_PRESSED);
+    setJoystickButtonWhenPressed(5, new InstantCommand(() -> shooterMode = !shooterMode));
+  }
+
+  private double getLeftY() {
+    // prevents tipping when stopping backward movement abruptly
+    if (lastInputLeftY < 0
+        && Math.abs(-driverStationJoystick.getRawAxis(0)) <= 0.05) { // 0.05 == joystick deadband
+      drivetrainSubsystem.setMotorsCoast();
     }
 
-    private double getLeftY() {
-        // prevents tipping when stopping backward movement abruptly
-        if (lastInputLeftY < 0
-                && Math.abs(-driverStationJoystick.getRawAxis(0))
-                        <= 0.05) { // 0.05 == joystick deadband
-            drivetrainSubsystem.setMotorsCoast();
-        }
-
-        if (Math.abs(-driverStationJoystick.getRawAxis(0)) > 0.05) {
-            drivetrainSubsystem.setMotorsBrake();
-        }
-
-        lastInputLeftY = -driverStationJoystick.getRawAxis(0);
-
-        return -driverStationJoystick.getRawAxis(0);
+    if (Math.abs(-driverStationJoystick.getRawAxis(0)) > 0.05) {
+      drivetrainSubsystem.setMotorsBrake();
     }
 
-    private double getLeftX() {
-        return driverStationJoystick.getRawAxis(1);
-    }
+    lastInputLeftY = -driverStationJoystick.getRawAxis(0);
 
-    private double getRightY() {
-        return -driverStationJoystick.getRawAxis(2);
-    }
+    return -driverStationJoystick.getRawAxis(0);
+  }
 
-    private double getRightX() {
-        return driverStationJoystick.getRawAxis(3);
-    }
+  private double getLeftX() {
+    return driverStationJoystick.getRawAxis(1);
+  }
 
-    private void setJoystickButtonWhenPressed(int button, CommandBase command) {
-        new JoystickButton(driverStationJoystick, button).whenPressed(command);
-    }
+  private double getRightY() {
+    return -driverStationJoystick.getRawAxis(2);
+  }
 
-    // commandOnTrue runs when shooterMode is true
-    private void setConditionalJoystickButtonWhenPressed(
-            int button, Command commandOnTrue, Command commandOnFalse) {
-        new JoystickButton(driverStationJoystick, button)
-                .whenPressed(
-                        new ConditionalCommand(commandOnTrue, commandOnFalse, () -> shooterMode));
-    }
+  private double getRightX() {
+    return driverStationJoystick.getRawAxis(3);
+  }
 
-    private void setJoystickButtonWhileHeld(int button, CommandBase command) {
-        new JoystickButton(driverStationJoystick, button).whileHeld(command);
-    }
+  private void setJoystickButtonWhenPressed(int button, CommandBase command) {
+    new JoystickButton(driverStationJoystick, button).whenPressed(command);
+  }
 
-    // commandOnTrue runs when shooterMode is true
-    private void setConditionalJoystickButtonWhileHeld(
-            int button, Command commandOnTrue, Command commandOnFalse) {
-        new JoystickButton(driverStationJoystick, button)
-                .whileHeld(
-                        new ConditionalCommand(commandOnTrue, commandOnFalse, () -> shooterMode));
-    }
+  // commandOnTrue runs when shooterMode is true
+  private void setConditionalJoystickButtonWhenPressed(
+      int button, Command commandOnTrue, Command commandOnFalse) {
+    new JoystickButton(driverStationJoystick, button)
+        .whenPressed(new ConditionalCommand(commandOnTrue, commandOnFalse, () -> shooterMode));
+  }
 
-    private void setConditionalButton(
-            int button,
-            Command trueCommand,
-            ActiveState trueActiveState,
-            Command falseCommand,
-            ActiveState falseActiveState) {
-        new JoyButton(driverStationJoystick, button)
-                .conditionalPressed(
-                        trueCommand,
-                        trueActiveState,
-                        falseCommand,
-                        falseActiveState,
-                        () -> shooterMode);
-    }
+  private void setJoystickButtonWhileHeld(int button, CommandBase command) {
+    new JoystickButton(driverStationJoystick, button).whileHeld(command);
+  }
 
-    /**
-     * Use this to pass the autonomous command to the main {@link Robot} class.
-     *
-     * @return the command to run in autonomous
-     */
-    public Command getAutonomousCommand() {
-        drivetrainSubsystem.setMotorsBrake();
+  // commandOnTrue runs when shooterMode is true
+  private void setConditionalJoystickButtonWhileHeld(
+      int button, Command commandOnTrue, Command commandOnFalse) {
+    new JoystickButton(driverStationJoystick, button)
+        .whileHeld(new ConditionalCommand(commandOnTrue, commandOnFalse, () -> shooterMode));
+  }
 
-        AutoBuilder builder = new AutoBuilder();
-        builder.setRobotContainer(this);
-        builder.setAutoMode(Robot.autoChooser.getSelected());
-        return builder.build();
-    }
+  private void setConditionalButton(
+      int button,
+      Command trueCommand,
+      ActiveState trueActiveState,
+      Command falseCommand,
+      ActiveState falseActiveState) {
+    new JoyButton(driverStationJoystick, button)
+        .conditionalPressed(
+            trueCommand, trueActiveState, falseCommand, falseActiveState, () -> shooterMode);
+  }
+
+  /**
+   * Use this to pass the autonomous command to the main {@link Robot} class.
+   *
+   * @return the command to run in autonomous
+   */
+  public Command getAutonomousCommand() {
+    drivetrainSubsystem.setMotorsBrake();
+
+    AutoBuilder builder = new AutoBuilder();
+    builder.setRobotContainer(this);
+    builder.setAutoMode(Robot.autoChooser.getSelected());
+    return builder.build();
+  }
 }

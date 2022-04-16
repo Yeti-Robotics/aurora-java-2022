@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.NeckSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -18,41 +17,40 @@ import frc.robot.subsystems.ShooterSubsystem;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AllInCommandGroup extends SequentialCommandGroup {
-    IntakeSubsystem intakeSubsystem;
-    NeckSubsystem neckSubsystem;
+  IntakeSubsystem intakeSubsystem;
+  NeckSubsystem neckSubsystem;
 
-    public AllInCommandGroup(IntakeSubsystem intakeSubsystem, NeckSubsystem neckSubsystem) {
-        this.intakeSubsystem = intakeSubsystem;
-        this.neckSubsystem = neckSubsystem;
-        addCommands(
-                new InstantCommand(
-                        () -> {
-                            intakeSubsystem.stopRoll();
-                            neckSubsystem.stopNeck();
-                        }),
-                new ConditionalCommand(
-                        new RunCommand(
-                                        () -> {
-                                            neckSubsystem.moveUp(0.8);
-                                        })
-                                .andThen(
-                                        new ConditionalCommand(
-                                                new WaitCommand(0.25),
-                                                new InstantCommand(),
-                                                () -> !neckSubsystem.getUpperBeamBreak())),
-                        new RunCommand(
-                                () -> {
-                                    intakeSubsystem.rollIn();
-                                    if (neckSubsystem.getLowerBeamBreak())
-                                        neckSubsystem.moveUp(0.3);
-                                }),
-                        () -> ShooterSubsystem.atSetPoint));
-    }
+  public AllInCommandGroup(IntakeSubsystem intakeSubsystem, NeckSubsystem neckSubsystem) {
+    this.intakeSubsystem = intakeSubsystem;
+    this.neckSubsystem = neckSubsystem;
+    addCommands(
+        new InstantCommand(
+            () -> {
+              intakeSubsystem.stopRoll();
+              neckSubsystem.stopNeck();
+            }),
+        new ConditionalCommand(
+            new RunCommand(
+                    () -> {
+                      neckSubsystem.moveUp(0.8);
+                    })
+                .andThen(
+                    new ConditionalCommand(
+                        new WaitCommand(0.25),
+                        new InstantCommand(),
+                        () -> !neckSubsystem.getUpperBeamBreak())),
+            new RunCommand(
+                () -> {
+                  intakeSubsystem.rollIn();
+                  if (neckSubsystem.getLowerBeamBreak()) neckSubsystem.moveUp(0.3);
+                }),
+            () -> ShooterSubsystem.atSetPoint));
+  }
 
-    @Override
-    public void end(boolean interrupted) {
-        // TODO Auto-generated method stub
-        intakeSubsystem.stopRoll();
-        neckSubsystem.stopNeck();
-    }
+  @Override
+  public void end(boolean interrupted) {
+    // TODO Auto-generated method stub
+    intakeSubsystem.stopRoll();
+    neckSubsystem.stopNeck();
+  }
 }
