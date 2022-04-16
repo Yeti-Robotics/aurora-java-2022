@@ -43,7 +43,7 @@ public class Robot extends TimedRobot {
     ONE_BALL,
     TWO_BALL,
     TWO_BALL_ALTERNATIVE,
-    TWO_BALL_DUMP, 
+    TWO_BALL_DUMP,
     THREE_BALL,
     FOUR_BALL,
     TEST_AUTO,
