@@ -10,8 +10,9 @@ import frc.robot.subsystems.NeckSubsystem;
 
 public class AllOutCommand extends CommandBase {
 
-  private IntakeSubsystem intakeSubsystem;
-  private NeckSubsystem neckSubsystem;
+  private final IntakeSubsystem intakeSubsystem;
+  private final NeckSubsystem neckSubsystem;
+
   /** Creates a new AllOutCommand. */
   public AllOutCommand(IntakeSubsystem intakeSubsystem, NeckSubsystem neckSubsystem) {
     this.intakeSubsystem = intakeSubsystem;

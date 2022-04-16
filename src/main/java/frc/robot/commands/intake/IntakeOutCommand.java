@@ -8,8 +8,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.IntakeSubsystem;
 
 public class IntakeOutCommand extends CommandBase {
+
   /** Creates a new IntakeInCommand. */
-  private IntakeSubsystem intakeSubsystem;
+  private final IntakeSubsystem intakeSubsystem;
 
   public IntakeOutCommand(IntakeSubsystem intakeSubsystem) {
     this.intakeSubsystem = intakeSubsystem;

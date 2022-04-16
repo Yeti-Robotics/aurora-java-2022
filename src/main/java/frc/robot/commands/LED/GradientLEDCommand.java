@@ -10,7 +10,9 @@ import frc.robot.subsystems.LEDSubsystem;
 public class GradientLEDCommand extends CommandBase {
   /** Creates a new GradientLEDCommand. */
   private final LEDSubsystem ledSubsystem;
+
   private int firstHueValue;
+
   public GradientLEDCommand(LEDSubsystem ledSubsystem, int firstHueValue) {
     this.ledSubsystem = ledSubsystem;
     this.firstHueValue = firstHueValue;

@@ -4,32 +4,35 @@
 
 package frc.robot.utils;
 
+import frc.robot.Constants.LimelightConstants;
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
-import frc.robot.Constants.LimelightConstants;
-
 public class PhotonVision {
-    private static PhotonCamera camera = new PhotonCamera("yetiworm");
 
-    public static double getX(){
-        PhotonTrackedTarget latestTarget = camera.getLatestResult().getBestTarget();
-        return (latestTarget == null) ? 0.0 : latestTarget.getYaw();
+  private static final PhotonCamera camera = new PhotonCamera("yetiworm");
+
+  public static double getX() {
+    PhotonTrackedTarget latestTarget = camera.getLatestResult().getBestTarget();
+    return (latestTarget == null) ? 0.0 : latestTarget.getYaw();
+  }
+
+  public static double getY() {
+    PhotonTrackedTarget latestTarget = camera.getLatestResult().getBestTarget();
+    return (latestTarget == null) ? 0.0 : latestTarget.getPitch();
+  }
+
+  public static double getDistance() {
+    if (!camera.getLatestResult().hasTargets()) {
+      return 0.0;
     }
 
-    public static double getY(){
-        PhotonTrackedTarget latestTarget = camera.getLatestResult().getBestTarget();
-        return (latestTarget == null) ? 0.0 : latestTarget.getPitch();
-    }
+    double angleToGoalDegrees = LimelightConstants.MOUNTING_ANGLE + getY();
+    double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
+    double distanceFromLimelightToGoalInches =
+        (LimelightConstants.GOAL_HEIGHT - LimelightConstants.LIMELIGHT_HEIGHT)
+            / Math.tan(angleToGoalRadians);
 
-    public static double getDistance(){
-        if(!camera.getLatestResult().hasTargets())
-            return 0.0;
-
-        double angleToGoalDegrees = LimelightConstants.MOUNTING_ANGLE + getY();
-        double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
-        double distanceFromLimelightToGoalInches = (LimelightConstants.GOAL_HEIGHT - LimelightConstants.LIMELIGHT_HEIGHT) / Math.tan(angleToGoalRadians);
-
-        return distanceFromLimelightToGoalInches;
-    }
+    return distanceFromLimelightToGoalInches;
+  }
 }

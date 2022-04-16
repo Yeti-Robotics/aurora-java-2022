@@ -8,8 +8,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ShooterSubsystem;
 
 public class SpinShooterVelocityCommand extends CommandBase {
-  private ShooterSubsystem shooterSubsystem;
-  private double vel;
+
+  private final ShooterSubsystem shooterSubsystem;
+  private final double vel;
 
   public SpinShooterVelocityCommand(ShooterSubsystem shooterSubsystem, double vel) {
     this.shooterSubsystem = shooterSubsystem;

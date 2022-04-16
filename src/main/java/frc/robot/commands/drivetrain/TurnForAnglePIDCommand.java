@@ -13,8 +13,9 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class TurnForAnglePIDCommand extends PIDCommand {
-  private DrivetrainSubsystem drivetrainSubsystem;
-  private double angle;
+
+  private final DrivetrainSubsystem drivetrainSubsystem;
+  private final double angle;
 
   public TurnForAnglePIDCommand(DrivetrainSubsystem drivetrainSubsystem, double angle) {
     super(
@@ -27,9 +28,9 @@ public class TurnForAnglePIDCommand extends PIDCommand {
         // This uses the output
         output -> {
           double realOutput = output;
-          if(Math.abs(output) >= 0.5){
+          if (Math.abs(output) >= 0.5) {
             realOutput = Math.signum(output) * 0.5;
-          } else if(Math.abs(output) <= 0.175){
+          } else if (Math.abs(output) <= 0.175) {
             realOutput = Math.signum(output) * 0.175;
           }
           drivetrainSubsystem.cheezyDrive(0.0, realOutput);

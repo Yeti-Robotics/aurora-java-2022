@@ -8,8 +8,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.TurretSubsystem;
 
 public class MoveTurretCommand extends CommandBase {
-  private TurretSubsystem turretSubsystem;
-  private double power;
+
+  private final TurretSubsystem turretSubsystem;
+  private final double power;
 
   public MoveTurretCommand(TurretSubsystem turretSubsystem, double power) {
     this.turretSubsystem = turretSubsystem;

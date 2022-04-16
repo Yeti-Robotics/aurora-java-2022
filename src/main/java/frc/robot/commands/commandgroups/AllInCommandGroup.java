@@ -19,31 +19,38 @@ import frc.robot.subsystems.ShooterSubsystem;
 public class AllInCommandGroup extends SequentialCommandGroup {
   IntakeSubsystem intakeSubsystem;
   NeckSubsystem neckSubsystem;
+
   public AllInCommandGroup(IntakeSubsystem intakeSubsystem, NeckSubsystem neckSubsystem) {
     this.intakeSubsystem = intakeSubsystem;
     this.neckSubsystem = neckSubsystem;
     addCommands(
-        new InstantCommand(() -> {
-          intakeSubsystem.stopRoll();
-          neckSubsystem.stopNeck();
-        }), 
+        new InstantCommand(
+            () -> {
+              intakeSubsystem.stopRoll();
+              neckSubsystem.stopNeck();
+            }),
         new ConditionalCommand(
-            new RunCommand(() -> {
-              neckSubsystem.moveUp(0.8);
-            }).andThen(new ConditionalCommand(new WaitCommand(0.25), new InstantCommand(), () -> !neckSubsystem.getUpperBeamBreak())),
+            new RunCommand(
+                    () -> {
+                      neckSubsystem.moveUp(0.8);
+                    })
+                .andThen(
+                    new ConditionalCommand(
+                        new WaitCommand(0.25),
+                        new InstantCommand(),
+                        () -> !neckSubsystem.getUpperBeamBreak())),
             new RunCommand(
                 () -> {
                   intakeSubsystem.rollIn();
-                  if (neckSubsystem.getLowerBeamBreak())
-                    neckSubsystem.moveUp(0.3);
+                  if (neckSubsystem.getLowerBeamBreak()) neckSubsystem.moveUp(0.3);
                 }),
             () -> ShooterSubsystem.atSetPoint));
   }
 
   @Override
   public void end(boolean interrupted) {
-      // TODO Auto-generated method stub
-      intakeSubsystem.stopRoll();
-      neckSubsystem.stopNeck();
+    // TODO Auto-generated method stub
+    intakeSubsystem.stopRoll();
+    neckSubsystem.stopNeck();
   }
 }

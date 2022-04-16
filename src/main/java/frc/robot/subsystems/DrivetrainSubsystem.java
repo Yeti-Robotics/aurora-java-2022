@@ -4,7 +4,6 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
@@ -18,20 +17,26 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.ShiftingSubsystem.ShiftStatus;
 
 public class DrivetrainSubsystem extends SubsystemBase {
-  private WPI_TalonFX leftFalcon1, leftFalcon2, rightFalcon1, rightFalcon2;
-  private MotorControllerGroup leftMotors;
-  private MotorControllerGroup rightMotors;
 
-  private AHRS gyro;
+  private final WPI_TalonFX leftFalcon1;
+  private final WPI_TalonFX leftFalcon2;
+  private final WPI_TalonFX rightFalcon1;
+  private final WPI_TalonFX rightFalcon2;
+  private final MotorControllerGroup leftMotors;
+  private final MotorControllerGroup rightMotors;
 
-  private DifferentialDrive drive;
+  private final AHRS gyro;
+
+  private final DifferentialDrive drive;
   private DriveMode driveMode;
-  private DifferentialDriveOdometry odometry;
+  private final DifferentialDriveOdometry odometry;
 
-  private PIDController drivePID;
+  private final PIDController drivePID;
 
   public enum DriveMode {
-    TANK, CHEEZY, ARCADE;
+    TANK,
+    CHEEZY,
+    ARCADE
   }
 
   private NeutralMode neutralMode;
@@ -72,15 +77,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     driveMode = DriveMode.CHEEZY;
 
-    drivePID = new PIDController(DriveConstants.DRIVE_P, DriveConstants.DRIVE_I, DriveConstants.DRIVE_D);
+    drivePID =
+        new PIDController(DriveConstants.DRIVE_P, DriveConstants.DRIVE_I, DriveConstants.DRIVE_D);
   }
 
   @Override
   public void periodic() {
-    odometry.update(
-        gyro.getRotation2d(),
-        getLeftEncoderDistance(),
-        getRightEncoderDistance());
+    odometry.update(gyro.getRotation2d(), getLeftEncoderDistance(), getRightEncoderDistance());
   }
 
   public void setMaxOutput(double maxOutput) {
@@ -128,14 +131,18 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   // Distance in meters
   public double getLeftEncoderDistance() {
-    return (leftFalcon1.getSelectedSensorPosition() * (DriveConstants.DISTANCE_PER_PULSE)
-        / (ShiftingSubsystem.getShifterPosition() == ShiftStatus.HIGH ? DriveConstants.HIGH_GEAR_RATIO
+    return (leftFalcon1.getSelectedSensorPosition()
+        * (DriveConstants.DISTANCE_PER_PULSE)
+        / (ShiftingSubsystem.getShifterPosition() == ShiftStatus.HIGH
+            ? DriveConstants.HIGH_GEAR_RATIO
             : DriveConstants.LOW_GEAR_RATIO));
   }
 
   public double getRightEncoderDistance() {
-    return (-rightFalcon1.getSelectedSensorPosition() * (DriveConstants.DISTANCE_PER_PULSE)
-        / (ShiftingSubsystem.getShifterPosition() == ShiftStatus.HIGH ? DriveConstants.HIGH_GEAR_RATIO
+    return (-rightFalcon1.getSelectedSensorPosition()
+        * (DriveConstants.DISTANCE_PER_PULSE)
+        / (ShiftingSubsystem.getShifterPosition() == ShiftStatus.HIGH
+            ? DriveConstants.HIGH_GEAR_RATIO
             : DriveConstants.LOW_GEAR_RATIO));
   }
 
@@ -150,14 +157,20 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   // Velocity in meters/second
   public double getLeftEncoderVelocity() {
-    return (leftFalcon1.getSelectedSensorVelocity() * 10 * (DriveConstants.DISTANCE_PER_PULSE)
-        / (ShiftingSubsystem.getShifterPosition() == ShiftStatus.HIGH ? DriveConstants.HIGH_GEAR_RATIO
+    return (leftFalcon1.getSelectedSensorVelocity()
+        * 10
+        * (DriveConstants.DISTANCE_PER_PULSE)
+        / (ShiftingSubsystem.getShifterPosition() == ShiftStatus.HIGH
+            ? DriveConstants.HIGH_GEAR_RATIO
             : DriveConstants.LOW_GEAR_RATIO));
   }
 
   public double getRightEncoderVelocity() {
-    return (-rightFalcon1.getSelectedSensorVelocity() * 10 * (DriveConstants.DISTANCE_PER_PULSE)
-        / (ShiftingSubsystem.getShifterPosition() == ShiftStatus.HIGH ? DriveConstants.HIGH_GEAR_RATIO
+    return (-rightFalcon1.getSelectedSensorVelocity()
+        * 10
+        * (DriveConstants.DISTANCE_PER_PULSE)
+        / (ShiftingSubsystem.getShifterPosition() == ShiftStatus.HIGH
+            ? DriveConstants.HIGH_GEAR_RATIO
             : DriveConstants.LOW_GEAR_RATIO));
   }
 
@@ -190,15 +203,15 @@ public class DrivetrainSubsystem extends SubsystemBase {
     return driveMode;
   }
 
-  public void setDriveMode(DriveMode driveMode){
+  public void setDriveMode(DriveMode driveMode) {
     this.driveMode = driveMode;
   }
 
   public NeutralMode getNeutralMode() {
     return neutralMode;
   }
-  
-  public void turnToAnglePID(double angle){
+
+  public void turnToAnglePID(double angle) {
     double output = drivePID.calculate(getHeading(), angle);
     System.out.println("OUTPUT: " + output);
     cheezyDrive(0.0, output);

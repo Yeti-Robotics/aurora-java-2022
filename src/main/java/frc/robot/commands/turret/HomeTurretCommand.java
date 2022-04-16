@@ -11,9 +11,10 @@ import frc.robot.subsystems.TurretSubsystem.TurretLockStatus;
 
 // run this command before encoders are reset
 public class HomeTurretCommand extends CommandBase {
-  private TurretSubsystem turretSubsystem;
+
+  private final TurretSubsystem turretSubsystem;
   private double power;
-  private boolean interruptLock;
+  private final boolean interruptLock;
 
   public HomeTurretCommand(TurretSubsystem turretSubsystem, boolean interruptLock) {
     this.turretSubsystem = turretSubsystem;
@@ -23,13 +24,15 @@ public class HomeTurretCommand extends CommandBase {
   @Override
   public void initialize() {
     power = -Math.signum(turretSubsystem.getEncoder()) * TurretConstants.TURRET_SPEED;
-    if(interruptLock)
+    if (interruptLock) {
       turretSubsystem.lockStatus = TurretLockStatus.UNLOCKED;
+    }
   }
 
   @Override
   public void execute() {
-    if(!(turretSubsystem.getMagSwitch()) && turretSubsystem.lockStatus != TurretLockStatus.LOCKED){
+    if (!(turretSubsystem.getMagSwitch())
+        && turretSubsystem.lockStatus != TurretLockStatus.LOCKED) {
       turretSubsystem.moveTurret(power);
     }
   }

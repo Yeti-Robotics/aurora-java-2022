@@ -11,7 +11,6 @@ public class NeckOutCommand extends CommandBase {
   /** Creates a new NeckInCommand. */
   private final NeckSubsystem neckSubsystem;
 
-
   public NeckOutCommand(NeckSubsystem neckSubsystem) {
     this.neckSubsystem = neckSubsystem;
     addRequirements(neckSubsystem);

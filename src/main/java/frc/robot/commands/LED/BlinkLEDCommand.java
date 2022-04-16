@@ -15,9 +15,7 @@ public class BlinkLEDCommand extends CommandBase {
   int r, g, b;
   boolean on = true;
 
-  /**
-   * Dont use this
-   */
+  /** Dont use this */
   public BlinkLEDCommand() {}
 
   public BlinkLEDCommand(LEDSubsystem ledSubsystem, int waitTime, int r, int g, int b) {

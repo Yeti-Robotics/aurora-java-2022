@@ -9,8 +9,9 @@ import frc.robot.Constants.TurretConstants;
 import frc.robot.subsystems.TurretSubsystem;
 
 public class SnapTurretRightCommand extends CommandBase {
-  private TurretSubsystem turretSubsystem;
-  private double limit; 
+
+  private final TurretSubsystem turretSubsystem;
+  private double limit;
 
   public SnapTurretRightCommand(TurretSubsystem turretSubsystem) {
     this.turretSubsystem = turretSubsystem;
@@ -20,9 +21,9 @@ public class SnapTurretRightCommand extends CommandBase {
   @Override
   public void initialize() {
     double currEncoder = turretSubsystem.getEncoder() + TurretConstants.TURRET_TOLERANCE;
-    if(currEncoder >= TurretConstants.TURRET_MAX_RIGHT){
+    if (currEncoder >= TurretConstants.TURRET_MAX_RIGHT) {
       limit = 0.0; // stop
-    } else if (currEncoder >= TurretConstants.TURRET_45_RIGHT){
+    } else if (currEncoder >= TurretConstants.TURRET_45_RIGHT) {
       limit = TurretConstants.TURRET_MAX_RIGHT;
     } else {
       limit = TurretConstants.TURRET_45_RIGHT;
@@ -31,8 +32,9 @@ public class SnapTurretRightCommand extends CommandBase {
 
   @Override
   public void execute() {
-    if(!(turretSubsystem.getEncoder() + TurretConstants.TURRET_TOLERANCE >= limit)) 
+    if (!(turretSubsystem.getEncoder() + TurretConstants.TURRET_TOLERANCE >= limit)) {
       turretSubsystem.moveTurret(TurretConstants.TURRET_SNAP_SPEED);
+    }
   }
 
   @Override

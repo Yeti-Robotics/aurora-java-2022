@@ -9,7 +9,8 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.utils.PhotonVision;
 
 public class TurnToTargetDriveCommand extends CommandBase {
-  private DrivetrainSubsystem drivetrainSubsystem;
+
+  private final DrivetrainSubsystem drivetrainSubsystem;
 
   public TurnToTargetDriveCommand(DrivetrainSubsystem drivetrainSubsystem) {
     this.drivetrainSubsystem = drivetrainSubsystem;
@@ -21,7 +22,7 @@ public class TurnToTargetDriveCommand extends CommandBase {
 
   @Override
   public void execute() {
-    if(PhotonVision.getX() > 0.0){
+    if (PhotonVision.getX() > 0.0) {
       drivetrainSubsystem.cheezyDrive(0.0, -0.3);
     } else {
       drivetrainSubsystem.cheezyDrive(0.0, 0.3);

@@ -8,8 +8,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ShooterSubsystem;
 
 public class SpinShooterCommand extends CommandBase {
-  private ShooterSubsystem shooterSubsystem;
-  private double power;
+
+  private final ShooterSubsystem shooterSubsystem;
+  private final double power;
   private double maxVel = 0.0;
 
   /** Creates a new SpinShooterCommand. */
@@ -28,8 +29,8 @@ public class SpinShooterCommand extends CommandBase {
   public void execute() {
     shooterSubsystem.shootFlywheel(power);
 
-    double currVel = shooterSubsystem.getAverageEncoder(); 
-    if(currVel > maxVel){
+    double currVel = shooterSubsystem.getAverageEncoder();
+    if (currVel > maxVel) {
       maxVel = currVel;
     }
   }

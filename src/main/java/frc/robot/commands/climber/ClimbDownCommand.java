@@ -5,29 +5,27 @@ import frc.robot.subsystems.ClimberSubsystem;
 
 public class ClimbDownCommand extends CommandBase {
 
-    private final ClimberSubsystem climberSubsystem;
+  private final ClimberSubsystem climberSubsystem;
 
-    public ClimbDownCommand(ClimberSubsystem climberSubsystem) {
-        this.climberSubsystem = climberSubsystem;
-    }
+  public ClimbDownCommand(ClimberSubsystem climberSubsystem) {
+    this.climberSubsystem = climberSubsystem;
+  }
 
-    @Override
-    public void initialize() {
+  @Override
+  public void initialize() {}
 
-    }
+  @Override
+  public void execute() {
+    climberSubsystem.climbDown();
+  }
 
-    @Override
-    public void execute() {
-        climberSubsystem.climbDown();
-    }
+  @Override
+  public boolean isFinished() {
+    return false;
+  }
 
-    @Override
-    public boolean isFinished() {
-        return false;
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-        climberSubsystem.stopClimb();
-    }
+  @Override
+  public void end(boolean interrupted) {
+    climberSubsystem.stopClimb();
+  }
 }

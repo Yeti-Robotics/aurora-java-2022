@@ -6,7 +6,6 @@ package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.IntakeSubsystem.IntakeStatus;
 
 public class ToggleIntakeCommand extends CommandBase {
   private final IntakeSubsystem intakeSubsystem;
@@ -22,11 +21,7 @@ public class ToggleIntakeCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (intakeSubsystem.getIntakePostion() == IntakeStatus.OUT) {
-      intakeSubsystem.retract();
-    } else {
-      intakeSubsystem.extend();
-    }
+    intakeSubsystem.toggleIntake();
   }
 
   // Called once the command ends or is interrupted.

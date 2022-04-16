@@ -10,6 +10,7 @@ import frc.robot.subsystems.LEDSubsystem;
 public class SnowfallLEDCommand extends CommandBase {
   /** Creates a new SnowfallLEDCommand. */
   private final LEDSubsystem ledSubsystem;
+
   long waitTime;
   long startTime;
   int stage;
@@ -26,14 +27,14 @@ public class SnowfallLEDCommand extends CommandBase {
   @Override
   public void initialize() {
     for (int i = 0; i < ledSubsystem.getBufferLength(); i++) {
-      if (i%4 == stage) { 
+      if (i % 4 == stage) {
         ledSubsystem.setRGB(i, 255, 255, 255);
         continue;
       }
       ledSubsystem.setRGB(i, 20, 120, 255);
-      }
-      ledSubsystem.sendData();
-      stage++;
+    }
+    ledSubsystem.sendData();
+    stage++;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -41,14 +42,14 @@ public class SnowfallLEDCommand extends CommandBase {
   public void execute() {
     if (System.currentTimeMillis() - startTime >= waitTime) {
       for (int i = 0; i < ledSubsystem.getBufferLength(); i++) {
-        if (i%4 == stage) { 
+        if (i % 4 == stage) {
           ledSubsystem.setRGB(i, 255, 255, 255);
           continue;
         }
-        ledSubsystem.setRGB(i, 20, 120, 255); 
-        }
-        ledSubsystem.sendData();
-        stage = stage + 1 > 3 ? 0 : stage + 1;
+        ledSubsystem.setRGB(i, 20, 120, 255);
+      }
+      ledSubsystem.sendData();
+      stage = stage + 1 > 3 ? 0 : stage + 1;
       startTime = System.currentTimeMillis();
     }
   }
