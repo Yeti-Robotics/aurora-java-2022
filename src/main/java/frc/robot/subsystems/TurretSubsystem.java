@@ -62,6 +62,6 @@ public class TurretSubsystem extends SubsystemBase {
   }
 
   public double getTurretOffset() {
-    return Math.toDegrees(Math.atan(TurretConstants.TURRET_OFFSET / PhotonVision.getDistance()));
+    return Math.toDegrees(Math.atan(TurretConstants.TURRET_OFFSET / (PhotonVision.getDistance() + 24.0)));
   }
 }

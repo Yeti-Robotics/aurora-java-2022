@@ -172,7 +172,7 @@ public final class Constants {
     public static final double TURRET_TOLERANCE = 1.0; // tolerance for checking encoder limits
     public static final double LIMELIGHT_TOLERANCE =
         0.1; // tolerance for alignment of target using limelight
-    public static double TURRET_OFFSET = 8.0; // inches
+    public static double TURRET_OFFSET = 8.0; // offset
   }
 
   public static final class OIConstants {
