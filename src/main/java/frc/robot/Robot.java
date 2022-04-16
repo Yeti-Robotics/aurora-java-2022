@@ -43,9 +43,10 @@ public class Robot extends TimedRobot {
     ONE_BALL,
     TWO_BALL,
     TWO_BALL_ALTERNATIVE,
+    TWO_BALL_DUMP, 
     THREE_BALL,
     FOUR_BALL,
-    TEST_AUTO
+    TEST_AUTO,
   }
 
   long timer;
@@ -104,10 +105,8 @@ public class Robot extends TimedRobot {
   public void disabledPeriodic() {
     CommandScheduler.getInstance().run();
     if (robotContainer.turretSubsystem.getMagSwitch()) {
-      redLedCommand.cancel();
       autoDisabledCommand.schedule();
     } else {
-      autoDisabledCommand.cancel();
       redLedCommand.schedule();
     }
   }
@@ -178,7 +177,7 @@ public class Robot extends TimedRobot {
 
     autoDisabledCommand.cancel();
     robotContainer.ledSubsystem.setDefaultCommand(
-        new TeleLEDDefaultCommand(robotContainer.ledSubsystem));
+        new AuroraLEDCommand(robotContainer.ledSubsystem));
 
     CommandScheduler.getInstance()
         .onCommandFinish(
