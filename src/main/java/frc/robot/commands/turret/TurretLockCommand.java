@@ -9,46 +9,46 @@ import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.subsystems.TurretSubsystem;
 import frc.robot.subsystems.TurretSubsystem.TurretLockStatus;
+import frc.robot.utils.Limelight;
 import frc.robot.utils.PhotonVision;
 
 public class TurretLockCommand extends PIDCommand {
-  private final TurretSubsystem turretSubsystem;
+	private final TurretSubsystem turretSubsystem;
 
-  public TurretLockCommand(TurretSubsystem turretSubsystem) {
-    super(
-        // Tune values later
-        new PIDController(
-            TurretConstants.TURRET_P, TurretConstants.TURRET_I, TurretConstants.TURRET_D),
-        // This should return the measurement
-        PhotonVision::getX,
-        // This should return the setpoint (can also be a constant)
-        turretSubsystem::getTurretOffset,
-        // This uses the output
-        output -> {
-          turretSubsystem.moveTurret(TurretConstants.TURRET_F + -output);
-        });
+	public TurretLockCommand(TurretSubsystem turretSubsystem) {
+		super(
+				// Tune values later
+				new PIDController(TurretConstants.TURRET_P, TurretConstants.TURRET_I, TurretConstants.TURRET_D),
+				// This should return the measurement
+				// PhotonVision::getX,
+				Limelight::getTx,
+				// This should return the setpoint (can also be a constant)
+				turretSubsystem::getTurretOffset,
+				// This uses the output
+				output -> {
+					turretSubsystem.moveTurret(TurretConstants.TURRET_F + -output);
+				});
+				
+		this.turretSubsystem = turretSubsystem;
+		getController().setTolerance(TurretConstants.LIMELIGHT_TOLERANCE);
 
-    this.turretSubsystem = turretSubsystem;
-    getController().setTolerance(TurretConstants.LIMELIGHT_TOLERANCE);
+		addRequirements(turretSubsystem);
+	}
 
-    addRequirements(turretSubsystem);
-  }
+	@Override
+	public void execute() {
+		if (turretSubsystem.lockStatus == TurretLockStatus.UNLOCKED || Limelight.getDistance() < 36.0 || Limelight.getDistance() > 250.0)
+			return;
+		super.execute();
+	}
 
-  @Override
-  public void execute() {
-    if (turretSubsystem.lockStatus == TurretLockStatus.UNLOCKED
-        || PhotonVision.getDistance() < 36.0
-        || PhotonVision.getDistance() > 250.0) return;
-    super.execute();
-  }
+	@Override
+	public void end(boolean interrupted) {
+		turretSubsystem.stopTurret();
+	}
 
-  @Override
-  public void end(boolean interrupted) {
-    turretSubsystem.stopTurret();
-  }
-
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
+	@Override
+	public boolean isFinished() {
+		return false;
+	}
 }

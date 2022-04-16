@@ -35,7 +35,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 public class AutoBuilder {
-
   private RobotContainer robotContainer;
   private ShooterLEDCommand shooterLEDCommand;
   private AutoModes autoMode;
