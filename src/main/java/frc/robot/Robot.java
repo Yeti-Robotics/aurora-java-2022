@@ -96,7 +96,8 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     // fixes flashing
-    robotContainer.ledSubsystem.setDefaultCommand(new RunCommand(() -> {}, robotContainer.ledSubsystem));
+    robotContainer.ledSubsystem.setDefaultCommand(
+        new RunCommand(() -> {}, robotContainer.ledSubsystem));
   }
 
   @Override

@@ -9,9 +9,7 @@ import frc.robot.Constants.LEDConstants;
 import frc.robot.subsystems.LEDSubsystem;
 
 public class AuroraLEDCommand extends CommandBase {
-  /**
-   * Creates a new AuroraLEDCommand.
-   */
+  /** Creates a new AuroraLEDCommand. */
   private final LEDSubsystem ledSubsystem;
 
   private final int NUM_LED_GROUPS = 6;
@@ -44,7 +42,9 @@ public class AuroraLEDCommand extends CommandBase {
 
     for (int position = 0; position < LEDConstants.LED_COUNT; position += 1) {
       int[][] state = new int[LEDConstants.LED_COUNT][3];
-      for (int j = 0; j < LEDConstants.LED_COUNT + 1; j += (LEDConstants.LED_COUNT / NUM_LED_GROUPS)) {
+      for (int j = 0;
+          j < LEDConstants.LED_COUNT + 1;
+          j += (LEDConstants.LED_COUNT / NUM_LED_GROUPS)) {
         int i = 0;
         int offset = j + position;
         int gradientOffset = j - position; // 0
@@ -85,8 +85,7 @@ public class AuroraLEDCommand extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-  }
+  public void initialize() {}
 
   private int[] calcBoundaries() {
     int[] result = new int[NUM_COLORS];
@@ -101,7 +100,9 @@ public class AuroraLEDCommand extends CommandBase {
   }
 
   private int[] getAvgValue(int[] color1, int[] color2) {
-    return new int[]{(color1[0] + color2[0]) / 2, (color1[1] + color2[1]) / 2, (color1[2] + color2[2]) / 2};
+    return new int[] {
+      (color1[0] + color2[0]) / 2, (color1[1] + color2[1]) / 2, (color1[2] + color2[2]) / 2
+    };
   }
 
   private int[][] calcGradientColors(int[] color1, int[] color2) {
@@ -134,7 +135,11 @@ public class AuroraLEDCommand extends CommandBase {
     if (System.currentTimeMillis() - startTime >= waitTime) {
 
       for (int i = 0; i < LEDConstants.LED_COUNT; i += 1) {
-        ledSubsystem.setRGB(wrapValues(i), ledStates[position][i][0], ledStates[position][i][1], ledStates[position][i][2]);
+        ledSubsystem.setRGB(
+            wrapValues(i),
+            ledStates[position][i][0],
+            ledStates[position][i][1],
+            ledStates[position][i][2]);
       }
 
       ledSubsystem.sendData();
@@ -150,8 +155,7 @@ public class AuroraLEDCommand extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
