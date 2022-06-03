@@ -5,7 +5,10 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -14,8 +17,8 @@ import frc.robot.Constants.ShooterConstants;
 import frc.robot.utils.Limelight;
 
 public class ShooterSubsystem extends SubsystemBase {
-  private TalonFX shooterLeftFalcon;
-  private TalonFX shooterRightFalcon;
+  private WPI_TalonFX shooterLeftFalcon;
+  private WPI_TalonFX shooterRightFalcon;
 
   private MotorControllerGroup shooterFalcons;
 
@@ -40,21 +43,19 @@ public class ShooterSubsystem extends SubsystemBase {
   public static boolean isShooting = false;
 
   private PIDController shooterPID;
+  private SimpleMotorFeedforward feedForward;
 
   public ShooterSubsystem() {
-    shooterLeftFalcon = new TalonFX(ShooterConstants.SHOOTER_LEFT_FALCON);
-    shooterRightFalcon = new TalonFX(ShooterConstants.SHOOTER_RIGHT_FALCON);
+    shooterLeftFalcon = new WPI_TalonFX(ShooterConstants.SHOOTER_LEFT_FALCON);
+    shooterRightFalcon = new WPI_TalonFX(ShooterConstants.SHOOTER_RIGHT_FALCON);
 
-    // shooterFalcons = new MotorControllerGroup(shooterLeftFalcon,
-    // shooterRightFalcon);
+    shooterFalcons = new MotorControllerGroup(shooterLeftFalcon, shooterRightFalcon);
 
     shooterLeftFalcon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
     shooterRightFalcon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
 
     shooterLeftFalcon.follow(shooterRightFalcon);
     shooterLeftFalcon.setInverted(InvertType.OpposeMaster);
-
-    // shooterLeftFalcon.setInverted(true);
 
     shooterStatus = ShooterStatus.OFF;
     shooterMode = ShooterMode.LIMELIGHT;
@@ -71,6 +72,7 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterPID =
         new PIDController(
             ShooterConstants.SHOOTER_P, ShooterConstants.SHOOTER_I, ShooterConstants.SHOOTER_D);
+    feedForward = new SimpleMotorFeedforward(ShooterConstants.SHOOTER_KS, ShooterConstants.SHOOTER_KV, ShooterConstants.SHOOTER_KA);
   }
 
   @Override
@@ -78,6 +80,8 @@ public class ShooterSubsystem extends SubsystemBase {
     ShooterSubsystem.atSetPoint = shooterStatus == ShooterStatus.FORWARD;
     SmartDashboard.putNumber("Flywheel Set Point: ", ShooterSubsystem.setPoint);
     SmartDashboard.putNumber("Flywheel Voltage", shooterRightFalcon.getMotorOutputVoltage());
+
+    System.out.println("RPM: " + getFlywheelRPM());
 
     if (ShooterSubsystem.isShooting) {
       switch (shooterMode) {
@@ -89,9 +93,13 @@ public class ShooterSubsystem extends SubsystemBase {
           if (Limelight.getDistance() > 0.0) {
             ShooterSubsystem.setPoint = ((25 / 3) * Limelight.getDistance()) + 2991.66667;
           }
-          shootFlywheel(
-              ShooterConstants.SHOOTER_F
-                  + shooterPID.calculate(getFlywheelRPM(), ShooterSubsystem.setPoint));
+          // shootFlywheel(
+          //     ShooterConstants.SHOOTER_F
+          //         + shooterPID.calculate(getFlywheelRPM(), ShooterSubsystem.setPoint));
+          double volts = feedForward.calculate(getMetersPerSecondFromRPM(1000.0));
+          System.out.println("FF: " + volts + " V");
+          setFlywheelVoltage(volts);
+
           break;
         case LAUNCHPAD:
           shootFlywheel(
@@ -149,6 +157,10 @@ public class ShooterSubsystem extends SubsystemBase {
     return getAverageEncoder()
         * ShooterConstants.PULLEY_RATIO
         * (ShooterConstants.ENCODER_TIME_CONVERSION / ShooterConstants.ENCODER_RESOLUTION);
+  }
+
+  public double getMetersPerSecondFromRPM(double RPM){
+    return (ShooterConstants.FLYWHEEL_DIAMETER_M * Math.PI) * (RPM / 60.0);
   }
 
   public static ShooterStatus getShooterStatus() {

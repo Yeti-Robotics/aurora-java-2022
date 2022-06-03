@@ -117,10 +117,10 @@ public final class Constants {
 
     public static final double SHOOTER_MAX_VEL = 12242.5; // in native encoder units per 100 ms
 
-    // feed forward values
-    public static final double SHOOTER_KS = 0.72828;
-    public static final double SHOOTER_KV = 0.15313;
-    public static final double SHOOTER_KA = 0.033071;
+    // feed forward values; characterized using meters
+    public static final double SHOOTER_KS = 0.65977;
+    public static final double SHOOTER_KV = 0.44887;
+    public static final double SHOOTER_KA = 0.055666;
 
     // shooter motor speeds
     public static final double SHOOTER_LOW_SPEED = 0.2; // for low goal shots
@@ -132,7 +132,8 @@ public final class Constants {
     public static final double QUAD_FACTOR = 4.0; // quadrature encoder factor
     public static final double RPM_TOLERANCE = 10.0;
 
-    public static final double FLYWHEEL_DIAMETER = 4.0; // inches
+    public static final double FLYWHEEL_DIAMETER_IN = 4.0; // inches
+    public static final double FLYWHEEL_DIAMETER_M = 0.1016; // meters
     public static final double SHOOTER_HIGH_DIST =
         82.0; // inches; ideal dist from shooter to go high
     public static final double SHOOTER_DIST_TOLERANCE = 6.0; // inhces; see above
