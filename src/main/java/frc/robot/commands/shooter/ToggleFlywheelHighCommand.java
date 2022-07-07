@@ -26,7 +26,7 @@ public class ToggleFlywheelHighCommand extends InstantCommand {
     } else {
       shooterLEDCommand.cancel();
     }
-    ShooterSubsystem.shooterMode = ShooterMode.LIMELIGHT;
+    ShooterSubsystem.shooterMode = ShooterMode.HIGH_GOAL;
     ShooterSubsystem.isShooting = !ShooterSubsystem.isShooting;
   }
 }

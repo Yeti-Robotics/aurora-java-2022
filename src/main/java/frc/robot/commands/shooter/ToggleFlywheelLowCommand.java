@@ -28,6 +28,6 @@ public class ToggleFlywheelLowCommand extends InstantCommand {
     }
 
     ShooterSubsystem.isShooting = !ShooterSubsystem.isShooting;
-    ShooterSubsystem.shooterMode = ShooterMode.LOWGOAL;
+    ShooterSubsystem.shooterMode = ShooterMode.LOW_GOAL;
   }
 }

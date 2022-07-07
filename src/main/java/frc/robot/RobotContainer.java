@@ -165,7 +165,7 @@ public class RobotContainer {
         4,
         new InstantCommand(
             () -> {
-              ShooterSubsystem.shooterMode = ShooterMode.LAUNCHPAD;
+              ShooterSubsystem.shooterMode = ShooterMode.HIGH_GOAL;
               ShooterSubsystem.isShooting = !ShooterSubsystem.isShooting;
             }),
         ActiveState.WHEN_PRESSED,

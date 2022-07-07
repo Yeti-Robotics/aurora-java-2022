@@ -4,7 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
@@ -15,8 +15,8 @@ import frc.robot.Constants.ShooterConstants;
 import frc.robot.utils.Limelight;
 
 public class ShooterSubsystem extends SubsystemBase {
-  private WPI_TalonFX shooterLeftFalcon;
-  private WPI_TalonFX shooterRightFalcon;
+  private TalonFX frontFalcon;
+  private TalonFX backFalcon;
 
   private MotorControllerGroup shooterFalcons;
 
@@ -29,99 +29,78 @@ public class ShooterSubsystem extends SubsystemBase {
   public static ShooterStatus shooterStatus;
 
   public enum ShooterMode {
-    LIMELIGHT,
-    LAUNCHPAD,
-    LOWGOAL
+    HIGH_GOAL,
+    LOW_GOAL
   }
 
   public static ShooterMode shooterMode;
 
   public static double setPoint = 0.0;
   public static boolean atSetPoint = false;
+
   public static boolean isShooting = false;
 
   private PIDController shooterPID;
-  private SimpleMotorFeedforward feedForward;
 
   public ShooterSubsystem() {
-    shooterLeftFalcon = new WPI_TalonFX(ShooterConstants.SHOOTER_LEFT_FALCON);
-    shooterRightFalcon = new WPI_TalonFX(ShooterConstants.SHOOTER_RIGHT_FALCON);
+    frontFalcon = new TalonFX(ShooterConstants.SHOOTER_FRONT_FALCON);
+    backFalcon = new TalonFX(ShooterConstants.SHOOTER_BACK_FALCON);
 
-    shooterFalcons = new MotorControllerGroup(shooterLeftFalcon, shooterRightFalcon);
+    // shooterFalcons = new MotorControllerGroup(shooterLeftFalcon, shooterRightFalcon);
 
-    shooterLeftFalcon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
-    shooterRightFalcon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
+    frontFalcon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
+    backFalcon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
 
-    shooterLeftFalcon.follow(shooterRightFalcon);
-    shooterLeftFalcon.setInverted(InvertType.OpposeMaster);
+    frontFalcon.follow(backFalcon);
+    frontFalcon.setInverted(InvertType.OpposeMaster);
 
     shooterStatus = ShooterStatus.OFF;
-    shooterMode = ShooterMode.LIMELIGHT;
+    shooterMode = ShooterMode.HIGH_GOAL;
 
-    shooterLeftFalcon.setNeutralMode(NeutralMode.Coast);
-    shooterRightFalcon.setNeutralMode(NeutralMode.Coast);
+    frontFalcon.setNeutralMode(NeutralMode.Coast);
+    backFalcon.setNeutralMode(NeutralMode.Coast);
 
-    shooterLeftFalcon.configVoltageCompSaturation(Constants.MOTOR_VOLTAGE_COMP);
-    shooterRightFalcon.configVoltageCompSaturation(Constants.MOTOR_VOLTAGE_COMP);
+    frontFalcon.configVoltageCompSaturation(Constants.MOTOR_VOLTAGE_COMP);
+    backFalcon.configVoltageCompSaturation(Constants.MOTOR_VOLTAGE_COMP);
 
-    shooterLeftFalcon.enableVoltageCompensation(true);
-    shooterRightFalcon.enableVoltageCompensation(true);
+    frontFalcon.enableVoltageCompensation(true);
+    backFalcon.enableVoltageCompensation(true);
 
     shooterPID =
         new PIDController(
             ShooterConstants.SHOOTER_P, ShooterConstants.SHOOTER_I, ShooterConstants.SHOOTER_D);
-    feedForward =
-        new SimpleMotorFeedforward(
-            ShooterConstants.SHOOTER_KS, ShooterConstants.SHOOTER_KV, ShooterConstants.SHOOTER_KA);
   }
 
   @Override
   public void periodic() {
     ShooterSubsystem.atSetPoint = shooterStatus == ShooterStatus.FORWARD;
     SmartDashboard.putNumber("Flywheel Set Point: ", ShooterSubsystem.setPoint);
-    SmartDashboard.putNumber("Flywheel Voltage", shooterRightFalcon.getMotorOutputVoltage());
+    SmartDashboard.putNumber("Flywheel Voltage", backFalcon.getMotorOutputVoltage());
 
-    System.out.println("RPM: " + getFlywheelRPM());
-
-    if (ShooterSubsystem.isShooting) {
-      switch (shooterMode) {
-        case LIMELIGHT:
-          // if (PhotonVision.getDistance() > 0.0) {
-          // ShooterSubsystem.setPoint = ((25 / 3) * PhotonVision.getDistance()) +
-          // 2991.66667;
-          // }
-          if (Limelight.getDistance() > 0.0) {
-            ShooterSubsystem.setPoint = ((25 / 3) * Limelight.getDistance()) + 2991.66667;
-          }
-          // shootFlywheel(
-          //     ShooterConstants.SHOOTER_F
-          //         + shooterPID.calculate(getFlywheelRPM(), ShooterSubsystem.setPoint));
-          double volts = feedForward.calculate(getMetersPerSecondFromRPM(1000.0));
-          System.out.println("FF: " + volts + " V");
-          setFlywheelVoltage(volts);
-
-          break;
-        case LAUNCHPAD:
-          shootFlywheel(
-              ShooterConstants.SHOOTER_F
-                  + shooterPID.calculate(getFlywheelRPM(), ShooterSubsystem.setPoint));
-          break;
-        case LOWGOAL:
-          shootFlywheel(ShooterConstants.SHOOTER_LOW_SPEED);
-          break;
-      }
-    } else {
+    if (shooterStatus == ShooterStatus.OFF) {
       stopFlywheel();
+      return;
+    }
+
+    if (shooterMode == ShooterMode.HIGH_GOAL){
+      if (Limelight.getDistance() > 0.0) {
+        ShooterSubsystem.setPoint = ((25 / 3) * Limelight.getDistance()) + 2991.66667;
+      }
+      shootFlywheel(
+          ShooterConstants.SHOOTER_F
+              + shooterPID.calculate(getFlywheelRPM(), ShooterSubsystem.setPoint));
+    } else {
+      shootFlywheel(ShooterConstants.SHOOTER_LOW_SPEED);
     }
   }
 
   public void shootFlywheel(double speed) {
-    shooterRightFalcon.set(ControlMode.PercentOutput, speed);
+    backFalcon.set(ControlMode.PercentOutput, speed);
     shooterStatus = ShooterStatus.FORWARD;
   }
 
   public void setFlywheelVelocity(double vel) {
-    shooterRightFalcon.set(ControlMode.Velocity, vel);
+    backFalcon.set(ControlMode.Velocity, vel);
     shooterStatus = ShooterStatus.FORWARD;
   }
 
@@ -131,22 +110,22 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void reverseFlywheel(double speed) {
-    shooterRightFalcon.set(ControlMode.PercentOutput, speed);
+    backFalcon.set(ControlMode.PercentOutput, speed);
     shooterStatus = ShooterStatus.BACKWARDS;
   }
 
   public void stopFlywheel() {
-    shooterRightFalcon.set(ControlMode.PercentOutput, 0.0);
+    backFalcon.set(ControlMode.PercentOutput, 0.0);
     // shooterFalcons.set(0.0);
     shooterStatus = ShooterStatus.OFF;
   }
 
   public double getLeftEncoder() {
-    return shooterLeftFalcon.getSelectedSensorVelocity();
+    return frontFalcon.getSelectedSensorVelocity();
   }
 
   public double getRightEncoder() {
-    return shooterRightFalcon.getSelectedSensorVelocity();
+    return backFalcon.getSelectedSensorVelocity();
   }
 
   public double getAverageEncoder() {
