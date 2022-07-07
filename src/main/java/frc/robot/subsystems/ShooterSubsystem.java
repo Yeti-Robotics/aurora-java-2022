@@ -6,7 +6,6 @@ import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -82,7 +81,7 @@ public class ShooterSubsystem extends SubsystemBase {
       return;
     }
 
-    if (shooterMode == ShooterMode.HIGH_GOAL){
+    if (shooterMode == ShooterMode.HIGH_GOAL) {
       if (Limelight.getDistance() > 0.0) {
         ShooterSubsystem.setPoint = ((25 / 3) * Limelight.getDistance()) + 2991.66667;
       }

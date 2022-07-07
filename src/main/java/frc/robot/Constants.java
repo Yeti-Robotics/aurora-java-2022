@@ -107,7 +107,7 @@ public final class Constants {
 
   public static final class ShooterConstants {
     // shooter motor ports
-    public static final int SHOOTER_FRONT_FALCON = 8; 
+    public static final int SHOOTER_FRONT_FALCON = 8;
     public static final int SHOOTER_BACK_FALCON = 7;
 
     public static final double SHOOTER_P = 0.00015;
