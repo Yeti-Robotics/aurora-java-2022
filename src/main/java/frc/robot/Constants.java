@@ -27,7 +27,7 @@ public final class Constants {
     public static final int[] SOLENOID_SHIFTER = {0, 1};
 
     public static final double DRIVE_ENCODER_RESOLUTION = 2048.0;
-    public static final double DRIVE_WHEEL_DIAMETER = 0.1016;
+    public static final double DRIVE_WHEEL_DIAMETER = 0.1016; // meters
     public static final double DISTANCE_PER_PULSE =
         (DRIVE_WHEEL_DIAMETER * Math.PI) / DRIVE_ENCODER_RESOLUTION;
 
@@ -40,10 +40,10 @@ public final class Constants {
   }
 
   public static final class AutoConstants {
-    public static final double AUTO_KS = 0.70497; // volts
-    public static final double AUTO_KV = 2.1533; // volt seconds per meter
-    public static final double AUTO_KA = 0.37337; // volt seconds squared per meter
-    public static final double AUTO_P = 3.0758;
+    public static final double AUTO_KS = 0.69025; // volts+
+    public static final double AUTO_KV = 2.1086; // volt seconds per meter
+    public static final double AUTO_KA = 0.53022; // volt seconds squared per meter
+    public static final double AUTO_P = 3.1606; 
 
     public static final double RAMSETE_B = 2.0;
     public static final double RAMSETE_ZETA = 0.7;
