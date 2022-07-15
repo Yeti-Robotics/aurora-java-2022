@@ -8,62 +8,62 @@ import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 import frc.robot.Constants.LEDConstants;
 
 public class LEDSubsystem extends SubsystemBase {
-    private AddressableLED ledStrip;
-    private AddressableLEDBuffer ledBuffer;
 
-    private int r, g, b;
+  private final AddressableLED ledStrip;
+  private final AddressableLEDBuffer ledBuffer;
 
-    public enum LEDStripStatus {
-        OFF,
-        ON
-    }
+  private int r, g, b;
 
-    public LEDStripStatus stripStatus;
+  public enum LEDStripStatus {
+    OFF,
+    ON
+  }
 
-    public LEDSubsystem() {
-        ledStrip = new AddressableLED(LEDConstants.ADDRESSABLE_LED);
-        ledBuffer = new AddressableLEDBuffer(LEDConstants.LED_COUNT);
+  public LEDStripStatus stripStatus;
 
-        ledStrip.setLength(ledBuffer.getLength());
-        ledStrip.setData(ledBuffer);
-        ledStrip.start();
+  public LEDSubsystem() {
+    ledStrip = new AddressableLED(LEDConstants.ADDRESSABLE_LED);
+    ledBuffer = new AddressableLEDBuffer(LEDConstants.LED_COUNT);
 
-        stripStatus = LEDStripStatus.ON;
-        SmartDashboard.putNumber("r", r);
-        SmartDashboard.putNumber("g", g);
-        SmartDashboard.putNumber("b", b);
-    }
+    ledStrip.setLength(ledBuffer.getLength());
+    ledStrip.setData(ledBuffer);
+    ledStrip.start();
 
-    @Override
-    public void periodic() {}
+    stripStatus = LEDStripStatus.ON;
+    SmartDashboard.putNumber("r", r);
+    SmartDashboard.putNumber("g", g);
+    SmartDashboard.putNumber("b", b);
+  }
 
-    public void setHSV(int i, int hue, int saturation, int value) {
-        ledBuffer.setHSV(i, hue, saturation, value);
-    }
+  @Override
+  public void periodic() {}
 
-    public void setRGB(int i, int red, int green, int blue) {
-        ledBuffer.setRGB(i, red, green, blue);
-    }
+  public void setHSV(int i, int hue, int saturation, int value) {
+    ledBuffer.setHSV(i, hue, saturation, value);
+  }
 
-    public int getBufferLength() {
-        return ledBuffer.getLength();
-    }
+  public void setRGB(int i, int red, int green, int blue) {
+    ledBuffer.setRGB(i, red, green, blue);
+  }
 
-    public void sendData() {
-        ledStrip.setData(ledBuffer);
-    }
+  public int getBufferLength() {
+    return ledBuffer.getLength();
+  }
 
-    public void stopLEDStrip() {
-        ledStrip.stop();
-        stripStatus = LEDStripStatus.OFF;
-    }
+  public void sendData() {
+    ledStrip.setData(ledBuffer);
+  }
 
-    public void startLEDStrip() {
-        ledStrip.start();
-        stripStatus = LEDStripStatus.ON;
-    }
+  public void stopLEDStrip() {
+    ledStrip.stop();
+    stripStatus = LEDStripStatus.OFF;
+  }
+
+  public void startLEDStrip() {
+    ledStrip.start();
+    stripStatus = LEDStripStatus.ON;
+  }
 }

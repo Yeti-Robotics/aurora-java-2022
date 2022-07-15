@@ -5,42 +5,42 @@
 package frc.robot.commands.commandgroups;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.NeckSubsystem;
 
 public class AllOutCommand extends CommandBase {
 
-    private IntakeSubsystem intakeSubsystem;
-    private NeckSubsystem neckSubsystem;
-    /** Creates a new AllOutCommand. */
-    public AllOutCommand(IntakeSubsystem intakeSubsystem, NeckSubsystem neckSubsystem) {
-        this.intakeSubsystem = intakeSubsystem;
-        this.neckSubsystem = neckSubsystem;
-        addRequirements(neckSubsystem);
-    }
+  private final IntakeSubsystem intakeSubsystem;
+  private final NeckSubsystem neckSubsystem;
 
-    // Called when the command is initially scheduled.
-    @Override
-    public void initialize() {}
+  /** Creates a new AllOutCommand. */
+  public AllOutCommand(IntakeSubsystem intakeSubsystem, NeckSubsystem neckSubsystem) {
+    this.intakeSubsystem = intakeSubsystem;
+    this.neckSubsystem = neckSubsystem;
+    addRequirements(neckSubsystem);
+  }
 
-    // Called every time the scheduler runs while the command is scheduled.
-    @Override
-    public void execute() {
-        neckSubsystem.moveDown();
-        intakeSubsystem.rollOut();
-    }
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize() {}
 
-    // Called once the command ends or is interrupted.
-    @Override
-    public void end(boolean interrupted) {
-        neckSubsystem.stopNeck();
-        intakeSubsystem.stopRoll();
-    }
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
+    neckSubsystem.moveDown();
+    intakeSubsystem.rollOut();
+  }
 
-    // Returns true when the command should end.
-    @Override
-    public boolean isFinished() {
-        return false;
-    }
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {
+    neckSubsystem.stopNeck();
+    intakeSubsystem.stopRoll();
+  }
+
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    return false;
+  }
 }

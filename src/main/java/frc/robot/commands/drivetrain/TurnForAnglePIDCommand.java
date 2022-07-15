@@ -6,7 +6,6 @@ package frc.robot.commands.drivetrain;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
-
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
@@ -14,52 +13,52 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class TurnForAnglePIDCommand extends PIDCommand {
-    private DrivetrainSubsystem drivetrainSubsystem;
-    private double angle;
 
-    public TurnForAnglePIDCommand(DrivetrainSubsystem drivetrainSubsystem, double angle) {
-        super(
-                // The controller that the command will use
-                new PIDController(
-                        DriveConstants.DRIVE_P, DriveConstants.DRIVE_I, DriveConstants.DRIVE_D),
-                // This should return the measurement
-                drivetrainSubsystem::getHeading,
-                // This should return the setpoint (can also be a constant)
-                () -> angle,
-                // This uses the output
-                output -> {
-                    double realOutput = output;
-                    if (Math.abs(output) >= 0.5) {
-                        realOutput = Math.signum(output) * 0.5;
-                    } else if (Math.abs(output) <= 0.175) {
-                        realOutput = Math.signum(output) * 0.175;
-                    }
-                    drivetrainSubsystem.cheezyDrive(0.0, realOutput);
-                });
+  private final DrivetrainSubsystem drivetrainSubsystem;
+  private final double angle;
 
-        this.drivetrainSubsystem = drivetrainSubsystem;
-        this.angle = angle;
+  public TurnForAnglePIDCommand(DrivetrainSubsystem drivetrainSubsystem, double angle) {
+    super(
+        // The controller that the command will use
+        new PIDController(DriveConstants.DRIVE_P, DriveConstants.DRIVE_I, DriveConstants.DRIVE_D),
+        // This should return the measurement
+        drivetrainSubsystem::getHeading,
+        // This should return the setpoint (can also be a constant)
+        () -> angle,
+        // This uses the output
+        output -> {
+          double realOutput = output;
+          if (Math.abs(output) >= 0.5) {
+            realOutput = Math.signum(output) * 0.5;
+          } else if (Math.abs(output) <= 0.175) {
+            realOutput = Math.signum(output) * 0.175;
+          }
+          drivetrainSubsystem.cheezyDrive(0.0, realOutput);
+        });
 
-        getController().setTolerance(0.1);
-        addRequirements(drivetrainSubsystem);
-    }
+    this.drivetrainSubsystem = drivetrainSubsystem;
+    this.angle = angle;
 
-    @Override
-    public void initialize() {
-        super.initialize();
-        drivetrainSubsystem.resetGyro();
-    }
+    getController().setTolerance(0.1);
+    addRequirements(drivetrainSubsystem);
+  }
 
-    @Override
-    public void end(boolean interrupted) {
-        super.end(interrupted);
-        drivetrainSubsystem.stopDrive();
-        System.out.println("ANGLE: " + drivetrainSubsystem.getHeading());
-    }
+  @Override
+  public void initialize() {
+    super.initialize();
+    drivetrainSubsystem.resetGyro();
+  }
 
-    // Returns true when the command should end.
-    @Override
-    public boolean isFinished() {
-        return getController().atSetpoint();
-    }
+  @Override
+  public void end(boolean interrupted) {
+    super.end(interrupted);
+    drivetrainSubsystem.stopDrive();
+    System.out.println("ANGLE: " + drivetrainSubsystem.getHeading());
+  }
+
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    return getController().atSetpoint();
+  }
 }

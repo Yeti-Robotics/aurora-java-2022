@@ -5,34 +5,34 @@
 package frc.robot.commands.turret;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-
 import frc.robot.subsystems.TurretSubsystem;
 
 public class MoveTurretCommand extends CommandBase {
-    private TurretSubsystem turretSubsystem;
-    private double power;
 
-    public MoveTurretCommand(TurretSubsystem turretSubsystem, double power) {
-        this.turretSubsystem = turretSubsystem;
-        this.power = power;
-        addRequirements(turretSubsystem);
-    }
+  private final TurretSubsystem turretSubsystem;
+  private final double power;
 
-    @Override
-    public void initialize() {}
+  public MoveTurretCommand(TurretSubsystem turretSubsystem, double power) {
+    this.turretSubsystem = turretSubsystem;
+    this.power = power;
+    addRequirements(turretSubsystem);
+  }
 
-    @Override
-    public void execute() {
-        turretSubsystem.moveTurret(power);
-    }
+  @Override
+  public void initialize() {}
 
-    @Override
-    public void end(boolean interrupted) {
-        turretSubsystem.stopTurret();
-    }
+  @Override
+  public void execute() {
+    turretSubsystem.moveTurret(power);
+  }
 
-    @Override
-    public boolean isFinished() {
-        return false;
-    }
+  @Override
+  public void end(boolean interrupted) {
+    turretSubsystem.stopTurret();
+  }
+
+  @Override
+  public boolean isFinished() {
+    return false;
+  }
 }
