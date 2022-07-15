@@ -93,12 +93,9 @@ public class ShooterSubsystem extends SubsystemBase {
           if (Limelight.getDistance() > 0.0) {
             ShooterSubsystem.setPoint = ((25 / 3) * Limelight.getDistance()) + 2991.66667;
           }
-          // shootFlywheel(
-          //     ShooterConstants.SHOOTER_F
-          //         + shooterPID.calculate(getFlywheelRPM(), ShooterSubsystem.setPoint));
-          double volts = feedForward.calculate(getMetersPerSecondFromRPM(1000.0));
-          System.out.println("FF: " + volts + " V");
-          setFlywheelVoltage(volts);
+          shootFlywheel(
+              ShooterConstants.SHOOTER_F
+                  + shooterPID.calculate(getFlywheelRPM(), ShooterSubsystem.setPoint));
 
           break;
         case LAUNCHPAD:
