@@ -103,8 +103,7 @@ public class Robot extends TimedRobot {
   public void disabledInit() {
     // fixes flashing
     robotContainer.ledSubsystem.setDefaultCommand(
-        new RunCommand(() -> {
-        }, robotContainer.ledSubsystem));
+        new RunCommand(() -> {}, robotContainer.ledSubsystem));
   }
 
   @Override
@@ -131,49 +130,52 @@ public class Robot extends TimedRobot {
     SequentialCommandGroup turretAuto;
     switch ((Robot.AutoModes) autoChooser.getSelected()) {
       case TWO_BALL:
-        turretAuto = new SequentialCommandGroup(
-            new WaitCommand(8.0),
-            new InstantCommand(
-                () -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED));
+        turretAuto =
+            new SequentialCommandGroup(
+                new WaitCommand(8.0),
+                new InstantCommand(
+                    () -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED));
         break;
       case FOUR_BALL:
-        turretAuto = new SequentialCommandGroup(
-            new WaitCommand(2.7),
-            new InstantCommand(
-                () -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED),
-            new WaitCommand(5.0),
-            new HomeTurretCommand(robotContainer.turretSubsystem, true),
-            new WaitCommand(1.5),
-            new InstantCommand(
-                () -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED));
+        turretAuto =
+            new SequentialCommandGroup(
+                new WaitCommand(2.7),
+                new InstantCommand(
+                    () -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED),
+                new WaitCommand(5.0),
+                new HomeTurretCommand(robotContainer.turretSubsystem, true),
+                new WaitCommand(1.5),
+                new InstantCommand(
+                    () -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED));
         break;
       case DEAD_GYRO:
-        turretAuto = new SequentialCommandGroup(
-            new WaitCommand(6.0),
-            new InstantCommand(
-                () -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED));
+        turretAuto =
+            new SequentialCommandGroup(
+                new WaitCommand(6.0),
+                new InstantCommand(
+                    () -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED));
         break;
       case TEST_AUTO:
         turretAuto = new SequentialCommandGroup();
         break;
       default:
-        turretAuto = new SequentialCommandGroup(
-            new InstantCommand(
-                () -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED));
+        turretAuto =
+            new SequentialCommandGroup(
+                new InstantCommand(
+                    () -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED));
         break;
     }
 
     if (m_autonomousCommand != null) {
       new ParallelCommandGroup(
-          m_autonomousCommand.alongWith(new TurretLockCommand(robotContainer.turretSubsystem)),
-          turretAuto)
-              .schedule();
+              m_autonomousCommand.alongWith(new TurretLockCommand(robotContainer.turretSubsystem)),
+              turretAuto)
+          .schedule();
     }
   }
 
   @Override
-  public void autonomousPeriodic() {
-  }
+  public void autonomousPeriodic() {}
 
   @Override
   public void teleopInit() {
@@ -197,8 +199,7 @@ public class Robot extends TimedRobot {
         .onCommandFinish(
             command -> {
               if (command.getName().equals(new BlinkLEDCommand().getName())) {
-                if (beforeBlinkCommand != null)
-                  beforeBlinkCommand.schedule();
+                if (beforeBlinkCommand != null) beforeBlinkCommand.schedule();
               }
             });
 
@@ -224,6 +225,5 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void testPeriodic() {
-  }
+  public void testPeriodic() {}
 }

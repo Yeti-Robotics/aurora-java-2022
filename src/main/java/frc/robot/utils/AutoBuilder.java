@@ -222,8 +222,7 @@ public class AutoBuilder {
 
   private void testAuto() {
     subsystemCommandGroup.addCommands(
-        new DriveForDistanceCommand(robotContainer.drivetrainSubsystem, 1.0, 0.2)
-    );
+        new DriveForDistanceCommand(robotContainer.drivetrainSubsystem, 1.0, 0.2));
 
     command.alongWith(subsystemCommandGroup);
   }
@@ -231,20 +230,24 @@ public class AutoBuilder {
   private void deadGyro() {
     subsystemCommandGroup.addCommands(
         new ToggleIntakeCommand(robotContainer.intakeSubsystem),
-        new DriveForDistanceCommand(robotContainer.drivetrainSubsystem, 1.5, 0.2).deadlineWith(new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem)),
+        new DriveForDistanceCommand(robotContainer.drivetrainSubsystem, 1.5, 0.2)
+            .deadlineWith(
+                new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem)),
         new ToggleIntakeCommand(robotContainer.intakeSubsystem),
-        new TurnToTargetDriveCommand(robotContainer.drivetrainSubsystem).withTimeout(5.0), 
+        new TurnToTargetDriveCommand(robotContainer.drivetrainSubsystem).withTimeout(5.0),
         new DriveForDistanceCommand(robotContainer.drivetrainSubsystem, 1.0, 0.2),
         new InstantCommand(
             () -> ShooterSubsystem.setPoint = ((25 / 3) * Limelight.getDistance()) + 2991.66667),
         new ToggleFlywheelHighCommand(shooterLEDCommand),
-        // new AllOutCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(0.25),
+        // new AllOutCommand(robotContainer.intakeSubsystem,
+        // robotContainer.neckSubsystem).withTimeout(0.25),
         new WaitCommand(2.0),
-        new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(1.0),
+        new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem)
+            .withTimeout(1.0),
         new WaitCommand(1.0),
-        new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(2.0),
-        new ToggleFlywheelHighCommand(shooterLEDCommand)
-    );
+        new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem)
+            .withTimeout(2.0),
+        new ToggleFlywheelHighCommand(shooterLEDCommand));
 
     command.alongWith(subsystemCommandGroup);
   }
@@ -286,7 +289,7 @@ public class AutoBuilder {
       case TWO_BALL_DUMP:
         twoBallDump();
         break;
-      case DEAD_GYRO: 
+      case DEAD_GYRO:
         deadGyro();
         break;
       default:
