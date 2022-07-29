@@ -6,7 +6,7 @@ package frc.robot.commands.drivetrain;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.utils.PhotonVision;
+import frc.robot.utils.Limelight;
 
 public class TurnToTargetDriveCommand extends CommandBase {
 
@@ -18,15 +18,13 @@ public class TurnToTargetDriveCommand extends CommandBase {
   }
 
   @Override
-  public void initialize() {}
+  public void initialize() {
+    drivetrainSubsystem.cheezyDrive(0.0, -0.3);
+  }
 
   @Override
   public void execute() {
-    if (PhotonVision.getX() > 0.0) {
-      drivetrainSubsystem.cheezyDrive(0.0, -0.3);
-    } else {
-      drivetrainSubsystem.cheezyDrive(0.0, 0.3);
-    }
+    drivetrainSubsystem.cheezyDrive(0.0, -0.3);
   }
 
   @Override
@@ -36,6 +34,6 @@ public class TurnToTargetDriveCommand extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return Math.abs(PhotonVision.getX()) < 3.0;
+    return Limelight.isTarget() && Math.abs(Limelight.getTx()) < 3.0;
   }
 }

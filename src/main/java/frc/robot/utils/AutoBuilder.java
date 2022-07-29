@@ -222,42 +222,31 @@ public class AutoBuilder {
 
   private void testAuto() {
     subsystemCommandGroup.addCommands(
-        // new ToggleIntakeCommand(robotContainer.intakeSubsystem),
-        // new AllInCommand(robotContainer.intakeSubsystem,
-        // robotContainer.neckSubsystem).withTimeout(1.5),
-        // new InstantCommand(() -> ShooterSubsystem.setPoint = 4200.0),
-        // new ToggleFlywheelHighCommand(shooterLEDCommand),
-        // new WaitCommand(0.75),
-        // new ToggleIntakeCommand(robotContainer.intakeSubsystem),
-        // new WaitCommand(1.25),
-        // new AllInCommand(robotContainer.intakeSubsystem,
-        // robotContainer.neckSubsystem).withTimeout(0.5),
-        // new WaitCommand(0.25),
-        // new AllInCommand(robotContainer.intakeSubsystem,
-        // robotContainer.neckSubsystem).withTimeout(0.75),
-        // new ToggleFlywheelHighCommand(shooterLEDCommand),
-        // new ToggleIntakeCommand(robotContainer.intakeSubsystem),
-        // new AllInCommand(robotContainer.intakeSubsystem,
-        // robotContainer.neckSubsystem).withTimeout(4.5),
-        // new ToggleIntakeCommand(robotContainer.intakeSubsystem),
-        // new WaitCommand(2.0),
-        // new InstantCommand(() -> ShooterSubsystem.setPoint = 4200.0),
-        // new ToggleFlywheelHighCommand(shooterLEDCommand),
-        // new WaitCommand(1.5),
-        // new AllInCommand(robotContainer.intakeSubsystem,
-        // robotContainer.neckSubsystem).withTimeout(0.5),
-        // new WaitCommand(0.25),
-        // new AllInCommand(robotContainer.intakeSubsystem,
-        // robotContainer.neckSubsystem).withTimeout(0.5),
-        // new ToggleFlywheelHighCommand(shooterLEDCommand)
-        );
+        new DriveForDistanceCommand(robotContainer.drivetrainSubsystem, 1.0, 0.2)
+    );
 
-    pathCommandGroup.addCommands(
-        runTrajectoryPath(AutoConstants.fourBall1),
-        new WaitCommand(2.25),
-        runTrajectoryPath(AutoConstants.fourBall2));
+    command.alongWith(subsystemCommandGroup);
+  }
 
-    command.alongWith(pathCommandGroup, subsystemCommandGroup);
+  private void deadGyro() {
+    subsystemCommandGroup.addCommands(
+        new ToggleIntakeCommand(robotContainer.intakeSubsystem),
+        new DriveForDistanceCommand(robotContainer.drivetrainSubsystem, 1.5, 0.2).deadlineWith(new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem)),
+        new ToggleIntakeCommand(robotContainer.intakeSubsystem),
+        new TurnToTargetDriveCommand(robotContainer.drivetrainSubsystem).withTimeout(5.0), 
+        new DriveForDistanceCommand(robotContainer.drivetrainSubsystem, 1.0, 0.2),
+        new InstantCommand(
+            () -> ShooterSubsystem.setPoint = ((25 / 3) * Limelight.getDistance()) + 2991.66667),
+        new ToggleFlywheelHighCommand(shooterLEDCommand),
+        // new AllOutCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(0.25),
+        new WaitCommand(2.0),
+        new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(1.0),
+        new WaitCommand(1.0),
+        new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(2.0),
+        new ToggleFlywheelHighCommand(shooterLEDCommand)
+    );
+
+    command.alongWith(subsystemCommandGroup);
   }
 
   // AutoBuilder build tools here
@@ -296,6 +285,9 @@ public class AutoBuilder {
         break;
       case TWO_BALL_DUMP:
         twoBallDump();
+        break;
+      case DEAD_GYRO: 
+        deadGyro();
         break;
       default:
         fourBall();

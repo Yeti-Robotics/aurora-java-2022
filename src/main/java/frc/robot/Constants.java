@@ -40,10 +40,10 @@ public final class Constants {
   }
 
   public static final class AutoConstants {
-    public static final double AUTO_KS = 0.70497; // volts
-    public static final double AUTO_KV = 2.1533; // volt seconds per meter
-    public static final double AUTO_KA = 0.37337; // volt seconds squared per meter
-    public static final double AUTO_P = 3.0758;
+    public static final double AUTO_KS = 0.69914; // volts
+    public static final double AUTO_KV = 2.1275; // volt seconds per meter
+    public static final double AUTO_KA = 0.53096; // volt seconds squared per meter
+    public static final double AUTO_P = 3.1895;
 
     public static final double RAMSETE_B = 2.0;
     public static final double RAMSETE_ZETA = 0.7;

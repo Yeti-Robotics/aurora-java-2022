@@ -81,15 +81,11 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Flywheel Set Point: ", ShooterSubsystem.setPoint);
     SmartDashboard.putNumber("Flywheel Voltage", shooterRightFalcon.getMotorOutputVoltage());
 
-    System.out.println("RPM: " + getFlywheelRPM());
+    // System.out.println("RPM: " + getFlywheelRPM());
 
     if (ShooterSubsystem.isShooting) {
       switch (shooterMode) {
         case LIMELIGHT:
-          // if (PhotonVision.getDistance() > 0.0) {
-          // ShooterSubsystem.setPoint = ((25 / 3) * PhotonVision.getDistance()) +
-          // 2991.66667;
-          // }
           if (Limelight.getDistance() > 0.0) {
             ShooterSubsystem.setPoint = ((25 / 3) * Limelight.getDistance()) + 2991.66667;
           }
