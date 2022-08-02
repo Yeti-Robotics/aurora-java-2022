@@ -167,7 +167,9 @@ public class Robot extends TimedRobot {
 
     if (m_autonomousCommand != null) {
       new ParallelCommandGroup(
-              m_autonomousCommand.alongWith(new TurretLockCommand(robotContainer.turretSubsystem, robotContainer.visionSubsystem)),
+              m_autonomousCommand.alongWith(
+                  new TurretLockCommand(
+                      robotContainer.turretSubsystem, robotContainer.visionSubsystem)),
               turretAuto)
           .schedule();
     }

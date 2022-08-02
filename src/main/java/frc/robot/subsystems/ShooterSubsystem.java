@@ -74,7 +74,7 @@ public class ShooterSubsystem extends SubsystemBase {
     feedForward =
         new SimpleMotorFeedforward(
             ShooterConstants.SHOOTER_KS, ShooterConstants.SHOOTER_KV, ShooterConstants.SHOOTER_KA);
-    
+
     this.visionSubsystem = visionSubsystem;
   }
 

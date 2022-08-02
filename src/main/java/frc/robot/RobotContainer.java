@@ -36,10 +36,10 @@ import frc.robot.subsystems.NeckSubsystem;
 import frc.robot.subsystems.ShiftingSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ShooterSubsystem.ShooterMode;
+import frc.robot.subsystems.TurretSubsystem;
 import frc.robot.subsystems.VisionSubsystem.LimelightSubsystem;
 import frc.robot.subsystems.VisionSubsystem.PhotonVisionSubsystem;
 import frc.robot.subsystems.VisionSubsystem.VisionSubsystem;
-import frc.robot.subsystems.TurretSubsystem;
 import frc.robot.utils.AutoBuilder;
 import frc.robot.utils.JoyButton;
 import frc.robot.utils.JoyButton.ActiveState;
@@ -69,11 +69,11 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     if (isLimelight) {
-        visionSubsystem = new LimelightSubsystem();
+      visionSubsystem = new LimelightSubsystem();
     } else {
-        visionSubsystem = new PhotonVisionSubsystem();
+      visionSubsystem = new PhotonVisionSubsystem();
     }
-    
+
     ledSubsystem = new LEDSubsystem();
     driverStationJoystick = new Joystick(OIConstants.DRIVER_STATION_JOY);
     intakeSubsystem = new IntakeSubsystem();

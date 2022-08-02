@@ -19,7 +19,8 @@ public class TurnToTargetCommand extends CommandBase {
   private VisionSubsystem visionSubsystem;
 
   // power should be positive
-  public TurnToTargetCommand(TurretSubsystem turretSubsystem, VisionSubsystem visionSubsystem, double power) {
+  public TurnToTargetCommand(
+      TurretSubsystem turretSubsystem, VisionSubsystem visionSubsystem, double power) {
     this.turretSubsystem = turretSubsystem;
     this.visionSubsystem = visionSubsystem;
     this.power = power;

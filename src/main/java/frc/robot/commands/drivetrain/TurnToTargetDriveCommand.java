@@ -13,7 +13,8 @@ public class TurnToTargetDriveCommand extends CommandBase {
   private final DrivetrainSubsystem drivetrainSubsystem;
   private VisionSubsystem visionSubsystem;
 
-  public TurnToTargetDriveCommand(DrivetrainSubsystem drivetrainSubsystem, VisionSubsystem visionSubsystem) {
+  public TurnToTargetDriveCommand(
+      DrivetrainSubsystem drivetrainSubsystem, VisionSubsystem visionSubsystem) {
     this.drivetrainSubsystem = drivetrainSubsystem;
     addRequirements(drivetrainSubsystem);
   }
