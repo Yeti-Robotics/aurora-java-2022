@@ -82,7 +82,7 @@ public class AutoBuilder {
 
     pathCommandGroup.addCommands(
         runTrajectoryJSON(AutoConstants.twoBallAlternative),
-        new TurnToTargetDriveCommand(robotContainer.drivetrainSubsystem).withTimeout(3.0));
+        new TurnToTargetDriveCommand(robotContainer.drivetrainSubsystem, robotContainer.visionSubsystem).withTimeout(3.0));
 
     ShooterSubsystem.setPoint = 4000.0;
     command.alongWith(pathCommandGroup, subsystemCommandGroup);
@@ -92,7 +92,7 @@ public class AutoBuilder {
     subsystemCommandGroup.addCommands(
         new DriveForDistanceCommand(robotContainer.drivetrainSubsystem, 48.0, -0.2),
         new InstantCommand(
-            () -> ShooterSubsystem.setPoint = ((25 / 3) * PhotonVision.getDistance()) + 2991.66667),
+            () -> ShooterSubsystem.setPoint = ((25 / 3) * robotContainer.visionSubsystem.getDistance()) + 2991.66667),
         new ToggleFlywheelHighCommand(shooterLEDCommand),
         new WaitCommand(1.0),
         new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem)
@@ -234,10 +234,10 @@ public class AutoBuilder {
             .deadlineWith(
                 new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem)),
         new ToggleIntakeCommand(robotContainer.intakeSubsystem),
-        new TurnToTargetDriveCommand(robotContainer.drivetrainSubsystem).withTimeout(5.0),
+        new TurnToTargetDriveCommand(robotContainer.drivetrainSubsystem, robotContainer.visionSubsystem).withTimeout(5.0),
         new DriveForDistanceCommand(robotContainer.drivetrainSubsystem, 1.0, 0.2),
         new InstantCommand(
-            () -> ShooterSubsystem.setPoint = ((25 / 3) * Limelight.getDistance()) + 2991.66667),
+            () -> ShooterSubsystem.setPoint = ((25 / 3) * robotContainer.visionSubsystem.getDistance()) + 2991.66667),
         new ToggleFlywheelHighCommand(shooterLEDCommand),
         // new AllOutCommand(robotContainer.intakeSubsystem,
         // robotContainer.neckSubsystem).withTimeout(0.25),
@@ -255,7 +255,7 @@ public class AutoBuilder {
   // AutoBuilder build tools here
   public void setRobotContainer(RobotContainer robotContainer) {
     this.robotContainer = robotContainer;
-    this.shooterLEDCommand = new ShooterLEDCommand(robotContainer.ledSubsystem);
+    this.shooterLEDCommand = new ShooterLEDCommand(robotContainer.ledSubsystem, robotContainer.visionSubsystem);
   }
 
   public void setAutoMode(AutoModes autoMode) {

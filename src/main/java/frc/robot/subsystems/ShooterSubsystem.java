@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
-import frc.robot.utils.Limelight;
+import frc.robot.subsystems.VisionSubsystem.VisionSubsystem;
 
 public class ShooterSubsystem extends SubsystemBase {
   private WPI_TalonFX shooterLeftFalcon;
@@ -42,8 +42,9 @@ public class ShooterSubsystem extends SubsystemBase {
 
   private PIDController shooterPID;
   private SimpleMotorFeedforward feedForward;
+  public VisionSubsystem visionSubsystem;
 
-  public ShooterSubsystem() {
+  public ShooterSubsystem(VisionSubsystem visionSubsystem) {
     shooterLeftFalcon = new WPI_TalonFX(ShooterConstants.SHOOTER_LEFT_FALCON);
     shooterRightFalcon = new WPI_TalonFX(ShooterConstants.SHOOTER_RIGHT_FALCON);
 
@@ -73,6 +74,8 @@ public class ShooterSubsystem extends SubsystemBase {
     feedForward =
         new SimpleMotorFeedforward(
             ShooterConstants.SHOOTER_KS, ShooterConstants.SHOOTER_KV, ShooterConstants.SHOOTER_KA);
+    
+    this.visionSubsystem = visionSubsystem;
   }
 
   @Override
@@ -86,8 +89,8 @@ public class ShooterSubsystem extends SubsystemBase {
     if (ShooterSubsystem.isShooting) {
       switch (shooterMode) {
         case LIMELIGHT:
-          if (Limelight.getDistance() > 0.0) {
-            ShooterSubsystem.setPoint = ((25 / 3) * Limelight.getDistance()) + 2991.66667;
+          if (visionSubsystem.getDistance() > 0.0) {
+            ShooterSubsystem.setPoint = ((25 / 3) * visionSubsystem.getDistance()) + 2991.66667;
           }
           shootFlywheel(
               ShooterConstants.SHOOTER_F

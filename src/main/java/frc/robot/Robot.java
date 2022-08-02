@@ -20,7 +20,6 @@ import frc.robot.commands.turret.HomeTurretCommand;
 import frc.robot.commands.turret.TurretLockCommand;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TurretSubsystem.TurretLockStatus;
-import frc.robot.utils.Limelight;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
@@ -95,8 +94,8 @@ public class Robot extends TimedRobot {
     // System.out.println("getFlywheelRPM: " +
     // robotContainer.shooterSubsystem.getFlywheelRPM());
     System.out.println("GYRO: " + robotContainer.drivetrainSubsystem.getHeading());
-    System.out.println("getTx: " + Limelight.getTx());
-    System.out.println("isTarget: " + Limelight.isTarget());
+    System.out.println("getTx: " + robotContainer.visionSubsystem.getX());
+    System.out.println("isTarget: " + robotContainer.visionSubsystem.hasTargets());
   }
 
   @Override
@@ -168,7 +167,7 @@ public class Robot extends TimedRobot {
 
     if (m_autonomousCommand != null) {
       new ParallelCommandGroup(
-              m_autonomousCommand.alongWith(new TurretLockCommand(robotContainer.turretSubsystem)),
+              m_autonomousCommand.alongWith(new TurretLockCommand(robotContainer.turretSubsystem, robotContainer.visionSubsystem)),
               turretAuto)
           .schedule();
     }

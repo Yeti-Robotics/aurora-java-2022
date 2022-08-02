@@ -16,6 +16,7 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.NeckSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
+import frc.robot.subsystems.VisionSubsystem.VisionSubsystem;
 
 public class DeadReckon2BallAuto extends CommandBase {
 
@@ -24,21 +25,25 @@ public class DeadReckon2BallAuto extends CommandBase {
   private final DrivetrainSubsystem drivetrainSubsystem;
   private TurretSubsystem turretSubsystem;
   private ShooterLEDCommand shooterLEDCommand;
+  private VisionSubsystem visionSubsystem;
 
   /** Creates a new AllOutCommand. */
   public DeadReckon2BallAuto(
       IntakeSubsystem intakeSubsystem,
       NeckSubsystem neckSubsystem,
-      DrivetrainSubsystem drivetrainSubsystem) {
+      DrivetrainSubsystem drivetrainSubsystem,
+      VisionSubsystem visionSubsystem) {
     this.intakeSubsystem = intakeSubsystem;
     this.neckSubsystem = neckSubsystem;
     this.drivetrainSubsystem = drivetrainSubsystem;
+    this.visionSubsystem = visionSubsystem;
     addRequirements(neckSubsystem, intakeSubsystem, drivetrainSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -49,7 +54,7 @@ public class DeadReckon2BallAuto extends CommandBase {
     new ToggleIntakeCommand(intakeSubsystem);
     new TurnForAngleCommand(drivetrainSubsystem, 160);
     new DriveForDistanceCommand(drivetrainSubsystem, 0.5715, 50);
-    new TurretLockCommand(turretSubsystem);
+    new TurretLockCommand(turretSubsystem, visionSubsystem);
     new ToggleFlywheelHighCommand(shooterLEDCommand);
     new WaitCommand(0.75);
     new AllInCommand(intakeSubsystem, neckSubsystem).withTimeout(0.3);

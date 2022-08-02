@@ -6,13 +6,14 @@ package frc.robot.commands.drivetrain;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.utils.Limelight;
+import frc.robot.subsystems.VisionSubsystem.VisionSubsystem;
 
 public class TurnToTargetDriveCommand extends CommandBase {
 
   private final DrivetrainSubsystem drivetrainSubsystem;
+  private VisionSubsystem visionSubsystem;
 
-  public TurnToTargetDriveCommand(DrivetrainSubsystem drivetrainSubsystem) {
+  public TurnToTargetDriveCommand(DrivetrainSubsystem drivetrainSubsystem, VisionSubsystem visionSubsystem) {
     this.drivetrainSubsystem = drivetrainSubsystem;
     addRequirements(drivetrainSubsystem);
   }
@@ -34,6 +35,6 @@ public class TurnToTargetDriveCommand extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return Limelight.isTarget() && Math.abs(Limelight.getTx()) < 3.0;
+    return visionSubsystem.hasTargets() && Math.abs(visionSubsystem.getX()) < 3.0;
   }
 }

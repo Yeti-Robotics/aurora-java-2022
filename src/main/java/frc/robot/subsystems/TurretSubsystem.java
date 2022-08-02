@@ -11,9 +11,10 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.TurretConstants;
-import frc.robot.utils.Limelight;
+import frc.robot.subsystems.VisionSubsystem.VisionSubsystem;
 
 public class TurretSubsystem extends SubsystemBase {
+  private VisionSubsystem visionSubsystem;
 
   private final CANSparkMax turretSpark;
   private final DigitalInput magSwitch;
@@ -26,7 +27,9 @@ public class TurretSubsystem extends SubsystemBase {
 
   public TurretLockStatus lockStatus;
 
-  public TurretSubsystem() {
+  public TurretSubsystem(VisionSubsystem visionSubsystem) {
+    this.visionSubsystem = visionSubsystem;
+
     turretSpark = new CANSparkMax(TurretConstants.TURRET_SPARK, MotorType.kBrushless);
     magSwitch = new DigitalInput(TurretConstants.MAG_SWITCH_PORT);
     turretEncoder = turretSpark.getEncoder();
@@ -63,6 +66,6 @@ public class TurretSubsystem extends SubsystemBase {
 
   public double getTurretOffset() {
     return Math.toDegrees(
-        Math.atan(TurretConstants.TURRET_OFFSET / (Limelight.getDistance() + 24.0)));
+        Math.atan(TurretConstants.TURRET_OFFSET / (visionSubsystem.getDistance() + 24.0)));
   }
 }

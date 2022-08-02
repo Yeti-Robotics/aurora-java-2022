@@ -7,7 +7,7 @@ package frc.robot.commands.LED;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.LEDSubsystem;
-import frc.robot.utils.Limelight;
+import frc.robot.subsystems.VisionSubsystem.VisionSubsystem;
 
 public class TeleLEDDefaultCommand extends CommandBase {
 
@@ -16,8 +16,11 @@ public class TeleLEDDefaultCommand extends CommandBase {
   private final int[] white = {255, 255, 255};
   private final int[] blue = {20, 120, 255};
 
-  public TeleLEDDefaultCommand(LEDSubsystem ledSubsystem) {
+  private VisionSubsystem visionSubsystem;
+
+  public TeleLEDDefaultCommand(LEDSubsystem ledSubsystem, VisionSubsystem visionSubsystem) {
     this.ledSubsystem = ledSubsystem;
+    this.visionSubsystem = visionSubsystem;
     addRequirements(ledSubsystem);
   }
 
@@ -28,7 +31,7 @@ public class TeleLEDDefaultCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (Math.abs(Limelight.getDistance() - ShooterConstants.SHOOTER_HIGH_DIST)
+    if (Math.abs(visionSubsystem.getDistance() - ShooterConstants.SHOOTER_HIGH_DIST)
         <= ShooterConstants.SHOOTER_DIST_TOLERANCE) {
       currColor = white;
     } else {
