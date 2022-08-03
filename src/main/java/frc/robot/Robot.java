@@ -20,7 +20,6 @@ import frc.robot.commands.turret.HomeTurretCommand;
 import frc.robot.commands.turret.TurretLockCommand;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TurretSubsystem.TurretLockStatus;
-import frc.robot.utils.Limelight;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
@@ -43,7 +42,7 @@ public class Robot extends TimedRobot {
     THREE_BALL,
     FOUR_BALL,
     TEST_AUTO,
-    DEAD_GYRO, 
+    DEAD_GYRO,
     FOUR_BALL_ZONE
   }
 
@@ -139,7 +138,7 @@ public class Robot extends TimedRobot {
                     () -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED));
         break;
       case FOUR_BALL:
-      case FOUR_BALL_ZONE: 
+      case FOUR_BALL_ZONE:
         turretAuto =
             new SequentialCommandGroup(
                 new WaitCommand(2.7),

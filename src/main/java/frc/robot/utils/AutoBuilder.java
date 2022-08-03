@@ -335,7 +335,7 @@ public class AutoBuilder {
       case DEAD_GYRO:
         deadGyro();
         break;
-      case FOUR_BALL_ZONE: 
+      case FOUR_BALL_ZONE:
         fourBallZone();
         break;
       default:
