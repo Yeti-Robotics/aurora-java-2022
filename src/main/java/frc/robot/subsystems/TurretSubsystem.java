@@ -14,7 +14,6 @@ import frc.robot.Constants.TurretConstants;
 import frc.robot.subsystems.VisionSubsystem.VisionSubsystem;
 
 public class TurretSubsystem extends SubsystemBase {
-  private VisionSubsystem visionSubsystem;
 
   private final CANSparkMax turretSpark;
   private final DigitalInput magSwitch;
@@ -27,8 +26,7 @@ public class TurretSubsystem extends SubsystemBase {
 
   public TurretLockStatus lockStatus;
 
-  public TurretSubsystem(VisionSubsystem visionSubsystem) {
-    this.visionSubsystem = visionSubsystem;
+  public TurretSubsystem() {
 
     turretSpark = new CANSparkMax(TurretConstants.TURRET_SPARK, MotorType.kBrushless);
     magSwitch = new DigitalInput(TurretConstants.MAG_SWITCH_PORT);
@@ -66,6 +64,6 @@ public class TurretSubsystem extends SubsystemBase {
 
   public double getTurretOffset() {
     return Math.toDegrees(
-        Math.atan(TurretConstants.TURRET_OFFSET / (visionSubsystem.getDistance() + 24.0)));
+        Math.atan(TurretConstants.TURRET_OFFSET / (VisionSubsystem.getDistance() + 24.0)));
   }
 }

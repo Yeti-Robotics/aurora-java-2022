@@ -11,9 +11,8 @@ import frc.robot.subsystems.VisionSubsystem.VisionSubsystem;
 public class TurnToTargetDriveCommand extends CommandBase {
 
   private final DrivetrainSubsystem drivetrainSubsystem;
-  private VisionSubsystem visionSubsystem;
 
-  public TurnToTargetDriveCommand(DrivetrainSubsystem drivetrainSubsystem, VisionSubsystem visionSubsystem) {
+  public TurnToTargetDriveCommand(DrivetrainSubsystem drivetrainSubsystem) {
     this.drivetrainSubsystem = drivetrainSubsystem;
     addRequirements(drivetrainSubsystem);
   }
@@ -35,6 +34,6 @@ public class TurnToTargetDriveCommand extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return visionSubsystem.hasTargets() && Math.abs(visionSubsystem.getX()) < 3.0;
+    return VisionSubsystem.hasTargets() && Math.abs(VisionSubsystem.getX()) < 3.0;
   }
 }

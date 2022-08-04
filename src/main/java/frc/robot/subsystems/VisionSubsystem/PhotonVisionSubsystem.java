@@ -8,7 +8,7 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 import frc.robot.Constants.LimelightConstants;
 
-public class PhotonVisionSubsystem implements VisionSubsystem {
+public class PhotonVisionSubsystem implements VisionBackend {
     private final PhotonCamera camera;
 
     public Map<LEDMode, VisionLEDMode> ledModeMap = Map.of(

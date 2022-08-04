@@ -16,12 +16,9 @@ public class TurnToTargetCommand extends CommandBase {
   private boolean atLimit = false;
   private boolean isAligned = false;
 
-  private VisionSubsystem visionSubsystem;
-
   // power should be positive
-  public TurnToTargetCommand(TurretSubsystem turretSubsystem, VisionSubsystem visionSubsystem, double power) {
+  public TurnToTargetCommand(TurretSubsystem turretSubsystem, double power) {
     this.turretSubsystem = turretSubsystem;
-    this.visionSubsystem = visionSubsystem;
     this.power = power;
 
     addRequirements(turretSubsystem);
@@ -32,8 +29,8 @@ public class TurnToTargetCommand extends CommandBase {
 
   @Override
   public void execute() {
-    power = Math.abs(power) * ((visionSubsystem.getX() < 0) ? -1 : 1);
-    isAligned = Math.abs(visionSubsystem.getX()) <= TurretConstants.LIMELIGHT_TOLERANCE;
+    power = Math.abs(power) * ((VisionSubsystem.getX() < 0) ? -1 : 1);
+    isAligned = Math.abs(VisionSubsystem.getX()) <= TurretConstants.LIMELIGHT_TOLERANCE;
 
     atLimit =
         (power > 0)

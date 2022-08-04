@@ -6,7 +6,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.Constants.LimelightConstants;
 
-public class LimelightSubsystem implements VisionSubsystem {
+public class LimelightSubsystem implements VisionBackend {
     private NetworkTableInstance table = null;
 
     /**
@@ -36,9 +36,9 @@ public class LimelightSubsystem implements VisionSubsystem {
             LEDMode.BLINK, LightMode.eBlink,
             LEDMode.DEFAULT, LightMode.eOn);
 
-    public Map<VisionSubsystem.CameraMode, LimelightSubsystem.CameraMode> cameraModeMap = Map.of(
-            VisionSubsystem.CameraMode.VISION, LimelightSubsystem.CameraMode.eVision,
-            VisionSubsystem.CameraMode.DRIVER, LimelightSubsystem.CameraMode.eDriver);
+    public Map<VisionBackend.CameraMode, LimelightSubsystem.CameraMode> cameraModeMap = Map.of(
+            VisionBackend.CameraMode.VISION, LimelightSubsystem.CameraMode.eVision,
+            VisionBackend.CameraMode.DRIVER, LimelightSubsystem.CameraMode.eDriver);
 
     public LimelightSubsystem() {
         table = NetworkTableInstance.getDefault();
@@ -70,7 +70,7 @@ public class LimelightSubsystem implements VisionSubsystem {
     }
 
     @Override
-    public void setCameraMode(frc.robot.subsystems.VisionSubsystem.VisionSubsystem.CameraMode mode) {
+    public void setCameraMode(frc.robot.subsystems.VisionSubsystem.VisionBackend.CameraMode mode) {
         getValue("camMode").setNumber(cameraModeMap.get(mode).ordinal());
     }
 

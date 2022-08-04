@@ -13,16 +13,15 @@ import frc.robot.subsystems.VisionSubsystem.VisionSubsystem;
 
 public class TurretLockCommand extends PIDCommand {
   private final TurretSubsystem turretSubsystem;
-  private final VisionSubsystem visionSubsystem;
 
-  public TurretLockCommand(TurretSubsystem turretSubsystem, VisionSubsystem visionSubsystem) {
+  public TurretLockCommand(TurretSubsystem turretSubsystem) {
     super(
         // Tune values later
         new PIDController(
             TurretConstants.TURRET_P, TurretConstants.TURRET_I, TurretConstants.TURRET_D),
         // This should return the measurement
         // PhotonVision::getX,
-        visionSubsystem::getX,
+        VisionSubsystem::getX,
         // This should return the setpoint (can also be a constant)
         turretSubsystem::getTurretOffset,
         // This uses the output
@@ -30,7 +29,6 @@ public class TurretLockCommand extends PIDCommand {
           turretSubsystem.moveTurret(TurretConstants.TURRET_F + -output);
         });
     this.turretSubsystem = turretSubsystem;
-    this.visionSubsystem = visionSubsystem;
     getController().setTolerance(TurretConstants.LIMELIGHT_TOLERANCE);
 
     addRequirements(turretSubsystem);
@@ -39,8 +37,8 @@ public class TurretLockCommand extends PIDCommand {
   @Override
   public void execute() {
     if (turretSubsystem.lockStatus == TurretLockStatus.UNLOCKED
-        || visionSubsystem.getDistance() < 36.0
-        || visionSubsystem.getDistance() > 250.0) return;
+        || VisionSubsystem.getDistance() < 36.0
+        || VisionSubsystem.getDistance() > 250.0) return;
     super.execute();
   }
 

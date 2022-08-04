@@ -42,9 +42,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
   private PIDController shooterPID;
   private SimpleMotorFeedforward feedForward;
-  public VisionSubsystem visionSubsystem;
 
-  public ShooterSubsystem(VisionSubsystem visionSubsystem) {
+  public ShooterSubsystem() {
     shooterLeftFalcon = new WPI_TalonFX(ShooterConstants.SHOOTER_LEFT_FALCON);
     shooterRightFalcon = new WPI_TalonFX(ShooterConstants.SHOOTER_RIGHT_FALCON);
 
@@ -74,8 +73,6 @@ public class ShooterSubsystem extends SubsystemBase {
     feedForward =
         new SimpleMotorFeedforward(
             ShooterConstants.SHOOTER_KS, ShooterConstants.SHOOTER_KV, ShooterConstants.SHOOTER_KA);
-    
-    this.visionSubsystem = visionSubsystem;
   }
 
   @Override
@@ -89,8 +86,8 @@ public class ShooterSubsystem extends SubsystemBase {
     if (ShooterSubsystem.isShooting) {
       switch (shooterMode) {
         case LIMELIGHT:
-          if (visionSubsystem.getDistance() > 0.0) {
-            ShooterSubsystem.setPoint = ((25 / 3) * visionSubsystem.getDistance()) + 2991.66667;
+          if (VisionSubsystem.getDistance() > 0.0) {
+            ShooterSubsystem.setPoint = ((25 / 3) * VisionSubsystem.getDistance()) + 2991.66667;
           }
           shootFlywheel(
               ShooterConstants.SHOOTER_F

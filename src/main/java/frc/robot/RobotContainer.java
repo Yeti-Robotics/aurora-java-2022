@@ -36,9 +36,8 @@ import frc.robot.subsystems.NeckSubsystem;
 import frc.robot.subsystems.ShiftingSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ShooterSubsystem.ShooterMode;
-import frc.robot.subsystems.VisionSubsystem.LimelightSubsystem;
-import frc.robot.subsystems.VisionSubsystem.PhotonVisionSubsystem;
 import frc.robot.subsystems.VisionSubsystem.VisionSubsystem;
+import frc.robot.subsystems.VisionSubsystem.VisionSubsystem.VisionAPI;
 import frc.robot.subsystems.TurretSubsystem;
 import frc.robot.utils.AutoBuilder;
 import frc.robot.utils.JoyButton;
@@ -64,27 +63,23 @@ public class RobotContainer {
 
   private double lastInputLeftY = 0.0;
   public boolean shooterMode = true; // false = turretMode
-  public boolean isLimelight = true;
+  public VisionAPI visionAPI = VisionAPI.LIMELIGHT;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    if (isLimelight) {
-        visionSubsystem = new LimelightSubsystem();
-    } else {
-        visionSubsystem = new PhotonVisionSubsystem();
-    }
-    
     ledSubsystem = new LEDSubsystem();
     driverStationJoystick = new Joystick(OIConstants.DRIVER_STATION_JOY);
     intakeSubsystem = new IntakeSubsystem();
     shiftingSubsystem = new ShiftingSubsystem();
     neckSubsystem = new NeckSubsystem();
-    turretSubsystem = new TurretSubsystem(visionSubsystem);
-    shooterSubsystem = new ShooterSubsystem(visionSubsystem);
+    turretSubsystem = new TurretSubsystem();
+    shooterSubsystem = new ShooterSubsystem();
     climberSubsystem = new ClimberSubsystem();
     drivetrainSubsystem = new DrivetrainSubsystem();
+    visionSubsystem = new VisionSubsystem(visionAPI);
+    
 
-    turretSubsystem.setDefaultCommand(new TurretLockCommand(turretSubsystem, visionSubsystem));
+    turretSubsystem.setDefaultCommand(new TurretLockCommand(turretSubsystem));
 
     switch (drivetrainSubsystem.getDriveMode()) {
       case TANK:
@@ -117,7 +112,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    ShooterLEDCommand shooterLEDCommand = new ShooterLEDCommand(ledSubsystem, visionSubsystem);
+    ShooterLEDCommand shooterLEDCommand = new ShooterLEDCommand(ledSubsystem);
     setJoystickButtonWhenPressed(12, new ToggleIntakeCommand(intakeSubsystem));
     setConditionalButton(
         11,

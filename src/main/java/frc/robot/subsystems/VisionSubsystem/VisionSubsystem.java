@@ -1,33 +1,56 @@
 package frc.robot.subsystems.VisionSubsystem;
 
-public interface VisionSubsystem {
+import frc.robot.subsystems.VisionSubsystem.VisionBackend.CameraMode;
+import frc.robot.subsystems.VisionSubsystem.VisionBackend.LEDMode;
 
-    public enum LEDMode {
-        ON,
-        OFF,
-        DEFAULT,
-        BLINK
+public class VisionSubsystem {
+    private static VisionBackend visionSubsystem;
+    public static VisionAPI api;
+
+    public enum VisionAPI {
+        LIMELIGHT,
+        PHOTONVISION
     }
 
-    public enum CameraMode {
-        VISION,
-        DRIVER
+    public VisionSubsystem(VisionAPI api) {
+        VisionSubsystem.api = api;
+
+        if (api == VisionAPI.LIMELIGHT) {
+            visionSubsystem = new LimelightSubsystem();
+        } else {
+            visionSubsystem = new PhotonVisionSubsystem();
+        }
     }
-    
-    public boolean hasTargets();
 
-    public double getX();
+    public static boolean hasTargets() {
+        return visionSubsystem.hasTargets();
+    }
 
-    public double getY();
-    
-    public double getA();
+    public static double getX() {
+        return visionSubsystem.getX();
+    }
 
-    public void setLEDMode(LEDMode mode);
-    
-    public void setCameraMode(CameraMode mode);
+    public static double getY() {
+        return visionSubsystem.getY();
+    }
 
-    public void setPipeline(int num);
+    public static double getA() {
+        return visionSubsystem.getA();
+    }
 
-    public double getDistance();
+    public static void setLEDMode(LEDMode mode) {
+        visionSubsystem.setLEDMode(mode);
+    }
 
+    public static void setCameraMode(CameraMode mode) {
+        visionSubsystem.setCameraMode(mode);
+    }
+
+    public static void setPipeline (int num) {
+        visionSubsystem.setPipeline(num);   
+    }
+
+    public static double getDistance() {
+        return visionSubsystem.getDistance();
+    }
 }

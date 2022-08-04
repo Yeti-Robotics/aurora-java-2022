@@ -16,11 +16,8 @@ public class TeleLEDDefaultCommand extends CommandBase {
   private final int[] white = {255, 255, 255};
   private final int[] blue = {20, 120, 255};
 
-  private VisionSubsystem visionSubsystem;
-
-  public TeleLEDDefaultCommand(LEDSubsystem ledSubsystem, VisionSubsystem visionSubsystem) {
+  public TeleLEDDefaultCommand(LEDSubsystem ledSubsystem) {
     this.ledSubsystem = ledSubsystem;
-    this.visionSubsystem = visionSubsystem;
     addRequirements(ledSubsystem);
   }
 
@@ -31,7 +28,7 @@ public class TeleLEDDefaultCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (Math.abs(visionSubsystem.getDistance() - ShooterConstants.SHOOTER_HIGH_DIST)
+    if (Math.abs(VisionSubsystem.getDistance() - ShooterConstants.SHOOTER_HIGH_DIST)
         <= ShooterConstants.SHOOTER_DIST_TOLERANCE) {
       currColor = white;
     } else {

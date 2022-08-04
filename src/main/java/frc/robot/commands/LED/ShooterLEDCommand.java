@@ -17,12 +17,9 @@ public class ShooterLEDCommand extends CommandBase {
   private final int[] white = {255, 255, 255};
   private ArrayList<int[]> colorQueue;
 
-  private VisionSubsystem visionSubsystem;
-
-  public ShooterLEDCommand(LEDSubsystem ledSubsystem, VisionSubsystem visionSubsystem) {
+  public ShooterLEDCommand(LEDSubsystem ledSubsystem) {
     this.ledSubsystem = ledSubsystem;
     // colorQueue = new int[ledSubsystem.getBufferLength()][3];
-    this.visionSubsystem = visionSubsystem;
     addRequirements(ledSubsystem);
   }
 
@@ -57,7 +54,7 @@ public class ShooterLEDCommand extends CommandBase {
   @Override
   public void execute() {
     if (ShooterSubsystem.atSetPoint
-        && Math.abs(visionSubsystem.getDistance() - ShooterConstants.SHOOTER_HIGH_DIST)
+        && Math.abs(VisionSubsystem.getDistance() - ShooterConstants.SHOOTER_HIGH_DIST)
             <= ShooterConstants.SHOOTER_DIST_TOLERANCE) {
       // wave effect
       for (int i = 0; i < ledSubsystem.getBufferLength(); i++) {
