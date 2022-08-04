@@ -36,9 +36,9 @@ import frc.robot.subsystems.NeckSubsystem;
 import frc.robot.subsystems.ShiftingSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ShooterSubsystem.ShooterMode;
+import frc.robot.subsystems.TurretSubsystem;
 import frc.robot.subsystems.VisionSubsystem.VisionSubsystem;
 import frc.robot.subsystems.VisionSubsystem.VisionSubsystem.VisionAPI;
-import frc.robot.subsystems.TurretSubsystem;
 import frc.robot.utils.AutoBuilder;
 import frc.robot.utils.JoyButton;
 import frc.robot.utils.JoyButton.ActiveState;
@@ -77,7 +77,6 @@ public class RobotContainer {
     climberSubsystem = new ClimberSubsystem();
     drivetrainSubsystem = new DrivetrainSubsystem();
     visionSubsystem = new VisionSubsystem(visionAPI);
-    
 
     turretSubsystem.setDefaultCommand(new TurretLockCommand(turretSubsystem));
 

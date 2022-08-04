@@ -29,15 +29,17 @@ public class LimelightSubsystem implements VisionBackend {
     eDriver
   }
 
-  public Map<LEDMode, LightMode> ledModeMap = Map.of(
-      LEDMode.ON, LightMode.eOn,
-      LEDMode.OFF, LightMode.eOff,
-      LEDMode.BLINK, LightMode.eBlink,
-      LEDMode.DEFAULT, LightMode.eOn);
+  public Map<LEDMode, LightMode> ledModeMap =
+      Map.of(
+          LEDMode.ON, LightMode.eOn,
+          LEDMode.OFF, LightMode.eOff,
+          LEDMode.BLINK, LightMode.eBlink,
+          LEDMode.DEFAULT, LightMode.eOn);
 
-  public Map<VisionBackend.CameraMode, LimelightSubsystem.CameraMode> cameraModeMap = Map.of(
-      VisionBackend.CameraMode.VISION, LimelightSubsystem.CameraMode.eVision,
-      VisionBackend.CameraMode.DRIVER, LimelightSubsystem.CameraMode.eDriver);
+  public Map<VisionBackend.CameraMode, LimelightSubsystem.CameraMode> cameraModeMap =
+      Map.of(
+          VisionBackend.CameraMode.VISION, LimelightSubsystem.CameraMode.eVision,
+          VisionBackend.CameraMode.DRIVER, LimelightSubsystem.CameraMode.eDriver);
 
   public LimelightSubsystem() {
     table = NetworkTableInstance.getDefault();
@@ -86,9 +88,9 @@ public class LimelightSubsystem implements VisionBackend {
 
     double angleToGoalDegrees = LimelightConstants.MOUNTING_ANGLE + getY();
     double angleToGoalRadians = angleToGoalDegrees * (Math.PI / 180.0);
-    double distanceFromLimelightToGoalInches = (LimelightConstants.GOAL_HEIGHT
-        - LimelightConstants.LIMELIGHT_HEIGHT)
-        / Math.tan(angleToGoalRadians);
+    double distanceFromLimelightToGoalInches =
+        (LimelightConstants.GOAL_HEIGHT - LimelightConstants.LIMELIGHT_HEIGHT)
+            / Math.tan(angleToGoalRadians);
 
     return distanceFromLimelightToGoalInches;
   }

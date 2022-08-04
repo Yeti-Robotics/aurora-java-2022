@@ -2,32 +2,31 @@ package frc.robot.subsystems.VisionSubsystem;
 
 public interface VisionBackend {
 
-    public enum LEDMode {
-        ON,
-        OFF,
-        DEFAULT,
-        BLINK
-    }
+  public enum LEDMode {
+    ON,
+    OFF,
+    DEFAULT,
+    BLINK
+  }
 
-    public enum CameraMode {
-        VISION,
-        DRIVER
-    }
-    
-    public boolean hasTargets();
+  public enum CameraMode {
+    VISION,
+    DRIVER
+  }
 
-    public double getX();
+  public boolean hasTargets();
 
-    public double getY();
-    
-    public double getA();
+  public double getX();
 
-    public void setLEDMode(LEDMode mode);
-    
-    public void setCameraMode(CameraMode mode);
+  public double getY();
 
-    public void setPipeline(int num);
+  public double getA();
 
-    public double getDistance();
+  public void setLEDMode(LEDMode mode);
 
+  public void setCameraMode(CameraMode mode);
+
+  public void setPipeline(int num);
+
+  public double getDistance();
 }

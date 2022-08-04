@@ -7,7 +7,7 @@ import org.photonvision.common.hardware.VisionLEDMode;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 public class PhotonVisionSubsystem implements VisionBackend {
-    private final PhotonCamera camera;
+  private final PhotonCamera camera;
 
   public Map<LEDMode, VisionLEDMode> ledModeMap =
       Map.of(

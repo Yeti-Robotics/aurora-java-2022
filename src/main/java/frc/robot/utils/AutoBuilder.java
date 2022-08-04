@@ -32,7 +32,6 @@ import frc.robot.commands.intake.ToggleIntakeCommand;
 import frc.robot.commands.shooter.ToggleFlywheelHighCommand;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.VisionSubsystem.VisionSubsystem;
-
 import java.io.IOException;
 import java.nio.file.Path;
 
@@ -94,7 +93,9 @@ public class AutoBuilder {
     subsystemCommandGroup.addCommands(
         new DriveForDistanceCommand(robotContainer.drivetrainSubsystem, 48.0, -0.2),
         new InstantCommand(
-            () -> ShooterSubsystem.setPoint = ((25 / 3) * VisionSubsystem.getDistance()) + 2991.66667),
+            () ->
+                ShooterSubsystem.setPoint =
+                    ((25 / 3) * VisionSubsystem.getDistance()) + 2991.66667),
         new ToggleFlywheelHighCommand(shooterLEDCommand),
         new WaitCommand(1.0),
         new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem)
@@ -239,7 +240,9 @@ public class AutoBuilder {
         new TurnToTargetDriveCommand(robotContainer.drivetrainSubsystem).withTimeout(5.0),
         new DriveForDistanceCommand(robotContainer.drivetrainSubsystem, 1.0, 0.2),
         new InstantCommand(
-            () -> ShooterSubsystem.setPoint = ((25 / 3) * VisionSubsystem.getDistance()) + 2991.66667),
+            () ->
+                ShooterSubsystem.setPoint =
+                    ((25 / 3) * VisionSubsystem.getDistance()) + 2991.66667),
         new ToggleFlywheelHighCommand(shooterLEDCommand),
         // new AllOutCommand(robotContainer.intakeSubsystem,
         // robotContainer.neckSubsystem).withTimeout(0.25),
