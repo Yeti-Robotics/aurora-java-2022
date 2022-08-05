@@ -96,8 +96,8 @@ public class Robot extends TimedRobot {
     // System.out.println("getFlywheelRPM: " +
     // robotContainer.shooterSubsystem.getFlywheelRPM());
     // System.out.println("GYRO: " + robotContainer.drivetrainSubsystem.getHeading());
-    // System.out.println("getTx: " + Limelight.getTx());
-    // System.out.println("isTarget: " + Limelight.isTarget());
+    // System.out.println("getTx: " + VisionSubsystem.getX());
+    // System.out.println("isTarget: " + VisionSubsystem.hasTargets());
   }
 
   @Override

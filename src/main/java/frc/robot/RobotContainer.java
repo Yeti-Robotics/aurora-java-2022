@@ -37,6 +37,8 @@ import frc.robot.subsystems.ShiftingSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ShooterSubsystem.ShooterMode;
 import frc.robot.subsystems.TurretSubsystem;
+import frc.robot.subsystems.VisionSubsystem.VisionSubsystem;
+import frc.robot.subsystems.VisionSubsystem.VisionSubsystem.VisionAPI;
 import frc.robot.utils.AutoBuilder;
 import frc.robot.utils.JoyButton;
 import frc.robot.utils.JoyButton.ActiveState;
@@ -57,9 +59,11 @@ public class RobotContainer {
   public ShooterSubsystem shooterSubsystem;
   public ClimberSubsystem climberSubsystem;
   public LEDSubsystem ledSubsystem;
+  public VisionSubsystem visionSubsystem;
 
   private double lastInputLeftY = 0.0;
   public boolean shooterMode = true; // false = turretMode
+  public VisionAPI visionAPI = VisionAPI.LIMELIGHT;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -72,6 +76,7 @@ public class RobotContainer {
     shooterSubsystem = new ShooterSubsystem();
     climberSubsystem = new ClimberSubsystem();
     drivetrainSubsystem = new DrivetrainSubsystem();
+    visionSubsystem = new VisionSubsystem(visionAPI);
 
     turretSubsystem.setDefaultCommand(new TurretLockCommand(turretSubsystem));
 

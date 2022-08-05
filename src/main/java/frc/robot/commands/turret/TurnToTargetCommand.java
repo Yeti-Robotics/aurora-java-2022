@@ -7,7 +7,7 @@ package frc.robot.commands.turret;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.subsystems.TurretSubsystem;
-import frc.robot.utils.Limelight;
+import frc.robot.subsystems.VisionSubsystem.VisionSubsystem;
 
 public class TurnToTargetCommand extends CommandBase {
 
@@ -29,8 +29,8 @@ public class TurnToTargetCommand extends CommandBase {
 
   @Override
   public void execute() {
-    power = Math.abs(power) * ((Limelight.getTx() < 0) ? -1 : 1);
-    isAligned = Math.abs(Limelight.getTx()) <= TurretConstants.LIMELIGHT_TOLERANCE;
+    power = Math.abs(power) * ((VisionSubsystem.getX() < 0) ? -1 : 1);
+    isAligned = Math.abs(VisionSubsystem.getX()) <= TurretConstants.LIMELIGHT_TOLERANCE;
 
     atLimit =
         (power > 0)

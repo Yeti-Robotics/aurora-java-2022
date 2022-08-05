@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
-import frc.robot.utils.Limelight;
+import frc.robot.subsystems.VisionSubsystem.VisionSubsystem;
 
 public class ShooterSubsystem extends SubsystemBase {
   private WPI_TalonFX shooterLeftFalcon;
@@ -86,8 +86,8 @@ public class ShooterSubsystem extends SubsystemBase {
     if (ShooterSubsystem.isShooting) {
       switch (shooterMode) {
         case LIMELIGHT:
-          if (Limelight.getDistance() > 0.0) {
-            ShooterSubsystem.setPoint = ((25 / 3) * Limelight.getDistance()) + 2991.66667;
+          if (VisionSubsystem.getDistance() > 0.0) {
+            ShooterSubsystem.setPoint = ((25 / 3) * VisionSubsystem.getDistance()) + 2991.66667;
           }
           shootFlywheel(
               ShooterConstants.SHOOTER_F
