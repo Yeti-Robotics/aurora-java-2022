@@ -114,7 +114,7 @@ public class AutoBuilder {
         // new InstantCommand(() -> TurretConstants.TURRET_OFFSET = 0.0),
         new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem)
             .withTimeout(1.5),
-        new InstantCommand(() -> ShooterSubsystem.setPoint = 4400.0),
+        new InstantCommand(() -> ShooterSubsystem.setPoint = 4600.0),
         new InstantCommand(() -> ShooterSubsystem.isShooting = true),
         new WaitCommand(0.75),
         new ToggleIntakeCommand(robotContainer.intakeSubsystem),
@@ -129,7 +129,7 @@ public class AutoBuilder {
         new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem, 0.375)
             .withTimeout(4.25),
         new WaitCommand(2.5),
-        new InstantCommand(() -> ShooterSubsystem.setPoint = 4200.0),
+        new InstantCommand(() -> ShooterSubsystem.setPoint = 4400.0),
         new InstantCommand(() -> ShooterSubsystem.isShooting = true),
         new WaitCommand(0.75),
         new ToggleIntakeCommand(robotContainer.intakeSubsystem),
@@ -146,6 +146,49 @@ public class AutoBuilder {
         runTrajectoryPath(AutoConstants.fourBall1),
         new WaitCommand(2.25),
         runTrajectoryPath(AutoConstants.fourBall2));
+
+    command.alongWith(pathCommandGroup, subsystemCommandGroup);
+  }
+
+  // the four ball routine that (theoretically) is accurate to our home field
+  private void fourBallZone() {
+    subsystemCommandGroup.addCommands(
+        new ToggleIntakeCommand(robotContainer.intakeSubsystem),
+        // new InstantCommand(() -> TurretConstants.TURRET_OFFSET = 0.0),
+        new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem)
+            .withTimeout(1.5),
+        new InstantCommand(() -> ShooterSubsystem.setPoint = 4800.0),
+        new InstantCommand(() -> ShooterSubsystem.isShooting = true),
+        new WaitCommand(0.75),
+        new ToggleIntakeCommand(robotContainer.intakeSubsystem),
+        new WaitCommand(1.1),
+        new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem)
+            .withTimeout(0.3),
+        new WaitCommand(0.3),
+        new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem)
+            .withTimeout(0.3),
+        new InstantCommand(() -> ShooterSubsystem.isShooting = false),
+        new ToggleIntakeCommand(robotContainer.intakeSubsystem),
+        new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem, 0.375)
+            .withTimeout(4.25),
+        new WaitCommand(2.5),
+        new InstantCommand(() -> ShooterSubsystem.setPoint = 4600.0),
+        new InstantCommand(() -> ShooterSubsystem.isShooting = true),
+        new WaitCommand(0.75),
+        new ToggleIntakeCommand(robotContainer.intakeSubsystem),
+        new WaitCommand(0.25),
+        new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem)
+            .withTimeout(0.4),
+        new WaitCommand(0.5),
+        new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem)
+            .withTimeout(0.7),
+        new InstantCommand(() -> ShooterSubsystem.isShooting = false),
+        new InstantCommand(() -> TurretConstants.TURRET_OFFSET = 8.0));
+
+    pathCommandGroup.addCommands(
+        runTrajectoryPath(AutoConstants.fourBallZone1),
+        new WaitCommand(2.25),
+        runTrajectoryPath(AutoConstants.fourBallZone2));
 
     command.alongWith(pathCommandGroup, subsystemCommandGroup);
   }
@@ -296,6 +339,9 @@ public class AutoBuilder {
         break;
       case DEAD_GYRO:
         deadGyro();
+        break;
+      case FOUR_BALL_ZONE:
+        fourBallZone();
         break;
       default:
         fourBall();

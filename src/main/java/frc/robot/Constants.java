@@ -40,15 +40,15 @@ public final class Constants {
   }
 
   public static final class AutoConstants {
-    public static final double AUTO_KS = 0.69914; // volts
-    public static final double AUTO_KV = 2.1275; // volt seconds per meter
-    public static final double AUTO_KA = 0.53096; // volt seconds squared per meter
-    public static final double AUTO_P = 3.1895;
+    public static final double AUTO_KS = 0.69249; // volts
+    public static final double AUTO_KV = 2.1531; // volt seconds per meter
+    public static final double AUTO_KA = 0.41394; // volt seconds squared per meter
+    public static final double AUTO_P = 3.1202;
 
     public static final double RAMSETE_B = 2.0;
     public static final double RAMSETE_ZETA = 0.7;
 
-    public static final double TRACK_WIDTH = 0.80532; // m
+    public static final double TRACK_WIDTH = 0.80692; // m
     public static final DifferentialDriveKinematics KINEMATICS =
         new DifferentialDriveKinematics(TRACK_WIDTH);
 
@@ -64,6 +64,8 @@ public final class Constants {
     public static final String threeBall2 = "threeBall2";
     public static final String fourBall1 = "fourBall1";
     public static final String fourBall2 = "fourBall2";
+    public static final String fourBallZone1 = "fourBallZone1";
+    public static final String fourBallZone2 = "fourBallZone2";
     public static final String twoBallDump = "twoBallDump";
   }
 
