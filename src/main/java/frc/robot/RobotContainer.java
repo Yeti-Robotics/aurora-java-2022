@@ -63,7 +63,6 @@ public class RobotContainer {
 
   private double lastInputLeftY = 0.0;
   public boolean shooterMode = true; // false = turretMode
-  public VisionAPI visionAPI = VisionAPI.LIMELIGHT;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -76,7 +75,6 @@ public class RobotContainer {
     shooterSubsystem = new ShooterSubsystem();
     climberSubsystem = new ClimberSubsystem();
     drivetrainSubsystem = new DrivetrainSubsystem();
-    visionSubsystem = new VisionSubsystem(visionAPI);
 
     turretSubsystem.setDefaultCommand(new TurretLockCommand(turretSubsystem));
 

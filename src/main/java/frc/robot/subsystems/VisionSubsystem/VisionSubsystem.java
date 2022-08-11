@@ -4,21 +4,24 @@ import frc.robot.subsystems.VisionSubsystem.VisionBackend.CameraMode;
 import frc.robot.subsystems.VisionSubsystem.VisionBackend.LEDMode;
 
 public class VisionSubsystem {
-  private static VisionBackend visionSubsystem;
-  public static VisionAPI api;
+  private static final VisionBackend visionSubsystem = getBackend();
+  // change this to change what backend we use
+  private static final VisionAPI api = VisionAPI.LIMELIGHT;
 
   public enum VisionAPI {
     LIMELIGHT,
     PHOTONVISION
   }
 
-  public VisionSubsystem(VisionAPI api) {
-    VisionSubsystem.api = api;
-
-    if (api == VisionAPI.LIMELIGHT) {
-      visionSubsystem = new LimelightSubsystem();
-    } else {
-      visionSubsystem = new PhotonVisionSubsystem();
+  public static VisionBackend getBackend() {
+    switch (api) {
+      case PHOTONVISION:
+        return new PhotonVisionSubsystem();
+      case LIMELIGHT:
+        return new LimelightSubsystem();
+      default:
+        // hopefully never happens
+        return null;
     }
   }
 
