@@ -30,6 +30,8 @@ import frc.robot.commands.drivetrain.DriveForDistanceCommand;
 import frc.robot.commands.drivetrain.TurnToTargetDriveCommand;
 import frc.robot.commands.intake.ToggleIntakeCommand;
 import frc.robot.commands.shooter.ToggleFlywheelHighCommand;
+import frc.robot.commands.turret.HomeTurretCommand;
+import frc.robot.commands.turret.SnapTurret70RightCommand;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.VisionSubsystem.VisionSubsystem;
 import java.io.IOException;
@@ -275,27 +277,48 @@ public class AutoBuilder {
 
   private void deadGyro() {
     subsystemCommandGroup.addCommands(
+        new SnapTurret70RightCommand(robotContainer.turretSubsystem),
         new ToggleIntakeCommand(robotContainer.intakeSubsystem),
-        new DriveForDistanceCommand(robotContainer.drivetrainSubsystem, 1.5, 0.2)
+        new DriveForDistanceCommand(robotContainer.drivetrainSubsystem, 1.0, 0.2)
             .deadlineWith(
                 new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem)),
         new ToggleIntakeCommand(robotContainer.intakeSubsystem),
         new TurnToTargetDriveCommand(robotContainer.drivetrainSubsystem).withTimeout(5.0),
-        new DriveForDistanceCommand(robotContainer.drivetrainSubsystem, 1.0, 0.2),
+        //Turret lock on
+        //Shoot 2 balls vv
         new InstantCommand(
             () ->
                 ShooterSubsystem.setPoint =
                     ((25 / 3) * VisionSubsystem.getDistance()) + 2991.66667),
         new ToggleFlywheelHighCommand(shooterLEDCommand),
-        // new AllOutCommand(robotContainer.intakeSubsystem,
-        // robotContainer.neckSubsystem).withTimeout(0.25),
         new WaitCommand(2.0),
         new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem)
             .withTimeout(1.0),
         new WaitCommand(1.0),
         new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem)
             .withTimeout(2.0),
-        new ToggleFlywheelHighCommand(shooterLEDCommand));
+        new ToggleFlywheelHighCommand(shooterLEDCommand),
+        //Shoot 2 balls ^^
+        new ToggleIntakeCommand(robotContainer.intakeSubsystem),
+        new DriveForDistanceCommand(robotContainer.drivetrainSubsystem, 2.5, 0.2)
+            .deadlineWith(
+                new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem)),
+        new HomeTurretCommand(robotContainer.turretSubsystem, true),
+        new TurnToTargetDriveCommand(robotContainer.drivetrainSubsystem).withTimeout(5.0),
+        new DriveForDistanceCommand(robotContainer.drivetrainSubsystem, 1.0, 0.2),
+        //Turret lock on
+        //Shoot 1 ball vv
+       new InstantCommand(
+            () ->
+                ShooterSubsystem.setPoint =
+                    ((25 / 3) * VisionSubsystem.getDistance()) + 2991.66667),
+        new ToggleFlywheelHighCommand(shooterLEDCommand),
+        new WaitCommand(2.0),
+        new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem)
+            .withTimeout(1.0),
+        new ToggleFlywheelHighCommand(shooterLEDCommand)
+        //Shoot 1 ball ^^
+        );
 
     command.alongWith(subsystemCommandGroup);
   }

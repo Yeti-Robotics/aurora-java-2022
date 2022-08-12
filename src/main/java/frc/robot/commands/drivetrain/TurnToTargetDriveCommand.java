@@ -19,12 +19,12 @@ public class TurnToTargetDriveCommand extends CommandBase {
 
   @Override
   public void initialize() {
-    drivetrainSubsystem.cheezyDrive(0.0, -0.3);
+    drivetrainSubsystem.cheezyDrive(0.0, 0.3); //Change to -0.3 to switch direction
   }
 
   @Override
   public void execute() {
-    drivetrainSubsystem.cheezyDrive(0.0, -0.3);
+    drivetrainSubsystem.cheezyDrive(0.0, 0.3); //Change to -0.3 to switch direction
   }
 
   @Override

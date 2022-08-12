@@ -152,10 +152,10 @@ public class Robot extends TimedRobot {
         break;
       case DEAD_GYRO:
         turretAuto =
-            new SequentialCommandGroup(
-                new WaitCommand(6.0),
-                new InstantCommand(
-                    () -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED));
+           // new SequentialCommandGroup(
+           //     new WaitCommand(6.0),
+           //     new InstantCommand(
+           //         () -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED));
         break;
       case TEST_AUTO:
         turretAuto = new SequentialCommandGroup();
