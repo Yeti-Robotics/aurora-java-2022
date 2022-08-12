@@ -284,8 +284,8 @@ public class AutoBuilder {
                 new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem)),
         new ToggleIntakeCommand(robotContainer.intakeSubsystem),
         new TurnToTargetDriveCommand(robotContainer.drivetrainSubsystem).withTimeout(5.0),
-        //Turret lock on
-        //Shoot 2 balls vv
+        // Turret lock on
+        // Shoot 2 balls vv
         new InstantCommand(
             () ->
                 ShooterSubsystem.setPoint =
@@ -298,7 +298,7 @@ public class AutoBuilder {
         new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem)
             .withTimeout(2.0),
         new ToggleFlywheelHighCommand(shooterLEDCommand),
-        //Shoot 2 balls ^^
+        // Shoot 2 balls ^^
         new ToggleIntakeCommand(robotContainer.intakeSubsystem),
         new DriveForDistanceCommand(robotContainer.drivetrainSubsystem, 2.5, 0.2)
             .deadlineWith(
@@ -306,9 +306,9 @@ public class AutoBuilder {
         new HomeTurretCommand(robotContainer.turretSubsystem, true),
         new TurnToTargetDriveCommand(robotContainer.drivetrainSubsystem).withTimeout(5.0),
         new DriveForDistanceCommand(robotContainer.drivetrainSubsystem, 1.0, 0.2),
-        //Turret lock on
-        //Shoot 1 ball vv
-       new InstantCommand(
+        // Turret lock on
+        // Shoot 1 ball vv
+        new InstantCommand(
             () ->
                 ShooterSubsystem.setPoint =
                     ((25 / 3) * VisionSubsystem.getDistance()) + 2991.66667),
@@ -317,7 +317,7 @@ public class AutoBuilder {
         new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem)
             .withTimeout(1.0),
         new ToggleFlywheelHighCommand(shooterLEDCommand)
-        //Shoot 1 ball ^^
+        // Shoot 1 ball ^^
         );
 
     command.alongWith(subsystemCommandGroup);
