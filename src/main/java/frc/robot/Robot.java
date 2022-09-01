@@ -9,26 +9,33 @@ import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CompressorConfigType;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants.TurretConstants;
-import frc.robot.commands.LED.*;
+import frc.robot.commands.LED.AuroraLEDCommand;
+import frc.robot.commands.LED.BlinkLEDCommand;
+import frc.robot.commands.LED.SetLEDToRGBCommand;
 import frc.robot.commands.turret.HomeTurretCommand;
 import frc.robot.commands.turret.TurretLockCommand;
+import frc.robot.di.DaggerRobotComponent;
+import frc.robot.di.RobotComponent;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TurretSubsystem.TurretLockStatus;
+
+import javax.inject.Inject;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private Command beforeBlinkCommand = null;
   private boolean blinkWarningRan = false;
   public CompressorConfigType compressorConfigType;
-  private PowerDistribution revPDH;
-
-  private RobotContainer robotContainer;
+  private RobotComponent robotComponent;
+  @Inject
+  PowerDistribution revPDH;
+  @Inject
+  RobotContainer robotContainer;
 
   public static SendableChooser<AutoModes> autoChooser;
   private SetLEDToRGBCommand redLedCommand;
@@ -46,10 +53,15 @@ public class Robot extends TimedRobot {
 
   long timer;
 
+  public Robot() {
+    robotComponent = DaggerRobotComponent.builder().build();
+    robotComponent.inject(this);
+  }
+
   @Override
   public void robotInit() {
-    robotContainer = new RobotContainer();
-    revPDH = new PowerDistribution(1, ModuleType.kRev);
+    //robotContainer = new RobotContainer();
+    //revPDH = new PowerDistribution(1, ModuleType.kRev);
     redLedCommand = new SetLEDToRGBCommand(robotContainer.ledSubsystem, 255, 0, 0);
     autoDisabledCommand = new AuroraLEDCommand(robotContainer.ledSubsystem);
     robotContainer.turretSubsystem.lockStatus = TurretLockStatus.UNLOCKED;

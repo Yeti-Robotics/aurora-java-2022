@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
+import dagger.internal.DaggerGenerated;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
@@ -11,10 +12,14 @@ import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.SerialPort.Port;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.ShiftingSubsystem.ShiftStatus;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 public class DrivetrainSubsystem extends SubsystemBase {
 
@@ -31,6 +36,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private DriveMode driveMode;
   private final DifferentialDriveOdometry odometry;
 
+  private Command tankCommand;
+  private Command cheezyCommand;
+  private Command arcadeCommand;
+
   private final PIDController drivePID;
 
   public enum DriveMode {
@@ -41,7 +50,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   private NeutralMode neutralMode;
 
-  public DrivetrainSubsystem() {
+  @Inject
+  public DrivetrainSubsystem(
+          @Named("tank drive") Command tankCommand,
+          @Named("cheezy drive") Command cheezyCommand,
+          @Named("arcade drive") Command arcadeCommand
+  ) {
     leftFalcon1 = new WPI_TalonFX(DriveConstants.LEFT_FALCON_1);
     leftFalcon2 = new WPI_TalonFX(DriveConstants.LEFT_FALCON_2);
     rightFalcon1 = new WPI_TalonFX(DriveConstants.RIGHT_FALCON_1);
@@ -76,6 +90,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
     odometry = new DifferentialDriveOdometry(gyro.getRotation2d());
 
     driveMode = DriveMode.CHEEZY;
+    this.tankCommand = tankCommand;
+    this.cheezyCommand = cheezyCommand;
+    this.arcadeCommand = arcadeCommand;
+    setDriveMode(DriveMode.CHEEZY);
 
     drivePID =
         new PIDController(DriveConstants.DRIVE_P, DriveConstants.DRIVE_I, DriveConstants.DRIVE_D);
@@ -205,6 +223,17 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   public void setDriveMode(DriveMode driveMode) {
     this.driveMode = driveMode;
+    switch (this.driveMode) {
+      case TANK:
+        this.setDefaultCommand(cheezyCommand);
+        break;
+      case CHEEZY:
+        this.setDefaultCommand(cheezyCommand);
+        break;
+      case ARCADE:
+        this.setDefaultCommand(arcadeCommand);
+        break;
+    }
   }
 
   public NeutralMode getNeutralMode() {

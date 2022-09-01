@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.utils.Limelight;
 
+import javax.inject.Inject;
+
 public class TurretSubsystem extends SubsystemBase {
 
   private final CANSparkMax turretSpark;
@@ -26,6 +28,7 @@ public class TurretSubsystem extends SubsystemBase {
 
   public TurretLockStatus lockStatus;
 
+  @Inject
   public TurretSubsystem() {
     turretSpark = new CANSparkMax(TurretConstants.TURRET_SPARK, MotorType.kBrushless);
     magSwitch = new DigitalInput(TurretConstants.MAG_SWITCH_PORT);

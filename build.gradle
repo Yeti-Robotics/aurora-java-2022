@@ -5,10 +5,22 @@ plugins {
     id "edu.wpi.first.GradleRIO" version "2022.4.1"
 }
 
+repositories {
+    mavenCentral()
+}
+
 sourceCompatibility = JavaVersion.VERSION_11
 targetCompatibility = JavaVersion.VERSION_11
 
 def ROBOT_MAIN_CLASS = "frc.robot.Main"
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java', 'build/generated/sources/annotationProcessor/java/main']
+        }
+    }
+}
 
 // Define my targets (RoboRIO) and artifacts (deployable files)
 // This is added by GradleRIO's backing project DeployUtils.
@@ -31,7 +43,7 @@ deploy {
 
                 // Static files artifact
                 frcStaticFileDeploy(getArtifactTypeClass('FileTreeArtifact')) {
-                    files = project.fileTree('src/main/deploy')
+                    files = project.fileTree('src/main/deploy') + project.fileTree('build/generated/sources/annotationProcessor/java/main')
                     directory = '/home/lvuser/deploy'
                 }
             }
@@ -52,6 +64,9 @@ def includeDesktopSupport = true
 dependencies {
     implementation wpi.java.deps.wpilib()
     implementation wpi.java.vendor.java()
+
+    implementation 'com.google.dagger:dagger:2.43.2'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.43.2'
 
     roborioDebug wpi.java.deps.wpilibJniDebug(wpi.platforms.roborio)
     roborioDebug wpi.java.vendor.jniDebug(wpi.platforms.roborio)

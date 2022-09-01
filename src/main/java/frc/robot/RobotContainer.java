@@ -7,13 +7,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.Constants.OIConstants;
 import frc.robot.commands.LED.ShooterLEDCommand;
 import frc.robot.commands.climber.ClimbDownCommand;
 import frc.robot.commands.climber.ClimbUpCommand;
@@ -23,23 +18,16 @@ import frc.robot.commands.intake.ToggleIntakeCommand;
 import frc.robot.commands.shifting.ToggleShiftCommand;
 import frc.robot.commands.shooter.ToggleFlywheelHighCommand;
 import frc.robot.commands.shooter.ToggleFlywheelLowCommand;
-import frc.robot.commands.turret.HomeTurretCommand;
-import frc.robot.commands.turret.SnapTurretLeftCommand;
-import frc.robot.commands.turret.SnapTurretRightCommand;
-import frc.robot.commands.turret.ToggleTurretLockCommand;
-import frc.robot.commands.turret.TurretLockCommand;
-import frc.robot.subsystems.ClimberSubsystem;
-import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.LEDSubsystem;
-import frc.robot.subsystems.NeckSubsystem;
-import frc.robot.subsystems.ShiftingSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.commands.turret.*;
+import frc.robot.di.RobotComponent;
+import frc.robot.subsystems.*;
 import frc.robot.subsystems.ShooterSubsystem.ShooterMode;
-import frc.robot.subsystems.TurretSubsystem;
 import frc.robot.utils.AutoBuilder;
 import frc.robot.utils.JoyButton;
 import frc.robot.utils.JoyButton.ActiveState;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -48,21 +36,39 @@ import frc.robot.utils.JoyButton.ActiveState;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+  @Inject
   public Joystick driverStationJoystick;
+  @Inject
+  @Named("drivetrain")
   public DrivetrainSubsystem drivetrainSubsystem;
+  @Inject
+  @Named("shifting")
   public ShiftingSubsystem shiftingSubsystem;
+  @Inject
+  @Named("intake")
   public IntakeSubsystem intakeSubsystem;
+  @Inject
+  @Named("neck")
   public NeckSubsystem neckSubsystem;
+  @Inject
+  @Named("turret")
   public TurretSubsystem turretSubsystem;
+  @Inject
+  @Named("shooter")
   public ShooterSubsystem shooterSubsystem;
+  @Inject
+  @Named("climber")
   public ClimberSubsystem climberSubsystem;
+  @Inject
   public LEDSubsystem ledSubsystem;
 
   private double lastInputLeftY = 0.0;
   public boolean shooterMode = true; // false = turretMode
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  @Inject
   public RobotContainer() {
+    /*
     ledSubsystem = new LEDSubsystem();
     driverStationJoystick = new Joystick(OIConstants.DRIVER_STATION_JOY);
     intakeSubsystem = new IntakeSubsystem();
@@ -72,28 +78,10 @@ public class RobotContainer {
     shooterSubsystem = new ShooterSubsystem();
     climberSubsystem = new ClimberSubsystem();
     drivetrainSubsystem = new DrivetrainSubsystem();
+    */
+    //RobotComponent robotComponent = DaggerRobotComponent.create();
 
     turretSubsystem.setDefaultCommand(new TurretLockCommand(turretSubsystem));
-
-    switch (drivetrainSubsystem.getDriveMode()) {
-      case TANK:
-        drivetrainSubsystem.setDefaultCommand(
-            new RunCommand(
-                () -> drivetrainSubsystem.tankDrive(getLeftY(), getRightY()), drivetrainSubsystem));
-        break;
-      case CHEEZY:
-        drivetrainSubsystem.setDefaultCommand(
-            new RunCommand(
-                () -> drivetrainSubsystem.cheezyDrive(getLeftY(), getRightX()),
-                drivetrainSubsystem));
-        break;
-      case ARCADE:
-        drivetrainSubsystem.setDefaultCommand(
-            new RunCommand(
-                () -> drivetrainSubsystem.arcadeDrive(getLeftY(), getRightX()),
-                drivetrainSubsystem));
-        break;
-    }
 
     // Configure the button bindings
     configureButtonBindings();
@@ -182,7 +170,7 @@ public class RobotContainer {
     setJoystickButtonWhenPressed(5, new InstantCommand(() -> shooterMode = !shooterMode));
   }
 
-  private double getLeftY() {
+  public double getLeftY() {
     // prevents tipping when stopping backward movement abruptly
     if (lastInputLeftY < 0
         && Math.abs(-driverStationJoystick.getRawAxis(0)) <= 0.05) { // 0.05 == joystick deadband
@@ -198,15 +186,15 @@ public class RobotContainer {
     return -driverStationJoystick.getRawAxis(0);
   }
 
-  private double getLeftX() {
+  public double getLeftX() {
     return driverStationJoystick.getRawAxis(1);
   }
 
-  private double getRightY() {
+  public double getRightY() {
     return -driverStationJoystick.getRawAxis(2);
   }
 
-  private double getRightX() {
+  public double getRightX() {
     return driverStationJoystick.getRawAxis(3);
   }
 
