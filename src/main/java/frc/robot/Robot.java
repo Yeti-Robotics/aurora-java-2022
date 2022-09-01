@@ -23,7 +23,6 @@ import frc.robot.di.DaggerRobotComponent;
 import frc.robot.di.RobotComponent;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TurretSubsystem.TurretLockStatus;
-
 import javax.inject.Inject;
 
 public class Robot extends TimedRobot {
@@ -32,10 +31,8 @@ public class Robot extends TimedRobot {
   private boolean blinkWarningRan = false;
   public CompressorConfigType compressorConfigType;
   private RobotComponent robotComponent;
-  @Inject
-  PowerDistribution revPDH;
-  @Inject
-  RobotContainer robotContainer;
+  @Inject PowerDistribution revPDH;
+  @Inject RobotContainer robotContainer;
 
   public static SendableChooser<AutoModes> autoChooser;
   private SetLEDToRGBCommand redLedCommand;
@@ -60,8 +57,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    //robotContainer = new RobotContainer();
-    //revPDH = new PowerDistribution(1, ModuleType.kRev);
+    // robotContainer = new RobotContainer();
+    // revPDH = new PowerDistribution(1, ModuleType.kRev);
     redLedCommand = new SetLEDToRGBCommand(robotContainer.ledSubsystem, 255, 0, 0);
     autoDisabledCommand = new AuroraLEDCommand(robotContainer.ledSubsystem);
     robotContainer.turretSubsystem.lockStatus = TurretLockStatus.UNLOCKED;

@@ -19,13 +19,11 @@ import frc.robot.commands.shifting.ToggleShiftCommand;
 import frc.robot.commands.shooter.ToggleFlywheelHighCommand;
 import frc.robot.commands.shooter.ToggleFlywheelLowCommand;
 import frc.robot.commands.turret.*;
-import frc.robot.di.RobotComponent;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.ShooterSubsystem.ShooterMode;
 import frc.robot.utils.AutoBuilder;
 import frc.robot.utils.JoyButton;
 import frc.robot.utils.JoyButton.ActiveState;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -36,31 +34,37 @@ import javax.inject.Named;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  @Inject
-  public Joystick driverStationJoystick;
+  @Inject public Joystick driverStationJoystick;
+
   @Inject
   @Named("drivetrain")
   public DrivetrainSubsystem drivetrainSubsystem;
+
   @Inject
   @Named("shifting")
   public ShiftingSubsystem shiftingSubsystem;
+
   @Inject
   @Named("intake")
   public IntakeSubsystem intakeSubsystem;
+
   @Inject
   @Named("neck")
   public NeckSubsystem neckSubsystem;
+
   @Inject
   @Named("turret")
   public TurretSubsystem turretSubsystem;
+
   @Inject
   @Named("shooter")
   public ShooterSubsystem shooterSubsystem;
+
   @Inject
   @Named("climber")
   public ClimberSubsystem climberSubsystem;
-  @Inject
-  public LEDSubsystem ledSubsystem;
+
+  @Inject public LEDSubsystem ledSubsystem;
 
   private double lastInputLeftY = 0.0;
   public boolean shooterMode = true; // false = turretMode
@@ -79,7 +83,7 @@ public class RobotContainer {
     climberSubsystem = new ClimberSubsystem();
     drivetrainSubsystem = new DrivetrainSubsystem();
     */
-    //RobotComponent robotComponent = DaggerRobotComponent.create();
+    // RobotComponent robotComponent = DaggerRobotComponent.create();
 
     turretSubsystem.setDefaultCommand(new TurretLockCommand(turretSubsystem));
 

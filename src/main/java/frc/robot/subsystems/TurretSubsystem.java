@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.utils.Limelight;
-
 import javax.inject.Inject;
 
 public class TurretSubsystem extends SubsystemBase {

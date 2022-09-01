@@ -4,7 +4,6 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
-import dagger.internal.DaggerGenerated;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
@@ -17,7 +16,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.ShiftingSubsystem.ShiftStatus;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -52,10 +50,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   @Inject
   public DrivetrainSubsystem(
-          @Named("tank drive") Command tankCommand,
-          @Named("cheezy drive") Command cheezyCommand,
-          @Named("arcade drive") Command arcadeCommand
-  ) {
+      @Named("tank drive") Command tankCommand,
+      @Named("cheezy drive") Command cheezyCommand,
+      @Named("arcade drive") Command arcadeCommand) {
     leftFalcon1 = new WPI_TalonFX(DriveConstants.LEFT_FALCON_1);
     leftFalcon2 = new WPI_TalonFX(DriveConstants.LEFT_FALCON_2);
     rightFalcon1 = new WPI_TalonFX(DriveConstants.RIGHT_FALCON_1);
