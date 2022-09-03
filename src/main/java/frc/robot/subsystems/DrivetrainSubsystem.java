@@ -209,10 +209,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
     return driveMode;
   }
 
-  public void setDriveMode(DriveMode driveMode) {
-    this.driveMode = driveMode;
-    RobotContainer container = robotComponent.container();
-    switch (this.driveMode) {
+  public void setDriveMode(RobotContainer container, DriveMode mode) {
+    driveMode = mode;
+    switch (driveMode) {
       case TANK:
         this.setDefaultCommand(
             new RunCommand(() -> tankDrive(container.getLeftY(), container.getRightY()), this));
