@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
@@ -8,14 +7,15 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.wpilibj.SerialPort.Port;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.RobotContainer;
+import frc.robot.di.RobotComponent;
 import frc.robot.subsystems.ShiftingSubsystem.ShiftStatus;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -34,11 +34,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private DriveMode driveMode;
   private final DifferentialDriveOdometry odometry;
 
-  private Command tankCommand;
-  private Command cheezyCommand;
-  private Command arcadeCommand;
-
   private final PIDController drivePID;
+
+  private final DifferentialDriveWheelSpeeds wheelSpeeds;
 
   public enum DriveMode {
     TANK,
@@ -47,26 +45,24 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   private NeutralMode neutralMode;
+  private final RobotComponent robotComponent;
 
   @Inject
   public DrivetrainSubsystem(
-      @Named("tank drive") Command tankCommand,
-      @Named("cheezy drive") Command cheezyCommand,
-      @Named("arcade drive") Command arcadeCommand) {
-    leftFalcon1 = new WPI_TalonFX(DriveConstants.LEFT_FALCON_1);
-    leftFalcon2 = new WPI_TalonFX(DriveConstants.LEFT_FALCON_2);
-    rightFalcon1 = new WPI_TalonFX(DriveConstants.RIGHT_FALCON_1);
-    rightFalcon2 = new WPI_TalonFX(DriveConstants.RIGHT_FALCON_2);
-
-    leftFalcon1.configVoltageCompSaturation(Constants.MOTOR_VOLTAGE_COMP);
-    leftFalcon2.configVoltageCompSaturation(Constants.MOTOR_VOLTAGE_COMP);
-    rightFalcon1.configVoltageCompSaturation(Constants.MOTOR_VOLTAGE_COMP);
-    rightFalcon2.configVoltageCompSaturation(Constants.MOTOR_VOLTAGE_COMP);
-
-    leftFalcon1.enableVoltageCompensation(true);
-    leftFalcon2.enableVoltageCompensation(true);
-    rightFalcon1.enableVoltageCompensation(true);
-    rightFalcon2.enableVoltageCompensation(true);
+          RobotComponent component,
+          @Named("left drive 1") WPI_TalonFX leftDrive1,
+          @Named("left drive 2") WPI_TalonFX leftDrive2,
+          @Named("right drive 1") WPI_TalonFX rightDrive1,
+          @Named("right drive 2") WPI_TalonFX rightDrive2,
+          AHRS gyro,
+          @Named("drive PID") PIDController drivePID,
+          DifferentialDriveWheelSpeeds diffWheelSpeeds
+  ) {
+    robotComponent = component;
+    leftFalcon1 = leftDrive1;
+    leftFalcon2 = leftDrive2;
+    rightFalcon1 = rightDrive1;
+    rightFalcon2 = rightDrive2;
 
     leftMotors = new MotorControllerGroup(leftFalcon1, leftFalcon2);
     rightMotors = new MotorControllerGroup(rightFalcon1, rightFalcon2);
@@ -77,23 +73,18 @@ public class DrivetrainSubsystem extends SubsystemBase {
     drive = new DifferentialDrive(leftMotors, rightMotors);
     drive.setDeadband(0.0525);
 
-    leftFalcon1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
-    rightFalcon1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
     resetEncoders();
 
-    gyro = new AHRS(Port.kUSB);
+    this.gyro = gyro;
     resetGyro();
 
     odometry = new DifferentialDriveOdometry(gyro.getRotation2d());
 
     driveMode = DriveMode.CHEEZY;
-    this.tankCommand = tankCommand;
-    this.cheezyCommand = cheezyCommand;
-    this.arcadeCommand = arcadeCommand;
     setDriveMode(DriveMode.CHEEZY);
 
-    drivePID =
-        new PIDController(DriveConstants.DRIVE_P, DriveConstants.DRIVE_I, DriveConstants.DRIVE_D);
+    this.drivePID = drivePID;
+    wheelSpeeds = diffWheelSpeeds;
   }
 
   @Override
@@ -202,7 +193,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-    return new DifferentialDriveWheelSpeeds(getLeftEncoderVelocity(), getRightEncoderVelocity());
+    wheelSpeeds.leftMetersPerSecond = getLeftEncoderVelocity();
+    wheelSpeeds.rightMetersPerSecond = getRightEncoderVelocity();
+    return wheelSpeeds;
   }
 
   public Pose2d getPose() {
@@ -220,15 +213,19 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   public void setDriveMode(DriveMode driveMode) {
     this.driveMode = driveMode;
+    RobotContainer container = robotComponent.container();
     switch (this.driveMode) {
       case TANK:
-        this.setDefaultCommand(cheezyCommand);
+        this.setDefaultCommand(new RunCommand(
+                () -> tankDrive(container.getLeftY(), container.getRightY()), this));
         break;
       case CHEEZY:
-        this.setDefaultCommand(cheezyCommand);
+        this.setDefaultCommand(new RunCommand(
+                () -> cheezyDrive(container.getLeftY(), container.getRightX()), this));
         break;
       case ARCADE:
-        this.setDefaultCommand(arcadeCommand);
+        this.setDefaultCommand(new RunCommand(
+                () -> arcadeDrive(container.getLeftY(), container.getRightX()), this));
         break;
     }
   }

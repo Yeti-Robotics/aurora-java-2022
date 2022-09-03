@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.NeckConstants;
@@ -13,11 +12,11 @@ public class NeckSubsystem extends SubsystemBase {
   private final DigitalInput lowerBeamBreak;
   private final DigitalInput upperBeamBreak;
 
-  public NeckSubsystem() {
-    frontSpark = new CANSparkMax(NeckConstants.FRONT_INDEXER, MotorType.kBrushless);
-    rearSpark = new CANSparkMax(NeckConstants.REAR_INDEXER, MotorType.kBrushless);
-    lowerBeamBreak = new DigitalInput(NeckConstants.NECK_LOWER_BEAM_BREAK);
-    upperBeamBreak = new DigitalInput(NeckConstants.NECK_UPPER_BEAM_BREAK);
+  public NeckSubsystem(CANSparkMax frontSpark, CANSparkMax rearSpark, DigitalInput lowerBeamBreak, DigitalInput upperBeamBreak) {
+    this.frontSpark = frontSpark;
+    this.rearSpark = rearSpark;
+    this.lowerBeamBreak = lowerBeamBreak;
+    this.upperBeamBreak = upperBeamBreak;
   }
 
   @Override

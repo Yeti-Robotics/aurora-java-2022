@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
 
+import javax.inject.Named;
+
 public class IntakeSubsystem extends SubsystemBase {
 
   public enum IntakeStatus {
@@ -20,16 +22,13 @@ public class IntakeSubsystem extends SubsystemBase {
   private final TalonFX intakeFalcon;
   private final DoubleSolenoid pistons;
 
-  public IntakeSubsystem() {
-    pistons =
-        new DoubleSolenoid(
-            PneumaticsModuleType.CTREPCM,
-            IntakeConstants.INTAKE_PISTONS_SOLENOID[0],
-            IntakeConstants.INTAKE_PISTONS_SOLENOID[1]);
-    intakeFalcon = new TalonFX(IntakeConstants.INTAKE_FALCON);
+  public IntakeSubsystem(
+          @Named("intake pistons") DoubleSolenoid intakePistons,
+          @Named("intake falcon") TalonFX intakeFalcon
+  ) {
+    pistons = intakePistons;
+    this.intakeFalcon = intakeFalcon;
     intakeStatus = IntakeStatus.IN;
-    pistons.set(Value.kForward);
-    intakeFalcon.setInverted(true);
   }
 
   public void extend() {

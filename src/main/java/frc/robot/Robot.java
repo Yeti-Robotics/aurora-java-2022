@@ -23,6 +23,7 @@ import frc.robot.di.DaggerRobotComponent;
 import frc.robot.di.RobotComponent;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TurretSubsystem.TurretLockStatus;
+
 import javax.inject.Inject;
 
 public class Robot extends TimedRobot {
@@ -30,7 +31,6 @@ public class Robot extends TimedRobot {
   private Command beforeBlinkCommand = null;
   private boolean blinkWarningRan = false;
   public CompressorConfigType compressorConfigType;
-  private RobotComponent robotComponent;
   @Inject PowerDistribution revPDH;
   @Inject RobotContainer robotContainer;
 
@@ -51,8 +51,9 @@ public class Robot extends TimedRobot {
   long timer;
 
   public Robot() {
-    robotComponent = DaggerRobotComponent.builder().build();
+    RobotComponent robotComponent = DaggerRobotComponent.builder().build();
     robotComponent.inject(this);
+    robotContainer.setRobotComponent(robotComponent);
   }
 
   @Override

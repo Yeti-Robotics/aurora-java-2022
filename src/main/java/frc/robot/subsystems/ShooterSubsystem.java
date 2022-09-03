@@ -1,9 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.InvertType;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -15,10 +13,10 @@ import frc.robot.Constants.ShooterConstants;
 import frc.robot.utils.Limelight;
 
 public class ShooterSubsystem extends SubsystemBase {
-  private WPI_TalonFX shooterLeftFalcon;
-  private WPI_TalonFX shooterRightFalcon;
+  private final WPI_TalonFX shooterLeftFalcon;
+  private final WPI_TalonFX shooterRightFalcon;
 
-  private MotorControllerGroup shooterFalcons;
+  private final MotorControllerGroup shooterFalcons;
 
   public enum ShooterStatus {
     FORWARD,
@@ -40,17 +38,19 @@ public class ShooterSubsystem extends SubsystemBase {
   public static boolean atSetPoint = false;
   public static boolean isShooting = false;
 
-  private PIDController shooterPID;
-  private SimpleMotorFeedforward feedForward;
+  private final PIDController shooterPID;
+  private final SimpleMotorFeedforward feedForward;
 
-  public ShooterSubsystem() {
-    shooterLeftFalcon = new WPI_TalonFX(ShooterConstants.SHOOTER_LEFT_FALCON);
-    shooterRightFalcon = new WPI_TalonFX(ShooterConstants.SHOOTER_RIGHT_FALCON);
+  public ShooterSubsystem(
+          WPI_TalonFX shooterLeft,
+          WPI_TalonFX shooterRight,
+          PIDController shooterPID,
+          SimpleMotorFeedforward feedForward
+  ) {
+    shooterLeftFalcon = shooterLeft;
+    shooterRightFalcon = shooterRight;
 
     shooterFalcons = new MotorControllerGroup(shooterLeftFalcon, shooterRightFalcon);
-
-    shooterLeftFalcon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
-    shooterRightFalcon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
 
     shooterLeftFalcon.follow(shooterRightFalcon);
     shooterLeftFalcon.setInverted(InvertType.OpposeMaster);
@@ -58,21 +58,8 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterStatus = ShooterStatus.OFF;
     shooterMode = ShooterMode.LIMELIGHT;
 
-    shooterLeftFalcon.setNeutralMode(NeutralMode.Coast);
-    shooterRightFalcon.setNeutralMode(NeutralMode.Coast);
-
-    shooterLeftFalcon.configVoltageCompSaturation(Constants.MOTOR_VOLTAGE_COMP);
-    shooterRightFalcon.configVoltageCompSaturation(Constants.MOTOR_VOLTAGE_COMP);
-
-    shooterLeftFalcon.enableVoltageCompensation(true);
-    shooterRightFalcon.enableVoltageCompensation(true);
-
-    shooterPID =
-        new PIDController(
-            ShooterConstants.SHOOTER_P, ShooterConstants.SHOOTER_I, ShooterConstants.SHOOTER_D);
-    feedForward =
-        new SimpleMotorFeedforward(
-            ShooterConstants.SHOOTER_KS, ShooterConstants.SHOOTER_KV, ShooterConstants.SHOOTER_KA);
+    this.shooterPID = shooterPID;
+    this.feedForward = feedForward;
   }
 
   @Override
@@ -91,7 +78,7 @@ public class ShooterSubsystem extends SubsystemBase {
           // 2991.66667;
           // }
           if (Limelight.getDistance() > 0.0) {
-            ShooterSubsystem.setPoint = ((25 / 3) * Limelight.getDistance()) + 2991.66667;
+            ShooterSubsystem.setPoint = ((25 / 3.0) * Limelight.getDistance()) + 2991.66667;
           }
           shootFlywheel(
               ShooterConstants.SHOOTER_F

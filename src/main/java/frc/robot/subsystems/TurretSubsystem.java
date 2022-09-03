@@ -5,13 +5,12 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.SoftLimitDirection;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.utils.Limelight;
+
 import javax.inject.Inject;
 
 public class TurretSubsystem extends SubsystemBase {
@@ -28,16 +27,11 @@ public class TurretSubsystem extends SubsystemBase {
   public TurretLockStatus lockStatus;
 
   @Inject
-  public TurretSubsystem() {
-    turretSpark = new CANSparkMax(TurretConstants.TURRET_SPARK, MotorType.kBrushless);
-    magSwitch = new DigitalInput(TurretConstants.MAG_SWITCH_PORT);
+  public TurretSubsystem(CANSparkMax turret, DigitalInput magSwitch) {
+    turretSpark = turret;
+    this.magSwitch = magSwitch;
     turretEncoder = turretSpark.getEncoder();
     lockStatus = TurretLockStatus.UNLOCKED;
-
-    turretSpark.enableSoftLimit(SoftLimitDirection.kForward, true);
-    turretSpark.enableSoftLimit(SoftLimitDirection.kReverse, true);
-    turretSpark.setSoftLimit(SoftLimitDirection.kForward, (float) TurretConstants.TURRET_MAX_RIGHT);
-    turretSpark.setSoftLimit(SoftLimitDirection.kReverse, (float) TurretConstants.TURRET_MAX_LEFT);
   }
 
   @Override

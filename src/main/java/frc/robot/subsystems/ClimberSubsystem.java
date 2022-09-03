@@ -10,7 +10,6 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ClimberConstants;
@@ -21,15 +20,11 @@ public class ClimberSubsystem extends SubsystemBase {
   private final WPI_TalonFX climberFalcon2;
   private final DoubleSolenoid climberBrake;
 
-  public ClimberSubsystem() {
-    climberFalcon1 = new WPI_TalonFX(ClimberConstants.CLIMBER_1);
-    climberFalcon2 = new WPI_TalonFX(ClimberConstants.CLIMBER_2);
+  public ClimberSubsystem(WPI_TalonFX climber1, WPI_TalonFX climber2, DoubleSolenoid climberBrake) {
+    climberFalcon1 = climber1;
+    climberFalcon2 = climber2;
 
-    climberBrake =
-        new DoubleSolenoid(
-            PneumaticsModuleType.CTREPCM,
-            ClimberConstants.CLIMBER_BRAKE[0],
-            ClimberConstants.CLIMBER_BRAKE[1]);
+    this.climberBrake = climberBrake;
 
     climberBrake.set(Value.kForward);
 
