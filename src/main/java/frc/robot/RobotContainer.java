@@ -106,6 +106,7 @@ public class RobotContainer {
 
     // Configure the button bindings
     configureButtonBindings(shooterLEDCommand, toggleIntakeCommand);
+    drivetrainSubsystem.setDriveMode(drivetrainSubsystem.getDriveMode());
   }
 
   /**

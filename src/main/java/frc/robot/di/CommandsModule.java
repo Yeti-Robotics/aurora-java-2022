@@ -90,7 +90,7 @@ public class CommandsModule {
           new ToggleFlywheelHighCommand(shooterLEDCommand)
         },
         new Command[] {
-          AutoHelper.runTrajectoryPath(
+          AutoHelper.runTrajectoryJSON(
               drivetrainSubsystem, Constants.AutoConstants.twoBallAlternative),
           new TurnToTargetDriveCommand(drivetrainSubsystem).withTimeout(3.0)
         });
