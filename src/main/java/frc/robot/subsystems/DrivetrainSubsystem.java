@@ -79,7 +79,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     odometry = new DifferentialDriveOdometry(gyro.getRotation2d());
 
     driveMode = DriveMode.CHEEZY;
-//    setDriveMode(DriveMode.CHEEZY);
+    //    setDriveMode(DriveMode.CHEEZY);
 
     this.drivePID = drivePID;
     wheelSpeeds = diffWheelSpeeds;
