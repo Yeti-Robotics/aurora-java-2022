@@ -12,7 +12,11 @@ public class NeckSubsystem extends SubsystemBase {
   private final DigitalInput lowerBeamBreak;
   private final DigitalInput upperBeamBreak;
 
-  public NeckSubsystem(CANSparkMax frontSpark, CANSparkMax rearSpark, DigitalInput lowerBeamBreak, DigitalInput upperBeamBreak) {
+  public NeckSubsystem(
+      CANSparkMax frontSpark,
+      CANSparkMax rearSpark,
+      DigitalInput lowerBeamBreak,
+      DigitalInput upperBeamBreak) {
     this.frontSpark = frontSpark;
     this.rearSpark = rearSpark;
     this.lowerBeamBreak = lowerBeamBreak;

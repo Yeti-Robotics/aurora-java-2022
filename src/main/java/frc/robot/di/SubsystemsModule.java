@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.*;
-
 import javax.inject.Named;
 import javax.inject.Singleton;
 
@@ -32,9 +31,8 @@ public class SubsystemsModule {
   @Provides
   @Named("intake")
   public Subsystem provideIntakeSubsystem(
-          @Named("intake pistons") DoubleSolenoid intakePistons,
-          @Named("intake falcon") TalonFX intakeFalcon
-  ) {
+      @Named("intake pistons") DoubleSolenoid intakePistons,
+      @Named("intake falcon") TalonFX intakeFalcon) {
     return new IntakeSubsystem(intakePistons, intakeFalcon);
   }
 
@@ -49,11 +47,10 @@ public class SubsystemsModule {
   @Provides
   @Named("neck")
   public Subsystem provideNeckSubsystem(
-          @Named("front spark") CANSparkMax frontSpark,
-          @Named("rear spark") CANSparkMax rearSpark,
-          @Named("lower beam break") DigitalInput lowerBeamBreak,
-          @Named("upper beam break") DigitalInput upperBeamBreak
-  ) {
+      @Named("front spark") CANSparkMax frontSpark,
+      @Named("rear spark") CANSparkMax rearSpark,
+      @Named("lower beam break") DigitalInput lowerBeamBreak,
+      @Named("upper beam break") DigitalInput upperBeamBreak) {
     return new NeckSubsystem(frontSpark, rearSpark, lowerBeamBreak, upperBeamBreak);
   }
 
@@ -61,9 +58,7 @@ public class SubsystemsModule {
   @Provides
   @Named("turret")
   public Subsystem provideTurretSubsystem(
-          @Named("turret spark") CANSparkMax turret,
-          @Named("mag switch") DigitalInput magSwitch
-  ) {
+      @Named("turret spark") CANSparkMax turret, @Named("mag switch") DigitalInput magSwitch) {
     return new TurretSubsystem(turret, magSwitch);
   }
 
@@ -71,10 +66,10 @@ public class SubsystemsModule {
   @Provides
   @Named("shooter")
   public Subsystem provideShooterSubsystem(
-          @Named("shooter left") WPI_TalonFX shooterLeft,
-          @Named("shooter right") WPI_TalonFX shooterRight,
-          @Named("shooter pid") PIDController pidController,
-          @Named("feed forward")SimpleMotorFeedforward feedForward) {
+      @Named("shooter left") WPI_TalonFX shooterLeft,
+      @Named("shooter right") WPI_TalonFX shooterRight,
+      @Named("shooter pid") PIDController pidController,
+      @Named("feed forward") SimpleMotorFeedforward feedForward) {
     return new ShooterSubsystem(shooterLeft, shooterRight, pidController, feedForward);
   }
 
@@ -82,10 +77,9 @@ public class SubsystemsModule {
   @Provides
   @Named("climber")
   public Subsystem provideClimberSubsystem(
-          @Named("climber 1") WPI_TalonFX climber1,
-          @Named("climber 2") WPI_TalonFX climber2,
-          @Named("climber brake")DoubleSolenoid climberBrake
-          ) {
+      @Named("climber 1") WPI_TalonFX climber1,
+      @Named("climber 2") WPI_TalonFX climber2,
+      @Named("climber brake") DoubleSolenoid climberBrake) {
     return new ClimberSubsystem(climber1, climber2, climberBrake);
   }
 
@@ -93,24 +87,22 @@ public class SubsystemsModule {
   @Provides
   @Named("drivetrain")
   public Subsystem provideDrivetrainSubsystem(
-          RobotComponent robotComponent,
-          @Named("left drive 1") WPI_TalonFX leftDrive1,
-          @Named("left drive 2") WPI_TalonFX leftDrive2,
-          @Named("right drive 1") WPI_TalonFX rightDrive1,
-          @Named("right drive 2") WPI_TalonFX rightDrive2,
-          AHRS gyro,
-          @Named("drive PID") PIDController drivePID,
-          DifferentialDriveWheelSpeeds diffWheelSpeeds
-  ) {
+      RobotComponent robotComponent,
+      @Named("left drive 1") WPI_TalonFX leftDrive1,
+      @Named("left drive 2") WPI_TalonFX leftDrive2,
+      @Named("right drive 1") WPI_TalonFX rightDrive1,
+      @Named("right drive 2") WPI_TalonFX rightDrive2,
+      AHRS gyro,
+      @Named("drive PID") PIDController drivePID,
+      DifferentialDriveWheelSpeeds diffWheelSpeeds) {
     return new DrivetrainSubsystem(
-            robotComponent,
-            leftDrive1,
-            leftDrive2,
-            rightDrive1,
-            rightDrive2,
-            gyro,
-            drivePID,
-            diffWheelSpeeds
-    );
+        robotComponent,
+        leftDrive1,
+        leftDrive2,
+        rightDrive1,
+        rightDrive2,
+        gyro,
+        drivePID,
+        diffWheelSpeeds);
   }
 }

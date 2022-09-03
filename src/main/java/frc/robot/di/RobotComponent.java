@@ -4,7 +4,6 @@ import dagger.Component;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.commands.turret.TurretLockCommand;
-
 import javax.inject.Singleton;
 
 @Singleton
@@ -16,6 +15,8 @@ public interface RobotComponent {
   }
 
   void inject(Robot robot);
+
   RobotContainer container();
+
   TurretLockCommand turretLockCommand();
 }

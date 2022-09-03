@@ -23,7 +23,6 @@ import frc.robot.di.DaggerRobotComponent;
 import frc.robot.di.RobotComponent;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TurretSubsystem.TurretLockStatus;
-
 import javax.inject.Inject;
 
 public class Robot extends TimedRobot {

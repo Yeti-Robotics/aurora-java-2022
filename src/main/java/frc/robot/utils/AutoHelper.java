@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.subsystems.DrivetrainSubsystem;
-
 import java.io.IOException;
 import java.nio.file.Path;
 
@@ -39,7 +38,8 @@ public class AutoHelper {
   }
 
   // for PathWeaver
-  public static Command runTrajectoryJSON(DrivetrainSubsystem drivetrainSubsystem, String trajectoryJSON) {
+  public static Command runTrajectoryJSON(
+      DrivetrainSubsystem drivetrainSubsystem, String trajectoryJSON) {
     Trajectory trajectory = loadTrajectoryJSON(trajectoryJSON);
 
     RamseteCommand ramseteCommand =
@@ -61,7 +61,8 @@ public class AutoHelper {
   }
 
   // for PathPlanner
-  public static Command runTrajectoryPath(DrivetrainSubsystem drivetrainSubsystem, String trajectoryPath) {
+  public static Command runTrajectoryPath(
+      DrivetrainSubsystem drivetrainSubsystem, String trajectoryPath) {
     Trajectory trajectory = loadTrajectoryPath(trajectoryPath);
 
     RamseteCommand ramseteCommand =

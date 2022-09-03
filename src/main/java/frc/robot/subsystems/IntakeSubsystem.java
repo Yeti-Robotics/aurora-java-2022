@@ -3,11 +3,8 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
-
 import javax.inject.Named;
 
 public class IntakeSubsystem extends SubsystemBase {
@@ -23,9 +20,8 @@ public class IntakeSubsystem extends SubsystemBase {
   private final DoubleSolenoid pistons;
 
   public IntakeSubsystem(
-          @Named("intake pistons") DoubleSolenoid intakePistons,
-          @Named("intake falcon") TalonFX intakeFalcon
-  ) {
+      @Named("intake pistons") DoubleSolenoid intakePistons,
+      @Named("intake falcon") TalonFX intakeFalcon) {
     pistons = intakePistons;
     this.intakeFalcon = intakeFalcon;
     intakeStatus = IntakeStatus.IN;

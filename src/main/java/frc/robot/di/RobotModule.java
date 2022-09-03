@@ -21,7 +21,6 @@ import frc.robot.commands.LED.ShooterLEDCommand;
 import frc.robot.commands.intake.ToggleIntakeCommand;
 import frc.robot.subsystems.*;
 import frc.robot.utils.AutoHelper;
-
 import javax.inject.Named;
 import javax.inject.Singleton;
 
@@ -30,47 +29,45 @@ public class RobotModule {
   @Singleton
   @Provides
   public RobotContainer provideRobotContainer(
-          RobotComponent robotComponent,
-          Joystick driverJoystick,
-          @Named("climber") Subsystem climberSubsystem,
-          @Named("drivetrain") Subsystem drivetrainSubsystem,
-          @Named("intake") Subsystem intakeSubsystem,
-          @Named("led") Subsystem ledSubsystem,
-          @Named("neck") Subsystem neckSubsystem,
-          @Named("shifting") Subsystem shiftingSubsystem,
-          @Named("shooter") Subsystem shooterSubsystem,
-          @Named("turret") Subsystem turretSubsystem,
-          ShooterLEDCommand shooterLEDCommand,
-          ToggleIntakeCommand toggleIntakeCommand,
-          @Named("two ball") Command twoBall,
-          @Named("two ball alt") Command twoBallAlt,
-          @Named("one ball") Command oneBall,
-          @Named("four ball") Command fourBall,
-          @Named("three ball") Command threeBall,
-          @Named("two ball dump") Command twoBallDump,
-          @Named("test auto") Command testAuto
-          ) {
+      RobotComponent robotComponent,
+      Joystick driverJoystick,
+      @Named("climber") Subsystem climberSubsystem,
+      @Named("drivetrain") Subsystem drivetrainSubsystem,
+      @Named("intake") Subsystem intakeSubsystem,
+      @Named("led") Subsystem ledSubsystem,
+      @Named("neck") Subsystem neckSubsystem,
+      @Named("shifting") Subsystem shiftingSubsystem,
+      @Named("shooter") Subsystem shooterSubsystem,
+      @Named("turret") Subsystem turretSubsystem,
+      ShooterLEDCommand shooterLEDCommand,
+      ToggleIntakeCommand toggleIntakeCommand,
+      @Named("two ball") Command twoBall,
+      @Named("two ball alt") Command twoBallAlt,
+      @Named("one ball") Command oneBall,
+      @Named("four ball") Command fourBall,
+      @Named("three ball") Command threeBall,
+      @Named("two ball dump") Command twoBallDump,
+      @Named("test auto") Command testAuto) {
     return new RobotContainer(
-            robotComponent,
-            driverJoystick,
-            (ClimberSubsystem) climberSubsystem,
-            (DrivetrainSubsystem) drivetrainSubsystem,
-            (IntakeSubsystem) intakeSubsystem,
-            (LEDSubsystem) ledSubsystem,
-            (NeckSubsystem) neckSubsystem,
-            (ShiftingSubsystem) shiftingSubsystem,
-            (ShooterSubsystem) shooterSubsystem,
-            (TurretSubsystem) turretSubsystem,
-            shooterLEDCommand,
-            toggleIntakeCommand,
-            twoBall,
-            twoBallAlt,
-            oneBall,
-            fourBall,
-            threeBall,
-            twoBallDump,
-            testAuto
-    );
+        robotComponent,
+        driverJoystick,
+        (ClimberSubsystem) climberSubsystem,
+        (DrivetrainSubsystem) drivetrainSubsystem,
+        (IntakeSubsystem) intakeSubsystem,
+        (LEDSubsystem) ledSubsystem,
+        (NeckSubsystem) neckSubsystem,
+        (ShiftingSubsystem) shiftingSubsystem,
+        (ShooterSubsystem) shooterSubsystem,
+        (TurretSubsystem) turretSubsystem,
+        shooterLEDCommand,
+        toggleIntakeCommand,
+        twoBall,
+        twoBallAlt,
+        oneBall,
+        fourBall,
+        threeBall,
+        twoBallDump,
+        testAuto);
   }
 
   /****** Robot Class Dependencies ******/
@@ -103,9 +100,9 @@ public class RobotModule {
   @Named("climber brake")
   public DoubleSolenoid provideClimberBrake() {
     return new DoubleSolenoid(
-            PneumaticsModuleType.CTREPCM,
-            Constants.ClimberConstants.CLIMBER_BRAKE[0],
-            Constants.ClimberConstants.CLIMBER_BRAKE[1]);
+        PneumaticsModuleType.CTREPCM,
+        Constants.ClimberConstants.CLIMBER_BRAKE[0],
+        Constants.ClimberConstants.CLIMBER_BRAKE[1]);
   }
 
   /****** Drivetrain Subsystem Dependencies ******/
@@ -161,10 +158,9 @@ public class RobotModule {
   @Named("drive PID")
   public PIDController provideDrivePid() {
     return new PIDController(
-            Constants.DriveConstants.DRIVE_P,
-            Constants.DriveConstants.DRIVE_I,
-            Constants.DriveConstants.DRIVE_D
-    );
+        Constants.DriveConstants.DRIVE_P,
+        Constants.DriveConstants.DRIVE_I,
+        Constants.DriveConstants.DRIVE_D);
   }
 
   @Provides
@@ -178,7 +174,8 @@ public class RobotModule {
   @Provides
   @Named("intake pistons")
   public DoubleSolenoid provideIntakePistons() {
-    DoubleSolenoid pistons = new DoubleSolenoid(
+    DoubleSolenoid pistons =
+        new DoubleSolenoid(
             PneumaticsModuleType.CTREPCM,
             Constants.IntakeConstants.INTAKE_PISTONS_SOLENOID[0],
             Constants.IntakeConstants.INTAKE_PISTONS_SOLENOID[1]);
@@ -210,13 +207,15 @@ public class RobotModule {
   @Provides
   @Named("front spark")
   public CANSparkMax providesFrontSpark() {
-    return new CANSparkMax(Constants.NeckConstants.FRONT_INDEXER, CANSparkMaxLowLevel.MotorType.kBrushless);
+    return new CANSparkMax(
+        Constants.NeckConstants.FRONT_INDEXER, CANSparkMaxLowLevel.MotorType.kBrushless);
   }
 
   @Provides
   @Named("rear spark")
   public CANSparkMax providesRearSpark() {
-    return new CANSparkMax(Constants.NeckConstants.REAR_INDEXER, CANSparkMaxLowLevel.MotorType.kBrushless);
+    return new CANSparkMax(
+        Constants.NeckConstants.REAR_INDEXER, CANSparkMaxLowLevel.MotorType.kBrushless);
   }
 
   @Provides
@@ -237,9 +236,9 @@ public class RobotModule {
   @Named("shifter")
   public DoubleSolenoid providesShifter() {
     return new DoubleSolenoid(
-            PneumaticsModuleType.CTREPCM,
-            Constants.DriveConstants.SOLENOID_SHIFTER[0],
-            Constants.DriveConstants.SOLENOID_SHIFTER[1]);
+        PneumaticsModuleType.CTREPCM,
+        Constants.DriveConstants.SOLENOID_SHIFTER[0],
+        Constants.DriveConstants.SOLENOID_SHIFTER[1]);
   }
 
   /****** Shooter Subsystem Dependencies ******/
@@ -272,20 +271,18 @@ public class RobotModule {
   @Named("shooter pid")
   public PIDController provideShooterPidController() {
     return new PIDController(
-            Constants.ShooterConstants.SHOOTER_P,
-            Constants.ShooterConstants.SHOOTER_I,
-            Constants.ShooterConstants.SHOOTER_D
-    );
+        Constants.ShooterConstants.SHOOTER_P,
+        Constants.ShooterConstants.SHOOTER_I,
+        Constants.ShooterConstants.SHOOTER_D);
   }
 
   @Provides
   @Named("feed forward")
   public SimpleMotorFeedforward provideFeedForward() {
     return new SimpleMotorFeedforward(
-            Constants.ShooterConstants.SHOOTER_KS,
-            Constants.ShooterConstants.SHOOTER_KV,
-            Constants.ShooterConstants.SHOOTER_KA
-    );
+        Constants.ShooterConstants.SHOOTER_KS,
+        Constants.ShooterConstants.SHOOTER_KV,
+        Constants.ShooterConstants.SHOOTER_KA);
   }
 
   /****** Turret Subsystem Dependencies ******/
@@ -293,11 +290,16 @@ public class RobotModule {
   @Provides
   @Named("turret spark")
   public CANSparkMax provideTurretSpark() {
-    CANSparkMax spark = new CANSparkMax(Constants.TurretConstants.TURRET_SPARK, CANSparkMaxLowLevel.MotorType.kBrushless);
+    CANSparkMax spark =
+        new CANSparkMax(
+            Constants.TurretConstants.TURRET_SPARK, CANSparkMaxLowLevel.MotorType.kBrushless);
     spark.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
     spark.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
-    spark.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, (float) Constants.TurretConstants.TURRET_MAX_RIGHT);
-    spark.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, (float) Constants.TurretConstants.TURRET_MAX_LEFT);
+    spark.setSoftLimit(
+        CANSparkMax.SoftLimitDirection.kForward,
+        (float) Constants.TurretConstants.TURRET_MAX_RIGHT);
+    spark.setSoftLimit(
+        CANSparkMax.SoftLimitDirection.kReverse, (float) Constants.TurretConstants.TURRET_MAX_LEFT);
     return spark;
   }
 
@@ -311,5 +313,4 @@ public class RobotModule {
   public AutoHelper providesAutoBuilder() {
     return new AutoHelper();
   }
-
 }

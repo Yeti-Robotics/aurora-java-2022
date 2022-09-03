@@ -30,7 +30,6 @@ import frc.robot.subsystems.*;
 import frc.robot.subsystems.ShooterSubsystem.ShooterMode;
 import frc.robot.utils.JoyButton;
 import frc.robot.utils.JoyButton.ActiveState;
-
 import javax.inject.Inject;
 
 /**
@@ -54,8 +53,9 @@ public class RobotContainer {
   public boolean shooterMode = true; // false = turretMode
   private RobotComponent robotComponent;
 
-  /** Auto command lists **/
+  /** Auto command lists * */
   private final Command twoBallAuto;
+
   private final Command twoBallAlt;
   private final Command oneBallAuto;
   private final Command fourBallAuto;
@@ -66,26 +66,25 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   @Inject
   public RobotContainer(
-          RobotComponent robotComponent,
-          Joystick driverJoystick,
-          ClimberSubsystem climberSubsystem,
-          DrivetrainSubsystem drivetrainSubsystem,
-          IntakeSubsystem intakeSubsystem,
-          LEDSubsystem ledSubsystem,
-          NeckSubsystem neckSubsystem,
-          ShiftingSubsystem shiftingSubsystem,
-          ShooterSubsystem shooterSubsystem,
-          TurretSubsystem turretSubsystem,
-          ShooterLEDCommand shooterLEDCommand,
-          ToggleIntakeCommand toggleIntakeCommand,
-          Command twoBall,
-          Command twoBallAlt,
-          Command oneBallAuto,
-          Command fourBallAuto,
-          Command threeBallAuto,
-          Command twoBallDump,
-          Command testAuto
-  ) {
+      RobotComponent robotComponent,
+      Joystick driverJoystick,
+      ClimberSubsystem climberSubsystem,
+      DrivetrainSubsystem drivetrainSubsystem,
+      IntakeSubsystem intakeSubsystem,
+      LEDSubsystem ledSubsystem,
+      NeckSubsystem neckSubsystem,
+      ShiftingSubsystem shiftingSubsystem,
+      ShooterSubsystem shooterSubsystem,
+      TurretSubsystem turretSubsystem,
+      ShooterLEDCommand shooterLEDCommand,
+      ToggleIntakeCommand toggleIntakeCommand,
+      Command twoBall,
+      Command twoBallAlt,
+      Command oneBallAuto,
+      Command fourBallAuto,
+      Command threeBallAuto,
+      Command twoBallDump,
+      Command testAuto) {
     driverStationJoystick = driverJoystick;
     this.ledSubsystem = ledSubsystem;
     this.intakeSubsystem = intakeSubsystem;
@@ -115,7 +114,8 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings(ShooterLEDCommand shooterLEDCommand, ToggleIntakeCommand toggleIntakeCommand) {
+  private void configureButtonBindings(
+      ShooterLEDCommand shooterLEDCommand, ToggleIntakeCommand toggleIntakeCommand) {
     setJoystickButtonWhenPressed(12, toggleIntakeCommand);
     // TODO: Consider loading this from a resource
     setConditionalButton(
@@ -287,5 +287,4 @@ public class RobotContainer {
   public void setRobotComponent(RobotComponent robotComponent) {
     this.robotComponent = robotComponent;
   }
-
 }

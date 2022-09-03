@@ -15,7 +15,6 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.RobotContainer;
 import frc.robot.di.RobotComponent;
 import frc.robot.subsystems.ShiftingSubsystem.ShiftStatus;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -49,15 +48,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   @Inject
   public DrivetrainSubsystem(
-          RobotComponent component,
-          @Named("left drive 1") WPI_TalonFX leftDrive1,
-          @Named("left drive 2") WPI_TalonFX leftDrive2,
-          @Named("right drive 1") WPI_TalonFX rightDrive1,
-          @Named("right drive 2") WPI_TalonFX rightDrive2,
-          AHRS gyro,
-          @Named("drive PID") PIDController drivePID,
-          DifferentialDriveWheelSpeeds diffWheelSpeeds
-  ) {
+      RobotComponent component,
+      @Named("left drive 1") WPI_TalonFX leftDrive1,
+      @Named("left drive 2") WPI_TalonFX leftDrive2,
+      @Named("right drive 1") WPI_TalonFX rightDrive1,
+      @Named("right drive 2") WPI_TalonFX rightDrive2,
+      AHRS gyro,
+      @Named("drive PID") PIDController drivePID,
+      DifferentialDriveWheelSpeeds diffWheelSpeeds) {
     robotComponent = component;
     leftFalcon1 = leftDrive1;
     leftFalcon2 = leftDrive2;
@@ -216,16 +214,16 @@ public class DrivetrainSubsystem extends SubsystemBase {
     RobotContainer container = robotComponent.container();
     switch (this.driveMode) {
       case TANK:
-        this.setDefaultCommand(new RunCommand(
-                () -> tankDrive(container.getLeftY(), container.getRightY()), this));
+        this.setDefaultCommand(
+            new RunCommand(() -> tankDrive(container.getLeftY(), container.getRightY()), this));
         break;
       case CHEEZY:
-        this.setDefaultCommand(new RunCommand(
-                () -> cheezyDrive(container.getLeftY(), container.getRightX()), this));
+        this.setDefaultCommand(
+            new RunCommand(() -> cheezyDrive(container.getLeftY(), container.getRightX()), this));
         break;
       case ARCADE:
-        this.setDefaultCommand(new RunCommand(
-                () -> arcadeDrive(container.getLeftY(), container.getRightX()), this));
+        this.setDefaultCommand(
+            new RunCommand(() -> arcadeDrive(container.getLeftY(), container.getRightX()), this));
         break;
     }
   }

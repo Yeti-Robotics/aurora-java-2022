@@ -42,11 +42,10 @@ public class ShooterSubsystem extends SubsystemBase {
   private final SimpleMotorFeedforward feedForward;
 
   public ShooterSubsystem(
-          WPI_TalonFX shooterLeft,
-          WPI_TalonFX shooterRight,
-          PIDController shooterPID,
-          SimpleMotorFeedforward feedForward
-  ) {
+      WPI_TalonFX shooterLeft,
+      WPI_TalonFX shooterRight,
+      PIDController shooterPID,
+      SimpleMotorFeedforward feedForward) {
     shooterLeftFalcon = shooterLeft;
     shooterRightFalcon = shooterRight;
 
