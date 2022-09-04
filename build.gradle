@@ -20,6 +20,11 @@ sourceSets {
             srcDirs = ['src/main/java', 'build/generated/sources/annotationProcessor/java/main']
         }
     }
+    test {
+        java {
+            srcDirs = ['src/test/java', 'src/main/java', 'build/generated/sources/annotationProcessor/java/main']
+        }
+    }
 }
 
 // Define my targets (RoboRIO) and artifacts (deployable files)
@@ -82,7 +87,8 @@ dependencies {
     nativeRelease wpi.java.vendor.jniRelease(wpi.platforms.desktop)
     simulationRelease wpi.sim.enableRelease()
 
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.mockito:mockito-core:4.7.0'
 }
 
 // Simulation configuration (e.g. environment variables).

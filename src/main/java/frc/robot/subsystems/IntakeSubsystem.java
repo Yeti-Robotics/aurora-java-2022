@@ -2,12 +2,13 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
 import javax.inject.Named;
 
-public class IntakeSubsystem extends SubsystemBase {
+public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
 
   public enum IntakeStatus {
     OUT,
@@ -21,10 +22,15 @@ public class IntakeSubsystem extends SubsystemBase {
 
   public IntakeSubsystem(
       @Named("intake pistons") DoubleSolenoid intakePistons,
-      @Named("intake falcon") TalonFX intakeFalcon) {
+      @Named("intake falcon") WPI_TalonFX intakeFalcon) {
     pistons = intakePistons;
     this.intakeFalcon = intakeFalcon;
     intakeStatus = IntakeStatus.IN;
+  }
+
+  @Override
+  public void close() throws Exception {
+    pistons.close();
   }
 
   public void extend() {
@@ -58,7 +64,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public IntakeStatus getIntakePostion() {
-    return intakeStatus;
+    return pistons.get() == DoubleSolenoid.Value.kForward ? IntakeStatus.IN : IntakeStatus.OUT;
   }
 
   public IntakeStatus getIntakePositionDown() {

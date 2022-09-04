@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ClimberConstants;
 
-public class ClimberSubsystem extends SubsystemBase {
+public class ClimberSubsystem extends SubsystemBase implements AutoCloseable {
 
   private final WPI_TalonFX climberFalcon1;
   private final WPI_TalonFX climberFalcon2;
@@ -94,5 +94,10 @@ public class ClimberSubsystem extends SubsystemBase {
 
   public void toggleClimberBrake() {
     climberBrake.toggle();
+  }
+
+  @Override
+  public void close() throws Exception {
+    climberBrake.close();
   }
 }

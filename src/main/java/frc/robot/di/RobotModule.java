@@ -2,7 +2,6 @@ package frc.robot.di;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
@@ -21,6 +20,7 @@ import frc.robot.commands.LED.ShooterLEDCommand;
 import frc.robot.commands.intake.ToggleIntakeCommand;
 import frc.robot.subsystems.*;
 import frc.robot.utils.AutoHelper;
+
 import javax.inject.Named;
 import javax.inject.Singleton;
 
@@ -185,8 +185,8 @@ public class RobotModule {
 
   @Provides
   @Named("intake falcon")
-  public TalonFX provideIntakeFalcon() {
-    TalonFX intakeFalcon = new TalonFX(Constants.IntakeConstants.INTAKE_FALCON);
+  public WPI_TalonFX provideIntakeFalcon() {
+    WPI_TalonFX intakeFalcon = new WPI_TalonFX(Constants.IntakeConstants.INTAKE_FALCON);
     intakeFalcon.setInverted(true);
     return intakeFalcon;
   }

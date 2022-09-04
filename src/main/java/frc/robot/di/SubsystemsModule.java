@@ -32,7 +32,7 @@ public class SubsystemsModule {
   @Named("intake")
   public Subsystem provideIntakeSubsystem(
       @Named("intake pistons") DoubleSolenoid intakePistons,
-      @Named("intake falcon") TalonFX intakeFalcon) {
+      @Named("intake falcon") WPI_TalonFX intakeFalcon) {
     return new IntakeSubsystem(intakePistons, intakeFalcon);
   }
 
