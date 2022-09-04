@@ -20,7 +20,6 @@ import frc.robot.commands.LED.ShooterLEDCommand;
 import frc.robot.commands.intake.ToggleIntakeCommand;
 import frc.robot.subsystems.*;
 import frc.robot.utils.AutoHelper;
-
 import javax.inject.Named;
 import javax.inject.Singleton;
 
