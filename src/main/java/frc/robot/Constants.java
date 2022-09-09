@@ -110,9 +110,13 @@ public final class Constants {
     public static final int SHOOTER_FRONT_FALCON = 8;
     public static final int SHOOTER_BACK_FALCON = 7;
 
-    public static final double SHOOTER_P = 0.00015;
-    public static final double SHOOTER_I = 0.0;
-    public static final double SHOOTER_D = 0.00001;
+    public static final double FRONT_SHOOTER_P = 0.00015;
+    public static final double FRONT_SHOOTER_I = 0.0;
+    public static final double FRONT_SHOOTER_D = 0.00001;
+
+    public static final double BACK_SHOOTER_P = 0.00015;
+    public static final double BACK_SHOOTER_I = 0.0;
+    public static final double BACK_SHOOTER_D = 0.00001;
     public static final double SHOOTER_F = 0.4;
 
     public static final double SHOOTER_MAX_VEL = 12242.5; // in native encoder units per 100 ms
@@ -126,7 +130,8 @@ public final class Constants {
     public static final double SHOOTER_LOW_SPEED = 0.2; // for low goal shots
 
     // shooter rpm calc constants
-    public static final double PULLEY_RATIO = 48.0 / 36.0; // not completely known
+    public static final double FRONT_GEAR_RATIO = 4.0 / 3.0;
+    public static final double BACK_GEAR_RATIO = 8.0 / 3.0;
     public static final double ENCODER_TIME_CONVERSION = 600.0; // 100 ms per minute
     public static final double ENCODER_RESOLUTION = 2048.0;
     public static final double QUAD_FACTOR = 4.0; // quadrature encoder factor
