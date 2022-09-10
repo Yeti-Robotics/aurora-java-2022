@@ -13,7 +13,8 @@ public class SpinShooterVelocityCommand extends CommandBase {
   private final double frontVel;
   private final double backVel;
 
-  public SpinShooterVelocityCommand(ShooterSubsystem shooterSubsystem, double frontVel, double backVel) {
+  public SpinShooterVelocityCommand(
+      ShooterSubsystem shooterSubsystem, double frontVel, double backVel) {
     this.shooterSubsystem = shooterSubsystem;
     this.frontVel = frontVel;
     this.backVel = backVel;

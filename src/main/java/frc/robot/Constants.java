@@ -115,7 +115,6 @@ public final class Constants {
     public static final double FRONT_SHOOTER_D = 0.0;
     public static final double FRONT_SHOOTER_F = 0.0;
 
-
     public static final double BACK_SHOOTER_P = 0.0;
     public static final double BACK_SHOOTER_I = 0.0;
     public static final double BACK_SHOOTER_D = 0.0;

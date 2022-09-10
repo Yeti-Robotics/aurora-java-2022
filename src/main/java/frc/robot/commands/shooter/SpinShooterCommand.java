@@ -13,7 +13,8 @@ public class SpinShooterCommand extends CommandBase {
   private final double frontPower;
   private final double backPower;
 
-  public SpinShooterCommand(ShooterSubsystem shooterSubsystem, double frontPower, double backPower) {
+  public SpinShooterCommand(
+      ShooterSubsystem shooterSubsystem, double frontPower, double backPower) {
     this.shooterSubsystem = shooterSubsystem;
     this.frontPower = frontPower;
     this.backPower = backPower;

@@ -92,7 +92,7 @@ public class AutoBuilder {
     subsystemCommandGroup.addCommands(
         new DriveForDistanceCommand(robotContainer.drivetrainSubsystem, 48.0, -0.2),
         // new InstantCommand(
-            // () -> ShooterSubsystem.setPoint = ((25 / 3) * PhotonVision.getDistance()) + 2991.66667),
+        // () -> ShooterSubsystem.setPoint = ((25 / 3) * PhotonVision.getDistance()) + 2991.66667),
         new ToggleFlywheelHighCommand(shooterLEDCommand),
         new WaitCommand(1.0),
         new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem)
