@@ -2,17 +2,13 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
-import frc.robot.utils.Limelight;
 
 public class ShooterSubsystem extends SubsystemBase {
     private final WPI_TalonFX frontFalcon;
@@ -33,8 +29,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public static ShooterMode shooterMode;
 
-    public static double setPoint = 0.0;
-    public static boolean atSetPoint = false;
+    public static double frontSetPoint = 0.0;
+    public static double backSetPoint = 0.0;
+    public static boolean frontAtSetPoint = false;
+    public static boolean backAtSetPoint = false;
     public static boolean isShooting = false;
 
     private PIDController frontShooterPID;
@@ -74,77 +72,98 @@ public class ShooterSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        ShooterSubsystem.atSetPoint = shooterStatus == ShooterStatus.FORWARD;
-        SmartDashboard.putNumber("Flywheel Set Point: ", ShooterSubsystem.setPoint);
-        SmartDashboard.putNumber("Flywheel Voltage", backFalcon.getMotorOutputVoltage());
+        SmartDashboard.putNumber("Front Set Point: ", frontSetPoint);
+        SmartDashboard.putNumber("Back Set Point: ", backSetPoint);
 
         if (shooterStatus == ShooterStatus.OFF) {
-            stopFlywheel();
+            stopFlywheels();
             return;
         }
 
         if (shooterMode == ShooterMode.HIGH_GOAL) {
-            if (Limelight.getDistance() > 0.0) {
-                ShooterSubsystem.setPoint = ((25 / 3) * Limelight.getDistance()) + 2991.66667;
-            }
-            shootFlywheel(
-                    ShooterConstants.SHOOTER_F
-                            + shooterPID.calculate(getFlywheelRPM(), ShooterSubsystem.setPoint));
+            // setSetPoint(some equation lol); TODO
+            shootFlywheels(
+                ShooterConstants.FRONT_SHOOTER_F + frontShooterPID.calculate(getFrontFlywheelSurfaceVelocity(), frontSetPoint), 
+                ShooterConstants.BACK_SHOOTER_F + backShooterPID.calculate(getBackFlywheelSurfaceVelocity(), backSetPoint));
         } else {
-            shootFlywheel(ShooterConstants.SHOOTER_LOW_SPEED);
+            shootFlywheels(ShooterConstants.FRONT_LOW_SPEED, ShooterConstants.BACK_LOW_SPEED);
         }
     }
 
-    public void shootFlywheel(double speed) {
-        backFalcon.set(ControlMode.PercentOutput, speed);
-        shooterStatus = ShooterStatus.FORWARD;
+    /**
+     * Runs both sides of the flywheel at a PERCENT power. 
+     * @param frontSpeed the desired percent speed of the front flywheel; [-1, 1]
+     * @param backSpeed the desired percent speed of the back flywheel; [-1, 1]
+     */
+    public void shootFlywheels(double frontSpeed, double backSpeed) {
+        frontFalcon.set(ControlMode.PercentOutput, frontSpeed);
+        backFalcon.set(ControlMode.PercentOutput, backSpeed);
+
+        shooterStatus = (frontSpeed > 0.0 && backSpeed > 0.0) ? ShooterStatus.FORWARD : ShooterStatus.BACKWARDS;
     }
 
-    public void setFlywheelVelocity(double vel) {
-        backFalcon.set(ControlMode.Velocity, vel);
-        shooterStatus = ShooterStatus.FORWARD;
+    /**
+     * Runs both sides of the flywheel in units of ENCODER_CLICKS / 100 milliseconds. 
+     * @param frontVel the desired velocity of the front flywheel, clicks per 100 ms
+     * @param backVel the desired velocity of the back flywheel, clicks per 100 ms
+     */
+    public void setFlywheelVelocities(double frontVel, double backVel) {
+        frontFalcon.set(ControlMode.Velocity, frontVel);
+        backFalcon.set(ControlMode.Velocity, backVel);
+
+        shooterStatus = (frontVel > 0.0 && backVel > 0.0) ? ShooterStatus.FORWARD : ShooterStatus.BACKWARDS;
     }
 
-    public void setFlywheelVoltage(double volts) {
-        shooterFalcons.setVoltage(volts);
-        shooterStatus = ShooterStatus.FORWARD;
-    }
-
-    public void reverseFlywheel(double speed) {
-        backFalcon.set(ControlMode.PercentOutput, speed);
-        shooterStatus = ShooterStatus.BACKWARDS;
-    }
-
-    public void stopFlywheel() {
+    /**
+     * Stops running both flywheels. 
+     */
+    public void stopFlywheels() {
+        frontFalcon.set(ControlMode.PercentOutput, 0.0);
         backFalcon.set(ControlMode.PercentOutput, 0.0);
-        // shooterFalcons.set(0.0);
+        
         shooterStatus = ShooterStatus.OFF;
     }
 
-    public double getLeftEncoder() {
+    public double getFrontEncoder() {
         return frontFalcon.getSelectedSensorVelocity();
     }
 
-    public double getRightEncoder() {
+    public double getBackEncoder() {
         return backFalcon.getSelectedSensorVelocity();
     }
 
-    public double getAverageEncoder() {
-        return (getLeftEncoder() + getRightEncoder()) / 2.0;
-    }
-
-    public double getFlywheelRPM() {
-        return getAverageEncoder()
-                * ShooterConstants.PULLEY_RATIO
+    public double getFrontFlywheelRPM() {
+        return getFrontEncoder()
+                * ShooterConstants.FRONT_GEAR_RATIO
                 * (ShooterConstants.ENCODER_TIME_CONVERSION / ShooterConstants.ENCODER_RESOLUTION);
     }
 
+    public double getBackFlywheelRPM() {
+        return getBackEncoder()
+                * ShooterConstants.BACK_GEAR_RATIO
+                * (ShooterConstants.ENCODER_TIME_CONVERSION / ShooterConstants.ENCODER_RESOLUTION);
+    }
+
+    /**
+     * Calculates the velocity of the FRONT flywheel in meters per second. 
+     * @return the velocity of the front flywheel, m/s
+     */
     public double getFrontFlywheelSurfaceVelocity() {
-        return frontFalcon.getSelectedSensorVelocity() * 10 *
+        double rotationsPerSecond = getFrontFlywheelRPM() / 60.0;
+        return rotationsPerSecond * (Math.PI * ShooterConstants.FRONT_DIAMETER_M);
+    }
+
+    /**
+     * Calculates the velocity of the BACK flywheel in meters per second. 
+     * @return the velocity of the back flywheel, m/s
+     */
+    public double getBackFlywheelSurfaceVelocity() {
+        double rotationsPerSecond = getBackFlywheelRPM() / 60.0;
+        return rotationsPerSecond * (Math.PI * ShooterConstants.BACK_DIAMETER_M);
     }
 
     public double getMetersPerSecondFromRPM(double RPM) {
-        return (ShooterConstants.FLYWHEEL_DIAMETER_M * Math.PI) * (RPM / 60.0);
+        return (ShooterConstants.FRONT_DIAMETER_M * Math.PI) * (RPM / 60.0);
     }
 
     public static ShooterStatus getShooterStatus() {
@@ -153,16 +172,37 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public double getVelocityUnitsFromRPM(double RPM) {
         return RPM
-                / (ShooterConstants.PULLEY_RATIO
+                / (ShooterConstants.BACK_GEAR_RATIO
                 * (ShooterConstants.ENCODER_TIME_CONVERSION / ShooterConstants.ENCODER_RESOLUTION));
     }
 
-    public void setSetPoint(double setPoint) {
-        ShooterSubsystem.setPoint = setPoint;
+    /**
+     * Tests if both flywheels have reached their setpoints. 
+     * @return true if both flywheels are up to speed; false otherwise
+     */
+    public static boolean atSetPoint() {
+        return shooterStatus == ShooterStatus.FORWARD;
+
+        // we should do this properly if our PID is minty enough
+        // return frontAtSetPoint && backAtSetPoint;
     }
 
-    // returns in volts
-    public double getFeedForward() {
-        return (Constants.MOTOR_VOLTAGE_COMP / 8750.0) * ShooterSubsystem.setPoint;
+    /**
+     * Sets the set point of both flywheels with DISTINCT values, in units of meters per second. 
+     * @param frontVel the desired velocity of the front flywheel, m/s
+     * @param backVel the desired velocity of the back flywheel, m/s
+     */
+    public void setSetPoints(double frontVel, double backVel) {
+        frontSetPoint = frontVel;
+        backSetPoint = backVel; 
+    }
+
+    /**
+     * Sets the set point of both flywheels with the SAME values, in units of meters per second. 
+     * @param vel the desired velocity of both flywheels, m/s
+     */
+    public void setSetPoint(double vel) {
+        frontSetPoint = vel;
+        backSetPoint = vel;
     }
 }

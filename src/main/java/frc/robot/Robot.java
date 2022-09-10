@@ -78,7 +78,6 @@ public class Robot extends TimedRobot {
       revPDH.setSwitchableChannel(true);
     }
 
-    SmartDashboard.putNumber("Flywheel RPM: ", robotContainer.shooterSubsystem.getFlywheelRPM());
     SmartDashboard.putString(
         "Turret Lock Status: ",
         ((robotContainer.turretSubsystem.lockStatus == TurretLockStatus.UNLOCKED)

@@ -110,14 +110,16 @@ public final class Constants {
     public static final int SHOOTER_FRONT_FALCON = 8;
     public static final int SHOOTER_BACK_FALCON = 7;
 
-    public static final double FRONT_SHOOTER_P = 0.00015;
+    public static final double FRONT_SHOOTER_P = 0.0;
     public static final double FRONT_SHOOTER_I = 0.0;
-    public static final double FRONT_SHOOTER_D = 0.00001;
+    public static final double FRONT_SHOOTER_D = 0.0;
+    public static final double FRONT_SHOOTER_F = 0.0;
 
-    public static final double BACK_SHOOTER_P = 0.00015;
+
+    public static final double BACK_SHOOTER_P = 0.0;
     public static final double BACK_SHOOTER_I = 0.0;
-    public static final double BACK_SHOOTER_D = 0.00001;
-    public static final double SHOOTER_F = 0.4;
+    public static final double BACK_SHOOTER_D = 0.0;
+    public static final double BACK_SHOOTER_F = 0.0;
 
     public static final double SHOOTER_MAX_VEL = 12242.5; // in native encoder units per 100 ms
 
@@ -127,7 +129,8 @@ public final class Constants {
     public static final double SHOOTER_KA = 0.055666;
 
     // shooter motor speeds
-    public static final double SHOOTER_LOW_SPEED = 0.2; // for low goal shots
+    public static final double FRONT_LOW_SPEED = 0.2; // for low goal shots
+    public static final double BACK_LOW_SPEED = 0.0; // TODO
 
     // shooter rpm calc constants
     public static final double FRONT_GEAR_RATIO = 4.0 / 3.0;
@@ -137,8 +140,11 @@ public final class Constants {
     public static final double QUAD_FACTOR = 4.0; // quadrature encoder factor
     public static final double RPM_TOLERANCE = 10.0;
 
-    public static final double FLYWHEEL_DIAMETER_IN = 4.0; // inches
-    public static final double FLYWHEEL_DIAMETER_M = 0.1016; // meters
+    public static final double FRONT_DIAMETER_IN = 4.0; // inches
+    public static final double FRONT_DIAMETER_M = 0.1016; // meters
+    public static final double BACK_DIAMETER_IN = 0.0; // inches
+    public static final double BACK_DIAMETER_M = 0.0; // meters
+
     public static final double SHOOTER_HIGH_DIST =
         82.0; // inches; ideal dist from shooter to go high
     public static final double SHOOTER_DIST_TOLERANCE = 6.0; // inhces; see above

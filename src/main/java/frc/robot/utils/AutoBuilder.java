@@ -53,7 +53,7 @@ public class AutoBuilder {
         new WaitCommand(1.0),
         new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem)
             .withTimeout(1.0),
-        new InstantCommand(() -> ShooterSubsystem.setPoint = 4400.0),
+        // new InstantCommand(() -> ShooterSubsystem.setPoint = 4400.0),
         new ToggleFlywheelHighCommand(shooterLEDCommand),
         new WaitCommand(1.5),
         new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem)
@@ -84,15 +84,15 @@ public class AutoBuilder {
         runTrajectoryJSON(AutoConstants.twoBallAlternative),
         new TurnToTargetDriveCommand(robotContainer.drivetrainSubsystem).withTimeout(3.0));
 
-    ShooterSubsystem.setPoint = 4000.0;
+    // ShooterSubsystem.setPoint = 4000.0;
     command.alongWith(pathCommandGroup, subsystemCommandGroup);
   }
 
   private void oneBallAuto() {
     subsystemCommandGroup.addCommands(
         new DriveForDistanceCommand(robotContainer.drivetrainSubsystem, 48.0, -0.2),
-        new InstantCommand(
-            () -> ShooterSubsystem.setPoint = ((25 / 3) * PhotonVision.getDistance()) + 2991.66667),
+        // new InstantCommand(
+            // () -> ShooterSubsystem.setPoint = ((25 / 3) * PhotonVision.getDistance()) + 2991.66667),
         new ToggleFlywheelHighCommand(shooterLEDCommand),
         new WaitCommand(1.0),
         new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem)
@@ -111,7 +111,7 @@ public class AutoBuilder {
         // new InstantCommand(() -> TurretConstants.TURRET_OFFSET = 0.0),
         new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem)
             .withTimeout(1.5),
-        new InstantCommand(() -> ShooterSubsystem.setPoint = 4400.0),
+        // new InstantCommand(() -> ShooterSubsystem.setPoint = 4400.0),
         new InstantCommand(() -> ShooterSubsystem.isShooting = true),
         new WaitCommand(0.75),
         new ToggleIntakeCommand(robotContainer.intakeSubsystem),
@@ -126,7 +126,7 @@ public class AutoBuilder {
         new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem, 0.375)
             .withTimeout(4.25),
         new WaitCommand(2.5),
-        new InstantCommand(() -> ShooterSubsystem.setPoint = 4200.0),
+        // new InstantCommand(() -> ShooterSubsystem.setPoint = 4200.0),
         new InstantCommand(() -> ShooterSubsystem.isShooting = true),
         new WaitCommand(0.75),
         new ToggleIntakeCommand(robotContainer.intakeSubsystem),
@@ -153,7 +153,7 @@ public class AutoBuilder {
         new AllInCommandGroup(robotContainer.intakeSubsystem, robotContainer.neckSubsystem)
             .withTimeout(2.0),
         new ToggleIntakeCommand(robotContainer.intakeSubsystem),
-        new InstantCommand(() -> ShooterSubsystem.setPoint = 3800.0),
+        // new InstantCommand(() -> ShooterSubsystem.setPoint = 3800.0),
         new ToggleFlywheelHighCommand(shooterLEDCommand),
         new WaitCommand(1.25),
         new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem)
@@ -166,7 +166,7 @@ public class AutoBuilder {
         new ToggleIntakeCommand(robotContainer.intakeSubsystem),
         new AllInCommandGroup(robotContainer.intakeSubsystem, robotContainer.neckSubsystem)
             .withTimeout(3.0),
-        new InstantCommand(() -> ShooterSubsystem.setPoint = 3800.0),
+        // new InstantCommand(() -> ShooterSubsystem.setPoint = 3800.0),
         new ToggleFlywheelHighCommand(shooterLEDCommand),
         new WaitCommand(1.25),
         new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem)
@@ -195,7 +195,7 @@ public class AutoBuilder {
         new WaitCommand(1.0),
         new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem)
             .withTimeout(1.0),
-        new InstantCommand(() -> ShooterSubsystem.setPoint = 3600.0),
+        // new InstantCommand(() -> ShooterSubsystem.setPoint = 3600.0),
         new ToggleFlywheelHighCommand(shooterLEDCommand),
         new WaitCommand(1.5),
         new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem)

@@ -44,7 +44,7 @@ public class AllInCommandGroup extends SequentialCommandGroup {
                   intakeSubsystem.rollIn();
                   if (neckSubsystem.getLowerBeamBreak()) neckSubsystem.moveUp(0.3);
                 }),
-            () -> ShooterSubsystem.atSetPoint));
+            () -> ShooterSubsystem.atSetPoint()));
   }
 
   @Override

@@ -44,7 +44,7 @@ public class AllInCommand extends CommandBase {
     intakeSubsystem.rollIn(intakeSpeed);
     neckSubsystem.stopNeck();
 
-    if (ShooterSubsystem.atSetPoint) {
+    if (ShooterSubsystem.atSetPoint()) {
       // if (!neckSubsystem.getUpperBeamBreak() && startTime == 0) {
       // 	startTime = System.currentTimeMillis();
       // 	neckSubsystem.moveUp(0.8);

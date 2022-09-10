@@ -10,11 +10,13 @@ import frc.robot.subsystems.ShooterSubsystem;
 public class SpinShooterVelocityCommand extends CommandBase {
 
   private final ShooterSubsystem shooterSubsystem;
-  private final double vel;
+  private final double frontVel;
+  private final double backVel;
 
-  public SpinShooterVelocityCommand(ShooterSubsystem shooterSubsystem, double vel) {
+  public SpinShooterVelocityCommand(ShooterSubsystem shooterSubsystem, double frontVel, double backVel) {
     this.shooterSubsystem = shooterSubsystem;
-    this.vel = vel;
+    this.frontVel = frontVel;
+    this.backVel = backVel;
     addRequirements(shooterSubsystem);
   }
 
@@ -25,13 +27,13 @@ public class SpinShooterVelocityCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooterSubsystem.setFlywheelVelocity(vel);
+    shooterSubsystem.setFlywheelVelocities(frontVel, backVel);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooterSubsystem.stopFlywheel();
+    shooterSubsystem.stopFlywheels();
   }
 
   // Returns true when the command should end.

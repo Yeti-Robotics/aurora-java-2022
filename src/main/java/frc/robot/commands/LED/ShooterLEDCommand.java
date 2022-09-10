@@ -52,7 +52,7 @@ public class ShooterLEDCommand extends CommandBase {
 
   @Override
   public void execute() {
-    if (ShooterSubsystem.atSetPoint
+    if (ShooterSubsystem.atSetPoint()
         && Math.abs(Limelight.getDistance() - ShooterConstants.SHOOTER_HIGH_DIST)
             <= ShooterConstants.SHOOTER_DIST_TOLERANCE) {
       // wave effect
@@ -60,7 +60,7 @@ public class ShooterLEDCommand extends CommandBase {
         ledSubsystem.setRGB(i, colorQueue.get(i)[0], colorQueue.get(i)[1], colorQueue.get(i)[2]);
       }
       colorQueue.add(0, colorQueue.remove(ledSubsystem.getBufferLength() - 1));
-    } else if (ShooterSubsystem.atSetPoint) {
+    } else if (ShooterSubsystem.atSetPoint()) {
       for (int i = 0; i < ledSubsystem.getBufferLength(); i++) {
         ledSubsystem.setRGB(i, green[0], green[1], green[2]);
       }

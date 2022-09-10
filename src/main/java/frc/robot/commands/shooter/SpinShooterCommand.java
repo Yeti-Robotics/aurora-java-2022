@@ -10,13 +10,13 @@ import frc.robot.subsystems.ShooterSubsystem;
 public class SpinShooterCommand extends CommandBase {
 
   private final ShooterSubsystem shooterSubsystem;
-  private final double power;
-  private double maxVel = 0.0;
+  private final double frontPower;
+  private final double backPower;
 
-  /** Creates a new SpinShooterCommand. */
-  public SpinShooterCommand(ShooterSubsystem shooterSubsystem, double power) {
+  public SpinShooterCommand(ShooterSubsystem shooterSubsystem, double frontPower, double backPower) {
     this.shooterSubsystem = shooterSubsystem;
-    this.power = power;
+    this.frontPower = frontPower;
+    this.backPower = backPower;
     addRequirements(shooterSubsystem);
   }
 
@@ -27,19 +27,13 @@ public class SpinShooterCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooterSubsystem.shootFlywheel(power);
-
-    double currVel = shooterSubsystem.getAverageEncoder();
-    if (currVel > maxVel) {
-      maxVel = currVel;
-    }
+    shooterSubsystem.shootFlywheels(frontPower, backPower);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooterSubsystem.stopFlywheel();
-    // System.out.println("MAX VEL AT " + (power * 100) + "%: " + maxVel);
+    shooterSubsystem.stopFlywheels();
   }
 
   // Returns true when the command should end.
