@@ -52,6 +52,8 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterLeftFalcon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
     shooterRightFalcon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
 
+    shooterRightFalcon.setInverted(true);
+
     shooterLeftFalcon.follow(shooterRightFalcon);
     shooterLeftFalcon.setInverted(InvertType.OpposeMaster);
 
