@@ -43,7 +43,7 @@ public class Robot extends TimedRobot {
     FOUR_BALL,
     TEST_AUTO,
     DEAD_GYRO,
-    FOUR_BALL_ZONE, 
+    FOUR_BALL_ZONE,
     SCUFFED_THREE
   }
 
@@ -162,17 +162,17 @@ public class Robot extends TimedRobot {
       case TEST_AUTO:
         turretAuto = new SequentialCommandGroup();
         break;
-      case SCUFFED_THREE: 
-        turretAuto = new SequentialCommandGroup(
-          new WaitCommand(3.0),
-          new InstantCommand(
-                    () -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED), 
-          new WaitCommand(3.5),
-          new HomeTurretCommand(robotContainer.turretSubsystem, true), 
-          new WaitCommand(4.75),
-          new InstantCommand(
-            () -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED)
-        );
+      case SCUFFED_THREE:
+        turretAuto =
+            new SequentialCommandGroup(
+                new WaitCommand(3.0),
+                new InstantCommand(
+                    () -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED),
+                new WaitCommand(3.5),
+                new HomeTurretCommand(robotContainer.turretSubsystem, true),
+                new WaitCommand(4.75),
+                new InstantCommand(
+                    () -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED));
         break;
       default:
         turretAuto =
