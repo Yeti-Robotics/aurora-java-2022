@@ -67,6 +67,8 @@ public final class Constants {
     public static final String fourBallZone1 = "fourBallZone1";
     public static final String fourBallZone2 = "fourBallZone2";
     public static final String twoBallDump = "twoBallDump";
+    public static final String scuffedThree1 = "scuffedThree1";
+    public static final String scuffedThree2 = "scuffedThree2";
   }
 
   public static final class LimelightConstants {

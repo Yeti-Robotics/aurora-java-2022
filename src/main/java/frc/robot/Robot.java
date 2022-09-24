@@ -43,7 +43,8 @@ public class Robot extends TimedRobot {
     FOUR_BALL,
     TEST_AUTO,
     DEAD_GYRO,
-    FOUR_BALL_ZONE
+    FOUR_BALL_ZONE, 
+    SCUFFED_THREE
   }
 
   long timer;
@@ -71,6 +72,7 @@ public class Robot extends TimedRobot {
     autoChooser.addOption("TEST_AUTO", AutoModes.TEST_AUTO);
     autoChooser.addOption("FOUR_BALL_ZONE", AutoModes.FOUR_BALL_ZONE);
     autoChooser.addOption("DEAD_GYRO", AutoModes.DEAD_GYRO);
+    autoChooser.addOption("SCUFFED_THREE", AutoModes.SCUFFED_THREE);
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
@@ -159,6 +161,18 @@ public class Robot extends TimedRobot {
         break;
       case TEST_AUTO:
         turretAuto = new SequentialCommandGroup();
+        break;
+      case SCUFFED_THREE: 
+        turretAuto = new SequentialCommandGroup(
+          new WaitCommand(3.0),
+          new InstantCommand(
+                    () -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED), 
+          new WaitCommand(3.5),
+          new HomeTurretCommand(robotContainer.turretSubsystem, true), 
+          new WaitCommand(4.75),
+          new InstantCommand(
+            () -> robotContainer.turretSubsystem.lockStatus = TurretLockStatus.LOCKED)
+        );
         break;
       default:
         turretAuto =
