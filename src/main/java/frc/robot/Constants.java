@@ -18,11 +18,11 @@ public final class Constants {
   public static final double MOTOR_VOLTAGE_COMP = 11.0;
 
   public static final class DriveConstants {
-    public static final int LEFT_FALCON_1 = 1; // front relative to robot
-    public static final int LEFT_FALCON_2 = 2; // rear relative to robot
+    public static final int LEFT_FALCON_1 = 3; // front relative to robot
+    public static final int LEFT_FALCON_2 = 4; // rear relative to robot
 
-    public static final int RIGHT_FALCON_1 = 3; // front relative to robot
-    public static final int RIGHT_FALCON_2 = 4; // rear relative to robot
+    public static final int RIGHT_FALCON_1 = 15; // front relative to robot
+    public static final int RIGHT_FALCON_2 = 1; // rear relative to robot
 
     public static final int[] SOLENOID_SHIFTER = {0, 1};
 
@@ -40,10 +40,10 @@ public final class Constants {
   }
 
   public static final class AutoConstants {
-    public static final double AUTO_KS = 0.69249; // volts
-    public static final double AUTO_KV = 2.1531; // volt seconds per meter
-    public static final double AUTO_KA = 0.41394; // volt seconds squared per meter
-    public static final double AUTO_P = 3.1202;
+    public static final double AUTO_KS = 0.80069; // volts .69249
+    public static final double AUTO_KV = 1.9414; // volt seconds per meter 2.1531
+    public static final double AUTO_KA = 0.55335; // volt seconds squared per meter 0.41394
+    public static final double AUTO_P = 2.9854; //3.1202
 
     public static final double RAMSETE_B = 2.0;
     public static final double RAMSETE_ZETA = 0.7;

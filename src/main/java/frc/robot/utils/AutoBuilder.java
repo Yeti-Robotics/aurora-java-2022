@@ -315,6 +315,8 @@ public class AutoBuilder {
 
     private void deadGyro() {
         subsystemCommandGroup.addCommands(
+                // new ToggleIntakeCommand(robotContainer.intakeSubsystem),
+                new WaitCommand(0.5),
                 new ToggleIntakeCommand(robotContainer.intakeSubsystem),
                 new DriveForDistanceCommand(robotContainer.drivetrainSubsystem, 1.5, 0.2)
                         .deadlineWith(
@@ -336,6 +338,25 @@ public class AutoBuilder {
                 new ToggleFlywheelHighCommand(shooterLEDCommand));
 
         command.alongWith(subsystemCommandGroup);
+    }
+
+    private void deadGyroV2() {
+            subsystemCommandGroup.addCommands(
+                    new ToggleIntakeCommand(robotContainer.intakeSubsystem),
+                    new DriveForDistanceCommand(robotContainer.drivetrainSubsystem, 1.25, 0.5).deadlineWith(
+                            new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem)),
+                new DriveForDistanceCommand(robotContainer.drivetrainSubsystem, 1, 0.5),
+                new TurnToTargetDriveCommand(robotContainer.drivetrainSubsystem).withTimeout(3.0),
+                new InstantCommand(() -> ShooterSubsystem.setPoint = ((25 / 3) * VisionSubsystem.getDistance()) + 2991.66667),
+                new ToggleFlywheelHighCommand(shooterLEDCommand),
+                new WaitCommand(1.5),
+                new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(1.0),
+                new WaitCommand(1.0),
+                new AllInCommand(robotContainer.intakeSubsystem, robotContainer.neckSubsystem).withTimeout(1.0),
+                new ToggleFlywheelHighCommand(shooterLEDCommand)
+            );
+
+            command.alongWith(subsystemCommandGroup);
     }
 
     // AutoBuilder build tools here
