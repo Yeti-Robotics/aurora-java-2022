@@ -43,7 +43,7 @@ public final class Constants {
     public static final double AUTO_KS = 0.80069; // volts .69249
     public static final double AUTO_KV = 1.9414; // volt seconds per meter 2.1531
     public static final double AUTO_KA = 0.55335; // volt seconds squared per meter 0.41394
-    public static final double AUTO_P = 2.9854; //3.1202
+    public static final double AUTO_P = 2.9854; // 3.1202
 
     public static final double RAMSETE_B = 2.0;
     public static final double RAMSETE_ZETA = 0.7;
