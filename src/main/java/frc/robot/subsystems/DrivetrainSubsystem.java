@@ -73,7 +73,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
     gyro = new AHRS(Port.kUSB);
     resetGyro();
 
-    odometry = new DifferentialDriveOdometry(gyro.getRotation2d(), leftFalcon1.getSelectedSensorPosition(), rightFalcon1.getSelectedSensorPosition());
+    odometry =
+        new DifferentialDriveOdometry(
+            gyro.getRotation2d(),
+            leftFalcon1.getSelectedSensorPosition(),
+            rightFalcon1.getSelectedSensorPosition());
 
     driveMode = DriveMode.CHEEZY;
 
@@ -196,7 +200,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   public void resetOdometry(Pose2d pose) {
     resetEncoders();
-    odometry.resetPosition(gyro.getRotation2d(), leftFalcon1.getSelectedSensorPosition(), rightFalcon1.getSelectedSensorPosition(), pose);
+    odometry.resetPosition(
+        gyro.getRotation2d(),
+        leftFalcon1.getSelectedSensorPosition(),
+        rightFalcon1.getSelectedSensorPosition(),
+        pose);
   }
 
   public DriveMode getDriveMode() {
