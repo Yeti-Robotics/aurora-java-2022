@@ -49,7 +49,6 @@ public class AllInCommandGroup extends SequentialCommandGroup {
 
   @Override
   public void end(boolean interrupted) {
-    // TODO Auto-generated method stub
     intakeSubsystem.stopRoll();
     neckSubsystem.stopNeck();
   }

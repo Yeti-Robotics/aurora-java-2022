@@ -213,25 +213,25 @@ public class RobotContainer {
   }
 
   private void setJoystickButtonWhenPressed(int button, CommandBase command) {
-    new JoystickButton(driverStationJoystick, button).whenPressed(command);
+    new JoystickButton(driverStationJoystick, button).onTrue(command);
   }
 
   // commandOnTrue runs when shooterMode is true
   private void setConditionalJoystickButtonWhenPressed(
       int button, Command commandOnTrue, Command commandOnFalse) {
     new JoystickButton(driverStationJoystick, button)
-        .whenPressed(new ConditionalCommand(commandOnTrue, commandOnFalse, () -> shooterMode));
+        .onTrue(new ConditionalCommand(commandOnTrue, commandOnFalse, () -> shooterMode));
   }
 
   private void setJoystickButtonWhileHeld(int button, CommandBase command) {
-    new JoystickButton(driverStationJoystick, button).whileHeld(command);
+    new JoystickButton(driverStationJoystick, button).whileTrue(command);
   }
 
   // commandOnTrue runs when shooterMode is true
   private void setConditionalJoystickButtonWhileHeld(
       int button, Command commandOnTrue, Command commandOnFalse) {
     new JoystickButton(driverStationJoystick, button)
-        .whileHeld(new ConditionalCommand(commandOnTrue, commandOnFalse, () -> shooterMode));
+        .whileTrue(new ConditionalCommand(commandOnTrue, commandOnFalse, () -> shooterMode));
   }
 
   private void setConditionalButton(
