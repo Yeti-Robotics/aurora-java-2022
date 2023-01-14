@@ -24,7 +24,8 @@ public class JoyButton extends JoystickButton {
       ActiveState falseActiveState,
       BooleanSupplier booleanSupplier) {
 
-    CommandScheduler.getInstance().getActiveButtonLoop()
+    CommandScheduler.getInstance()
+        .getActiveButtonLoop()
         .bind(
             new Runnable() {
               private boolean pressedLast = getAsBoolean();
