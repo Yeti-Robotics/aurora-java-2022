@@ -38,18 +38,35 @@ public class AutoBuilder {
   private SequentialCommandGroup subsystemCommandGroup;
   private SequentialCommandGroup pathCommandGroup;
 
-  private final CommandBase allInCommand = Commands.sequence(new InstantCommand(() -> {
-    robotContainer.intakeSubsystem.stopRoll();
-    robotContainer.neckSubsystem.stopNeck();
-  }), new ConditionalCommand(new RunCommand(() -> {
-    robotContainer.neckSubsystem.moveUp(0.8);
-  }).andThen(new ConditionalCommand(new WaitCommand(0.25), new InstantCommand(), () -> !robotContainer.neckSubsystem.getUpperBeamBreak())), new RunCommand(() -> {
-    robotContainer.intakeSubsystem.rollIn();
-    if (robotContainer.neckSubsystem.getLowerBeamBreak()) robotContainer.neckSubsystem.moveUp(0.3);
-  }), () -> ShooterSubsystem.atSetPoint), new InstantCommand(() -> {
-    robotContainer.intakeSubsystem.stopRoll();
-    robotContainer.neckSubsystem.stopNeck();
-  }));
+  private final CommandBase allInCommand =
+      Commands.sequence(
+          new InstantCommand(
+              () -> {
+                robotContainer.intakeSubsystem.stopRoll();
+                robotContainer.neckSubsystem.stopNeck();
+              }),
+          new ConditionalCommand(
+              new RunCommand(
+                      () -> {
+                        robotContainer.neckSubsystem.moveUp(0.8);
+                      })
+                  .andThen(
+                      new ConditionalCommand(
+                          new WaitCommand(0.25),
+                          new InstantCommand(),
+                          () -> !robotContainer.neckSubsystem.getUpperBeamBreak())),
+              new RunCommand(
+                  () -> {
+                    robotContainer.intakeSubsystem.rollIn();
+                    if (robotContainer.neckSubsystem.getLowerBeamBreak())
+                      robotContainer.neckSubsystem.moveUp(0.3);
+                  }),
+              () -> ShooterSubsystem.atSetPoint),
+          new InstantCommand(
+              () -> {
+                robotContainer.intakeSubsystem.stopRoll();
+                robotContainer.neckSubsystem.stopNeck();
+              }));
 
   private void twoBallAuto() {
     subsystemCommandGroup.addCommands(
