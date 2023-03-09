@@ -4,9 +4,13 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Axis;
+import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
@@ -21,6 +25,7 @@ import frc.robot.commands.commandgroups.AllInCommand;
 import frc.robot.commands.commandgroups.AllOutCommand;
 import frc.robot.commands.intake.ToggleIntakeCommand;
 import frc.robot.commands.shifting.ToggleShiftCommand;
+import frc.robot.commands.shooter.SpinShooterCommand;
 import frc.robot.commands.shooter.ToggleFlywheelHighCommand;
 import frc.robot.commands.shooter.ToggleFlywheelLowCommand;
 import frc.robot.commands.turret.HomeTurretCommand;
@@ -50,6 +55,9 @@ import frc.robot.utils.JoyButton.ActiveState;
  */
 public class RobotContainer {
   public Joystick driverStationJoystick;
+
+  private final XboxController xboxController;
+  public boolean isDriverStation;
   public DrivetrainSubsystem drivetrainSubsystem;
   public ShiftingSubsystem shiftingSubsystem;
   public IntakeSubsystem intakeSubsystem;
@@ -74,31 +82,33 @@ public class RobotContainer {
     shooterSubsystem = new ShooterSubsystem();
     climberSubsystem = new ClimberSubsystem();
     drivetrainSubsystem = new DrivetrainSubsystem();
-
     turretSubsystem.setDefaultCommand(new TurretLockCommand(turretSubsystem));
+    xboxController = new XboxController(0);
+
+
 
     switch (drivetrainSubsystem.getDriveMode()) {
       case TANK:
         drivetrainSubsystem.setDefaultCommand(
             new RunCommand(
-                () -> drivetrainSubsystem.tankDrive(getLeftY(), getRightY()), drivetrainSubsystem));
+                () -> drivetrainSubsystem.tankDrive(getXboxLeftY(), getXboxRightX()), drivetrainSubsystem));
         break;
       case CHEEZY:
         drivetrainSubsystem.setDefaultCommand(
             new RunCommand(
-                () -> drivetrainSubsystem.cheezyDrive(getLeftY(), getRightX()),
+                () -> drivetrainSubsystem.cheezyDrive(-xboxController.getLeftY(), xboxController.getRightX()),
                 drivetrainSubsystem));
         break;
       case ARCADE:
         drivetrainSubsystem.setDefaultCommand(
             new RunCommand(
-                () -> drivetrainSubsystem.arcadeDrive(getLeftY(), getRightX()),
+                () -> drivetrainSubsystem.arcadeDrive(xboxController.getLeftY(), xboxController.getRightX()),
                 drivetrainSubsystem));
         break;
     }
 
     // Configure the button bindings
-    configureButtonBindings();
+    configureButtonXboxBindings();
   }
 
   /**
@@ -108,80 +118,90 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+      ShooterLEDCommand shooterLEDCommand = new ShooterLEDCommand(ledSubsystem);
+      setJoystickButtonWhenPressed(12, new ToggleIntakeCommand(intakeSubsystem));
+      setConditionalButton(
+              11,
+              new ToggleShiftCommand(shiftingSubsystem),
+              ActiveState.WHEN_PRESSED,
+              new InstantCommand(),
+              ActiveState.WHEN_PRESSED);
+
+      setConditionalButton(
+              6,
+              new AllOutCommand(intakeSubsystem, neckSubsystem),
+              ActiveState.WHILE_HELD,
+              new ClimbUpCommand(climberSubsystem),
+              ActiveState.WHILE_HELD);
+      setConditionalButton(
+              1,
+              new AllInCommand(intakeSubsystem, neckSubsystem),
+              ActiveState.WHILE_HELD,
+              new ClimbDownCommand(climberSubsystem),
+              ActiveState.WHILE_HELD);
+
+      setConditionalButton(
+              7,
+              new ToggleTurretLockCommand(turretSubsystem)
+                      .andThen(new HomeTurretCommand(turretSubsystem, false)),
+              ActiveState.WHEN_PRESSED,
+              new InstantCommand(),
+              ActiveState.WHILE_HELD);
+      setConditionalButton(
+              2,
+              new ToggleFlywheelHighCommand(shooterLEDCommand),
+              ActiveState.WHEN_PRESSED,
+              new InstantCommand(),
+              ActiveState.WHILE_HELD);
+
+      setConditionalButton(
+              8,
+              new HomeTurretCommand(turretSubsystem, true),
+              ActiveState.WHEN_PRESSED,
+              new InstantCommand(() -> climberSubsystem.toggleClimberBrake()),
+              ActiveState.WHEN_PRESSED);
+      setConditionalButton(
+              3,
+              new ToggleFlywheelLowCommand(shooterLEDCommand),
+              ActiveState.WHEN_PRESSED,
+              new InstantCommand(),
+              ActiveState.WHEN_PRESSED);
+
+      setConditionalButton(
+              9,
+              new SnapTurretLeftCommand(turretSubsystem),
+              ActiveState.WHEN_PRESSED,
+              new InstantCommand(),
+              ActiveState.WHEN_PRESSED);
+      setConditionalButton(
+              4,
+              new InstantCommand(
+                      () -> {
+                        ShooterSubsystem.shooterMode = ShooterMode.LAUNCHPAD;
+                        ShooterSubsystem.isShooting = !ShooterSubsystem.isShooting;
+                      }),
+              ActiveState.WHEN_PRESSED,
+              new InstantCommand(),
+              ActiveState.WHILE_HELD);
+
+      // 10 = kill switch for climbing
+      setConditionalButton(
+              10,
+              new SnapTurretRightCommand(turretSubsystem),
+              ActiveState.WHEN_PRESSED,
+              new InstantCommand(),
+              ActiveState.WHEN_PRESSED);
+      setJoystickButtonWhenPressed(5, new InstantCommand(() -> shooterMode = !shooterMode));
+  }
+
+  private void configureButtonXboxBindings() {
     ShooterLEDCommand shooterLEDCommand = new ShooterLEDCommand(ledSubsystem);
-    setJoystickButtonWhenPressed(12, new ToggleIntakeCommand(intakeSubsystem));
-    setConditionalButton(
-        11,
-        new ToggleShiftCommand(shiftingSubsystem),
-        ActiveState.WHEN_PRESSED,
-        new InstantCommand(),
-        ActiveState.WHEN_PRESSED);
 
-    setConditionalButton(
-        6,
-        new AllOutCommand(intakeSubsystem, neckSubsystem),
-        ActiveState.WHILE_HELD,
-        new ClimbUpCommand(climberSubsystem),
-        ActiveState.WHILE_HELD);
-    setConditionalButton(
-        1,
-        new AllInCommand(intakeSubsystem, neckSubsystem),
-        ActiveState.WHILE_HELD,
-        new ClimbDownCommand(climberSubsystem),
-        ActiveState.WHILE_HELD);
+    setButtonWhenPressed(xboxController, Button.kLeftBumper.value, new ToggleIntakeCommand(intakeSubsystem));
 
-    setConditionalButton(
-        7,
-        new ToggleTurretLockCommand(turretSubsystem)
-            .andThen(new HomeTurretCommand(turretSubsystem, false)),
-        ActiveState.WHEN_PRESSED,
-        new InstantCommand(),
-        ActiveState.WHILE_HELD);
-    setConditionalButton(
-        2,
-        new ToggleFlywheelHighCommand(shooterLEDCommand),
-        ActiveState.WHEN_PRESSED,
-        new InstantCommand(),
-        ActiveState.WHILE_HELD);
-
-    setConditionalButton(
-        8,
-        new HomeTurretCommand(turretSubsystem, true),
-        ActiveState.WHEN_PRESSED,
-        new InstantCommand(() -> climberSubsystem.toggleClimberBrake()),
-        ActiveState.WHEN_PRESSED);
-    setConditionalButton(
-        3,
-        new ToggleFlywheelLowCommand(shooterLEDCommand),
-        ActiveState.WHEN_PRESSED,
-        new InstantCommand(),
-        ActiveState.WHEN_PRESSED);
-
-    setConditionalButton(
-        9,
-        new SnapTurretLeftCommand(turretSubsystem),
-        ActiveState.WHEN_PRESSED,
-        new InstantCommand(),
-        ActiveState.WHEN_PRESSED);
-    setConditionalButton(
-        4,
-        new InstantCommand(
-            () -> {
-              ShooterSubsystem.shooterMode = ShooterMode.LAUNCHPAD;
-              ShooterSubsystem.isShooting = !ShooterSubsystem.isShooting;
-            }),
-        ActiveState.WHEN_PRESSED,
-        new InstantCommand(),
-        ActiveState.WHILE_HELD);
-
-    // 10 = kill switch for climbing
-    setConditionalButton(
-        10,
-        new SnapTurretRightCommand(turretSubsystem),
-        ActiveState.WHEN_PRESSED,
-        new InstantCommand(),
-        ActiveState.WHEN_PRESSED);
-    setJoystickButtonWhenPressed(5, new InstantCommand(() -> shooterMode = !shooterMode));
+    setButtonWhenPressed(xboxController, Button.kRightBumper.value, new ToggleFlywheelHighCommand(shooterLEDCommand));
+    setButtonWhenPressed(xboxController, Button.kX.value, new ToggleFlywheelLowCommand(shooterLEDCommand));
+    setButtonWhenPressed(xboxController, Button.kY.value, new ToggleShiftCommand(shiftingSubsystem));
   }
 
   private double getLeftY() {
@@ -244,8 +264,31 @@ public class RobotContainer {
         .conditionalPressed(
             trueCommand, trueActiveState, falseCommand, falseActiveState, () -> shooterMode);
   }
+  private double getXboxLeftY() {
+    return -xboxController.getRawAxis(Axis.kLeftY.value);
+  }
 
+  private double getXboxLeftX() {
+    return -xboxController.getRawAxis(Axis.kLeftX.value);
+  }
+
+  private double getXboxRightY() {
+    return -xboxController.getRawAxis(Axis.kRightY.value);
+  }
+
+  private double getXboxRightX() {
+    return -xboxController.getRawAxis(Axis.kRightX.value);
+  }
+
+  private void setButtonWhenPressed(GenericHID genericHID, int button, CommandBase command) {
+    new JoystickButton(genericHID, button).whenPressed(command);
+  }
+
+  private void setButtonWhileHeld(GenericHID genericHID, int button, CommandBase command) {
+    new JoystickButton(genericHID, button).whileHeld(command);
+  }
   /**
+
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
